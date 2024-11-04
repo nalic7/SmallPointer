@@ -52,6 +52,7 @@
 
 #endif
 #ifdef PCH_LWJGL64
+
 	// #include <stdio.h>
 	// #include <dlfcn.h>
 	// #include <stdint.h>
@@ -105,6 +106,9 @@
 #endif
 #ifdef PCH_NALIGL
 
+	#include <stdio.h>
+	#include <stdlib.h>
+
 	#define NALI_LWJGL2
 	#define NALI_X11
 	// #define NALI_EGL
@@ -130,6 +134,18 @@
 		#define GETPROCADDRESS(proc) glXGetProcAddress((const GLubyte*)proc)
 		#define NALI_LWJGL2
 	#endif
+
+#endif
+#ifdef PCH_NALIAL
+
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <stdint.h>
+
+	#include <jni.h>
+
+	#include <al.h>
+	#include <alc.h>
 
 #endif
 

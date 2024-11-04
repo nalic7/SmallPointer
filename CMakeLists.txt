@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
 # set(GLTF 1)
-set(COLLADA 1)
+# set(COLLADA 1)
 # set(LWJGL64 1)
 # set(NALIGL 1)
+set(NALIAL 1)
 
 if(GLTF)
   set(P_NAME gltf)
@@ -14,6 +15,8 @@ elseif(LWJGL64)
   set(P_NAME lwjgl64)
 elseif(NALIGL)
   set(P_NAME NaliGL)
+elseif(NALIAL)
+  set(P_NAME NaliAL)
 endif()
 
 project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
@@ -119,7 +122,7 @@ elseif(LWJGL64)
     ${WAYLAND_CLIENT_LIBRARY}
     Qt6::Widgets
     Qt6::WaylandClient
-    /home/nali/Documents/GitHub/openal-soft/build/libopenal.so
+    /home/nali/GitHub/openal-soft/build/libopenal.so
     # ${OPENGL_LIBRARIES}
     # ${X11_LIBRARIES}
     # png
@@ -139,6 +142,24 @@ elseif(NALIGL)
   )
 
   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL=1)
+
+elseif(NALIAL)
+
+  set(JAVA_HOME lib/jdk8u412-b08/)
+
+  add_library(${P_NAME} SHARED src/al/nali/alnali.c)
+
+  target_include_directories(${P_NAME} PRIVATE
+    ${JAVA_HOME}include
+    ${JAVA_HOME}include/${OS_NAME}
+    ../openal-soft/include/AL
+  )
+
+  target_link_libraries(${P_NAME}
+    /home/nali/GitHub/openal-soft/build/libopenal.so
+  )
+
+  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL=1)
 
 endif()
 
