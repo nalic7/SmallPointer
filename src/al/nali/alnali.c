@@ -60,3 +60,30 @@ JNIEXPORT void JNICALL Java_com_nali_NaliAL_alSourceStop(JNIEnv *__env, jclass c
 {
 	alSourceStop((ALuint)source);
 }
+
+JNIEXPORT void JNICALL Java_com_nali_NaliAL_alSourcePause(JNIEnv *__env, jclass clazz, jint source)
+{
+	alSourcePause((ALuint)source);
+}
+
+JNIEXPORT jint JNICALL Java_com_nali_NaliAL_alGetSourcei(JNIEnv *__env, jclass clazz, jint source, jint pname)
+{
+	ALint i;
+	alGetSourcei((ALuint)source, (ALenum)pname, &i);
+	return (jint)i;
+}
+
+JNIEXPORT void JNICALL Java_com_nali_NaliAL_alDeleteSources(JNIEnv *__env, jclass clazz, jint source)
+{
+	alDeleteSources(1, (ALuint*)&source);
+}
+
+JNIEXPORT void JNICALL Java_com_nali_NaliAL_alSource3f(JNIEnv *__env, jclass clazz, jint source, jint pname, jfloat v1, jfloat v2, jfloat v3)
+{
+	alSource3f((ALuint)source, (ALenum)pname, (ALfloat)v1, (ALfloat)v2, (ALfloat)v3);
+}
+
+JNIEXPORT void JNICALL Java_com_nali_NaliAL_alDeleteBuffers(JNIEnv *__env, jclass clazz, jint buffer)
+{
+	alDeleteBuffers(1, (ALuint*)&buffer);
+}
