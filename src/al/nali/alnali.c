@@ -87,3 +87,14 @@ JNIEXPORT void JNICALL Java_com_nali_NaliAL_alDeleteBuffers(JNIEnv *__env, jclas
 {
 	alDeleteBuffers(1, (ALuint*)&buffer);
 }
+
+JNIEXPORT void JNICALL Java_com_nali_NaliAL_alListener3f(JNIEnv *__env, jclass clazz, jint pname, jfloat v1, jfloat v2, jfloat v3)
+{
+	alListener3f((ALenum)pname, (ALfloat)v1, (ALfloat)v2, (ALfloat)v3);
+}
+
+JNIEXPORT void JNICALL Java_com_nali_NaliAL_alListenerfv(JNIEnv *__env, jclass clazz, jint pname, jlong value)
+{
+	ALfloat* value_ptr = (ALfloat*)(intptr_t)value;
+	alListenerfv((ALenum)pname, value_ptr);
+}
