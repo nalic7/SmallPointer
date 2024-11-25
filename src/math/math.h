@@ -1,12 +1,11 @@
 #ifndef NALI_MATH_H
 #define NALI_MATH_H
 
-#pragma once
-
 float math_radian(float degree);
 float math_degree(float radian);
 char* math_combine(const char* str1, const char* str2);
-uint32_t math_n_c_size(int number);
+uint32_t math_length(uint32_t number);
+char* math_get(uint32_t number);
 
 // template<class T>
 // static void getXX2DVector(std::vector<T> t_vector, std::vector<std::vector<T>>& t_2d_vector, const int& size)

@@ -26,7 +26,7 @@ uint32_t graphic_reader_count(char *char_ptr, char c_char)
 	return v;
 }
 
-void graphic_reader_sanitize(char *char_ptr)
+void graphic_reader_sanitize(char* char_ptr)
 {
 	while (*char_ptr)
 	{
@@ -38,367 +38,230 @@ void graphic_reader_sanitize(char *char_ptr)
 	}
 }
 
-// void graphic_reader_switchBones(SourceDataType *sourcedatatype_ptr)
-// {
-// 	sourcedatatype_ptr->visual_bones_bonedata_vector_vector = malloc(sourcedatatype_ptr->max_object * sizeof(BoneData *));
-
-// 	for (int z = 0; z < sourcedatatype_ptr->max_object; ++z)
-// 	{
-// 		sourcedatatype_ptr->visual_bones_bonedata_vector_vector[z] = malloc(sourcedatatype_ptr->joints_size[z] * sizeof(BoneData));
-// 		sourcedatatype_ptr->visual_bones_bonedata_vector_vector[z] = malloc(0);
-// 	}
-
-// 	for (int x = 0; x < sourcedatatype_ptr->max_animation_bones; ++x)
-// 	{
-// 		BoneData bonedata = sourcedatatype_ptr->bonedata_vector[x];
-
-// 		for (int y = 0; y < bonedata.bones_name_string_size; y += 2)
-// 		{
-// 			uint32_t index = 0;
-// 			for (int z = 0; z < sourcedatatype_ptr->max_object; ++z)
-// 			{
-// 				for (int w = 0; w < sourcedatatype_ptr->joints_size[z]; ++w)
-// 				{
-// 					if (strcmp(sourcedatatype_ptr->joints[z][w], bonedata.bones_name_string[y]) == 0)
-// 					{
-// 						sourcedatatype_ptr->visual_bones_bonedata_vector_vector[z] = realloc(sourcedatatype_ptr->visual_bones_bonedata_vector_vector[z], sizeof(BoneData));
-// 						BoneData visual_bones_bonedata = sourcedatatype_ptr->visual_bones_bonedata_vector_vector[z][w];
-// 						visual_bones_bonedata.bones_name_string[index] = sourcedatatype_ptr->joints[z][w];
-// 						visual_bones_bonedata.space_int = bonedata.space_int;
-// 						visual_bones_bonedata.visual_bones_transform_float_vector = bonedata.visual_bones_transform_float_vector;
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// }
-
-// void graphic_reader_switchAnimationBones(SourceDataType *sourcedatatype_ptr)
-// {
-// 	for (int y = 0; y < sourcedatatype_ptr->joints.size(); ++y)
-// 	{
-// 		for (int z = 0; z < sourcedatatype_ptr->joints[y].size(); ++z)
-// 		{
-// 			int index = GraphicReader::matchString(sourcedatatype_ptr->joints[y][z], sourcedatatype_ptr->armature_string_vector, '*', '*');
-// 			if (index != -1)
-// 			{
-// 				sourcedatatype_ptr->armature_string_vector[index] = sourcedatatype_ptr->joints[y][z];
-// 			}
-// 		}
-// 	}
-// }
-
-void graphic_reader_makeBones(SourceDataType *sourcedatatype_ptr)
+void graphic_reader_makeBones(collada_Source *sourcedatatype_ptr)
 {
+	uint32_t max_data = sourcedatatype_ptr->max_data;
+	uint32_t max_bone = sourcedatatype_ptr->max_bone;
+
+	unsigned char** bone_ptr = malloc(sizeof(unsigned char*) * max_bone);
+	uint32_t* bone_size_ptr = malloc(sizeof(uint32_t) * max_bone);
+
 	BoneData *bonedata_vector = sourcedatatype_ptr->bonedata_vector;
-	sourcedatatype_ptr->max_bones_string_vector_vector_vector = malloc(sizeof(uint32_t *) * sourcedatatype_ptr->max_object);
-	sourcedatatype_ptr->bones_string_vector_vector_vector = malloc(sizeof(char ***) * sourcedatatype_ptr->max_object);
 
-	for (int x = 0; x < sourcedatatype_ptr->max_object; ++x)
+	for (int w = 0; w < max_bone; ++w)
 	{
-		sourcedatatype_ptr->max_bones_string_vector_vector_vector[x] = malloc(sizeof(uint32_t) * sourcedatatype_ptr->joints_size[x]);
-		sourcedatatype_ptr->bones_string_vector_vector_vector[x] = malloc(sizeof(char **) * sourcedatatype_ptr->joints_size[x]);
-
-		for (int w = 0; w < sourcedatatype_ptr->joints_size[x]; ++w)
+		for (int y = 0; y < sourcedatatype_ptr->max_bonedata; ++y)
 		{
-			for (int y = 0; y < sourcedatatype_ptr->max_bonedata; ++y)
+			if (strcmp(sourcedatatype_ptr->joint_ptr[w], bonedata_vector[y].bones_name_string[0]) == 0)
 			{
-				if (strcmp(sourcedatatype_ptr->joints[x][w], bonedata_vector[y].bones_name_string[0]) == 0)
-				{
-					char** char_ptr = malloc(sizeof(char *));
-					// uint32_t max_z = sourcedatatype_ptr->space_ptr[y / 2];
-					uint32_t max_z = sourcedatatype_ptr->space_ptr[w];
-					uint32_t index = 0;
-					char_ptr[index++] = bonedata_vector[y].bones_name_string[0];
+				bone_ptr[w] = malloc(0);
 
-					for (int z = y - 1; z - 1 > -2; --z)
+				uint32_t max_z = sourcedatatype_ptr->space_ptr[w];
+				uint32_t index = 1;
+
+				for (int z = y - 1; z - 1 > -2; --z)
+				{
+					uint32_t new_max_z = sourcedatatype_ptr->space_ptr[z];
+					if (max_z > new_max_z)
 					{
-						uint32_t new_max_z = sourcedatatype_ptr->space_ptr[z];
-						if (max_z > new_max_z)
+						max_z = new_max_z;
+						bone_ptr[w] = realloc(bone_ptr[w], sizeof(unsigned char) * index);
+						bone_ptr[w][index - 1] = z;
+						++index;
+					}
+				}
+
+				bone_size_ptr[w] = index;
+				break;
+			}
+		}
+	}
+
+	sourcedatatype_ptr->bone_ptr = bone_ptr;
+	sourcedatatype_ptr->bone_size_ptr = bone_size_ptr;
+}
+
+void graphic_reader_mix(collada_Source* collada_source_ptr)
+{
+	uint32_t max_object = collada_source_ptr->max_data;
+
+	collada_Pack** collada_pack_ptr = malloc(sizeof(collada_Pack*) * max_object);
+	uint32_t* collada_pack_size_ptr = malloc(sizeof(uint32_t) * max_object);
+
+	uint32_t** index_ptr = malloc(sizeof(uint32_t*) * max_object);
+	uint32_t* index_size_ptr = malloc(sizeof(uint32_t) * max_object);
+
+	for (uint32_t m = 0; m < max_object; ++m)
+	{
+		// uint32_t max_joint = collada_source_ptr->max_bone_ptr[m];
+		uint32_t p_offset_size = collada_source_ptr->p_offset_size[m];
+
+		collada_pack_ptr[m] = malloc(0);
+		collada_pack_size_ptr[m] = 0;
+
+		index_ptr[m] = malloc(0);
+		index_size_ptr[m] = 0;
+
+		float
+			p_x = 0, p_y = 0, p_z = 0,
+			n_x = 0, n_y = 0, n_z = 0,
+			t_x = 0, t_y = 0;
+		unsigned char* joint_ptr;
+		float* weight_ptr;
+		unsigned char max_bone = 0;
+
+		for (uint32_t p = 0; p < p_offset_size; ++p)
+		{
+			uint32_t po = collada_source_ptr->p_offset[m][p];
+			unsigned char id = p % 3;
+
+			switch (id)
+			{
+				case 0:
+					uint32_t v = po * 3;
+					p_x = collada_source_ptr->vertex_ptr[m][v];
+					p_y = collada_source_ptr->vertex_ptr[m][v + 1];
+					p_z = collada_source_ptr->vertex_ptr[m][v + 2];
+
+					if (collada_source_ptr->is_animated)
+					{
+						// joint_ptr = malloc(sizeof(uint32_t) * max_joint);
+						// weight_ptr = malloc(sizeof(float) * max_joint);
+						joint_ptr = malloc(sizeof(unsigned char) * 4);
+						weight_ptr = malloc(sizeof(float) * 4);
+						for (unsigned char i = 0; i < 4; ++i)
 						{
-							max_z = new_max_z;
-							char_ptr = realloc(char_ptr, sizeof(char *) * (index + 1));
-							char_ptr[index++] = bonedata_vector[z].bones_name_string[0];
+							joint_ptr[i] = 0;
+							weight_ptr[i] = 0;
+						}
+
+						uint32_t v_offset_by_p = 0;
+
+						for (uint32_t i = 0; i < po; ++i)
+						{
+							v_offset_by_p += collada_source_ptr->vcount_offset[m][i];
+						}
+
+						v_offset_by_p *= 2;
+
+						int vc = collada_source_ptr->vcount_offset[m][po];
+
+						max_bone = 0;
+
+						while (max_bone < vc)
+						{
+							uint32_t step = v_offset_by_p + max_bone * 2;
+							joint_ptr[max_bone] = collada_source_ptr->v_offset[m][step];
+							weight_ptr[max_bone] = collada_source_ptr->weight_ptr[collada_source_ptr->v_offset[m][step + 1]];
+							if (weight_ptr[max_bone] == 0)
+							{
+								info("m%d p%d %s", m, p, collada_source_ptr->data_name_ptr[m]);
+							}
+							++max_bone;
 						}
 					}
-
-					sourcedatatype_ptr->max_bones_string_vector_vector_vector[x][w] = index;
-					sourcedatatype_ptr->bones_string_vector_vector_vector[x][w] = char_ptr;
 					break;
+				case 1:
+					uint32_t n = po * 3;
+					n_x = collada_source_ptr->normal_ptr[m][n];
+					n_y = collada_source_ptr->normal_ptr[m][n + 1];
+					n_z = collada_source_ptr->normal_ptr[m][n + 2];
+					break;
+				case 2:
+					uint32_t t = po * 2;
+					t_x = collada_source_ptr->texcoord_ptr[m][t];
+					t_y = collada_source_ptr->texcoord_ptr[m][t + 1];
+			}
+
+			if (id == 2)
+			{
+				unsigned char pass = 0;
+				uint32_t i = 0;
+
+				while (i < collada_pack_size_ptr[m])
+				{
+					if
+					(
+						p_x == collada_pack_ptr[m][i].p_x &&
+						p_y == collada_pack_ptr[m][i].p_y &&
+						p_z == collada_pack_ptr[m][i].p_z &&
+
+						n_x == collada_pack_ptr[m][i].n_x &&
+						n_y == collada_pack_ptr[m][i].n_y &&
+						n_z == collada_pack_ptr[m][i].n_z &&
+
+						t_x == collada_pack_ptr[m][i].t_x &&
+						t_y == collada_pack_ptr[m][i].t_y
+					)
+					{
+						pass = 1;
+
+						////memory leak
+						//for (int j = 0; j < max_joint; ++j)
+						for (unsigned char j = 0; j < 4; ++j)
+						{
+							if
+							(
+								joint_ptr[j] != collada_pack_ptr[m][i].joint_ptr[j] ||
+								weight_ptr[j] != collada_pack_ptr[m][i].weight_ptr[j]
+							)
+							{
+								pass = 0;
+								break;
+							}
+						}
+
+						if (pass == 1)
+						{
+							break;
+						}
+					}
+					else
+					{
+						pass = 0;
+					}
+					++i;
+				}
+
+				++index_size_ptr[m];
+				index_ptr[m] = realloc(index_ptr[m], sizeof(uint32_t) * index_size_ptr[m]);
+				if (pass == 0)
+				{
+					uint32_t new_index = collada_pack_size_ptr[m];
+					++collada_pack_size_ptr[m];
+
+					collada_Pack new_collada_pack =
+					{
+						p_x, p_y, p_z,
+						n_x, n_y, n_z,
+						t_x, t_y,
+						joint_ptr,
+						weight_ptr,
+						max_bone
+					};
+
+					collada_pack_ptr[m] = realloc(collada_pack_ptr[m], sizeof(collada_Pack) * collada_pack_size_ptr[m]);
+					collada_pack_ptr[m][new_index] = new_collada_pack;
+
+					index_ptr[m][index_size_ptr[m] - 1] = new_index;
+				}
+				else
+				{
+					free(joint_ptr);
+					free(weight_ptr);
+					index_ptr[m][index_size_ptr[m] - 1] = i;
 				}
 			}
 		}
 	}
+
+	collada_source_ptr->collada_pack_ptr = collada_pack_ptr;
+	collada_source_ptr->collada_pack_size_ptr = collada_pack_size_ptr;
+	collada_source_ptr->index_ptr = index_ptr;
+	collada_source_ptr->index_size_ptr = index_size_ptr;
 }
 
-void graphic_reader_compressVertex(SourceDataType *sourcedatatype_ptr)
-{
-	size_t fs_size = sizeof(float *) * sourcedatatype_ptr->max_object;
-	size_t uis_size = sizeof(uint32_t *) * sourcedatatype_ptr->max_object;
-	sourcedatatype_ptr->indexdata.positions = malloc(fs_size);
-	sourcedatatype_ptr->indexdata.normals = malloc(fs_size);
-	sourcedatatype_ptr->indexdata.texcoord = malloc(fs_size);
-
-	for (int x = 0; x < sourcedatatype_ptr->max_object; ++x)
-	{
-		uint32_t p_offset_size = sourcedatatype_ptr->p_offset_size[x];
-		size_t f_size = sizeof(float) * p_offset_size;
-		sourcedatatype_ptr->indexdata.positions[x] = malloc(f_size);
-		sourcedatatype_ptr->indexdata.normals[x] = malloc(f_size);
-		sourcedatatype_ptr->indexdata.texcoord[x] = malloc(f_size);
-
-		for (int y = 0; y < p_offset_size; ++y)
-		{
-			int xv = sourcedatatype_ptr->positions_offset[x][y] * 3;
-			int yv = sourcedatatype_ptr->positions_offset[x][y] * 3 + 1;
-			int zv = sourcedatatype_ptr->positions_offset[x][y] * 3 + 2;
-			int xn = sourcedatatype_ptr->normals_offset[x][y] * 3;
-			int yn = sourcedatatype_ptr->normals_offset[x][y] * 3 + 1;
-			int zn = sourcedatatype_ptr->normals_offset[x][y] * 3 + 2;
-			int ut = sourcedatatype_ptr->texcoord_offset[x][y] * 2;
-			int vt = sourcedatatype_ptr->texcoord_offset[x][y] * 2 + 1;
-
-			sourcedatatype_ptr->indexdata.positions[x][y * 3] = sourcedatatype_ptr->positions[x][xv];
-			sourcedatatype_ptr->indexdata.positions[x][y * 3 + 1] = sourcedatatype_ptr->positions[x][yv];
-			sourcedatatype_ptr->indexdata.positions[x][y * 3 + 2] = sourcedatatype_ptr->positions[x][zv];
-			sourcedatatype_ptr->indexdata.normals[x][y * 3] = sourcedatatype_ptr->normals[x][xn];
-			sourcedatatype_ptr->indexdata.normals[x][y * 3 + 1] = sourcedatatype_ptr->normals[x][yn];
-			sourcedatatype_ptr->indexdata.normals[x][y * 3 + 1] = sourcedatatype_ptr->normals[x][zn];
-			sourcedatatype_ptr->indexdata.texcoord[x][y * 2] = sourcedatatype_ptr->texcoord[x][ut];
-			sourcedatatype_ptr->indexdata.texcoord[x][y * 2 + 1] = sourcedatatype_ptr->texcoord[x][vt];
-		}
-	}
-
-	if (sourcedatatype_ptr->create_animation)
-	{
-		sourcedatatype_ptr->indexdata.joints = malloc(uis_size);
-		sourcedatatype_ptr->indexdata.weights = malloc(fs_size);
-
-		sourcedatatype_ptr->pack_joints_size = malloc(sizeof(uint32_t) * sourcedatatype_ptr->max_object);
-		sourcedatatype_ptr->pack_weights_size = malloc(sizeof(uint32_t) * sourcedatatype_ptr->max_object);
-		sourcedatatype_ptr->pack_joints = malloc(uis_size);
-		sourcedatatype_ptr->pack_weights = malloc(fs_size);
-
-		for (int x = 0; x < sourcedatatype_ptr->max_object; ++x)
-		{
-			uint32_t p_offset_size = sourcedatatype_ptr->p_offset_size[x];
-			size_t f_size = sizeof(float) * p_offset_size;
-			uint32_t max_joint = sourcedatatype_ptr->max_joint_vector[x];
-			sourcedatatype_ptr->pack_joints[x] = malloc(sizeof(uint32_t) * max_joint);
-			sourcedatatype_ptr->pack_weights[x] = malloc(sizeof(float) * max_joint);
-
-			for (int j = 0; j < max_joint; ++j)
-			{
-				sourcedatatype_ptr->pack_joints[x][j] = 0;
-				sourcedatatype_ptr->pack_weights[x][j] = 0.0F;
-			}
-
-			for (int y = 0; y < p_offset_size; ++y)
-			{
-				{
-					int v_offset_by_p = 0;
-
-					for (int i = 0; i < sourcedatatype_ptr->positions_offset[x][y]; ++i)
-					{
-						v_offset_by_p += sourcedatatype_ptr->vcount_offset[x][i];
-					}
-
-					v_offset_by_p *= 2;
-
-					int vc = sourcedatatype_ptr->vcount_offset[x][sourcedatatype_ptr->positions_offset[x][y]];
-
-					int vc_in = 0;
-					int vc_out = 0;
-					sourcedatatype_ptr->pack_joints_size[x] = 0;
-
-					while (vc_out < vc)
-					{
-						sourcedatatype_ptr->pack_joints[x][sourcedatatype_ptr->pack_joints_size[x]] = sourcedatatype_ptr->v_offset[x][v_offset_by_p + vc_in];
-						++sourcedatatype_ptr->pack_joints_size[x];
-						++vc_out;
-						vc_in += 2;
-					}
-				}
-
-				{
-					int v_offset_by_p = 0;
-
-					for (int i = 0; i < sourcedatatype_ptr->positions_offset[x][y]; ++i)
-					{
-						v_offset_by_p += sourcedatatype_ptr->vcount_offset[x][i];
-					}
-
-					v_offset_by_p *= 2;
-
-					int vc = sourcedatatype_ptr->vcount_offset[x][sourcedatatype_ptr->positions_offset[x][y]];
-
-					int vc_in = 0;
-					int vc_out = 0;
-					sourcedatatype_ptr->pack_weights_size[x] = 0;
-
-					while (vc_out < vc)
-					{
-						sourcedatatype_ptr->pack_weights[x][sourcedatatype_ptr->pack_weights_size[x]] = sourcedatatype_ptr->weights[x][sourcedatatype_ptr->v_offset[x][v_offset_by_p + vc_in + 1]];
-						++sourcedatatype_ptr->pack_weights_size[x];
-						++vc_out;
-						vc_in += 2;
-					}
-				}
-			}
-		}
-	}
-
-	// sourcedatatype_ptr->indexdata.positions = positions;
-	// sourcedatatype_ptr->indexdata.normals = normals;
-	// sourcedatatype_ptr->indexdata.texcoord = texcoord;
-
-	// if (SourceDataType::CREATE_COLOR)
-	// {
-	// 	std::vector<std::vector<float>> color(sourcedatatype_ptr->positions_offset.size());
-	//
-	// 	for (int x = 0; x < sourcedatatype_ptr->positions_offset.size(); ++x)
-	// 	{
-	// 		sourcedatatype_ptr->pack_color.push_back({});
-	//
-	// 		for (int y = 0; y < sourcedatatype_ptr->positions_offset[x].size(); ++y)
-	// 		{
-	// 			int xv = sourcedatatype_ptr->color_offset[x][y] * 4;
-	// 			int yv = sourcedatatype_ptr->color_offset[x][y] * 4 + 1;
-	// 			int zv = sourcedatatype_ptr->color_offset[x][y] * 4 + 2;
-	// 			int wv = sourcedatatype_ptr->color_offset[x][y] * 4 + 3;
-	//
-	// 			color[x].push_back(sourcedatatype_ptr->color[x][xv]);
-	// 			color[x].push_back(sourcedatatype_ptr->color[x][yv]);
-	// 			color[x].push_back(sourcedatatype_ptr->color[x][zv]);
-	// 			color[x].push_back(sourcedatatype_ptr->color[x][wv]);
-	// 		}
-	// 	}
-	//
-	// 	sourcedatatype_ptr->indexdata.color = color;
-	// }
-
-	sourcedatatype_ptr->index = malloc(sizeof(uint32_t **) * sourcedatatype_ptr->max_object);
-
-	for (int x = 0; x < sourcedatatype_ptr->max_object; ++x)
-	{
-		sourcedatatype_ptr->index = malloc(sizeof(uint32_t) * );
-
-		for (int y = 0; y < sourcedatatype_ptr->positions_size[x] / 3; ++y)
-		{
-			if (canPackNew(sourcedatatype, x, y))
-			{
-				sourcedatatype_ptr->index[x].push_back({});
-				sourcedatatype_ptr->pack_positions[x].push_back(positions[x][y * 3]);
-				sourcedatatype_ptr->pack_positions[x].push_back(positions[x][y * 3 + 1]);
-				sourcedatatype_ptr->pack_positions[x].push_back(positions[x][y * 3 + 2]);
-				sourcedatatype_ptr->pack_normals[x].push_back(normals[x][y * 3]);
-				sourcedatatype_ptr->pack_normals[x].push_back(normals[x][y * 3 + 1]);
-				sourcedatatype_ptr->pack_normals[x].push_back(normals[x][y * 3 + 2]);
-				sourcedatatype_ptr->pack_texcoord[x].push_back(texcoord[x][y * 2]);
-				sourcedatatype_ptr->pack_texcoord[x].push_back(texcoord[x][y * 2 + 1]);
-
-				// if (SourceDataType::CREATE_COLOR)
-				// {
-				// 	sourcedatatype_ptr->pack_color[x].push_back(sourcedatatype_ptr->indexdata.color[x][y * 4]);
-				// 	sourcedatatype_ptr->pack_color[x].push_back(sourcedatatype_ptr->indexdata.color[x][y * 4 + 1]);
-				// 	sourcedatatype_ptr->pack_color[x].push_back(sourcedatatype_ptr->indexdata.color[x][y * 4 + 2]);
-				// 	sourcedatatype_ptr->pack_color[x].push_back(sourcedatatype_ptr->indexdata.color[x][y * 4 + 3]);
-				// }
-
-				if (sourcedatatype_ptr->create_animation)
-				{
-					for (int z = 0; z < sourcedatatype_ptr->max_joint_vector[x]; ++z)
-					{
-						sourcedatatype_ptr->pack_joints[x].push_back(sourcedatatype_ptr->indexdata.joints[x][y * sourcedatatype_ptr->max_joint_vector[x] + z]);
-						sourcedatatype_ptr->pack_weights[x].push_back(sourcedatatype_ptr->indexdata.weights[x][y * sourcedatatype_ptr->max_joint_vector[x] + z]);
-					}
-				}
-
-				for (int z = 0; z < positions[x].size() / 3; ++z)
-				{
-					if (canPack(sourcedatatype, x, y, z))
-					{
-						sourcedatatype_ptr->index[x][sourcedatatype_ptr->index[x].size() - 1].push_back(z);
-					}
-				}
-			}
-		}
-	}
-}
-//
-// bool GraphicReader::canPackNew(SourceDataType& sourcedatatype, int& x, int& y)
-// {
-// 	for (int z = 0; z < sourcedatatype_ptr->index[x].size(); ++z)
-// 	{
-// 		for (int w = 0; w < sourcedatatype_ptr->index[x][z].size(); ++w)
-// 		{
-// 			if (y == sourcedatatype_ptr->index[x][z][w])
-// 			{
-// 				return false;
-// 			}
-// 		}
-// 	}
-
-// 	return true;
-// }
-
-// bool GraphicReader::canPack(SourceDataType& sourcedatatype, int& x, int& y, int& z)
-// {
-// 	if (SourceDataType::CREATE_COLOR)
-// 	{
-// 		if
-// 		(
-// 			sourcedatatype_ptr->indexdata.color[x][y * 4] != sourcedatatype_ptr->indexdata.color[x][z * 4] ||
-// 			sourcedatatype_ptr->indexdata.color[x][y * 4 + 1] != sourcedatatype_ptr->indexdata.color[x][z * 4 + 1] ||
-// 			sourcedatatype_ptr->indexdata.color[x][y * 4 + 2] != sourcedatatype_ptr->indexdata.color[x][z * 4 + 2] ||
-// 			sourcedatatype_ptr->indexdata.color[x][y * 4 + 3] != sourcedatatype_ptr->indexdata.color[x][z * 4 + 3]
-// 		)
-// 		{
-// 			return false;
-// 		}
-// 	}
-
-// 	if
-// 	(
-// 		sourcedatatype_ptr->indexdata.positions[x][y * 3] == sourcedatatype_ptr->indexdata.positions[x][z * 3] &&
-// 		sourcedatatype_ptr->indexdata.positions[x][y * 3 + 1] == sourcedatatype_ptr->indexdata.positions[x][z * 3 + 1] &&
-// 		sourcedatatype_ptr->indexdata.positions[x][y * 3 + 2] == sourcedatatype_ptr->indexdata.positions[x][z * 3 + 2] &&
-// 		sourcedatatype_ptr->indexdata.texcoord[x][y * 2] == sourcedatatype_ptr->indexdata.texcoord[x][z * 2] &&
-// 		sourcedatatype_ptr->indexdata.texcoord[x][y * 2 + 1] == sourcedatatype_ptr->indexdata.texcoord[x][z * 2 + 1] &&
-// 		sourcedatatype_ptr->indexdata.normals[x][y * 3] == sourcedatatype_ptr->indexdata.normals[x][z * 3] &&
-// 		sourcedatatype_ptr->indexdata.normals[x][y * 3 + 1] == sourcedatatype_ptr->indexdata.normals[x][z * 3 + 1] &&
-// 		sourcedatatype_ptr->indexdata.normals[x][y * 3 + 2] == sourcedatatype_ptr->indexdata.normals[x][z * 3 + 2]
-// 	)
-// 	{
-// 		if (sourcedatatype_ptr->create_animation)
-// 		{
-// 			for (int w = 0; w < sourcedatatype_ptr->max_joint_vector[x]; ++w)
-// 			{
-// 				if
-// 				(
-// 					sourcedatatype_ptr->indexdata.joints[x][y * sourcedatatype_ptr->max_joint_vector[x] + w] != sourcedatatype_ptr->indexdata.joints[x][z * sourcedatatype_ptr->max_joint_vector[x] + w] ||
-// 					sourcedatatype_ptr->indexdata.weights[x][y * sourcedatatype_ptr->max_joint_vector[x] + w] != sourcedatatype_ptr->indexdata.weights[x][z * sourcedatatype_ptr->max_joint_vector[x] + w]
-// 				)
-// 				{
-// 					return false;
-// 				}
-// 			}
-
-// 			return true;
-// 		}
-// 		else
-// 		{
-// 			return true;
-// 		}
-
-// 	}
-// 	else
-// 	{
-// 		return false;
-// 	}
-// }
-
-void graphic_reader_fixAnimation(SourceDataType *sourcedatatype_ptr)
+void graphic_reader_fixAnimation(collada_Source *sourcedatatype_ptr)
 {
 	for (int y = 0; y < sourcedatatype_ptr->armature_string_vector_size; ++y)
 	{
@@ -423,69 +286,3 @@ void graphic_reader_fixAnimation(SourceDataType *sourcedatatype_ptr)
 		}
 	}
 }
-
-// void GraphicReader::unPackIndex(SourceDataType& sourcedatatype)
-// {
-// 	for (int x = 0; x < sourcedatatype_ptr->object_name_vector.size(); ++x)
-// 	{
-// 		sourcedatatype_ptr->unpack_index.push_back({});
-
-// 		for (int y = 0; y < sourcedatatype_ptr->indexdata.positions[x].size() / 3; ++y)
-// 		{
-// 			for (int z = 0; z < sourcedatatype_ptr->index[x].size(); ++z)
-// 			{
-// 				for (int w = 0; w < sourcedatatype_ptr->index[x][z].size(); ++w)
-// 				{
-// 					if (sourcedatatype_ptr->index[x][z][w] == y)
-// 					{
-// 						sourcedatatype_ptr->unpack_index[x].push_back(z);
-// 						break;
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// }
-
-// void GraphicReader::unPackVisualBones(SourceDataType& sourcedatatype)
-// {
-// 	for (int x = 0; x < sourcedatatype_ptr->object_name_vector.size(); ++x)
-// 	{
-// 		sourcedatatype_ptr->un_pack_visual_bones.push_back({});
-
-// 		for (int y = 0; y < sourcedatatype_ptr->visual_bones_bonedata_vector_vector[x].size(); ++y)
-// 		{
-// 			std::vector<float>& visual_bones_transform_float_vector = sourcedatatype_ptr->visual_bones_bonedata_vector_vector[x][y].visual_bones_transform_float_vector;
-
-// 			for (int z = 0; z < visual_bones_transform_float_vector.size(); ++z)
-// 			{
-// 				sourcedatatype_ptr->un_pack_visual_bones[x].push_back(visual_bones_transform_float_vector[z]);
-// 			}
-// 		}
-// 	}
-// }
-
-// void GraphicReader::updateBones(SourceDataType& sourcedatatype)
-// {
-// 	std::vector<std::string> armature_string_vector;
-// 	for (int i = 0; i < sourcedatatype_ptr->armature_string_vector.size(); ++i)
-// 	{
-// 		armature_string_vector.push_back("*" + sourcedatatype_ptr->armature_string_vector[i] + "*");
-// 	}
-
-// 	for (int x = 0; x < sourcedatatype_ptr->object_name_vector.size(); ++x)
-// 	{
-// 		sourcedatatype_ptr->skinning_bones.push_back({});
-// 		sourcedatatype_ptr->animation_bones.push_back({});
-
-// 		for (int z = 0; z < sourcedatatype_ptr->joints[x].size(); ++z)
-// 		{
-// 			int index = GraphicReader::matchString(sourcedatatype_ptr->joints[x][z], armature_string_vector, '*', '*');
-// 			if (index != -1)
-// 			{
-// 				sourcedatatype_ptr->skinning_bones[x].push_back(z * 16);
-// 				sourcedatatype_ptr->animation_bones[x].push_back(index * sourcedatatype_ptr->max_frame);
-// 			}
-// 		}
-// 	}
-// }

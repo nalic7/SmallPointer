@@ -1,36 +1,20 @@
 #ifdef PCH_GLTF
 
-	#define GLTF_IN "G_I"
-	#define GLTF_OUT "G_O"
+	#define GLTF_IN "./G_I"
+	#define GLTF_OUT "./G_O"
+
+	// #include <stdio.h>
+	// #include <stdlib.h>
+	#include <stdint.h>
+	#include <sys/stat.h>
+	#include <dirent.h>
+	#include <math.h>
+	#include <threads.h>
+
+	#include "math/math.h"
 
 #endif
 #ifdef PCH_COLLADA
-
-	#define CP_IN "./C_I"
-	#define CP_OUT "./C_O"
-
-	#define CP_COMPRESS 1
-	#define CP_FIX_ANIMATION 1
-	// #define CP_DECOMPOSED 0
-	// #define CP_CREATE_COLOR 0
-	#define CP_ARMATURE_NAME "<animation id=\""
-	#define CP_VERTICES_NAME "/vertex.bin"
-	#define CP_NORMALS_NAME "/normal.bin"
-	#define CP_TEXCOORD_NAME "/texcoord.bin"
-	#define CP_COLOR_NAME "/color.bin"
-	#define CP_JOINTS_NAME "/joint.bin"
-	#define CP_WEIGHTS_NAME "/weight.bin"
-	#define CP_BINDPOSES_NAME "/bindpose.bin"
-	#define CP_JOINTSIDENTITY_NAME "/jointsidentity.dat"
-	#define CP_INDEX_NAME "/index.bin"
-	#define CP_ANIMATION_NAME "/frame"
-	#define CP_BONES_NAME "/bone"
-	#define CP_BONES_M4X4_NAME "/BonesM4x4"
-	#define CP_SKINNING_BONES_NAME "/SkinningBones"
-	#define CP_ANIMATION_BONES_NAME "/AnimationBones"
-	#define CP_TIMES_NAME "/time.bin"
-	#define CP_TRANSFORMS_NAME "/transform.bin"
-	#define CP_VISUALBONES_NAME "/visualbone.bin"
 
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -106,8 +90,8 @@
 #endif
 #ifdef PCH_NALIGL
 
-	#include <stdio.h>
-	#include <stdlib.h>
+	// #include <stdio.h>
+	// #include <stdlib.h>
 
 	#define NALI_LWJGL2
 	#define NALI_X11
@@ -116,9 +100,9 @@
 	// #define NALI_LWJGL3
 
 	#include <jni.h>
-	#include <GL/gl.h>
 
 	#ifdef NALI_LWJGL3
+		#include <GL/gl.h>
 		#define tlsGetFunction(index) (uintptr_t)((void **)(*__env)->reserved3)[index]
 		typedef void (APIENTRY *glGenVertexArraysPROC) (jint, uintptr_t);
 	#endif

@@ -1,3 +1,4 @@
+//need math to use this
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
@@ -191,43 +192,44 @@ int main_skin_gltf(void *name)
 					cgltf_size cgltf_size_count = cgltf_accessor_ptr->count;
 					cgltf_size cgltf_size_type = cgltf_num_components(cgltf_accessor_ptr->type);
 					void *a_data;
-					size_t a_size = cgltf_size_count * cgltf_size_type;
+					// size_t a_size = cgltf_size_count * cgltf_size_type;
 					switch (cgltf_accessor_ptr->component_type)
 					{
 						case cgltf_component_type_r_32f:
-							a_data = malloc(a_size * sizeof(cgltf_float));
-							a_size /= sizeof(cgltf_float);
-							// cgltf_float *cgltf_float = a_data;
-							for (size_t k = 0; k < cgltf_size_count; ++k)
-							{
-								cgltf_accessor_read_float(cgltf_accessor_ptr, k, &a_data[k * cgltf_size_type], cgltf_size_type);
-								// if (cgltf_size_type == 4)
-								// {
-								// 	info("wx%f, wy%f wz%f ww%f", cgltf_float[k], cgltf_float[k + 1], cgltf_float[k + 2], cgltf_float[k + 3])
-								// }
-							}
+							a_data = malloc(cgltf_size_count * sizeof(cgltf_float));
+							// // a_size /= sizeof(cgltf_float);
+							// // cgltf_float *cgltf_float = a_data;
+							// for (size_t k = 0; k < cgltf_size_count; ++k)
+							// {
+							// 	cgltf_accessor_read_float(cgltf_accessor_ptr, k, &a_data[k * cgltf_size_type], cgltf_size_type);
+							// 	// if (cgltf_size_type == 4)
+							// 	// {
+							// 	// 	info("wx%f, wy%f wz%f ww%f", cgltf_float[k], cgltf_float[k + 1], cgltf_float[k + 2], cgltf_float[k + 3])
+							// 	// }
+							// }
 							break;
 						case cgltf_component_type_r_8u:
-							a_data = malloc(a_size * sizeof(cgltf_uint));
-							a_size /= sizeof(cgltf_uint);
-							// cgltf_uint *cgltf_uint = a_data;
-							for (size_t k = 0; k < cgltf_size_count; ++k)
-							{
-								//find max joints with weight
-								cgltf_accessor_read_uint(cgltf_accessor_ptr, k, &a_data[k * cgltf_size_type], cgltf_size_type);
-								// info("jx%d, jy%d jz%d jw%d", cgltf_uint[k], cgltf_uint[k + 1], cgltf_uint[k + 2], cgltf_uint[k + 3])
-							}
+							a_data = malloc(cgltf_size_count * sizeof(cgltf_uint));
+							// // a_size /= sizeof(cgltf_uint);
+							// // cgltf_uint *cgltf_uint = a_data;
+							// for (size_t k = 0; k < cgltf_size_count; ++k)
+							// {
+							// 	//find max joints with weight
+							// 	cgltf_accessor_read_uint(cgltf_accessor_ptr, k, &a_data[k * cgltf_size_type], cgltf_size_type);
+							// 	// info("jx%d, jy%d jz%d jw%d", cgltf_uint[k], cgltf_uint[k + 1], cgltf_uint[k + 2], cgltf_uint[k + 3])
+							// }
 							break;
 						default:
 							error("cgltf_accessor_ptr->type")
 					}
 
-					if (strcmp(cgltf_attribute.name, "JOINTS_0") == 0 || strcmp(cgltf_attribute.name, "WEIGHTS_0") == 0)
-					{
-						a_size = cgltf_size_count * max_joint;
-					}
+					// if (strcmp(cgltf_attribute.name, "JOINTS_0") == 0 || strcmp(cgltf_attribute.name, "WEIGHTS_0") == 0)
+					// {
+					// 	// a_size = cgltf_size_count * max_joint;
+					// 	a_size = cgltf_size_count * 4;
+					// }
 					info("%s %ld / %ld", n0, cgltf_accessor_ptr->stride, cgltf_size_type)
-					main_write_file(n0, a_data, cgltf_accessor_ptr->stride / 4, a_size);
+					main_write_file(n0, a_data, cgltf_accessor_ptr->stride / cgltf_size_type, cgltf_size_count);
 					free(n0);
 					free(a_data);
 				}
@@ -243,10 +245,11 @@ int main_skin_gltf(void *name)
 				}
 
 				info("%s %ld / 1", n2, cgltf_accessor_ptr->stride)
+				cgltf_size cgltf_size_type = cgltf_num_components(cgltf_accessor_ptr->type);
 				for (size_t j = 0; j < cgltf_size_count; ++j)
 				{
 					cgltf_size cgltf_size = cgltf_accessor_read_index(cgltf_accessor_ptr, j);
-					fwrite(&cgltf_size, cgltf_accessor_ptr->stride, 1, file);
+					fwrite(&cgltf_size, cgltf_accessor_ptr->stride / cgltf_size_type, 1, file);
 					// fwrite(&cgltf_size, sizeof(uint32_t), 1, file);
 				}
 
@@ -273,12 +276,12 @@ int main_skin_gltf(void *name)
 				cgltf_size cgltf_size_count = cgltf_accessor_ptr->count;
 				cgltf_size cgltf_size_type = cgltf_num_components(cgltf_accessor_ptr->type);
 				void *a_data;
-				size_t a_size = cgltf_size_count * cgltf_size_type;
+				// size_t a_size = cgltf_size_count * cgltf_size_type;
 				switch (cgltf_accessor_ptr->component_type)
 				{
 					case cgltf_component_type_r_32f:
-						a_data = malloc(a_size * sizeof(cgltf_float));
-						a_size /= sizeof(cgltf_float);
+						a_data = malloc(cgltf_size_count * sizeof(cgltf_float));
+						// a_size /= sizeof(cgltf_float);
 						// cgltf_float *cgltf_float = a_data;
 						for (size_t k = 0; k < cgltf_size_count; ++k)
 						{
@@ -289,7 +292,7 @@ int main_skin_gltf(void *name)
 						error("cgltf_accessor_ptr->type")
 				}
 				info("%s %ld / %ld", n0, cgltf_accessor_ptr->stride, cgltf_size_type)
-				main_write_file(n0, a_data, cgltf_accessor_ptr->stride / 4, a_size);
+				main_write_file(n0, a_data, cgltf_accessor_ptr->stride / cgltf_size_type, cgltf_size_count);
 				free(n0);
 				free(a_data);
 			}
@@ -393,7 +396,7 @@ int main_skin_gltf(void *name)
 	return 0;
 }
 
-int gltf_main()
+int main()
 {
 	mkdir(GLTF_IN, 0700);
 	mkdir(GLTF_OUT, 0700);

@@ -1,3 +1,123 @@
+void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
+{
+	uint32_t max_data = collada_source_ptr->max_data;
+	for (uint32_t m = 0; m < max_data; ++m)
+	{
+		// uint32_t max_joint = collada_source_ptr->max_bone_ptr[m];
+		uint32_t collada_pack_size = collada_source_ptr->collada_pack_size_ptr[m];
+		char* name_ptr = collada_source_ptr->data_name_ptr[m];
+
+		char* n0_ptr = math_combine(path, name_ptr);
+		mkdir(n0_ptr, 0700);
+
+		char* n1_ptr = math_combine(n0_ptr, C_INDEX_FILE);
+		FILE* index_file = fopen(n1_ptr, "wb");
+		fwrite(collada_source_ptr->index_ptr[m], sizeof(float), collada_source_ptr->index_size_ptr[m], index_file);
+		free(n1_ptr);
+		fclose(index_file);
+
+		n1_ptr = math_combine(n0_ptr, C_VERTEX_FILE);
+		remove(n1_ptr);
+		FILE* vertex_file = fopen(n1_ptr, "ab");
+		free(n1_ptr);
+
+		n1_ptr = math_combine(n0_ptr, C_NORMAL_FILE);
+		remove(n1_ptr);
+		FILE* normal_file = fopen(n1_ptr, "ab");
+		free(n1_ptr);
+
+		n1_ptr = math_combine(n0_ptr, C_TEXCOORD_FILE);
+		remove(n1_ptr);
+		FILE* texcoord_file = fopen(n1_ptr, "ab");
+		free(n1_ptr);
+
+		n1_ptr = math_combine(n0_ptr, C_JOINT_FILE);
+		remove(n1_ptr);
+		FILE* joint_file = fopen(n1_ptr, "ab");
+		free(n1_ptr);
+
+		n1_ptr = math_combine(n0_ptr, C_WEIGHT_FILE);
+		remove(n1_ptr);
+		FILE* weight_file = fopen(n1_ptr, "ab");
+		free(n1_ptr);
+
+		for (uint32_t p = 0; p < collada_pack_size; ++p)
+		{
+			collada_Pack collada_pack = collada_source_ptr->collada_pack_ptr[m][p];
+			fwrite(&collada_pack.p_x, sizeof(float), 1, vertex_file);
+			fwrite(&collada_pack.p_y, sizeof(float), 1, vertex_file);
+			fwrite(&collada_pack.p_z, sizeof(float), 1, vertex_file);
+
+			fwrite(&collada_pack.n_x, sizeof(float), 1, normal_file);
+			fwrite(&collada_pack.n_y, sizeof(float), 1, normal_file);
+			fwrite(&collada_pack.n_z, sizeof(float), 1, normal_file);
+
+			fwrite(&collada_pack.t_x, sizeof(float), 1, texcoord_file);
+			fwrite(&collada_pack.t_y, sizeof(float), 1, texcoord_file);
+
+			// fwrite(collada_pack.joint_ptr, sizeof(uint32_t), max_joint, joint_file);
+			// fwrite(collada_pack.weight_ptr, sizeof(float), max_joint, weight_file);
+			fwrite(collada_pack.joint_ptr, sizeof(unsigned char), collada_pack.max_bone, joint_file);
+			fwrite(collada_pack.weight_ptr, sizeof(float), collada_pack.max_bone, weight_file);
+		}
+
+		fclose(vertex_file);
+		fclose(normal_file);
+		fclose(texcoord_file);
+		fclose(joint_file);
+		fclose(weight_file);
+
+		free(n0_ptr);
+	}
+
+	uint32_t max_bone = collada_source_ptr->max_bone;
+
+	mkdir(path, 0700);
+	char* n1_ptr = math_combine(path, C_BINDPOSE_FILE);
+	FILE* file = fopen(n1_ptr, "wb");
+	fwrite(collada_source_ptr->bind_pose_ptr, sizeof(float), max_bone * 16, file);
+	free(n1_ptr);
+	fclose(file);
+
+	n1_ptr = math_combine(path, C_TRANSFORM_FILE);
+	file = fopen(n1_ptr, "wb");
+	fwrite(collada_source_ptr->armature_transform_vector, sizeof(float), max_bone * collada_source_ptr->max_frame * 16, file);
+	free(n1_ptr);
+	fclose(file);
+
+	n1_ptr = math_combine(path, "_Doc");
+	mkdir(n1_ptr, 0700);
+
+	char* n2_ptr = math_combine(n1_ptr, C_BONE_FILE);
+	file = fopen(n2_ptr, "wb");
+	for (uint32_t m = 0; m < max_bone; ++m)
+	{
+		BoneData bonedata = collada_source_ptr->bonedata_vector[m];
+		fwrite(bonedata.bones_name_string[0], sizeof(char), strlen(bonedata.bones_name_string[0]), file);
+		char n = '\n';
+		fwrite(&n, sizeof(char), 1, file);
+	}
+	free(n2_ptr);
+	free(n1_ptr);
+	fclose(file);
+
+	n1_ptr = math_combine(path, "/bone/");
+	mkdir(n1_ptr, 0700);
+
+	for (uint32_t m = 0; m < max_bone; ++m)
+	{
+		char* n = math_get(m);
+		n2_ptr = math_combine(n1_ptr, n);
+		free(n);
+		file = fopen(n2_ptr, "wb");
+		fwrite(collada_source_ptr->bone_ptr[m], sizeof(unsigned char), collada_source_ptr->bone_size_ptr[m], file);
+		free(n2_ptr);
+		fclose(file);
+	}
+
+	free(n1_ptr);
+}
+
 // void file_writer_modelFile(SourceDataType *sourcedatatype_ptr, const char *path)
 // {
 //	 if (CP_COMPRESS)

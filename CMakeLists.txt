@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
 # set(GLTF 1)
-# set(COLLADA 1)
+set(COLLADA 1)
 # set(LWJGL64 1)
 # set(NALIGL 1)
-set(NALIAL 1)
+# set(NALIAL 1)
 
 if(GLTF)
   set(P_NAME gltf)
@@ -29,11 +29,16 @@ set(CMAKE_C_STANDARD_REQUIRED On)
 if(GLTF)
 
   add_executable(${P_NAME}
+    src/math/math.c
     src/gltf/gltf.c
   )
 
   target_include_directories(${P_NAME} PRIVATE
     ../cgltf
+  )
+
+  target_link_libraries(${P_NAME}
+    m
   )
 
   target_compile_definitions(${P_NAME} PRIVATE PCH_GLTF=1)
@@ -134,7 +139,7 @@ elseif(NALIGL)
 
   set(JAVA_HOME lib/jdk8u412-b08/)
 
-  add_library(${P_NAME} SHARED src/glnali.c)
+  add_library(${P_NAME} SHARED src/gl/nali/glnali.c)
 
   target_include_directories(${P_NAME} PRIVATE
     ${JAVA_HOME}include

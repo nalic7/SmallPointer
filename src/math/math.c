@@ -10,10 +10,8 @@ float math_degree(float radian)
 
 char* math_combine(const char* str1, const char* str2)
 {
-	size_t len1 = strlen(str1);
-	size_t len2 = strlen(str2);
-	
-	char *char_ptr = malloc(len1 + len2 + 1);
+	//auto \0
+	char *char_ptr = malloc(strlen(str1) + strlen(str2) + 1);
 
 	strcpy(char_ptr, str1);
 	strcat(char_ptr, str2);
@@ -21,8 +19,17 @@ char* math_combine(const char* str1, const char* str2)
 	return char_ptr;
 }
 
-uint32_t math_n_c_size(int number)
+//abs(number)
+uint32_t math_length(uint32_t number)
 {
 	if (number == 0) return 1;
-	return (uint32_t)log10(abs(number)) + 1;
+	return (uint32_t)log10(number) + 1;
+}
+
+char* math_get(uint32_t number)
+{
+	//auto \0
+	char* c_ptr = malloc(sizeof(char) * math_length(number) + 1);
+	sprintf(c_ptr, "%u", number);
+	return c_ptr;
 }
