@@ -3,7 +3,7 @@
 
 extern float m_m4x4_mat[16];
 
-void m4x4_inverse(float *mat_ptr, uint32_t index);
+void m4x4_inverse(float* mat_ptr, uint32_t index);
 
 // struct TransformComponents
 // {

@@ -1,4 +1,4 @@
-const char *ppEnabledExtensionNames[] =
+const char* ppEnabledExtensionNames[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
 	VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
@@ -6,7 +6,7 @@ const char *ppEnabledExtensionNames[] =
 	VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 };
 
-const char *ppEnabledLayerNames[] =
+const char* ppEnabledLayerNames[] =
 {
 	"VK_LAYER_KHRONOS_validation"
 };

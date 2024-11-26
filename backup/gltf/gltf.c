@@ -1,4 +1,5 @@
 //need math to use this
+//use index to create triangle
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 

@@ -1,6 +1,6 @@
-char file_reader_match(FILE *file_ptr, const char *mchar_ptr[], size_t size)
+char file_reader_match(FILE* file_ptr, const char* mchar_ptr[], size_t size)
 {
-	char *char_ptr[size];
+	char* char_ptr[size];
 	for (uint32_t i = 0; i < size; ++i)
 	{
 		char_ptr[i] = malloc(sizeof(char));
@@ -42,17 +42,17 @@ char file_reader_match(FILE *file_ptr, const char *mchar_ptr[], size_t size)
 	return -1;
 }
 
-char **file_reader_char_ptr(FILE *file_ptr, const char *f_char_ptr, const char *e_char_ptr, char **char_ptr, uint32_t *size)
+char** file_reader_char_ptr(FILE* file_ptr, const char* f_char_ptr, const char* e_char_ptr, char** char_ptr, uint32_t* size)
 {
-	char *c_ptr = malloc(sizeof(char));
+	char* c_ptr = malloc(sizeof(char));
 	c_ptr[sizeof(char) - 1] = '\0';
 	uint32_t c_index = 0;
 
-	char *sf_char_ptr = malloc(sizeof(char));
+	char* sf_char_ptr = malloc(sizeof(char));
 	sf_char_ptr[sizeof(char) - 1] = '\0';
 	uint32_t sf_index = 0;
 
-	char *se_char_ptr = malloc(sizeof(char));
+	char* se_char_ptr = malloc(sizeof(char));
 	se_char_ptr[sizeof(char) - 1] = '\0';
 	uint32_t se_index = 0;
 
@@ -93,7 +93,7 @@ char **file_reader_char_ptr(FILE *file_ptr, const char *f_char_ptr, const char *
 
 		if (strcmp(f_char_ptr, sf_char_ptr) == 0)
 		{
-			char_ptr = realloc(char_ptr, (*size + 1) * sizeof(char *));
+			char_ptr = realloc(char_ptr, (*size + 1) * sizeof(char*));
 			size_t length = (c_index + sizeof(char) + 1) * sizeof(char);
 			char_ptr[*size] = malloc(length);
 			memcpy(char_ptr[*size], c_ptr, length);
@@ -108,7 +108,7 @@ char **file_reader_char_ptr(FILE *file_ptr, const char *f_char_ptr, const char *
 		{
 			if (c_index != 0)
 			{
-				char_ptr = realloc(char_ptr, (*size + 1) * sizeof(char *));
+				char_ptr = realloc(char_ptr, (*size + 1) * sizeof(char*));
 				size_t length = (c_index + sizeof(char) + 1) * sizeof(char);
 				char_ptr[*size] = malloc(length);
 				memcpy(char_ptr[*size], c_ptr, length);
@@ -127,13 +127,13 @@ char **file_reader_char_ptr(FILE *file_ptr, const char *f_char_ptr, const char *
 	return char_ptr;
 }
 
-float *file_reader_float(FILE *file_ptr, const char *e_char_ptr, float *float_ptr, uint32_t *size)
+float* file_reader_float(FILE* file_ptr, const char* e_char_ptr, float* float_ptr, uint32_t* size)
 {
-	char *n_char_ptr = malloc(sizeof(char));//'\0'
+	char* n_char_ptr = malloc(sizeof(char));//'\0'
 	n_char_ptr[sizeof(char) - 1] = '\0';
 	uint32_t n_index = 0;
 
-	char *se_char_ptr = malloc(sizeof(char));
+	char* se_char_ptr = malloc(sizeof(char));
 	se_char_ptr[sizeof(char) - 1] = '\0';
 	uint32_t se_index = 0;
 
@@ -190,14 +190,14 @@ float *file_reader_float(FILE *file_ptr, const char *e_char_ptr, float *float_pt
 	return float_ptr;
 }
 
-int *file_reader_int(FILE *file_ptr, const char *e_char_ptr, int *int_ptr, uint32_t *size)
+int* file_reader_int(FILE* file_ptr, const char* e_char_ptr, int* int_ptr, uint32_t* size)
 {
-	char *n_char_ptr = malloc(sizeof(char));
+	char* n_char_ptr = malloc(sizeof(char));
 	n_char_ptr[sizeof(char) - 1] = '\0';
 	int n_index = 0;
 
 	// char f_char[sizeof(int)];
-	char *se_char_ptr = malloc(sizeof(char));
+	char* se_char_ptr = malloc(sizeof(char));
 	se_char_ptr[sizeof(char) - 1] = '\0';
 	int se_index = 0;
 
@@ -264,18 +264,18 @@ int *file_reader_int(FILE *file_ptr, const char *e_char_ptr, int *int_ptr, uint3
 	return int_ptr;
 }
 
-BoneData *file_reader_node(FILE *file_ptr, BoneData *bonedata, uint32_t *size)
+collada_Bone* file_reader_node(FILE* file_ptr, collada_Bone* collada_bone_ptr, uint32_t* size)
 {
-	bonedata = realloc(bonedata, (*size + 1) * sizeof(BoneData));
-	bonedata[*size].bones_name_string_size = 0;
-	bonedata[*size].bones_name_string = malloc(0);
+	collada_bone_ptr = realloc(collada_bone_ptr, (*size + 1) * sizeof(collada_Bone));
+	collada_bone_ptr[*size].name_size = 0;
+	collada_bone_ptr[*size].name_ptr = malloc(0);
 	file_reader_match(file_ptr, (const char*[]){"name=\""}, 1);
-	bonedata[*size].bones_name_string = file_reader_char_ptr(file_ptr, "\t", "\"", bonedata[*size].bones_name_string, &bonedata[*size].bones_name_string_size);
+	collada_bone_ptr[*size].name_ptr = file_reader_char_ptr(file_ptr, "\t", "\"", collada_bone_ptr[*size].name_ptr, &collada_bone_ptr[*size].name_size);
 	file_reader_match(file_ptr, (const char*[]){"type=\"JOINT\">\n"}, 1);
-	bonedata[*size].bones_name_string = file_reader_char_ptr(file_ptr, "\t", "<matrix sid=\"transform\">", bonedata[*size].bones_name_string, &bonedata[*size].bones_name_string_size);
-	bonedata[*size].visual_bones_transform_float_vector_size = 0;
-	bonedata[*size].visual_bones_transform_float_vector = malloc(0);
-	bonedata[*size].visual_bones_transform_float_vector = file_reader_float(file_ptr, "</matrix>", bonedata[*size].visual_bones_transform_float_vector, &bonedata[*size].visual_bones_transform_float_vector_size);
+	collada_bone_ptr[*size].name_ptr = file_reader_char_ptr(file_ptr, "\t", "<matrix sid=\"transform\">", collada_bone_ptr[*size].name_ptr, &collada_bone_ptr[*size].name_size);
+	collada_bone_ptr[*size].visual_size = 0;
+	collada_bone_ptr[*size].visual_ptr = malloc(0);
+	collada_bone_ptr[*size].visual_ptr = file_reader_float(file_ptr, "</matrix>", collada_bone_ptr[*size].visual_ptr, &collada_bone_ptr[*size].visual_size);
 	++*size;
-	return bonedata;
+	return collada_bone_ptr;
 }

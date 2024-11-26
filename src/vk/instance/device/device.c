@@ -6,7 +6,7 @@ void vk_makeDevice(uint32_t device)
 
 	info("max_graphics %d", max_graphics)
 
-	VkDeviceQueueCreateInfo *vkdevicequeuecreateinfo_ptr = malloc(max_graphics * sizeof(VkDeviceQueueCreateInfo));
+	VkDeviceQueueCreateInfo* vkdevicequeuecreateinfo_ptr = malloc(max_graphics * sizeof(VkDeviceQueueCreateInfo));
 
 	float queuepriority = 1.0F;
 

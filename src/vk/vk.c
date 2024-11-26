@@ -3,33 +3,33 @@ VkInstance m_vkinstance;
 //D
 uint32_t m_max_device;
 
-VkPhysicalDevice *m_vkphysicaldevice_ptr;
-unsigned char *m_max_graphics_ptr;
-uint32_t **m_graphics_ptr;
-VkQueue **m_vkqueue_graphics_ptr;
+VkPhysicalDevice* m_vkphysicaldevice_ptr;
+unsigned char* m_max_graphics_ptr;
+uint32_t** m_graphics_ptr;
+VkQueue** m_vkqueue_graphics_ptr;
 
-VkDevice *m_vkdevice_ptr;
+VkDevice* m_vkdevice_ptr;
 //D
 
 //S
 VkSurfaceKHR m_vksurfacekhr;
 
-VkSwapchainKHR *m_vkswapchainkhr_ptr;
+VkSwapchainKHR* m_vkswapchainkhr_ptr;
 
-VkSurfaceCapabilitiesKHR *m_vksurfacecapabilitieskhr_ptr;
+VkSurfaceCapabilitiesKHR* m_vksurfacecapabilitieskhr_ptr;
 
-VkSurfaceFormatKHR **m_vksurfaceformatkhr_ptr;
-uint32_t *m_vkswapchainkhr_format_ptr;
+VkSurfaceFormatKHR** m_vksurfaceformatkhr_ptr;
+uint32_t* m_vkswapchainkhr_format_ptr;
 
-VkPresentModeKHR **m_vkpresentmodekhr_ptr;
-uint32_t *m_vkswapchainkhr_present_mode_ptr;
+VkPresentModeKHR** m_vkpresentmodekhr_ptr;
+uint32_t* m_vkswapchainkhr_present_mode_ptr;
 
-VkImage **m_vkswapchainkhr_vkimage_ptr;
+VkImage** m_vkswapchainkhr_vkimage_ptr;
 
-VkFence *m_vkfence_ptr;
-VkSemaphore ***m_vksemaphore_ptr;
+VkFence* m_vkfence_ptr;
+VkSemaphore*** m_vksemaphore_ptr;
 
-VkCommandPool **m_vkcommandpool_ptr;
+VkCommandPool** m_vkcommandpool_ptr;
 //S
 
 uint32_t m_device = 0;
@@ -63,7 +63,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 // //	 uint32_t queueFamilyCount = 0;
 // //	 vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, NULL);
 
-// //	 VkQueueFamilyProperties *queueFamilies = malloc(sizeof(VkQueueFamilyProperties) * queueFamilyCount);
+// //	 VkQueueFamilyProperties* queueFamilies = malloc(sizeof(VkQueueFamilyProperties) * queueFamilyCount);
 // //	 vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies);
 
 // //	 for (uint32_t i = 0; i < queueFamilyCount; i++) {
@@ -94,7 +94,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 // // }
 
 // VkCommandPool vkcommandpool;
-// VkCommandBuffer *vkcommandbuffer_ptr;
+// VkCommandBuffer* vkcommandbuffer_ptr;
 
 // VkRenderPass vkrenderpass;
 // VkFramebuffer vkframebuffer;
@@ -110,7 +110,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 // VkSemaphore imageAvailableSemaphore;
 // VkSemaphore renderingCompleteSemaphore;
 
-// uint32_t findMemoryType(vk *vk, uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags)
+// uint32_t findMemoryType(vk* vk, uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags)
 // {
 //	 VkPhysicalDevice vkphysicaldevice = vk->vkphysicaldevice_ptr[device];
 //	 VkPhysicalDeviceMemoryProperties vkphysicaldevicememoryproperties;
@@ -129,7 +129,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 //	 return 0;
 // }
 
-// void createImage(vk *vk, uint32_t device, uint32_t width, uint32_t height, VkFormat vkformat, VkImageTiling vkimagetiling, VkImageUsageFlags vkimageusageflags, VkMemoryPropertyFlags vkmemorypropertyflags, VkImage *vkimage, VkDeviceMemory *vkdevicememory)
+// void createImage(vk* vk, uint32_t device, uint32_t width, uint32_t height, VkFormat vkformat, VkImageTiling vkimagetiling, VkImageUsageFlags vkimageusageflags, VkMemoryPropertyFlags vkmemorypropertyflags, VkImage* vkimage, VkDeviceMemory* vkdevicememory)
 // {
 //	 VkImageCreateInfo vkimagecreateinfo;
 //	 vkimagecreateinfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -170,7 +170,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 //	 vkBindImageMemory(vk->vkdevice, *vkimage, *vkdevicememory, 0);
 // }
 
-// // VkImageView createImageViews(vk *vk, VkImage vkimage, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags/* , VkComponentMapping vkcomponentmapping */)
+// // VkImageView createImageViews(vk* vk, VkImage vkimage, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags/* , VkComponentMapping vkcomponentmapping */)
 // // {
 // //	 VkImageView vkimageview;
 
@@ -200,7 +200,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 // //	 return vkimageview;
 // // }
 
-// VkFormat findSupportedFormat(vk *vk, uint32_t device, VkFormat vkformatvector[], uint32_t vkformatvector_size, VkImageTiling vkimagetiling, VkFormatFeatureFlags vkformatfeatureflags)
+// VkFormat findSupportedFormat(vk* vk, uint32_t device, VkFormat vkformatvector[], uint32_t vkformatvector_size, VkImageTiling vkimagetiling, VkFormatFeatureFlags vkformatfeatureflags)
 // {
 //	 VkFormat vkformatfromvector;
 //	 for (uint32_t i = 0; i < vkformatvector_size; ++i)
@@ -225,13 +225,13 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 //	 return vkformatfromvector;
 // }
 
-// VkFormat findDepthFormat(vk *vk, uint32_t device)
+// VkFormat findDepthFormat(vk* vk, uint32_t device)
 // {
 //	 VkFormat vkformat[] = { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT };
 //	 return findSupportedFormat(vk, device, vkformat, 3, VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 // }
 
-// void createFramebuffers(vk *vk, uint32_t device)
+// void createFramebuffers(vk* vk, uint32_t device)
 // {
 //	 info("run_createFramebuffers")
 //	 VkFormat depth_vkformat = findDepthFormat(vk, device);
@@ -282,7 +282,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 //	 // }
 // }
 
-// void createRenderPass(vk *vk, uint32_t device)
+// void createRenderPass(vk* vk, uint32_t device)
 // {
 //	 info("run_createRenderPass")
 //	 VkAttachmentDescription color_vkattachmentdescription;
@@ -340,7 +340,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 //		 color_vkattachmentdescription,
 //		 depthvkattachmentdescription
 //	 };
-//	 // VkAttachmentDescription *vkattachmentdescription_ptr = malloc(2 * sizeof(VkAttachmentDescription));
+//	 // VkAttachmentDescription* vkattachmentdescription_ptr = malloc(2 * sizeof(VkAttachmentDescription));
 //	 // vkattachmentdescription_ptr[0] = color_vkattachmentdescription;
 //	 // vkattachmentdescription_ptr[1] = depthvkattachmentdescription;
 
@@ -362,7 +362,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 //	 }
 // }
 
-int vk_loop(void *arg)
+int vk_loop(void* arg)
 {
 	// uint32_t d = 0;
 
@@ -708,7 +708,7 @@ void checkE(uint32_t d)
 	uint32_t extensions = 0;
 	vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE);
 
-	VkExtensionProperties *vkextensionproperties_ptr = malloc(extensions * sizeof(VkExtensionProperties));
+	VkExtensionProperties* vkextensionproperties_ptr = malloc(extensions * sizeof(VkExtensionProperties));
 	vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_ptr);
 
 	uint32_t device_extensions_size = sizeof(deviceextensions) / sizeof(deviceextensions[0]);

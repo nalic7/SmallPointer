@@ -8,7 +8,7 @@ void vk_draw()
 	VkSwapchainKHR vkswapchainkhr = m_vkswapchainkhr_ptr[m_device];
 	VkFence vkfence = m_vkfence_ptr[m_device];
 	VkQueue vkqueue = m_vkqueue_graphics_ptr[m_graphic][m_graphic];
-	VkSemaphore *vksemaphore_ptr = m_vksemaphore_ptr[m_graphic][m_graphic];
+	VkSemaphore* vksemaphore_ptr = m_vksemaphore_ptr[m_graphic][m_graphic];
 	VkSemaphore image_vksemaphore = vksemaphore_ptr[0];
 	VkSemaphore render_vksemaphore = vksemaphore_ptr[1];
 

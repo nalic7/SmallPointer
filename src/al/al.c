@@ -1,5 +1,5 @@
-ALCdevice *m_alcdevice;
-ALCcontext *alccontext;
+ALCdevice* m_alcdevice;
+ALCcontext* alccontext;
 
 void al_init()
 {

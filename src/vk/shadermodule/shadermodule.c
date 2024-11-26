@@ -1,4 +1,4 @@
-void vk_makeShaderModule(uint32_t device, uint32_t *uint32_t_ptr, uint32_t size, VkShaderModule* vkshadermodule_ptr)
+void vk_makeShaderModule(uint32_t device, uint32_t* uint32_t_ptr, uint32_t size, VkShaderModule* vkshadermodule_ptr)
 {
 	VkShaderModuleCreateInfo vkshadermodulecreateinfo =
 	{

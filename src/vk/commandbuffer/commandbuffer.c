@@ -1,4 +1,4 @@
-void vk_makeCommandBuffer(uint32_t device, uint32_t graphic, VkCommandBuffer *vkcommandbuffer_ptr, uint32_t size)
+void vk_makeCommandBuffer(uint32_t device, uint32_t graphic, VkCommandBuffer* vkcommandbuffer_ptr, uint32_t size)
 {
 	VkCommandBufferAllocateInfo vkcommandbufferallocateinfo =
 	{

@@ -1,19 +1,19 @@
-#ifdef PCH_GLTF
-
-	#define GLTF_IN "./G_I"
-	#define GLTF_OUT "./G_O"
-
-	// #include <stdio.h>
-	// #include <stdlib.h>
-	#include <stdint.h>
-	#include <sys/stat.h>
-	#include <dirent.h>
-	#include <math.h>
-	#include <threads.h>
-
-	#include "math/math.h"
-
-#endif
+// #ifdef PCH_GLTF
+//
+// 	#define GLTF_IN "./G_I"
+// 	#define GLTF_OUT "./G_O"
+//
+// 	// #include <stdio.h>
+// 	// #include <stdlib.h>
+// 	#include <stdint.h>
+// 	#include <sys/stat.h>
+// 	#include <dirent.h>
+// 	#include <math.h>
+// 	#include <threads.h>
+//
+// 	#include "math/math.h"
+//
+// #endif
 #ifdef PCH_COLLADA
 
 	#include <stdio.h>
@@ -103,8 +103,8 @@
 
 	#ifdef NALI_LWJGL3
 		#include <GL/gl.h>
-		#define tlsGetFunction(index) (uintptr_t)((void **)(*__env)->reserved3)[index]
-		typedef void (APIENTRY *glGenVertexArraysPROC) (jint, uintptr_t);
+		#define tlsGetFunction(index) (uintptr_t)((void**)(*__env)->reserved3)[index]
+		typedef void (APIENTRY* glGenVertexArraysPROC) (jint, uintptr_t);
 	#endif
 
 	#ifdef NALI_EGL

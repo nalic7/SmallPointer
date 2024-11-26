@@ -1,7 +1,7 @@
-Display *display;
+Display* display;
 Window root;
 GLXContext glx_context;
-XVisualInfo *visual_info;
+XVisualInfo* visual_info;
 XSetWindowAttributes swa;
 Window win;
 Colormap cmap;
@@ -31,7 +31,7 @@ void initOpenGL()
 		None
 	};
 
-	GLXFBConfig *fbconfigs;
+	GLXFBConfig* fbconfigs;
 	int fbcount;
 
 	fbconfigs = glXChooseFBConfig(display, DefaultScreen(display), visual_attribs, &fbcount);
@@ -77,7 +77,7 @@ void initOpenGL()
 	XFlush(display);
 }
 
-JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLContext_nLoadOpenGLLibrary(JNIEnv * env, jclass clazz)
+JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLContext_nLoadOpenGLLibrary(JNIEnv* env, jclass clazz)
 {
 	// //init vulkan
 	// //avoid gl
@@ -108,10 +108,10 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLContext_nLoadOpenGLLibrary(JNIEnv
 	al_init();
 }
 
-// void *extgl_GetProcAddress(const char *name)
+// void* extgl_GetProcAddress(const char* name)
 // {
 //	 //set name as address
-//	 // void *t = eglGetProcAddress(name);
+//	 // void* t = eglGetProcAddress(name);
 
 //	 // if ( t == NULL ) {
 // 	// 	t = dlsym(lib_gl_handle, name);
@@ -124,10 +124,10 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLContext_nLoadOpenGLLibrary(JNIEnv
 //	 return 0;
 // }
 
-JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_GLContext_ngetFunctionAddress(JNIEnv *env, jclass clazz, jlong function_name)
+JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_GLContext_ngetFunctionAddress(JNIEnv* env, jclass clazz, jlong function_name)
 {
 	// //avoid gl
 	// info("run_GLContext$ngetFunctionAddress_0")
-	// return (jlong)(intptr_t)extgl_GetProcAddress((char *)(intptr_t)function_name);
+	// return (jlong)(intptr_t)extgl_GetProcAddress((char*)(intptr_t)function_name);
 	return -1;
 }

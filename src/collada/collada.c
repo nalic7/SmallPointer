@@ -1,395 +1,347 @@
 static uint32_t thrd = 0;
 
-int main_skin(void* name)
+int main_skin(void* d_name_ptr)
 {
-	info("skin %s\n", (char*)name)
+	// info("skin %s\n", (char*)name)
 
 	char* n0_ptr = math_combine(C_IN, "/");
-	char* n_in_ptr = math_combine(n0_ptr, name);
+	char* n_in_ptr = math_combine(n0_ptr, d_name_ptr);
 	free(n0_ptr);
 	n0_ptr = math_combine(C_OUT, "/");
 
-	FILE* file = fopen(n_in_ptr, "r");
-	if (!file)
+	FILE* file_ptr = fopen(n_in_ptr, "r");
+	if (!file_ptr)
 	{
 		error("fopen");
 	}
 
-	char* dot_ptr = strchr(name, '.');
+	char* dot_p = strchr(d_name_ptr, '.');
 
-	if (dot_ptr)
+	if (dot_p)
 	{
-		*dot_ptr = '\0';
+		*dot_p = '\0';
 	}
 
-	char* n_out = math_combine(n0_ptr, name);
+	char* n_out_ptr = math_combine(n0_ptr, d_name_ptr);
 	free(n0_ptr);
 
-	collada_Source sourcedatatype =
+	collada_Source collada_source =
 	{
 		.max_bone = -2,
-		.is_animated = file_reader_match(file, (const char*[]){"<library_visual_scenes>", "<library_controllers>"}, 2)
+		.is_animated = file_reader_match(file_ptr, (const char*[]){"<library_visual_scenes>", "<library_controllers>"}, 2)
 	};
 
-	fseek(file, 0, SEEK_SET);
+	fseek(file_ptr, 0, SEEK_SET);
 
-	if (sourcedatatype.is_animated)
+	if (collada_source.is_animated)
 	{
-		file_reader_match(file, (const char*[]){"<library_animations>"}, 1);
+		file_reader_match(file_ptr, (const char*[]){"<library_animations>"}, 1);
 
-		while (file_reader_match(file, (const char*[]){"</library_animations>", C_ARMATURE_NAME}, 2))
+		while (file_reader_match(file_ptr, (const char*[]){"</library_animations>", C_ARMATURE_NAME}, 2))
 		{
-			++sourcedatatype.max_bone;
+			++collada_source.max_bone;
 		}
 
-		fseek(file, 0, SEEK_SET);
+		fseek(file_ptr, 0, SEEK_SET);
 
-		file_reader_match(file, (const char*[]){"<library_animations>"}, 1);
-		file_reader_match(file, (const char*[]){C_ARMATURE_NAME}, 1);
-		file_reader_match(file, (const char*[]){"count=\""}, 1);
-		uint32_t int_size = 0;
+		file_reader_match(file_ptr, (const char*[]){"<library_animations>"}, 1);
+		file_reader_match(file_ptr, (const char*[]){C_ARMATURE_NAME}, 1);
+		file_reader_match(file_ptr, (const char*[]){"count=\""}, 1);
+		uint32_t temp_size = 0;
 		int* int_ptr = malloc(0);
-		int_ptr = file_reader_int(file, "\"", int_ptr, &int_size);
+		int_ptr = file_reader_int(file_ptr, "\"", int_ptr, &temp_size);
 
-		sourcedatatype.max_frame = int_ptr[0];
+		collada_source.max_frame = int_ptr[0];
+		free(int_ptr);
 
-		fseek(file, 0, SEEK_SET);
+		fseek(file_ptr, 0, SEEK_SET);
 
-		// VisualBones
+		file_reader_match(file_ptr, (const char*[]){"<library_visual_scenes>"}, 1);
+		file_reader_match(file_ptr, (const char*[]){"</matrix>\n"}, 1);
 
-		file_reader_match(file, (const char*[]){"<library_visual_scenes>"}, 1);
-
-		// if (CP_DECOMPOSED)
-		// {
-		// 	file_reader_match(file, "</translate>", 1);
-		// }
-		// else
-		// {
-		file_reader_match(file, (const char*[]){"</matrix>\n"}, 1);
-		// }
-
-		sourcedatatype.max_bonedata = 0;
-		sourcedatatype.bonedata_vector = malloc(0);
-		for (int l = 0; l < sourcedatatype.max_bone; ++l)
+		collada_source.collada_bone_ptr = malloc(0);
+		temp_size = 0;
+		while (temp_size < collada_source.max_bone)
 		{
-			sourcedatatype.bonedata_vector = file_reader_node(file, sourcedatatype.bonedata_vector, &sourcedatatype.max_bonedata);
+			collada_source.collada_bone_ptr = file_reader_node(file_ptr, collada_source.collada_bone_ptr, &temp_size);
 		}
 
-		sourcedatatype.space_ptr = malloc(sourcedatatype.max_bone * sizeof(uint32_t));
-		for (int x = 0; x < sourcedatatype.max_bone; ++x)
+		collada_source.space_ptr = malloc(collada_source.max_bone * sizeof(uint32_t));
+		for (int x = 0; x < collada_source.max_bone; ++x)
 		{
-			BoneData bonedata = sourcedatatype.bonedata_vector[x];
+			collada_Bone bonedata = collada_source.collada_bone_ptr[x];
 
-			// for (int y = 0; y < bonedata.bones_name_string_size; y += 2)
-			// {
-			// uint32_t value = graphic_reader_count(bonedata.bones_name_string[y + 1], ' ');
-			uint32_t value = graphic_reader_count(bonedata.bones_name_string[1], ' ');
-			// sourcedatatype.space_ptr[y / 2] = value;
-			sourcedatatype.space_ptr[x] = value;
+			uint32_t value = graphic_reader_count(bonedata.name_ptr[1], ' ');
+			collada_source.space_ptr[x] = value;
 
-			graphic_reader_sanitize(bonedata.bones_name_string[0]);
-			// }
+			graphic_reader_sanitize(bonedata.name_ptr[0]);
 		}
 
-		fseek(file, 0, SEEK_SET);
+		fseek(file_ptr, 0, SEEK_SET);
 	}
 
-	file_reader_match(file, (const char*[]){"<library_geometries>"}, 1);
+	file_reader_match(file_ptr, (const char*[]){"<library_geometries>"}, 1);
 
 	{
-		sourcedatatype.max_data = 0;
-		sourcedatatype.data_name_ptr = malloc(0);
-		sourcedatatype.vertex_size_ptr = malloc(0);
-		sourcedatatype.vertex_ptr = malloc(0);
-		sourcedatatype.normal_size_ptr = malloc(0);
-		sourcedatatype.normal_ptr = malloc(0);
-		sourcedatatype.texcoord_size_ptr = malloc(0);
-		sourcedatatype.texcoord_ptr = malloc(0);
-		sourcedatatype.p_offset_size = malloc(0);
-		sourcedatatype.p_offset = malloc(0);
+		collada_source.max_data = 0;
+		collada_source.data_ptr = malloc(0);
+		collada_source.vertex_size_ptr = malloc(0);
+		collada_source.vertex_ptr = malloc(0);
+		collada_source.normal_size_ptr = malloc(0);
+		collada_source.normal_ptr = malloc(0);
+		collada_source.texcoord_size_ptr = malloc(0);
+		collada_source.texcoord_ptr = malloc(0);
+		collada_source.p_size_ptr = malloc(0);
+		collada_source.p_ptr = malloc(0);
 
 		uint32_t v_index = 0;
 
 		char state;
-		while ((state = file_reader_match(file, (const char*[]){"</library_geometries>", "<geometry"}, 2)))
+		while ((state = file_reader_match(file_ptr, (const char*[]){"</library_geometries>", "<geometry"}, 2)))
 		{
-			file_reader_match(file, (const char*[]){"\""}, 1);
-			sourcedatatype.data_name_ptr = file_reader_char_ptr(file, "\t", "-", sourcedatatype.data_name_ptr, &sourcedatatype.max_data);
-			graphic_reader_sanitize(sourcedatatype.data_name_ptr[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"\""}, 1);
+			collada_source.data_ptr = file_reader_char_ptr(file_ptr, "\t", "-", collada_source.data_ptr, &collada_source.max_data);
+			graphic_reader_sanitize(collada_source.data_ptr[v_index]);
 
-			size_t fs_size = sourcedatatype.max_data * sizeof(float*);
-			size_t is_size = sourcedatatype.max_data * sizeof(int*);
-			size_t ui_size = sourcedatatype.max_data * sizeof(uint32_t);
+			size_t fs_size = collada_source.max_data * sizeof(float*);
+			size_t is_size = collada_source.max_data * sizeof(int*);
+			size_t ui_size = collada_source.max_data * sizeof(uint32_t);
 
-			file_reader_match(file, (const char*[]){"positions-array"}, 1);
-			file_reader_match(file, (const char*[]){">"}, 1);
-			sourcedatatype.vertex_size_ptr = realloc(sourcedatatype.vertex_size_ptr, ui_size);
-			sourcedatatype.vertex_size_ptr[v_index] = 0;
-			sourcedatatype.vertex_ptr = realloc(sourcedatatype.vertex_ptr, fs_size);
-			sourcedatatype.vertex_ptr[v_index] = malloc(0);
-			sourcedatatype.vertex_ptr[v_index] = file_reader_float(file, "</float_array>", sourcedatatype.vertex_ptr[v_index], &sourcedatatype.vertex_size_ptr[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"positions-array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			collada_source.vertex_size_ptr = realloc(collada_source.vertex_size_ptr, ui_size);
+			collada_source.vertex_size_ptr[v_index] = 0;
+			collada_source.vertex_ptr = realloc(collada_source.vertex_ptr, fs_size);
+			collada_source.vertex_ptr[v_index] = malloc(0);
+			collada_source.vertex_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.vertex_ptr[v_index], &collada_source.vertex_size_ptr[v_index]);
 
-			file_reader_match(file, (const char*[]){"normals-array"}, 1);
-			file_reader_match(file, (const char*[]){">"}, 1);
-			sourcedatatype.normal_size_ptr = realloc(sourcedatatype.normal_size_ptr, ui_size);
-			sourcedatatype.normal_size_ptr[v_index] = 0;
-			sourcedatatype.normal_ptr = realloc(sourcedatatype.normal_ptr, fs_size);
-			sourcedatatype.normal_ptr[v_index] = malloc(0);
-			sourcedatatype.normal_ptr[v_index] = file_reader_float(file, "</float_array>", sourcedatatype.normal_ptr[v_index], &sourcedatatype.normal_size_ptr[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"normals-array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			collada_source.normal_size_ptr = realloc(collada_source.normal_size_ptr, ui_size);
+			collada_source.normal_size_ptr[v_index] = 0;
+			collada_source.normal_ptr = realloc(collada_source.normal_ptr, fs_size);
+			collada_source.normal_ptr[v_index] = malloc(0);
+			collada_source.normal_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.normal_ptr[v_index], &collada_source.normal_size_ptr[v_index]);
 
-			file_reader_match(file, (const char*[]){"map-0-array"}, 1);
-			file_reader_match(file, (const char*[]){">"}, 1);
-			sourcedatatype.texcoord_size_ptr = realloc(sourcedatatype.texcoord_size_ptr, ui_size);
-			sourcedatatype.texcoord_size_ptr[v_index] = 0;
-			sourcedatatype.texcoord_ptr = realloc(sourcedatatype.texcoord_ptr, fs_size);
-			sourcedatatype.texcoord_ptr[v_index] = malloc(0);
-			sourcedatatype.texcoord_ptr[v_index] = file_reader_float(file, "</float_array>", sourcedatatype.texcoord_ptr[v_index], &sourcedatatype.texcoord_size_ptr[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"map-0-array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			collada_source.texcoord_size_ptr = realloc(collada_source.texcoord_size_ptr, ui_size);
+			collada_source.texcoord_size_ptr[v_index] = 0;
+			collada_source.texcoord_ptr = realloc(collada_source.texcoord_ptr, fs_size);
+			collada_source.texcoord_ptr[v_index] = malloc(0);
+			collada_source.texcoord_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.texcoord_ptr[v_index], &collada_source.texcoord_size_ptr[v_index]);
 
-			// if (SourceDataType::CREATE_COLOR)
-			// {
-			// 	sourcedatatype.color.push_back({});
-
-			// 	file_reader_match(char_pointer, "colors-Attribute-array");
-			// 	file_reader_match(char_pointer, ">");
-			// 	file_reader_float(char_pointer, "</float_array>", sourcedatatype.color[v_index]);
-			// }
-
-			file_reader_match(file, (const char*[]){"<p>"}, 1);
-			sourcedatatype.p_offset_size = realloc(sourcedatatype.p_offset_size, ui_size);
-			sourcedatatype.p_offset_size[v_index] = 0;
-			sourcedatatype.p_offset = realloc(sourcedatatype.p_offset, is_size);
-			sourcedatatype.p_offset[v_index] = malloc(0);
-			sourcedatatype.p_offset[v_index] = file_reader_int(file, "</p>", sourcedatatype.p_offset[v_index], &sourcedatatype.p_offset_size[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"<p>"}, 1);
+			collada_source.p_size_ptr = realloc(collada_source.p_size_ptr, ui_size);
+			collada_source.p_size_ptr[v_index] = 0;
+			collada_source.p_ptr = realloc(collada_source.p_ptr, is_size);
+			collada_source.p_ptr[v_index] = malloc(0);
+			collada_source.p_ptr[v_index] = file_reader_int(file_ptr, "</p>", collada_source.p_ptr[v_index], &collada_source.p_size_ptr[v_index]);
 			++v_index;
 		}
-
-		// uint32_t offset_size = sizeof(int *) * sourcedatatype.max_object;
-		// sourcedatatype.positions_offset = malloc(offset_size);
-		// sourcedatatype.normals_offset = malloc(offset_size);
-		// sourcedatatype.texcoord_offset = malloc(offset_size);
-		// // // GraphicReader::makeModelOffset(sourcedatatype);
-		// for (uint32_t x = 0; x < sourcedatatype.max_object; ++x)
-		// {
-		// 	uint32_t p_offset_size = sourcedatatype.p_offset_size[x];
-		// 	uint32_t offset2_size = sizeof(int) * p_offset_size;
-		// 	sourcedatatype.positions_offset[x] = malloc(offset2_size);
-		// 	sourcedatatype.normals_offset[x] = malloc(offset2_size);
-		// 	sourcedatatype.texcoord_offset[x] = malloc(offset2_size);
-		// 	char offset = 0;
-		// 	for (int y = 0; y < p_offset_size; ++y)
-		// 	{
-		// 		// if (CP_CREATE_COLOR)
-		// 		// {
-		// 		// 	sourcedatatype.color_offset.push_back({});
-		//
-		// 		// 	for (int i : sourcedatatype.p_offset[x])
-		// 		// 	{
-		// 		// 		if (i_offset == 0)
-		// 		// 		{
-		// 		// 			sourcedatatype.positions_offset[x].push_back(i);
-		// 		// 		}
-		// 		// 		else if (i_offset == 1)
-		// 		// 		{
-		// 		// 			sourcedatatype.normals_offset[x].push_back(i);
-		// 		// 		}
-		// 		// 		else if (i_offset == 2)
-		// 		// 		{
-		// 		// 			sourcedatatype.texcoord_offset[x].push_back(i);
-		// 		// 		}
-		// 		// 		else if (i_offset == 3)
-		// 		// 		{
-		// 		// 			sourcedatatype.color_offset[x].push_back(i);
-		//
-		// 		// 			i_offset = -1;
-		// 		// 		}
-		// 		// 	}
-		// 		// }
-		// 		// else
-		// 		// {
-		// 		int i = sourcedatatype.p_offset[x][y];
-		// 		switch (offset)
-		// 		{
-		// 			case 0:
-		// 				sourcedatatype.positions_offset[x][y] = i;
-		// 				++offset;
-		// 				break;
-		// 			case 1:
-		// 				sourcedatatype.normals_offset[x][y] = i;
-		// 				++offset;
-		// 				break;
-		// 			case 2:
-		// 				sourcedatatype.texcoord_offset[x][y] = i;
-		// 				offset = 0;
-		// 		}
-		// 		// }
-		// 	}
-		// }
 	}
 
-	// Skinning / Animation
-
-	if (sourcedatatype.is_animated)
+	if (collada_source.is_animated)
 	{
-		file_reader_match(file, (const char*[]){"<library_controllers>"}, 1);
+		file_reader_match(file_ptr, (const char*[]){"<library_controllers>"}, 1);
 
-		// sourcedatatype.joints_size = malloc(0);
-		// sourcedatatype.joints = malloc(0);
-		// sourcedatatype.bind_poses_size = malloc(0);
-		// sourcedatatype.bind_pose_ptr = malloc(0);
-		// sourcedatatype.weights_size = malloc(0);
-		// sourcedatatype.weight_ptr = malloc(0);
-		sourcedatatype.vcount_offset_size = malloc(0);
-		sourcedatatype.vcount_offset = malloc(0);
-		sourcedatatype.v_offset_size = malloc(0);
-		sourcedatatype.v_offset = malloc(0);
-		// sourcedatatype.max_bone_size = 0;
-		// sourcedatatype.max_bone_ptr = malloc(0);
+		collada_source.vcount_size_ptr = malloc(0);
+		collada_source.vcount_ptr = malloc(0);
+		collada_source.v_size_ptr = malloc(0);
+		collada_source.v_ptr = malloc(0);
 
 		uint32_t v_index = 0;
 
 		char state;
-		while ((state = file_reader_match(file, (const char*[]){"</library_controllers>", "<controller"}, 2)))
+		while ((state = file_reader_match(file_ptr, (const char*[]){"</library_controllers>", "<controller"}, 2)))
 		{
-			size_t cs2_size = sourcedatatype.max_data * sizeof(char**);
-			size_t fs_size = sourcedatatype.max_data * sizeof(float*);
-			size_t is_size = sourcedatatype.max_data * sizeof(int*);
-			size_t ui_size = sourcedatatype.max_data * sizeof(uint32_t);
+			size_t cs2_size = collada_source.max_data * sizeof(char**);
+			size_t fs_size = collada_source.max_data * sizeof(float*);
+			size_t is_size = collada_source.max_data * sizeof(int*);
+			size_t ui_size = collada_source.max_data * sizeof(uint32_t);
 
-			file_reader_match(file, (const char*[]){"joints-array"}, 1);
-			file_reader_match(file, (const char*[]){">"}, 1);
-			// sourcedatatype.joints_size = realloc(sourcedatatype.joints_size, ui_size);
-			// sourcedatatype.joints_size[v_index] = 0;
+			file_reader_match(file_ptr, (const char*[]){"joints-array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
 
 			if (v_index == 0)
 			{
 				uint32_t max_bone = 0;
-				// sourcedatatype.joints = realloc(sourcedatatype.joints, cs2_size);
-				sourcedatatype.joint_ptr = malloc(0);
-				sourcedatatype.joint_ptr = file_reader_char_ptr(file, " ", "</Name_array>", sourcedatatype.joint_ptr, &max_bone);
+				collada_source.joint_ptr = malloc(0);
+				collada_source.joint_ptr = file_reader_char_ptr(file_ptr, " ", "</Name_array>", collada_source.joint_ptr, &max_bone);
 
 				for (uint32_t j = 0; j < max_bone; ++j)
 				{
-					graphic_reader_sanitize(sourcedatatype.joint_ptr[j]);
+					graphic_reader_sanitize(collada_source.joint_ptr[j]);
 				}
 
-				file_reader_match(file, (const char*[]){"bind_poses-array"}, 1);
-				file_reader_match(file, (const char*[]){">"}, 1);
-				// sourcedatatype.bind_poses_size = realloc(sourcedatatype.bind_poses_size, ui_size);
-				// sourcedatatype.bind_poses_size[v_index] = 0;
-				// sourcedatatype.bind_pose_ptr = realloc(sourcedatatype.bind_pose_ptr, fs_size);
+				file_reader_match(file_ptr, (const char*[]){"bind_poses-array"}, 1);
+				file_reader_match(file_ptr, (const char*[]){">"}, 1);
 				max_bone = 0;
-				sourcedatatype.bind_pose_ptr = malloc(0);
-				sourcedatatype.bind_pose_ptr = file_reader_float(file, "</float_array>", sourcedatatype.bind_pose_ptr, &max_bone);
+				collada_source.bind_pose_ptr = malloc(0);
+				collada_source.bind_pose_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.bind_pose_ptr, &max_bone);
 
-				file_reader_match(file, (const char*[]){"weights-array"}, 1);
-				file_reader_match(file, (const char*[]){">"}, 1);
-				// sourcedatatype.weights_size = realloc(sourcedatatype.weights_size, ui_size);
-				// sourcedatatype.weights_size[v_index] = 0;
-				// sourcedatatype.weight_ptr = realloc(sourcedatatype.weight_ptr, fs_size);
+				file_reader_match(file_ptr, (const char*[]){"weights-array"}, 1);
+				file_reader_match(file_ptr, (const char*[]){">"}, 1);
 				max_bone = 0;
-				sourcedatatype.weight_ptr = malloc(0);
-				sourcedatatype.weight_ptr = file_reader_float(file, "</float_array>", sourcedatatype.weight_ptr, &max_bone);
+				collada_source.weight_ptr = malloc(0);
+				collada_source.weight_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.weight_ptr, &max_bone);
 			}
 
-			file_reader_match(file, (const char*[]){"<vcount>"}, 1);
-			sourcedatatype.vcount_offset_size = realloc(sourcedatatype.vcount_offset_size, ui_size);
-			sourcedatatype.vcount_offset_size[v_index] = 0;
-			sourcedatatype.vcount_offset = realloc(sourcedatatype.vcount_offset, is_size);
-			sourcedatatype.vcount_offset[v_index] = 0;
-			sourcedatatype.vcount_offset[v_index] = file_reader_int(file, "</vcount>", sourcedatatype.vcount_offset[v_index], &sourcedatatype.vcount_offset_size[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"<vcount>"}, 1);
+			collada_source.vcount_size_ptr = realloc(collada_source.vcount_size_ptr, ui_size);
+			collada_source.vcount_size_ptr[v_index] = 0;
+			collada_source.vcount_ptr = realloc(collada_source.vcount_ptr, is_size);
+			collada_source.vcount_ptr[v_index] = 0;
+			collada_source.vcount_ptr[v_index] = file_reader_int(file_ptr, "</vcount>", collada_source.vcount_ptr[v_index], &collada_source.vcount_size_ptr[v_index]);
 
-			// sourcedatatype.max_bone_ptr = realloc(sourcedatatype.max_bone_ptr, ui_size);
-			// sourcedatatype.max_bone_ptr[v_index] = 0;
-			// for (uint32_t j = 0; j < sourcedatatype.vcount_offset_size[v_index]; ++j)
-			// {
-			// 	if (sourcedatatype.max_bone_ptr[v_index] < sourcedatatype.vcount_offset[v_index][j])
-			// 	{
-			// 		sourcedatatype.max_bone_ptr[v_index] = sourcedatatype.vcount_offset[v_index][j];
-			// 	}
-			// }
-			// info("%s%s : %d\n", (char *)name, sourcedatatype.data_name_ptr[v_index], sourcedatatype.max_bone_ptr[v_index])
-			unsigned char max_bone = 0;
-			for (uint32_t j = 0; j < sourcedatatype.vcount_offset_size[v_index]; ++j)
-			{
-				if (max_bone < sourcedatatype.vcount_offset[v_index][j])
-				{
-					max_bone = sourcedatatype.vcount_offset[v_index][j];
-				}
-			}
-			info("%s%s %d\n", (char *)name, sourcedatatype.data_name_ptr[v_index], max_bone)
-
-			file_reader_match(file, (const char*[]){"<v>"}, 1);
-			sourcedatatype.v_offset_size = realloc(sourcedatatype.v_offset_size, ui_size);
-			sourcedatatype.v_offset_size[v_index] = 0;
-			sourcedatatype.v_offset = realloc(sourcedatatype.weight_ptr, is_size);
-			sourcedatatype.v_offset[v_index] = 0;
-			sourcedatatype.v_offset[v_index] = file_reader_int(file, "</v>", sourcedatatype.v_offset[v_index], &sourcedatatype.v_offset_size[v_index]);
+			file_reader_match(file_ptr, (const char*[]){"<v>"}, 1);
+			collada_source.v_size_ptr = realloc(collada_source.v_size_ptr, ui_size);
+			collada_source.v_size_ptr[v_index] = 0;
+			collada_source.v_ptr = realloc(collada_source.v_ptr, is_size);
+			collada_source.v_ptr[v_index] = 0;
+			collada_source.v_ptr[v_index] = file_reader_int(file_ptr, "</v>", collada_source.v_ptr[v_index], &collada_source.v_size_ptr[v_index]);
 			++v_index;
 		}
 
-		file_reader_match(file, (const char*[]){"name=\""}, 1);
-		sourcedatatype.animation_bone_name_vector_size = 0;
-		sourcedatatype.animation_bone_name_vector = malloc(0);
-		sourcedatatype.animation_bone_name_vector = file_reader_char_ptr(file, "\t", "\"", sourcedatatype.animation_bone_name_vector, &sourcedatatype.animation_bone_name_vector_size);
+		file_reader_match(file_ptr, (const char*[]){"name=\""}, 1);
+		collada_source.armature_size = 0;
+		collada_source.armature_ptr = malloc(0);
+		collada_source.armature_ptr = file_reader_char_ptr(file_ptr, "\t", "\"", collada_source.armature_ptr, &collada_source.armature_size);
 
-		file_reader_match(file, (const char*[]){"</animation>"}, 1);
+		file_reader_match(file_ptr, (const char*[]){"</animation>"}, 1);
 
-		sourcedatatype.armature_time_vector_size = 0;
-		sourcedatatype.armature_time_vector = malloc(0);
-		sourcedatatype.armature_transform_vector_size = 0;
-		sourcedatatype.armature_transform_vector = malloc(0);
-		sourcedatatype.armature_string_vector_size = 0;
-		sourcedatatype.armature_string_vector = malloc(0);
+		collada_source.time_size_ptr = 0;
+		collada_source.time_ptr = malloc(0);
+		collada_source.transform_size = 0;
+		collada_source.transform_ptr = malloc(0);
+		collada_source.v_bone_size = 0;
+		collada_source.v_bone_ptr = malloc(0);
 
-		// for (int l = 0; l < sourcedatatype.max_animation_bones * (CP_DECOMPOSED ? 9 : 1); ++l)
-		for (int l = 0; l < sourcedatatype.max_bone; ++l)
+		for (int l = 0; l < collada_source.max_bone; ++l)
 		{
-			file_reader_match(file, (const char*[]){"<float_array"}, 1);
-			file_reader_match(file, (const char*[]){">"}, 1);
-			sourcedatatype.armature_time_vector = file_reader_float(file, "</float_array>", sourcedatatype.armature_time_vector, &sourcedatatype.armature_time_vector_size);
+			file_reader_match(file_ptr, (const char*[]){"<float_array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			collada_source.time_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.time_ptr, &collada_source.time_size_ptr);
 
-			file_reader_match(file, (const char*[]){"<float_array"}, 1);
-			file_reader_match(file, (const char*[]){">"}, 1);
-			sourcedatatype.armature_transform_vector = file_reader_float(file, "</float_array>", sourcedatatype.armature_transform_vector, &sourcedatatype.armature_transform_vector_size);
+			file_reader_match(file_ptr, (const char*[]){"<float_array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			collada_source.transform_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.transform_ptr, &collada_source.transform_size);
 
-			file_reader_match(file, (const char*[]){"target=\""}, 1);
-			file_reader_match(file, (const char*[]){sourcedatatype.animation_bone_name_vector[0]}, 1);
-			file_reader_match(file, (const char*[]){"_"}, 1);
-			sourcedatatype.armature_string_vector = file_reader_char_ptr(file, "\t", "/", sourcedatatype.armature_string_vector, &sourcedatatype.armature_string_vector_size);
-			graphic_reader_sanitize(sourcedatatype.armature_string_vector[sourcedatatype.armature_string_vector_size - 1]);
+			file_reader_match(file_ptr, (const char*[]){"target=\""}, 1);
+			file_reader_match(file_ptr, (const char*[]){collada_source.armature_ptr[0]}, 1);
+			file_reader_match(file_ptr, (const char*[]){"_"}, 1);
+			collada_source.v_bone_ptr = file_reader_char_ptr(file_ptr, "\t", "/", collada_source.v_bone_ptr, &collada_source.v_bone_size);
+			graphic_reader_sanitize(collada_source.v_bone_ptr[collada_source.v_bone_size - 1]);
 		}
 
-		graphic_reader_makeBones(&sourcedatatype);
-		// graphic_reader_switchBones(&sourcedatatype);
-		// graphic_reader_switchAnimationBones(&sourcedatatype);
+		graphic_reader_makeBones(&collada_source);
 	}
 
-	if (sourcedatatype.is_animated && C_FIX_ANIMATED)
+	if (collada_source.is_animated && C_FIX_ANIMATED)
 	{
-		graphic_reader_fixAnimation(&sourcedatatype);
+		graphic_reader_fixAnimation(&collada_source);
 	}
 
-	graphic_reader_mix(&sourcedatatype);
-	// if (CP_COMPRESS)
-	// {
-	// 	graphic_reader_compressVertex(&sourcedatatype);
-	// 	// GraphicReader::unPackIndex(sourcedatatype);
-	//
-	// 	if (sourcedatatype.create_animation)
-	// 	{
-	// 		// GraphicReader::unPackVisualBones(sourcedatatype);
-	// 		// GraphicReader::updateBones(sourcedatatype);
-	// 	}
-	// }
+	graphic_reader_mix(&collada_source);
 
-	// modelFile(sourcedatatype, n_in);
-	file_writer_collada(&sourcedatatype, n_out);
+	file_writer_collada(&collada_source, n_out_ptr);
 
-	// file.close();
-	fclose(file);
+	fclose(file_ptr);
 	free(n_in_ptr);
-	free(n_out);
-	free(name);
+	free(n_out_ptr);
+	free(d_name_ptr);
+
+	//s0-free
+	for (uint32_t b = 0; b < collada_source.max_bone; ++b)
+	{
+		collada_Bone collada_bone = collada_source.collada_bone_ptr[b];
+		for (uint32_t i = 0; i < collada_bone.name_size; ++i)
+		{
+			free(collada_bone.name_ptr[i]);
+		}
+		free(collada_bone.name_ptr);
+
+		free(collada_bone.visual_ptr);
+
+		free(collada_source.joint_ptr[b]);
+	}
+	free(collada_source.collada_bone_ptr);
+
+	free(collada_source.joint_ptr);
+	free(collada_source.weight_ptr);
+	free(collada_source.bind_pose_ptr);
+
+	free(collada_source.space_ptr);
+
+	for (uint32_t b = 0; b < collada_source.max_bone; ++b)
+	{
+		free(collada_source.bone_ptr[b]);
+	}
+	free(collada_source.bone_ptr);
+	free(collada_source.bone_size_ptr);
+
+	for (uint32_t b = 0; b < collada_source.v_bone_size; ++b)
+	{
+		free(collada_source.v_bone_ptr[b]);
+	}
+	free(collada_source.v_bone_ptr);
+
+	free(collada_source.time_ptr);
+	free(collada_source.transform_ptr);
+
+	for (uint32_t a = 0; a < collada_source.armature_size; ++a)
+	{
+		free(collada_source.armature_ptr[a]);
+	}
+	free(collada_source.armature_ptr);
+
+	for (uint32_t m = 0; m < collada_source.max_data; ++m)
+	{
+		free(collada_source.data_ptr[m]);
+
+		free(collada_source.vertex_ptr[m]);
+		free(collada_source.normal_ptr[m]);
+		free(collada_source.texcoord_ptr[m]);
+
+		free(collada_source.p_ptr[m]);
+
+		free(collada_source.v_ptr[m]);
+		free(collada_source.vcount_ptr[m]);
+
+		free(collada_source.index_ptr[m]);
+		for (uint32_t p = 0; p < collada_source.collada_pack_size_ptr[m]; ++p)
+		{
+			collada_Pack collada_pack = collada_source.collada_pack_ptr[m][p];
+			free(collada_pack.joint_ptr);
+			free(collada_pack.weight_ptr);
+		}
+		free(collada_source.collada_pack_ptr[m]);
+	}
+	free(collada_source.data_ptr);
+
+	free(collada_source.vertex_ptr);
+	free(collada_source.vertex_size_ptr);
+	free(collada_source.normal_ptr);
+	free(collada_source.normal_size_ptr);
+	free(collada_source.texcoord_ptr);
+	free(collada_source.texcoord_size_ptr);
+
+	free(collada_source.p_ptr);
+	free(collada_source.p_size_ptr);
+
+	free(collada_source.v_ptr);
+	free(collada_source.v_size_ptr);
+
+	free(collada_source.vcount_ptr);
+	free(collada_source.vcount_size_ptr);
+
+	free(collada_source.index_ptr);
+	free(collada_source.index_size_ptr);
+
+	free(collada_source.collada_pack_ptr);
+	free(collada_source.collada_pack_size_ptr);
+	//e0-free
+
 	--thrd;
 	return 0;
 }
@@ -452,14 +404,14 @@ int main()
 	struct dirent* dirent_ptr;
 	while ((dirent_ptr = readdir(dir)) != NULL)
 	{
-		const char* d_name = strdup(dirent_ptr->d_name);
-		size_t size = strlen(d_name) + 1;
-		char* name = malloc(size);
-		memcpy(name, d_name, size);
+		char* d_name_ptr = strdup(dirent_ptr->d_name);
+		// size_t size = strlen(d_name_ptr) + 1;
+		// char* name_ptr = malloc(size);
+		// memcpy(name_ptr, d_name_ptr, size);
 		struct stat _stat;
 
 		char* n0_ptr = math_combine(C_IN, "/");
-		char* n_in_ptr = math_combine(n0_ptr, name);
+		char* n_in_ptr = math_combine(n0_ptr, d_name_ptr);
 		free(n0_ptr);
 
 		if (stat(n_in_ptr, &_stat))
@@ -482,7 +434,7 @@ int main()
 			// }
 
 			// if (result != thrd_success)
-			if (thrd_create(&thread, main_skin, (void*)d_name) != thrd_success)
+			if (thrd_create(&thread, main_skin, (void*)d_name_ptr) != thrd_success)
 			{
 				error("thrd_create")
 			}
@@ -492,6 +444,8 @@ int main()
 
 		free(n_in_ptr);
 	}
+
+	closedir(dir);
 
 	while (thrd){}
 }

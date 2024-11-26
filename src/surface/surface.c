@@ -1,6 +1,6 @@
-// JNIEXPORT void JNICALL Java_com_nali_summer_SmallRender_init(JNIEnv *env, jobject obj)
+// JNIEXPORT void JNICALL Java_com_nali_summer_SmallRender_init(JNIEnv* env, jobject obj)
 // {
-//	 struct wl_display *display = wl_display_connect(NULL);
+//	 struct wl_display* display = wl_display_connect(NULL);
 //	 if (!display)
 //	 {
 //		 info(stderr, "Failed to connect to Wayland display.")
@@ -12,16 +12,16 @@
 // }
 
 // Global variables
-struct wl_display *m_wl_display;
-struct wl_registry *wl_registry;
-struct wl_compositor *wl_compositor;
-struct wl_surface *m_wl_surface;
-struct xdg_wm_base *xdg_wm_base;
-struct xdg_surface *xdg_surface;
-struct xdg_toplevel *xdg_toplevel;
+struct wl_display* m_wl_display;
+struct wl_registry* wl_registry;
+struct wl_compositor* wl_compositor;
+struct wl_surface* m_wl_surface;
+struct xdg_wm_base* xdg_wm_base;
+struct xdg_surface* xdg_surface;
+struct xdg_toplevel* xdg_toplevel;
 
-struct wl_seat *wl_seat;
-struct wl_keyboard *wl_keyboard;
+struct wl_seat* wl_seat;
+struct wl_keyboard* wl_keyboard;
 
 uint32_t m_width;
 uint32_t m_height;
@@ -60,32 +60,32 @@ uint32_t m_height;
 //	 }
 // }
 
-void wl_keyboard_listener_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
+void wl_keyboard_listener_keymap(void* data, struct wl_keyboard* wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
 {
 	info("wl_keyboard_listener_keymap_fd %d", fd)
 }
 
-void wl_keyboard_listener_key(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
+void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
 {
 	info("wl_keyboard_listener_key_key %d", key)
 }
 
-void wl_keyboard_listener_enter(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, struct wl_surface *surface, struct wl_array *keys)
+void wl_keyboard_listener_enter(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, struct wl_surface* surface, struct wl_array* keys)
 {
 
 }
 
-void wl_keyboard_listener_leave(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, struct wl_surface *surface)
+void wl_keyboard_listener_leave(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, struct wl_surface* surface)
 {
 
 }
 
-void wl_keyboard_listener_modifiers(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group)
+void wl_keyboard_listener_modifiers(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group)
 {
 	info("wl_keyboard_listener_modifiers_group %d", group)
 }
 
-void wl_keyboard_listener_repeat_info(void *data, struct wl_keyboard *wl_keyboard, int32_t rate, int32_t delay)
+void wl_keyboard_listener_repeat_info(void* data, struct wl_keyboard* wl_keyboard, int32_t rate, int32_t delay)
 {
 
 }
@@ -100,7 +100,7 @@ struct wl_keyboard_listener wl_keyboard_listener =
 	.repeat_info = wl_keyboard_listener_repeat_info
 };
 
-void wl_seat_listener_capabilities(void *data, struct wl_seat *wl_seat, uint32_t capabilities)
+void wl_seat_listener_capabilities(void* data, struct wl_seat* wl_seat, uint32_t capabilities)
 {
 	if (capabilities & WL_SEAT_CAPABILITY_KEYBOARD)
 	{
@@ -114,7 +114,7 @@ struct wl_seat_listener wl_seat_listener =
 	.capabilities = wl_seat_listener_capabilities,
 };
 
-void wl_registry_listener_global(void *data, struct wl_registry *wl_registry, uint32_t name, const char *interface, uint32_t version)
+void wl_registry_listener_global(void* data, struct wl_registry* wl_registry, uint32_t name, const char* interface, uint32_t version)
 {
 	info("wl_registry_listener_global_interface %s", interface)
 	if (strcmp(interface, wl_compositor_interface.name) == 0)
@@ -143,7 +143,7 @@ void wl_registry_listener_global(void *data, struct wl_registry *wl_registry, ui
 	// }
 }
 
-void wl_registry_listener_remove(void *data, struct wl_registry *registry, uint32_t id)
+void wl_registry_listener_remove(void* data, struct wl_registry* registry, uint32_t id)
 {
 	// info("run_wl_registry_listener_remove")
 }
@@ -154,7 +154,7 @@ struct wl_registry_listener registry_listener =
 	.global_remove = wl_registry_listener_remove
 };
 
-void xdg_surface_listener_configure(void *data, struct xdg_surface *_xdg_surface, uint32_t serial)
+void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_surface, uint32_t serial)
 {
 	// info("run_xdg_surface_listener_configure")
 	// if (_xdg_surface == xdg_surface)
@@ -170,7 +170,7 @@ struct xdg_surface_listener xdg_surface_listener =
 	.configure = xdg_surface_listener_configure
 };
 
-void xdg_toplevel_listener_configure(void *data, struct xdg_toplevel *_xdg_toplevel, int32_t width, int32_t height, struct wl_array *states)
+void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xdg_toplevel, int32_t width, int32_t height, struct wl_array* states)
 {
 	if (_xdg_toplevel == xdg_toplevel)
 	{
@@ -195,19 +195,19 @@ void xdg_toplevel_listener_configure(void *data, struct xdg_toplevel *_xdg_tople
 	}
 }
 
-void xdg_toplevel_listener_close(void *data, struct xdg_toplevel *xdg_toplevel)
+void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_toplevel)
 {
 	// info("run_xdg_toplevel_listener_close")
 	// cleanup();
 	exit(EXIT_SUCCESS);
 }
 
-void xdg_toplevel_listener_configure_bounds(void *data, struct xdg_toplevel *xdg_toplevel, int32_t width, int32_t height)
+void xdg_toplevel_listener_configure_bounds(void* data, struct xdg_toplevel* xdg_toplevel, int32_t width, int32_t height)
 {
 	// info("run_xdg_toplevel_listener_configure_bounds")
 }
 
-void xdg_toplevel_listener_wm_capabilities(void *data, struct xdg_toplevel *xdg_toplevel, struct wl_array *capabilities)
+void xdg_toplevel_listener_wm_capabilities(void* data, struct xdg_toplevel* xdg_toplevel, struct wl_array* capabilities)
 {
 	// info("run_xdg_toplevel_listener_wm_capabilities")
 }
@@ -221,7 +221,7 @@ struct xdg_toplevel_listener xdg_toplevel_listener =
 };
 
 // Event loop
-int surface_loop(void *arg)
+int surface_loop(void* arg)
 {
 	// info("run_surface_loop")
 
@@ -306,7 +306,7 @@ int surface_loop(void *arg)
 	return 0;
 }
 
-// JNIEXPORT void JNICALL Java_com_nali_summer_SmallRender_init(JNIEnv *env, jobject obj)
+// JNIEXPORT void JNICALL Java_com_nali_summer_SmallRender_init(JNIEnv* env, jobject obj)
 void surface_init()
 {
 	// info("run_surface.c")

@@ -6,7 +6,7 @@ float m_m4x4_mat[] =
 	0.0F, 0.0F, 0.0F, 1.0F
 };
 
-void m4x4_inverse(float *mat_ptr, uint32_t index)
+void m4x4_inverse(float* mat_ptr, uint32_t index)
 {
 	float identity[] =
 	{

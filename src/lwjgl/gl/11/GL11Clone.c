@@ -1,35 +1,35 @@
 // uint32_t gl11_current_texture = -1;
-// int *gl11_target_ptr;
-// int *gl11_level_ptr;
-// int *gl11_internalformat_ptr;
-// int *gl11_width_ptr;
-// int *gl11_height_ptr;
-// int *gl11_border_ptr;
-// int *gl11_format_ptr;
-// int *gl11_type_ptr;
+// int* gl11_target_ptr;
+// int* gl11_level_ptr;
+// int* gl11_internalformat_ptr;
+// int* gl11_width_ptr;
+// int* gl11_height_ptr;
+// int* gl11_border_ptr;
+// int* gl11_format_ptr;
+// int* gl11_type_ptr;
 // // need to check is address able to reach
-// long *gl11_pixels_ptr;
+// long* gl11_pixels_ptr;
 // // char pixels_able;
-// // unsigned char *pixels_able_ptr;
-// unsigned char **gl11_clone_char_ptr;
+// // unsigned char* pixels_able_ptr;
+// unsigned char** gl11_clone_char_ptr;
 
 // int max_texture = -1;
 // uint32_t modify_texture = 0;
-// uint32_t *gl11_modify_texture_ptr = 0;
-// long *gl11_texture_ptr;
+// uint32_t* gl11_modify_texture_ptr = 0;
+// long* gl11_texture_ptr;
 
-// JNIEXPORT jstring JNICALL Java_org_lwjgl_opengl_GL11_nglGetString(JNIEnv *env, jclass clazz, jint name, jlong function_pointer)
+// JNIEXPORT jstring JNICALL Java_org_lwjgl_opengl_GL11_nglGetString(JNIEnv* env, jclass clazz, jint name, jlong function_pointer)
 // {
 //	 // info("run_GL11$nglGetString_0")
 
-//	 const GLubyte *glString = glGetString(name);
+//	 const GLubyte* glString = glGetString(name);
 //	 // info("run_GL11$nglGetString")
 //	 // info("name %d", name)
 //	 // info("glString %s", glString)
-//	 return (*env)->NewStringUTF(env, (const char *)glString);
+//	 return (*env)->NewStringUTF(env, (const char*)glString);
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGetIntegerv(JNIEnv *env, jclass clazz, jint pname, jlong params, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGetIntegerv(JNIEnv* env, jclass clazz, jint pname, jlong params, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglGetIntegerv_0")
@@ -39,20 +39,20 @@
 //	 glGetIntegerv((GLenum)pname, paramBuffer);
 // }
 
-// JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_GL11_nglGetError(JNIEnv *env, jclass clazz, jlong function_pointer)
+// JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_GL11_nglGetError(JNIEnv* env, jclass clazz, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglGetError_0")
 // 	return 0;
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglClearColor(JNIEnv *env, jclass clazz, jfloat red, jfloat green, jfloat blue, jfloat alpha, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglClearColor(JNIEnv* env, jclass clazz, jfloat red, jfloat green, jfloat blue, jfloat alpha, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglClearColor_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglClear(JNIEnv *env, jclass clazz, jint mask, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglClear(JNIEnv* env, jclass clazz, jint mask, jlong function_pointer)
 // {
 //	 info("max_texture+1 %d", (max_texture + 1))
 
@@ -62,7 +62,7 @@
 //		 info("%d l_address %ld", i, address)
 //		 if (address != -1)
 //		 {
-//			 int* buffer = (int *)(intptr_t)address;
+//			 int* buffer = (int*)(intptr_t)address;
 //			 info("nglClear i%d r%d g%d b%d a%d", i, buffer[0], buffer[1], buffer[2], buffer[3])
 //		 }
 
@@ -73,7 +73,7 @@
 //	 for (uint32_t i = 0; i < (max_texture + 1) && max_texture > 0; ++i)
 //	 {
 //		 long address = gl11_pixels_ptr[i];
-//		 unsigned char *n_clone_char_ptr = gl11_clone_char_ptr[i];
+//		 unsigned char* n_clone_char_ptr = gl11_clone_char_ptr[i];
 //		 info("%d c_address %p", i, n_clone_char_ptr)
 //		 if (/* n_clone_char_ptr &&  */address != -1)
 //		 {
@@ -88,7 +88,7 @@
 //	 // info("run_GL11$nglClear_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexImage2D(JNIEnv *env, jclass clazz, jint target, jint level, jint internalformat, jint width, jint height, jint border, jint format, jint type, jlong pixels, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexImage2D(JNIEnv* env, jclass clazz, jint target, jint level, jint internalformat, jint width, jint height, jint border, jint format, jint type, jlong pixels, jlong function_pointer)
 // {
 //	 if (gl11_current_texture == -1)
 //	 {
@@ -114,7 +114,7 @@
 //	 info("pixels %d", 1 && pixels);
 //	 if (/* (GL_RGBA8 == internalformat || GL_RGBA == internalformat) && (GL_UNSIGNED_BYTE == type || GL_UNSIGNED_SHORT_5_6_5 == type) &&  */pixels)
 //	 {
-//		 unsigned char *char_ptr = (unsigned char *)(intptr_t)pixels;
+//		 unsigned char* char_ptr = (unsigned char*)(intptr_t)pixels;
 //		 // for (int xy = 0; xy < width * height; ++xy)
 //		 // {
 //		 //	 char pixel = char_ptr[xy];
@@ -128,7 +128,7 @@
 //		 {
 //			 length = width * height * 2 * sizeof(unsigned char);//r5bit g6bit b5bit as 2 byte
 //		 }
-//		 unsigned char *n_clone_char_ptr = malloc(length);
+//		 unsigned char* n_clone_char_ptr = malloc(length);
 //		 memcpy(n_clone_char_ptr, char_ptr, length);
 //		 // pixels_able = 1;
 //		 gl11_pixels_ptr[gl11_current_texture] = pixels;
@@ -160,14 +160,14 @@
 //	 info("gl11_type_ptr[gl11_current_texture] %d", gl11_type_ptr[gl11_current_texture]);
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGetTexLevelParameteriv(JNIEnv *env, jclass clazz, jint target, jint level, jint pname, jlong params, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGetTexLevelParameteriv(JNIEnv* env, jclass clazz, jint target, jint level, jint pname, jlong params, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglGetTexLevelParameteriv_0")
 // }
 
 // // uint32_t texture_id = 0;
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGenTextures(JNIEnv *env, jclass clazz, jint textures_n, jlong textures, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGenTextures(JNIEnv* env, jclass clazz, jint textures_n, jlong textures, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglGenTextures_0")
@@ -179,7 +179,7 @@
 //	 // ++texture_id;
 //	 for (uint32_t i = 0; i < textures_n; ++i)
 //	 {
-//		 int* buffer = (int *)(intptr_t)textures;
+//		 int* buffer = (int*)(intptr_t)textures;
 //		 int texture_index;
 
 //		 info("gl11_textures_buffer[%d] -> %d", i, buffer[i])
@@ -207,7 +207,7 @@
 //			 gl11_format_ptr = realloc(gl11_format_ptr, int_size);
 //			 gl11_type_ptr = realloc(gl11_type_ptr, int_size);
 //			 gl11_pixels_ptr = realloc(gl11_pixels_ptr, long_size);
-//			 gl11_clone_char_ptr = realloc(gl11_clone_char_ptr, sizeof(unsigned char *) * (max_texture + 1));
+//			 gl11_clone_char_ptr = realloc(gl11_clone_char_ptr, sizeof(unsigned char*) * (max_texture + 1));
 //			 info("o_gl11_clone_char_ptr[%d] %p", max_texture, gl11_clone_char_ptr[max_texture])
 //			 gl11_clone_char_ptr[max_texture] = malloc(0);
 //			 info("n_gl11_clone_char_ptr[%d] %p", max_texture, gl11_clone_char_ptr[max_texture])
@@ -223,7 +223,7 @@
 //	 }
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDeleteTextures(JNIEnv *env, jclass clazz, jint textures_n, jlong textures, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDeleteTextures(JNIEnv* env, jclass clazz, jint textures_n, jlong textures, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglDeleteTextures_0")
@@ -233,11 +233,11 @@
 //	 info("gl11_current_texture %d", gl11_current_texture)
 //	 info("max_texture+1 %d", max_texture+1)
 
-//	 int* buffer = (int *)(intptr_t)textures;
+//	 int* buffer = (int*)(intptr_t)textures;
 //	 for (int i = 0; i < textures_n; ++i)
 //	 {
 //		 info("gl11_textures_buffer[%d] %d", i, buffer[i])
-//		 // free((int *)(intptr_t)gl11_texture_ptr[buffer[i]]);
+//		 // free((int*)(intptr_t)gl11_texture_ptr[buffer[i]]);
 //		 // gl11_texture_ptr[buffer[i]] = 0;
 //		 ++modify_texture;
 //		 gl11_modify_texture_ptr = realloc(gl11_modify_texture_ptr, sizeof(uint32_t) * modify_texture);
@@ -257,7 +257,7 @@
 //	 // --texture_id;
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglBindTexture(JNIEnv *env, jclass clazz, jint target, jint texture, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglBindTexture(JNIEnv* env, jclass clazz, jint target, jint texture, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglBindTexture_0")
@@ -273,25 +273,25 @@
 //	 }
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameteri(JNIEnv *env, jclass clazz, jint target, jint pname, jint param, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameteri(JNIEnv* env, jclass clazz, jint target, jint pname, jint param, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglTexParameteri_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameterfv(JNIEnv *env, jclass clazz, jint target, jint pname, jlong param, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameterfv(JNIEnv* env, jclass clazz, jint target, jint pname, jlong param, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglTexParameterfv_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameterf(JNIEnv *env, jclass clazz, jint target, jint pname, jlong param, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameterf(JNIEnv* env, jclass clazz, jint target, jint pname, jlong param, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglTexParameterf_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexSubImage2D(JNIEnv *env, jclass clazz, jint target, jint level, jint xoffset, jint yoffset, jint width, jint height, jint format, jint type, jlong pixels, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexSubImage2D(JNIEnv* env, jclass clazz, jint target, jint level, jint xoffset, jint yoffset, jint width, jint height, jint format, jint type, jlong pixels, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglTexSubImage2D_0")
@@ -325,7 +325,7 @@
 //	 info("pixels %d", 1 && pixels);
 //	 if (/* (GL_RGBA8 == gl11_internalformat_ptr[gl11_current_texture] || GL_RGBA == gl11_internalformat_ptr[gl11_current_texture]) && (GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture] || GL_UNSIGNED_SHORT_5_6_5 == gl11_type_ptr[gl11_current_texture]) &&  */pixels)
 //	 {
-//		 unsigned char *char_ptr = (unsigned char *)(intptr_t)pixels;
+//		 unsigned char* char_ptr = (unsigned char*)(intptr_t)pixels;
 //		 // for (int xy = 0; xy < width * height; ++xy)
 //		 // {
 //		 //	 char pixel = char_ptr[xy];
@@ -339,7 +339,7 @@
 //		 {
 //			 length = width * height * 2 * sizeof(unsigned char);//r5bit g6bit b5bit as 2 byte
 //		 }
-//		 unsigned char *n_clone_char_ptr = malloc(length);
+//		 unsigned char* n_clone_char_ptr = malloc(length);
 //		 memcpy(n_clone_char_ptr, char_ptr, length);
 //		 // pixels_able = 1;
 //		 gl11_pixels_ptr[gl11_current_texture] = pixels;
@@ -366,165 +366,165 @@
 //	 // gl11_type_ptr[gl11_current_texture] = type;
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnable(JNIEnv *env, jclass clazz, jint cap, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnable(JNIEnv* env, jclass clazz, jint cap, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglEnable_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDepthFunc(JNIEnv *env, jclass clazz, jint func, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDepthFunc(JNIEnv* env, jclass clazz, jint func, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglDepthFunc_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglAlphaFunc(JNIEnv *env, jclass clazz, jint func, jfloat ref, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglAlphaFunc(JNIEnv* env, jclass clazz, jint func, jfloat ref, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglAlphaFunc_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglMatrixMode(JNIEnv *env, jclass clazz, jint mode, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglMatrixMode(JNIEnv* env, jclass clazz, jint mode, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglMatrixMode_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglLoadIdentity(JNIEnv *env, jclass clazz, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglLoadIdentity(JNIEnv* env, jclass clazz, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglLoadIdentity_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglViewport(JNIEnv *env, jclass clazz, jint x, jint y, jint width, jint height, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglViewport(JNIEnv* env, jclass clazz, jint x, jint y, jint width, jint height, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_GL11_nglGenLists(JNIEnv *env, jclass clazz, jint range, jlong function_pointer)
+// JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_GL11_nglGenLists(JNIEnv* env, jclass clazz, jint range, jlong function_pointer)
 // {
 //	 return -1;
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDisable(JNIEnv *env, jclass clazz, jint cap, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDisable(JNIEnv* env, jclass clazz, jint cap, jlong function_pointer)
 // {
 //	 // //avoid gl
 //	 // info("run_GL11$nglDisable_0")
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglBlendFunc(JNIEnv *env, jclass clazz, jint sfactor, jint dfactor, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglBlendFunc(JNIEnv* env, jclass clazz, jint sfactor, jint dfactor, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglOrtho(JNIEnv *env, jclass clazz, jdouble left, jdouble right, jdouble bottom, jdouble top, jdouble zNear, jdouble zFar, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglOrtho(JNIEnv* env, jclass clazz, jdouble left, jdouble right, jdouble bottom, jdouble top, jdouble zNear, jdouble zFar, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColor3ub(JNIEnv *env, jclass clazz, jbyte red, jbyte green, jbyte blue, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColor3ub(JNIEnv* env, jclass clazz, jbyte red, jbyte green, jbyte blue, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglBegin(JNIEnv *env, jclass clazz, jint mode, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglBegin(JNIEnv* env, jclass clazz, jint mode, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexCoord2f(JNIEnv *env, jclass clazz, jfloat s, jfloat t, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexCoord2f(JNIEnv* env, jclass clazz, jfloat s, jfloat t, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglVertex2f(JNIEnv *env, jclass clazz, jfloat x, jfloat y, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglVertex2f(JNIEnv* env, jclass clazz, jfloat x, jfloat y, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnd(JNIEnv *env, jclass clazz, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnd(JNIEnv* env, jclass clazz, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglPushMatrix(JNIEnv *env, jclass clazz, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglPushMatrix(JNIEnv* env, jclass clazz, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTranslatef(JNIEnv *env, jclass clazz, jfloat x, jfloat y, jfloat z, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTranslatef(JNIEnv* env, jclass clazz, jfloat x, jfloat y, jfloat z, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglScalef(JNIEnv *env, jclass clazz, jfloat x, jfloat y, jfloat z, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglScalef(JNIEnv* env, jclass clazz, jfloat x, jfloat y, jfloat z, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColor4f(JNIEnv *env, jclass clazz, jfloat red, jfloat green, jfloat blue, jfloat alpha, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColor4f(JNIEnv* env, jclass clazz, jfloat red, jfloat green, jfloat blue, jfloat alpha, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglVertex3f(JNIEnv *env, jclass clazz, jfloat x, jfloat y, jfloat z, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglVertex3f(JNIEnv* env, jclass clazz, jfloat x, jfloat y, jfloat z, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglPopMatrix(JNIEnv *env, jclass clazz, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglPopMatrix(JNIEnv* env, jclass clazz, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglFlush(JNIEnv *env, jclass clazz, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglFlush(JNIEnv* env, jclass clazz, jlong function_pointer)
 // {
 //	 //avoid gl
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglMultMatrixf(JNIEnv *env, jclass clazz, jlong m, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglMultMatrixf(JNIEnv* env, jclass clazz, jlong m, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglRotatef(JNIEnv *env, jclass clazz, jfloat angle, jfloat x, jfloat y, jfloat z, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglRotatef(JNIEnv* env, jclass clazz, jfloat angle, jfloat x, jfloat y, jfloat z, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDepthMask(JNIEnv *env, jclass clazz, jboolean flag, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDepthMask(JNIEnv* env, jclass clazz, jboolean flag, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglVertexPointer(JNIEnv *env, jclass clazz, jint size, jint type, jint stride, jlong pointer, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglVertexPointer(JNIEnv* env, jclass clazz, jint size, jint type, jint stride, jlong pointer, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnableClientState(JNIEnv *env, jclass clazz, jint cap, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnableClientState(JNIEnv* env, jclass clazz, jint cap, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexCoordPointer(JNIEnv *env, jclass clazz, jint size, jint type, jint stride, jlong pointer, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexCoordPointer(JNIEnv* env, jclass clazz, jint size, jint type, jint stride, jlong pointer, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColorPointer(JNIEnv *env, jclass clazz, jint size, jint type, jint stride, jlong pointer, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColorPointer(JNIEnv* env, jclass clazz, jint size, jint type, jint stride, jlong pointer, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDrawArrays(JNIEnv *env, jclass clazz, jint mode, jint first, jint count, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDrawArrays(JNIEnv* env, jclass clazz, jint mode, jint first, jint count, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDisableClientState(JNIEnv *env, jclass clazz, jint cap, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDisableClientState(JNIEnv* env, jclass clazz, jint cap, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColorMask(JNIEnv *env, jclass clazz, jboolean red, jboolean green, jboolean blue, jboolean alpha, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglColorMask(JNIEnv* env, jclass clazz, jboolean red, jboolean green, jboolean blue, jboolean alpha, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglCopyTexSubImage2D(JNIEnv *env, jclass clazz, jint target, jint level, jint xoffset, jint yoffset, jint x, jint y, jint width, jint height, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglCopyTexSubImage2D(JNIEnv* env, jclass clazz, jint target, jint level, jint xoffset, jint yoffset, jint x, jint y, jint width, jint height, jlong function_pointer)
 // {
 // }
 
-// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglShadeModel(JNIEnv *env, jclass clazz, jint mode, jlong function_pointer)
+// JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglShadeModel(JNIEnv* env, jclass clazz, jint mode, jlong function_pointer)
 // {
 // }

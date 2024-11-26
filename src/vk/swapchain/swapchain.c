@@ -1,4 +1,4 @@
-// VkExtent2D chooseSwapExtent(vk *vk, VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr)
+// VkExtent2D chooseSwapExtent(vk* vk, VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr)
 // {
 //	 // VkExtent2D vkextent2d =
 //	 // {
@@ -193,7 +193,7 @@ void vk_makeSwapchain(uint32_t device)
 	// m_vkswapchainkhr_vkextent2d = vkextent2d;
 }
 
-// void recreateSwapChain(vk *vk)
+// void recreateSwapChain(vk* vk)
 // {
 //	 vk_createSwapchain(vk, *m_vkphysicaldevice_ptr);
 //	 VulkanBuffer::createImageViews(vk);
@@ -203,7 +203,7 @@ void vk_makeSwapchain(uint32_t device)
 //	 VulkanBufferFrame::createFramebuffers(vk);
 // }
 
-// void clearSwapchain(vk *vk)
+// void clearSwapchain(vk* vk)
 // {
 //	 // for (auto vkframebufferfromvector : vulkanstructure.vulkanbufferframestructure.vkframebuffer_vector)
 //	 // {
@@ -222,7 +222,7 @@ void vk_makeSwapchain(uint32_t device)
 //	 vkDestroySwapchainKHR(m_vkdevice, m_vkswapchainkhr, VK_NULL_HANDLE);
 // }
 
-// void clear(vk *vk)
+// void clear(vk* vk)
 // {
 //	 VulkanBufferFrame::clear(vulkanstructure);
 //	 // VulkanBufferFrame::clearSemaphore(vulkanstructure);

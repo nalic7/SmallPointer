@@ -1,8 +1,8 @@
 #ifdef NALI_LWJGL3
-	typedef void (APIENTRY *glGetIntegervPROC) (jint, uintptr_t);
-	typedef void (APIENTRY *glGenVertexArraysPROC) (jint, uintptr_t);
-	typedef void (APIENTRY *glBindVertexArrayPROC) (jint);
-	typedef void (APIENTRY *glDrawElementsPROC) (jint, jint, jint, uintptr_t);
+	typedef void (APIENTRY* glGetIntegervPROC) (jint, uintptr_t);
+	typedef void (APIENTRY* glGenVertexArraysPROC) (jint, uintptr_t);
+	typedef void (APIENTRY* glBindVertexArrayPROC) (jint);
+	typedef void (APIENTRY* glDrawElementsPROC) (jint, jint, jint, uintptr_t);
 	static glGetIntegervPROC glGetIntegerv3;
 	static glBindVertexArrayPROC glBindVertexArray;
 	static glGenVertexArraysPROC glGenVertexArrays;
@@ -13,7 +13,7 @@
 	static PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
 #endif
 
-JNIEXPORT void JNICALL Java_com_nali_NaliGL_init(JNIEnv *__env, jclass clazz)
+JNIEXPORT void JNICALL Java_com_nali_NaliGL_init(JNIEnv* __env, jclass clazz)
 {
 	#ifdef NALI_LWJGL3
 		glGetIntegerv3 = (glGetIntegervPROC)tlsGetFunction(96);
@@ -27,7 +27,7 @@ JNIEXPORT void JNICALL Java_com_nali_NaliGL_init(JNIEnv *__env, jclass clazz)
 	#endif
 }
 
-JNIEXPORT jint JNICALL Java_com_nali_NaliGL_glVertexArrayBinding(JNIEnv *env, jclass clazz)
+JNIEXPORT jint JNICALL Java_com_nali_NaliGL_glVertexArrayBinding(JNIEnv* env, jclass clazz)
 {
 	#ifdef NALI_LWJGL3
 		int params;
@@ -41,7 +41,7 @@ JNIEXPORT jint JNICALL Java_com_nali_NaliGL_glVertexArrayBinding(JNIEnv *env, jc
 	return (jint)params;
 }
 
-JNIEXPORT jint JNICALL Java_com_nali_NaliGL_glGenVertexArrays(JNIEnv *env, jclass clazz)
+JNIEXPORT jint JNICALL Java_com_nali_NaliGL_glGenVertexArrays(JNIEnv* env, jclass clazz)
 {
 	#ifdef NALI_LWJGL3
 		int vao;
@@ -55,7 +55,7 @@ JNIEXPORT jint JNICALL Java_com_nali_NaliGL_glGenVertexArrays(JNIEnv *env, jclas
 	return (jint)vao;
 }
 
-JNIEXPORT void JNICALL Java_com_nali_NaliGL_glBindVertexArray(JNIEnv *env, jclass clazz, jint array)
+JNIEXPORT void JNICALL Java_com_nali_NaliGL_glBindVertexArray(JNIEnv* env, jclass clazz, jint array)
 {
 	#ifdef NALI_LWJGL3
 		glBindVertexArray(array);
@@ -65,7 +65,7 @@ JNIEXPORT void JNICALL Java_com_nali_NaliGL_glBindVertexArray(JNIEnv *env, jclas
 	#endif
 }
 
-JNIEXPORT void JNICALL Java_com_nali_NaliGL_glDrawElementsTUi0(JNIEnv *env, jclass clazz, jint indices_count)
+JNIEXPORT void JNICALL Java_com_nali_NaliGL_glDrawElementsTUi0(JNIEnv* env, jclass clazz, jint indices_count)
 {
 	#ifdef NALI_LWJGL3
 		glDrawElements3((jint)GL_TRIANGLES, indices_count, (jint)GL_UNSIGNED_INT, 0);

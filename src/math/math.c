@@ -11,7 +11,7 @@ float math_degree(float radian)
 char* math_combine(const char* str1, const char* str2)
 {
 	//auto \0
-	char *char_ptr = malloc(strlen(str1) + strlen(str2) + 1);
+	char* char_ptr = malloc(strlen(str1) + strlen(str2) + 1);
 
 	strcpy(char_ptr, str1);
 	strcat(char_ptr, str2);
