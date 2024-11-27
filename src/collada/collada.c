@@ -1,3 +1,4 @@
+#include <stdlib.h>
 static uint32_t thrd = 0;
 
 int main_skin(void* d_name_ptr)
@@ -244,6 +245,24 @@ int main_skin(void* d_name_ptr)
 
 	graphic_reader_mix(&collada_source);
 
+	collada_source.max_joint_ptr = malloc(sizeof(uint8_t) * collada_source.max_data);
+	if (collada_source.is_animated)
+	{
+		for (uint32_t m = 0; m < collada_source.max_data; ++m)
+		{
+			collada_source.max_joint_ptr[m] = 0;
+			uint32_t collada_pack_size = collada_source.collada_pack_size_ptr[m];
+			for (uint32_t p = 0; p < collada_pack_size; ++p)
+			{
+				collada_Pack collada_pack = collada_source.collada_pack_ptr[m][p];
+				if (collada_source.max_joint_ptr[m] < collada_pack.max_bone)
+				{
+					collada_source.max_joint_ptr[m] = collada_pack.max_bone;
+				}
+			}
+		}
+	}
+
 	file_writer_collada(&collada_source, n_out_ptr);
 
 	fclose(file_ptr);
@@ -326,6 +345,7 @@ int main_skin(void* d_name_ptr)
 		free(collada_source.collada_pack_ptr[m]);
 	}
 	free(collada_source.data_ptr);
+	free(collada_source.max_joint_ptr);
 
 	free(collada_source.vertex_ptr);
 	free(collada_source.vertex_size_ptr);

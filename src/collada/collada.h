@@ -1,6 +1,7 @@
 #ifndef NALI_COLLADA_PARSER_H
 #define NALI_COLLADA_PARSER_H
 
+#include <stdint.h>
 #define C_IN "./C_I"
 #define C_OUT "./C_O"
 
@@ -66,6 +67,7 @@ typedef struct
 	//e0-bone
 
 	//s0-data
+	uint8_t* max_joint_ptr;
 	char** data_ptr;
 	uint32_t max_data;
 

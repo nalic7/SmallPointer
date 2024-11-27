@@ -45,6 +45,7 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 			free(n1_ptr);
 		}
 
+		uint8_t max_joint = collada_source_ptr->max_joint_ptr[m];
 		for (uint32_t p = 0; p < collada_pack_size; ++p)
 		{
 			collada_Pack collada_pack = collada_source_ptr->collada_pack_ptr[m][p];
@@ -61,8 +62,8 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 
 			if (collada_source_ptr->is_animated)
 			{
-				fwrite(collada_pack.joint_ptr, sizeof(uint8_t), collada_pack.max_bone, joint_file);
-				fwrite(collada_pack.weight_ptr, sizeof(float), collada_pack.max_bone, weight_file);
+				fwrite(collada_pack.joint_ptr, sizeof(uint8_t), max_joint, joint_file);
+				fwrite(collada_pack.weight_ptr, sizeof(float), max_joint, weight_file);
 			}
 		}
 
@@ -118,7 +119,7 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 		file = fopen(n2_ptr, "w");
 		for (uint32_t m = 0; m < max_data; ++m)
 		{
-			uint8_t max_joint = 0;
+			// uint8_t max_joint = 0;
 			// for (uint32_t j = 0; j < collada_source_ptr->vcount_size_ptr[m]; ++j)
 			// {
 			// 	if (max_joint < collada_source_ptr->vcount_ptr[m][j])
@@ -126,20 +127,11 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 			// 		max_joint = collada_source_ptr->vcount_ptr[m][j];
 			// 	}
 			// }
-			uint32_t collada_pack_size = collada_source_ptr->collada_pack_size_ptr[m];
-			for (uint32_t p = 0; p < collada_pack_size; ++p)
-			{
-				collada_Pack collada_pack = collada_source_ptr->collada_pack_ptr[m][p];
-				if (max_joint < collada_pack.max_bone)
-				{
-					max_joint = collada_pack.max_bone;
-				}
-			}
 			fwrite(path, sizeof(char), strlen(path), file);
 			fwrite(collada_source_ptr->data_ptr[m], sizeof(char), strlen(collada_source_ptr->data_ptr[m]), file);
 			char n = ' ';
 			fwrite(&n, sizeof(char), 1, file);
-			char* n_ptr = math_get(max_joint);
+			char* n_ptr = math_get(collada_source_ptr->max_joint_ptr[m]);
 			fwrite(n_ptr, sizeof(uint8_t), 1, file);
 			free(n_ptr);
 			if (m != max_data - 1)
