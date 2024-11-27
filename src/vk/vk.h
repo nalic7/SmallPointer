@@ -9,7 +9,7 @@ extern VkInstance m_vkinstance;
 extern uint32_t m_max_device;
 
 extern VkPhysicalDevice* m_vkphysicaldevice_ptr;
-extern unsigned char* m_max_graphics_ptr;
+extern uint8_t* m_max_graphics_ptr;
 extern uint32_t** m_graphics_ptr;
 extern VkQueue** m_vkqueue_graphics_ptr;
 

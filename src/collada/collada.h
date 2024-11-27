@@ -23,9 +23,9 @@ typedef struct
 		p_x, p_y, p_z,
 		n_x, n_y, n_z,
 		t_x, t_y;
-	unsigned char* joint_ptr;
+	uint8_t* joint_ptr;
 	float* weight_ptr;
-	unsigned char max_bone;
+	uint8_t max_bone;
 } collada_Pack;
 
 typedef struct
@@ -48,13 +48,13 @@ typedef struct
 
 	uint32_t* space_ptr;
 
-	unsigned char** bone_ptr;
+	uint8_t** bone_ptr;
 	uint32_t* bone_size_ptr;
 
 	char** v_bone_ptr;
 	uint32_t v_bone_size;
-	float* time_ptr;
-	uint32_t time_size_ptr;
+	// float* time_ptr;
+	// uint32_t time_size_ptr;
 	float* transform_ptr;
 	uint32_t transform_size;
 	char** armature_ptr;

@@ -1,4 +1,4 @@
-const char *deviceextensions[] =
+const char* deviceextensions[] =
 {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
@@ -77,9 +77,9 @@ void vk_makePhysicalDevice()
 
 	m_max_device = devices;
 	m_vkphysicaldevice_ptr = malloc(sizeof(VkPhysicalDevice) * devices);
-	m_vkqueue_graphics_ptr = malloc(sizeof(VkQueue *) * devices);
-	m_graphics_ptr = malloc(sizeof(uint32_t *) * devices);
-	m_max_graphics_ptr = malloc(sizeof(unsigned char) * devices);
+	m_vkqueue_graphics_ptr = malloc(sizeof(VkQueue*) * devices);
+	m_graphics_ptr = malloc(sizeof(uint32_t*) * devices);
+	m_max_graphics_ptr = malloc(sizeof(uint8_t) * devices);
 
 	vkEnumeratePhysicalDevices(m_vkinstance, &devices, m_vkphysicaldevice_ptr);
 

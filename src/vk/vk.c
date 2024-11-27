@@ -4,7 +4,7 @@ VkInstance m_vkinstance;
 uint32_t m_max_device;
 
 VkPhysicalDevice* m_vkphysicaldevice_ptr;
-unsigned char* m_max_graphics_ptr;
+uint8_t* m_max_graphics_ptr;
 uint32_t** m_graphics_ptr;
 VkQueue** m_vkqueue_graphics_ptr;
 
@@ -770,13 +770,13 @@ void vk_init()
 		vk_makeSwapchain(d);
 		vk_makeFence(d);
 
-		unsigned char max_graphics = m_max_graphics_ptr[d];
+		uint8_t max_graphics = m_max_graphics_ptr[d];
 
 		m_vksemaphore_ptr[d] = malloc(sizeof(VkSemaphore **) * max_graphics);
 
 		m_vkcommandpool_ptr[d] = malloc(sizeof(VkCommandPool) * max_graphics);
 
-		for (unsigned char g = 0; g < max_graphics; ++g)
+		for (uint8_t g = 0; g < max_graphics; ++g)
 		{
 			m_vksemaphore_ptr[d][g] = malloc(sizeof(VkSemaphore) * 2);
 

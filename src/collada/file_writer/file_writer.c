@@ -30,15 +30,20 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 		FILE* texcoord_file = fopen(n1_ptr, "ab");
 		free(n1_ptr);
 
-		n1_ptr = math_combine(n0_ptr, C_JOINT_FILE);
-		remove(n1_ptr);
-		FILE* joint_file = fopen(n1_ptr, "ab");
-		free(n1_ptr);
+		FILE* joint_file;
+		FILE* weight_file;
+		if (collada_source_ptr->is_animated)
+		{
+			n1_ptr = math_combine(n0_ptr, C_JOINT_FILE);
+			remove(n1_ptr);
+			joint_file = fopen(n1_ptr, "ab");
+			free(n1_ptr);
 
-		n1_ptr = math_combine(n0_ptr, C_WEIGHT_FILE);
-		remove(n1_ptr);
-		FILE* weight_file = fopen(n1_ptr, "ab");
-		free(n1_ptr);
+			n1_ptr = math_combine(n0_ptr, C_WEIGHT_FILE);
+			remove(n1_ptr);
+			weight_file = fopen(n1_ptr, "ab");
+			free(n1_ptr);
+		}
 
 		for (uint32_t p = 0; p < collada_pack_size; ++p)
 		{
@@ -54,90 +59,117 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 			fwrite(&collada_pack.t_x, sizeof(float), 1, texcoord_file);
 			fwrite(&collada_pack.t_y, sizeof(float), 1, texcoord_file);
 
-			fwrite(collada_pack.joint_ptr, sizeof(unsigned char), collada_pack.max_bone, joint_file);
-			fwrite(collada_pack.weight_ptr, sizeof(float), collada_pack.max_bone, weight_file);
+			if (collada_source_ptr->is_animated)
+			{
+				fwrite(collada_pack.joint_ptr, sizeof(uint8_t), collada_pack.max_bone, joint_file);
+				fwrite(collada_pack.weight_ptr, sizeof(float), collada_pack.max_bone, weight_file);
+			}
 		}
 
 		fclose(vertex_file);
 		fclose(normal_file);
 		fclose(texcoord_file);
-		fclose(joint_file);
-		fclose(weight_file);
+
+		if (collada_source_ptr->is_animated)
+		{
+			fclose(joint_file);
+			fclose(weight_file);
+		}
 
 		free(n0_ptr);
 	}
 
-	uint32_t max_bone = collada_source_ptr->max_bone;
-
-	mkdir(path, 0700);
-	char* n1_ptr = math_combine(path, C_BINDPOSE_FILE);
-	FILE* file = fopen(n1_ptr, "wb");
-	fwrite(collada_source_ptr->bind_pose_ptr, sizeof(float), max_bone * 16, file);
-	free(n1_ptr);
-	fclose(file);
-
-	n1_ptr = math_combine(path, C_TRANSFORM_FILE);
-	file = fopen(n1_ptr, "wb");
-	fwrite(collada_source_ptr->transform_ptr, sizeof(float), max_bone * collada_source_ptr->max_frame * 16, file);
-	free(n1_ptr);
-	fclose(file);
-
-	n1_ptr = math_combine(path, "_Doc");
-	mkdir(n1_ptr, 0700);
-
-	char* n2_ptr = math_combine(n1_ptr, "/bone.dat");
-	file = fopen(n2_ptr, "w");
-	for (uint32_t m = 0; m < max_bone; ++m)
+	if (collada_source_ptr->is_animated)
 	{
-		collada_Bone bonedata = collada_source_ptr->collada_bone_ptr[m];
-		fwrite(bonedata.name_ptr[0], sizeof(char), strlen(bonedata.name_ptr[0]), file);
-		char n = '\n';
-		fwrite(&n, sizeof(char), 1, file);
-	}
-	free(n2_ptr);
-	fclose(file);
+		uint32_t max_bone = collada_source_ptr->max_bone;
 
-	n2_ptr = math_combine(n1_ptr, "/joint.dat");
-	file = fopen(n2_ptr, "w");
-	for (uint32_t m = 0; m < max_data; ++m)
-	{
-		unsigned char max_joint = 0;
-		for (uint32_t j = 0; j < collada_source_ptr->vcount_size_ptr[m]; ++j)
+		mkdir(path, 0700);
+		char* n1_ptr = math_combine(path, C_BINDPOSE_FILE);
+		FILE* file = fopen(n1_ptr, "wb");
+		fwrite(collada_source_ptr->bind_pose_ptr, sizeof(float), max_bone * 16, file);
+		free(n1_ptr);
+		fclose(file);
+
+		n1_ptr = math_combine(path, C_TRANSFORM_FILE);
+		file = fopen(n1_ptr, "wb");
+		fwrite(collada_source_ptr->transform_ptr, sizeof(float), max_bone * collada_source_ptr->max_frame * 16, file);
+		free(n1_ptr);
+		fclose(file);
+
+		n1_ptr = math_combine(path, "_Doc");
+		mkdir(n1_ptr, 0700);
+
+		char* n2_ptr = math_combine(n1_ptr, "/bone.dat");
+		file = fopen(n2_ptr, "w");
+		for (uint32_t m = 0; m < max_bone; ++m)
 		{
-			if (max_joint < collada_source_ptr->vcount_ptr[m][j])
+			collada_Bone bonedata = collada_source_ptr->collada_bone_ptr[m];
+			fwrite(bonedata.name_ptr[0], sizeof(char), strlen(bonedata.name_ptr[0]), file);
+			if (m != max_bone - 1)
 			{
-				max_joint = collada_source_ptr->vcount_ptr[m][j];
+				char n = '\n';
+				fwrite(&n, sizeof(char), 1, file);
 			}
 		}
-		fwrite(path, sizeof(char), strlen(path), file);
-		fwrite(collada_source_ptr->data_ptr[m], sizeof(char), strlen(collada_source_ptr->data_ptr[m]), file);
-		char n = ' ';
-		fwrite(&n, sizeof(char), 1, file);
-		char* n_ptr = math_get(max_joint);
-		fwrite(n_ptr, sizeof(unsigned char), 1, file);
-		free(n_ptr);
-		n = '\n';
-		fwrite(&n, sizeof(char), 1, file);
-		// info("%s%s %d\n", path, collada_source_ptr->data_ptr[m], max_joint)
-	}
-	free(n2_ptr);
-	fclose(file);
-
-	free(n1_ptr);
-
-	n1_ptr = math_combine(path, "/bone/");
-	mkdir(n1_ptr, 0700);
-
-	for (uint32_t m = 0; m < max_bone; ++m)
-	{
-		char* n_ptr = math_get(m);
-		n2_ptr = math_combine(n1_ptr, n_ptr);
-		free(n_ptr);
-		file = fopen(n2_ptr, "wb");
-		fwrite(collada_source_ptr->bone_ptr[m], sizeof(unsigned char), collada_source_ptr->bone_size_ptr[m], file);
 		free(n2_ptr);
 		fclose(file);
-	}
 
-	free(n1_ptr);
+		n2_ptr = math_combine(n1_ptr, "/joint.dat");
+		file = fopen(n2_ptr, "w");
+		for (uint32_t m = 0; m < max_data; ++m)
+		{
+			uint8_t max_joint = 0;
+			// for (uint32_t j = 0; j < collada_source_ptr->vcount_size_ptr[m]; ++j)
+			// {
+			// 	if (max_joint < collada_source_ptr->vcount_ptr[m][j])
+			// 	{
+			// 		max_joint = collada_source_ptr->vcount_ptr[m][j];
+			// 	}
+			// }
+			uint32_t collada_pack_size = collada_source_ptr->collada_pack_size_ptr[m];
+			for (uint32_t p = 0; p < collada_pack_size; ++p)
+			{
+				collada_Pack collada_pack = collada_source_ptr->collada_pack_ptr[m][p];
+				if (max_joint < collada_pack.max_bone)
+				{
+					max_joint = collada_pack.max_bone;
+				}
+			}
+			fwrite(path, sizeof(char), strlen(path), file);
+			fwrite(collada_source_ptr->data_ptr[m], sizeof(char), strlen(collada_source_ptr->data_ptr[m]), file);
+			char n = ' ';
+			fwrite(&n, sizeof(char), 1, file);
+			char* n_ptr = math_get(max_joint);
+			fwrite(n_ptr, sizeof(uint8_t), 1, file);
+			free(n_ptr);
+			if (m != max_data - 1)
+			{
+				n = '\n';
+				fwrite(&n, sizeof(char), 1, file);
+				// info("%s%s %d\n", path, collada_source_ptr->data_ptr[m], max_joint)
+			}
+		}
+		free(n2_ptr);
+		fclose(file);
+
+		free(n1_ptr);
+
+		n1_ptr = math_combine(path, "/bone/");
+		mkdir(n1_ptr, 0700);
+
+		for (uint32_t m = 0; m < max_bone; ++m)
+		{
+			char* n_ptr = math_get(m);
+			n2_ptr = math_combine(n1_ptr, n_ptr);
+			free(n_ptr);
+			n_ptr = math_combine(n2_ptr, ".bin");
+			free(n2_ptr);
+			file = fopen(n_ptr, "wb");
+			fwrite(collada_source_ptr->bone_ptr[m], sizeof(uint8_t), collada_source_ptr->bone_size_ptr[m], file);
+			free(n_ptr);
+			fclose(file);
+		}
+
+		free(n1_ptr);
+	}
 }

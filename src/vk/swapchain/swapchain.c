@@ -63,7 +63,7 @@
 void vk_makeSwapchain(uint32_t device)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
-	unsigned char max_graphics = m_max_graphics_ptr[device];
+	uint8_t max_graphics = m_max_graphics_ptr[device];
 
 	//
 	// SwapchainSupportDetails swapchainsupportdetails =

@@ -13,7 +13,7 @@
 //	 // optical_flow_size,
 //	 // flag_size;
 //	 // char set;
-//	 uint32_t *graphics;
+//	 uint32_t* graphics;
 //	 // compute,
 //	 // transfer,
 //	 // sparse_binding,

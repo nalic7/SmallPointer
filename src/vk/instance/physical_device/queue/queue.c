@@ -10,7 +10,7 @@ void vk_makeQueue(uint32_t device)
 
 	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &queuefamilies, VK_NULL_HANDLE);
 
-	VkQueueFamilyProperties *vkqueuefamilyproperties_ptr = malloc(queuefamilies * sizeof(VkQueueFamilyProperties));
+	VkQueueFamilyProperties* vkqueuefamilyproperties_ptr = malloc(queuefamilies * sizeof(VkQueueFamilyProperties));
 
 	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &queuefamilies, vkqueuefamilyproperties_ptr);
 

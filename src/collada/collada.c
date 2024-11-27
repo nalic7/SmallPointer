@@ -210,8 +210,8 @@ int main_skin(void* d_name_ptr)
 
 		file_reader_match(file_ptr, (const char*[]){"</animation>"}, 1);
 
-		collada_source.time_size_ptr = 0;
-		collada_source.time_ptr = malloc(0);
+		// collada_source.time_size_ptr = 0;
+		// collada_source.time_ptr = malloc(0);
 		collada_source.transform_size = 0;
 		collada_source.transform_ptr = malloc(0);
 		collada_source.v_bone_size = 0;
@@ -220,8 +220,8 @@ int main_skin(void* d_name_ptr)
 		for (int l = 0; l < collada_source.max_bone; ++l)
 		{
 			file_reader_match(file_ptr, (const char*[]){"<float_array"}, 1);
-			file_reader_match(file_ptr, (const char*[]){">"}, 1);
-			collada_source.time_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.time_ptr, &collada_source.time_size_ptr);
+			// file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			// collada_source.time_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.time_ptr, &collada_source.time_size_ptr);
 
 			file_reader_match(file_ptr, (const char*[]){"<float_array"}, 1);
 			file_reader_match(file_ptr, (const char*[]){">"}, 1);
@@ -252,48 +252,51 @@ int main_skin(void* d_name_ptr)
 	free(d_name_ptr);
 
 	//s0-free
-	for (uint32_t b = 0; b < collada_source.max_bone; ++b)
+	if (collada_source.is_animated)
 	{
-		collada_Bone collada_bone = collada_source.collada_bone_ptr[b];
-		for (uint32_t i = 0; i < collada_bone.name_size; ++i)
+		for (uint32_t b = 0; b < collada_source.max_bone; ++b)
 		{
-			free(collada_bone.name_ptr[i]);
+			collada_Bone collada_bone = collada_source.collada_bone_ptr[b];
+			for (uint32_t i = 0; i < collada_bone.name_size; ++i)
+			{
+				free(collada_bone.name_ptr[i]);
+			}
+			free(collada_bone.name_ptr);
+
+			free(collada_bone.visual_ptr);
+
+			free(collada_source.joint_ptr[b]);
 		}
-		free(collada_bone.name_ptr);
+		free(collada_source.collada_bone_ptr);
 
-		free(collada_bone.visual_ptr);
+		free(collada_source.joint_ptr);
+		free(collada_source.weight_ptr);
+		free(collada_source.bind_pose_ptr);
 
-		free(collada_source.joint_ptr[b]);
+		free(collada_source.space_ptr);
+
+		for (uint32_t b = 0; b < collada_source.max_bone; ++b)
+		{
+			free(collada_source.bone_ptr[b]);
+		}
+		free(collada_source.bone_ptr);
+		free(collada_source.bone_size_ptr);
+
+		for (uint32_t b = 0; b < collada_source.v_bone_size; ++b)
+		{
+			free(collada_source.v_bone_ptr[b]);
+		}
+		free(collada_source.v_bone_ptr);
+
+		// free(collada_source.time_ptr);
+		free(collada_source.transform_ptr);
+
+		for (uint32_t a = 0; a < collada_source.armature_size; ++a)
+		{
+			free(collada_source.armature_ptr[a]);
+		}
+		free(collada_source.armature_ptr);
 	}
-	free(collada_source.collada_bone_ptr);
-
-	free(collada_source.joint_ptr);
-	free(collada_source.weight_ptr);
-	free(collada_source.bind_pose_ptr);
-
-	free(collada_source.space_ptr);
-
-	for (uint32_t b = 0; b < collada_source.max_bone; ++b)
-	{
-		free(collada_source.bone_ptr[b]);
-	}
-	free(collada_source.bone_ptr);
-	free(collada_source.bone_size_ptr);
-
-	for (uint32_t b = 0; b < collada_source.v_bone_size; ++b)
-	{
-		free(collada_source.v_bone_ptr[b]);
-	}
-	free(collada_source.v_bone_ptr);
-
-	free(collada_source.time_ptr);
-	free(collada_source.transform_ptr);
-
-	for (uint32_t a = 0; a < collada_source.armature_size; ++a)
-	{
-		free(collada_source.armature_ptr[a]);
-	}
-	free(collada_source.armature_ptr);
 
 	for (uint32_t m = 0; m < collada_source.max_data; ++m)
 	{
@@ -305,16 +308,21 @@ int main_skin(void* d_name_ptr)
 
 		free(collada_source.p_ptr[m]);
 
-		free(collada_source.v_ptr[m]);
-		free(collada_source.vcount_ptr[m]);
-
 		free(collada_source.index_ptr[m]);
-		for (uint32_t p = 0; p < collada_source.collada_pack_size_ptr[m]; ++p)
+
+		if (collada_source.is_animated)
 		{
-			collada_Pack collada_pack = collada_source.collada_pack_ptr[m][p];
-			free(collada_pack.joint_ptr);
-			free(collada_pack.weight_ptr);
+			free(collada_source.v_ptr[m]);
+			free(collada_source.vcount_ptr[m]);
+
+			for (uint32_t p = 0; p < collada_source.collada_pack_size_ptr[m]; ++p)
+			{
+				collada_Pack collada_pack = collada_source.collada_pack_ptr[m][p];
+				free(collada_pack.joint_ptr);
+				free(collada_pack.weight_ptr);
+			}
 		}
+
 		free(collada_source.collada_pack_ptr[m]);
 	}
 	free(collada_source.data_ptr);
@@ -329,11 +337,14 @@ int main_skin(void* d_name_ptr)
 	free(collada_source.p_ptr);
 	free(collada_source.p_size_ptr);
 
-	free(collada_source.v_ptr);
-	free(collada_source.v_size_ptr);
+	if (collada_source.is_animated)
+	{
+		free(collada_source.v_ptr);
+		free(collada_source.v_size_ptr);
 
-	free(collada_source.vcount_ptr);
-	free(collada_source.vcount_size_ptr);
+		free(collada_source.vcount_ptr);
+		free(collada_source.vcount_size_ptr);
+	}
 
 	free(collada_source.index_ptr);
 	free(collada_source.index_size_ptr);

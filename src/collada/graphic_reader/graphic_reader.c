@@ -1,3 +1,4 @@
+#include <stdint.h>
 uint32_t graphic_reader_count(char* char_ptr, char c_char)
 {
 	uint32_t v = 0;
@@ -31,7 +32,7 @@ void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 	uint32_t max_data = collada_source_ptr->max_data;
 	uint32_t max_bone = collada_source_ptr->max_bone;
 
-	unsigned char** bone_ptr = malloc(sizeof(unsigned char*) * max_bone);
+	uint8_t** bone_ptr = malloc(sizeof(uint8_t*) * max_bone);
 	uint32_t* bone_size_ptr = malloc(sizeof(uint32_t) * max_bone);
 
 	collada_Bone* bonedata_vector = collada_source_ptr->collada_bone_ptr;
@@ -42,7 +43,8 @@ void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 		{
 			if (strcmp(collada_source_ptr->joint_ptr[w], bonedata_vector[y].name_ptr[0]) == 0)
 			{
-				bone_ptr[w] = malloc(0);
+				bone_ptr[w] = malloc(sizeof(uint8_t));
+				bone_ptr[w][0] = w;
 
 				uint32_t max_z = collada_source_ptr->space_ptr[w];
 				uint32_t index = 1;
@@ -53,9 +55,9 @@ void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 					if (max_z > new_max_z)
 					{
 						max_z = new_max_z;
-						bone_ptr[w] = realloc(bone_ptr[w], sizeof(unsigned char) * index);
-						bone_ptr[w][index - 1] = z;
 						++index;
+						bone_ptr[w] = realloc(bone_ptr[w], sizeof(uint8_t) * index);
+						bone_ptr[w][index - 1] = z;
 					}
 				}
 
@@ -71,18 +73,18 @@ void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 
 void graphic_reader_mix(collada_Source* collada_source_ptr)
 {
-	uint32_t max_object = collada_source_ptr->max_data;
+	uint32_t max_data = collada_source_ptr->max_data;
 
-	collada_Pack** collada_pack_ptr = malloc(sizeof(collada_Pack*) * max_object);
-	uint32_t* collada_pack_size_ptr = malloc(sizeof(uint32_t) * max_object);
+	collada_Pack** collada_pack_ptr = malloc(sizeof(collada_Pack*) * max_data);
+	uint32_t* collada_pack_size_ptr = malloc(sizeof(uint32_t) * max_data);
 
-	uint32_t** index_ptr = malloc(sizeof(uint32_t*) * max_object);
-	uint32_t* index_size_ptr = malloc(sizeof(uint32_t) * max_object);
+	uint32_t** index_ptr = malloc(sizeof(uint32_t*) * max_data);
+	uint32_t* index_size_ptr = malloc(sizeof(uint32_t) * max_data);
 
-	for (uint32_t m = 0; m < max_object; ++m)
+	for (uint32_t m = 0; m < max_data; ++m)
 	{
 		// uint32_t max_joint = collada_source_ptr->max_bone_ptr[m];
-		uint32_t p_offset_size = collada_source_ptr->p_size_ptr[m];
+		uint32_t p_size = collada_source_ptr->p_size_ptr[m];
 
 		collada_pack_ptr[m] = malloc(0);
 		collada_pack_size_ptr[m] = 0;
@@ -94,76 +96,86 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 			p_x = 0, p_y = 0, p_z = 0,
 			n_x = 0, n_y = 0, n_z = 0,
 			t_x = 0, t_y = 0;
-		unsigned char* joint_ptr;
+		uint8_t* joint_ptr;
 		float* weight_ptr;
-		unsigned char max_bone = 0;
+		uint8_t max_bone = 0;
 
-		for (uint32_t p = 0; p < p_offset_size; ++p)
+		for (uint32_t p = 0; p < p_size; ++p)
 		{
-			uint32_t po = collada_source_ptr->p_ptr[m][p];
-			unsigned char id = p % 3;
+			uint32_t p0 = collada_source_ptr->p_ptr[m][p];
+			uint8_t id = p % 3;
 
 			switch (id)
 			{
 				case 0:
-					uint32_t v = po * 3;
+					uint32_t v = p0 * 3;
 					p_x = collada_source_ptr->vertex_ptr[m][v];
 					p_y = collada_source_ptr->vertex_ptr[m][v + 1];
 					p_z = collada_source_ptr->vertex_ptr[m][v + 2];
 
 					if (collada_source_ptr->is_animated)
 					{
-						joint_ptr = malloc(sizeof(unsigned char) * 4);
+						joint_ptr = malloc(sizeof(uint8_t) * 4);
 						weight_ptr = malloc(sizeof(float) * 4);
-						for (unsigned char i = 0; i < 4; ++i)
+						for (uint8_t i = 0; i < 4; ++i)
 						{
 							joint_ptr[i] = 0;
 							weight_ptr[i] = 0;
 						}
 
-						uint32_t v_offset_by_p = 0;
+						uint32_t v_by_p0 = 0;
 
-						for (uint32_t i = 0; i < po; ++i)
+						for (uint32_t i = 0; i < p0; ++i)
 						{
-							v_offset_by_p += collada_source_ptr->vcount_ptr[m][i];
+							v_by_p0 += collada_source_ptr->vcount_ptr[m][i];
 						}
 
-						v_offset_by_p *= 2;
+						v_by_p0 *= 2;
 
-						int vc = collada_source_ptr->vcount_ptr[m][po];
+						int vc = collada_source_ptr->vcount_ptr[m][p0];
 
 						max_bone = 0;
 
+						uint8_t limit = 0;
 						while (max_bone < vc)
 						{
-							uint32_t step = v_offset_by_p + max_bone * 2;
+							uint32_t step = v_by_p0 + max_bone * 2;
 							joint_ptr[max_bone] = collada_source_ptr->v_ptr[m][step];
 							weight_ptr[max_bone] = collada_source_ptr->weight_ptr[collada_source_ptr->v_ptr[m][step + 1]];
 
 							if (weight_ptr[max_bone] == 0)
 							{
 								joint_ptr[max_bone] = 0;
+								if (max_bone == vc - 1)
+								{
+									limit = 1;
+								}
 							}
 
 							++max_bone;
 						}
+						//need test
+						if (limit == 1 && max_bone != 0)
+						{
+							--max_bone;
+						}
 					}
 					break;
 				case 1:
-					uint32_t n = po * 3;
+					uint32_t n = p0 * 3;
 					n_x = collada_source_ptr->normal_ptr[m][n];
 					n_y = collada_source_ptr->normal_ptr[m][n + 1];
 					n_z = collada_source_ptr->normal_ptr[m][n + 2];
 					break;
 				case 2:
-					uint32_t t = po * 2;
+					uint32_t t = p0 * 2;
 					t_x = collada_source_ptr->texcoord_ptr[m][t];
 					t_y = collada_source_ptr->texcoord_ptr[m][t + 1];
 			}
 
 			if (id == 2)
 			{
-				unsigned char pass = 0;
+				uint8_t pass = 0;
 				uint32_t i = 0;
 
 				while (i < collada_pack_size_ptr[m])
@@ -184,18 +196,19 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 					{
 						pass = 1;
 
-						////memory leak
-						//for (int j = 0; j < max_joint; ++j)
-						for (unsigned char j = 0; j < 4; ++j)
+						if (collada_source_ptr->is_animated)
 						{
-							if
-							(
-								joint_ptr[j] != collada_pack_ptr[m][i].joint_ptr[j] ||
-								weight_ptr[j] != collada_pack_ptr[m][i].weight_ptr[j]
-							)
+							for (uint8_t j = 0; j < 4; ++j)
 							{
-								pass = 0;
-								break;
+								if
+								(
+									joint_ptr[j] != collada_pack_ptr[m][i].joint_ptr[j] ||
+									weight_ptr[j] != collada_pack_ptr[m][i].weight_ptr[j]
+								)
+								{
+									pass = 0;
+									break;
+								}
 							}
 						}
 
@@ -220,13 +233,17 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 
 					collada_Pack new_collada_pack =
 					{
-						p_x, p_y, p_z,
-						n_x, n_y, n_z,
-						t_x, t_y,
-						joint_ptr,
-						weight_ptr,
-						max_bone
+						.p_x = p_x, .p_y = p_y, .p_z = p_z,
+						.n_x = n_x, .n_y = n_y, .n_z = n_z,
+						.t_x = t_x, .t_y = t_y,
 					};
+
+					if (collada_source_ptr->is_animated)
+					{
+						new_collada_pack.joint_ptr = joint_ptr;
+						new_collada_pack.weight_ptr = weight_ptr;
+						new_collada_pack.max_bone = max_bone;
+					}
 
 					collada_pack_ptr[m] = realloc(collada_pack_ptr[m], sizeof(collada_Pack) * collada_pack_size_ptr[m]);
 					collada_pack_ptr[m][new_index] = new_collada_pack;
@@ -235,8 +252,11 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 				}
 				else
 				{
-					free(joint_ptr);
-					free(weight_ptr);
+					if (collada_source_ptr->is_animated)
+					{
+						free(joint_ptr);
+						free(weight_ptr);
+					}
 					index_ptr[m][index_size_ptr[m] - 1] = i;
 				}
 			}
@@ -253,17 +273,17 @@ void graphic_reader_fixAnimation(collada_Source* collada_source_ptr)
 {
 	uint32_t max_bone = collada_source_ptr->max_bone;
 
-	for (int y = 0; y < collada_source_ptr->v_bone_size; ++y)
+	for (uint32_t y = 0; y < collada_source_ptr->v_bone_size; ++y)
 	{
-		for (int x = 0; x < max_bone; ++x)
+		for (uint32_t x = 0; x < max_bone; ++x)
 		{
 			if (strcmp(collada_source_ptr->v_bone_ptr[y], collada_source_ptr->collada_bone_ptr[x].name_ptr[0]) == 0)
 			{
-				int y_index = y * collada_source_ptr->max_frame * 16;
+				uint32_t y_index = y * collada_source_ptr->max_frame * 16;
 
-				for (int z = 0; z < collada_source_ptr->max_frame; ++z)
+				for (uint32_t z = 0; z < collada_source_ptr->max_frame; ++z)
 				{
-					int z_index = z * 16;
+					uint32_t z_index = z * 16;
 
 					collada_source_ptr->transform_ptr[y_index + 3 + z_index] -= collada_source_ptr->collada_bone_ptr[x].visual_ptr[3];
 					collada_source_ptr->transform_ptr[y_index + 7 + z_index] -= collada_source_ptr->collada_bone_ptr[x].visual_ptr[7];

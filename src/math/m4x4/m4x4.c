@@ -16,15 +16,15 @@ void m4x4_inverse(float* mat_ptr, uint32_t index)
 		0.0F, 0.0F, 0.0F, 1.0F
 	};
 
-	int i, j, k;
+	int32_t i, j, k;
 	float s[16];
 	float t[16];
-	memcpy(s, m_m4x4_mat, 16);
-	memcpy(t, m_m4x4_mat, 16);
+	memcpy(s, m_m4x4_mat, sizeof(float) * 16);
+	memcpy(t, mat_ptr + index, sizeof(float) * 16);
 
 	for (i = 0; i < 3; i++)
 	{
-		int pivot = i;
+		int32_t pivot = i;
 
 		float pivotsize = t[i * 4 + i];
 
@@ -49,7 +49,7 @@ void m4x4_inverse(float* mat_ptr, uint32_t index)
 
 		if (pivotsize == 0)
 		{
-			memcpy(mat_ptr + index, identity, 16);
+			memcpy(mat_ptr + index, identity, sizeof(float) * 16);
 			return;
 		}
 
@@ -57,8 +57,8 @@ void m4x4_inverse(float* mat_ptr, uint32_t index)
 		{
 			for (j = 0; j < 4; j++)
 			{
-				int i4j = i * 4 + j;
-				int p4j = pivot * 4 + j;
+				int32_t i4j = i * 4 + j;
+				int32_t p4j = pivot * 4 + j;
 				float tmp;
 
 				tmp = t[i4j];
@@ -77,8 +77,8 @@ void m4x4_inverse(float* mat_ptr, uint32_t index)
 
 			for (k = 0; k < 4; k++)
 			{
-				int j4k = j * 4 + k;
-				int i4k = i * 4 + k;
+				int32_t j4k = j * 4 + k;
+				int32_t i4k = i * 4 + k;
 				t[j4k] -= f * t[i4k];
 				s[j4k] -= f * s[i4k];
 			}
@@ -91,13 +91,13 @@ void m4x4_inverse(float* mat_ptr, uint32_t index)
 
 		if ((f = t[i * 4 + i]) == 0)
 		{
-			memcpy(mat_ptr + index, identity, 16);
+			memcpy(mat_ptr + index, identity, sizeof(float) * 16);
 			return;
 		}
 
 		for (j = 0; j < 4; j++)
 		{
-			int i4j = i * 4 + j;
+			int32_t i4j = i * 4 + j;
 
 			t[i4j] /= f;
 			s[i4j] /= f;
@@ -109,13 +109,13 @@ void m4x4_inverse(float* mat_ptr, uint32_t index)
 
 			for (k = 0; k < 4; k++)
 			{
-				int j4k = j * 4 + k;
-				int i4k = i * 4 + k;
+				int32_t j4k = j * 4 + k;
+				int32_t i4k = i * 4 + k;
 				t[j4k] -= f * t[i4k];
 				s[j4k] -= f * s[i4k];
 			}
 		}
 	}
 
-	memcpy(mat_ptr + index, s, 16);
+	memcpy(mat_ptr + index, s, sizeof(float) * 16);
 }

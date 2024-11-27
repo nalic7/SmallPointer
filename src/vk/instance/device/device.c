@@ -1,7 +1,7 @@
 void vk_makeDevice(uint32_t device)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
-	unsigned char max_graphics = m_max_graphics_ptr[device];
+	uint8_t max_graphics = m_max_graphics_ptr[device];
 	// QueueList queuelist = vk_findQueue(vk, vkphysicaldevice);
 
 	info("max_graphics %d", max_graphics)
