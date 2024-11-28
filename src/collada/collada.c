@@ -1,4 +1,3 @@
-#include <stdlib.h>
 static uint32_t thrd = 0;
 
 int main_skin(void* d_name_ptr)

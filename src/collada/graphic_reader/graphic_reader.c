@@ -1,4 +1,4 @@
-uint32_t graphic_reader_count(char* char_ptr, char c_char)
+uint32_t graphic_reader_count(const char* char_ptr, const char c_char)
 {
 	uint32_t v = 0;
 
@@ -28,47 +28,47 @@ void graphic_reader_sanitize(char* char_ptr)
 
 void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 {
-	uint32_t max_data = collada_source_ptr->max_data;
-	uint32_t max_bone = collada_source_ptr->max_bone;
+	const uint32_t max_data = collada_source_ptr->max_data;
+	const uint8_t max_bone = collada_source_ptr->max_bone;
 
 	uint8_t** bone_ptr = malloc(sizeof(uint8_t*) * max_bone);
 	uint32_t* bone_size_ptr = malloc(sizeof(uint32_t) * max_bone);
 
-	collada_Bone* bonedata_vector = collada_source_ptr->collada_bone_ptr;
+	const collada_Bone* collada_bone_ptr = collada_source_ptr->collada_bone_ptr;
 
-	for (int16_t w = 0; w < max_bone; ++w)
+	for (uint8_t mb0 = 0; mb0 < max_bone; ++mb0)
 	{
-		for (int16_t y = 0; y < max_bone; ++y)
+		for (int16_t mb1 = 0; mb1 < max_bone; ++mb1)
 		{
-			if (strcmp(collada_source_ptr->joint_ptr[w], bonedata_vector[y].name_ptr[0]) == 0)
+			if (strcmp(collada_source_ptr->joint_ptr[mb0], collada_bone_ptr[mb1].name_ptr[0]) == 0)
 			{
-				uint32_t max_z = collada_source_ptr->space_ptr[w];
-				uint32_t index = 1;
+				uint32_t max_space = collada_source_ptr->space_ptr[mb0];
+				uint8_t bone_index = 1;
 
-				bone_ptr[w] = malloc(sizeof(uint8_t));
-				bone_ptr[w][0] = w;
+				bone_ptr[mb0] = malloc(sizeof(uint8_t));
+				bone_ptr[mb0][0] = mb0;
 
-				for (int16_t z = y - 1; z != -1; --z)
+				for (int16_t sb = mb1 - 1; sb != -1; --sb)
 				{
-					uint32_t new_max_z = collada_source_ptr->space_ptr[z];
-					if (max_z > new_max_z)
+					const uint32_t space = collada_source_ptr->space_ptr[sb];
+					if (max_space > space)
 					{
-						max_z = new_max_z;
+						max_space = space;
 
-						for (int16_t h = 0; h < max_bone; ++h)
+						for (uint8_t mb2 = 0; mb2 < max_bone; ++mb2)
 						{
-							if (strcmp(collada_source_ptr->joint_ptr[h], bonedata_vector[z].name_ptr[0]) == 0)
+							if (strcmp(collada_source_ptr->joint_ptr[mb2], collada_bone_ptr[sb].name_ptr[0]) == 0)
 							{
-								++index;
-								bone_ptr[w] = realloc(bone_ptr[w], sizeof(uint8_t) * index);
-								bone_ptr[w][index - 1] = h;
+								++bone_index;
+								bone_ptr[mb0] = realloc(bone_ptr[mb0], sizeof(uint8_t) * bone_index);
+								bone_ptr[mb0][bone_index - 1] = mb2;
 								break;
 							}
 						}
 					}
 				}
 
-				bone_size_ptr[w] = index;
+				bone_size_ptr[mb0] = bone_index;
 				break;
 			}
 		}
@@ -80,7 +80,7 @@ void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 
 void graphic_reader_mix(collada_Source* collada_source_ptr)
 {
-	uint32_t max_data = collada_source_ptr->max_data;
+	const uint32_t max_data = collada_source_ptr->max_data;
 
 	collada_Pack** collada_pack_ptr = malloc(sizeof(collada_Pack*) * max_data);
 	uint32_t* collada_pack_size_ptr = malloc(sizeof(uint32_t) * max_data);
@@ -88,16 +88,15 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 	uint32_t** index_ptr = malloc(sizeof(uint32_t*) * max_data);
 	uint32_t* index_size_ptr = malloc(sizeof(uint32_t) * max_data);
 
-	for (uint32_t m = 0; m < max_data; ++m)
+	for (uint32_t md = 0; md < max_data; ++md)
 	{
-		// uint32_t max_joint = collada_source_ptr->max_bone_ptr[m];
-		uint32_t p_size = collada_source_ptr->p_size_ptr[m];
+		const uint32_t p_size = collada_source_ptr->p_size_ptr[md];
 
-		collada_pack_ptr[m] = malloc(0);
-		collada_pack_size_ptr[m] = 0;
+		collada_pack_ptr[md] = malloc(0);
+		collada_pack_size_ptr[md] = 0;
 
-		index_ptr[m] = malloc(0);
-		index_size_ptr[m] = 0;
+		index_ptr[md] = malloc(0);
+		index_size_ptr[md] = 0;
 
 		float
 			p_x = 0, p_y = 0, p_z = 0,
@@ -109,16 +108,17 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 
 		for (uint32_t p = 0; p < p_size; ++p)
 		{
-			uint32_t p0 = collada_source_ptr->p_ptr[m][p];
-			uint8_t id = p % 3;
+			const uint32_t p0 = collada_source_ptr->p_ptr[md][p];
+			const uint8_t id = p % 3;
 
+			uint32_t sd;
 			switch (id)
 			{
 				case 0:
-					uint32_t v = p0 * 3;
-					p_x = collada_source_ptr->vertex_ptr[m][v];
-					p_y = collada_source_ptr->vertex_ptr[m][v + 1];
-					p_z = collada_source_ptr->vertex_ptr[m][v + 2];
+					sd = p0 * 3;
+					p_x = collada_source_ptr->vertex_ptr[md][sd];
+					p_y = collada_source_ptr->vertex_ptr[md][sd + 1];
+					p_z = collada_source_ptr->vertex_ptr[md][sd + 2];
 
 					if (collada_source_ptr->is_animated)
 					{
@@ -130,30 +130,30 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 							weight_ptr[i] = 0;
 						}
 
-						uint32_t v_by_p0 = 0;
+						uint32_t p0_vcount = 0;
 
 						for (uint32_t i = 0; i < p0; ++i)
 						{
-							v_by_p0 += collada_source_ptr->vcount_ptr[m][i];
+							p0_vcount += collada_source_ptr->vcount_ptr[md][i];
 						}
 
-						v_by_p0 *= 2;
+						p0_vcount *= 2;
 
-						int vc = collada_source_ptr->vcount_ptr[m][p0];
+						const int vcount = collada_source_ptr->vcount_ptr[md][p0];
 
 						max_bone = 0;
 
 						uint8_t limit = 0;
-						while (max_bone < vc)
+						while (max_bone < vcount)
 						{
-							uint32_t step = v_by_p0 + max_bone * 2;
-							joint_ptr[max_bone] = collada_source_ptr->v_ptr[m][step];
-							weight_ptr[max_bone] = collada_source_ptr->weight_ptr[m][collada_source_ptr->v_ptr[m][step + 1]];
+							const uint32_t step = p0_vcount + max_bone * 2;
+							joint_ptr[max_bone] = collada_source_ptr->v_ptr[md][step];
+							weight_ptr[max_bone] = collada_source_ptr->weight_ptr[md][collada_source_ptr->v_ptr[md][step + 1]];
 
 							if (weight_ptr[max_bone] == 0)
 							{
 								joint_ptr[max_bone] = 0;
-								if (max_bone == vc - 1)
+								if (max_bone == vcount - 1)
 								{
 									limit = 1;
 								}
@@ -169,15 +169,15 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 					}
 					break;
 				case 1:
-					uint32_t n = p0 * 3;
-					n_x = collada_source_ptr->normal_ptr[m][n];
-					n_y = collada_source_ptr->normal_ptr[m][n + 1];
-					n_z = collada_source_ptr->normal_ptr[m][n + 2];
+					sd = p0 * 3;
+					n_x = collada_source_ptr->normal_ptr[md][sd];
+					n_y = collada_source_ptr->normal_ptr[md][sd + 1];
+					n_z = collada_source_ptr->normal_ptr[md][sd + 2];
 					break;
 				case 2:
-					uint32_t t = p0 * 2;
-					t_x = collada_source_ptr->texcoord_ptr[m][t];
-					t_y = collada_source_ptr->texcoord_ptr[m][t + 1];
+					sd = p0 * 2;
+					t_x = collada_source_ptr->texcoord_ptr[md][sd];
+					t_y = collada_source_ptr->texcoord_ptr[md][sd + 1];
 			}
 
 			if (id == 2)
@@ -185,20 +185,20 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 				uint8_t pass = 0;
 				uint32_t i = 0;
 
-				while (i < collada_pack_size_ptr[m])
+				while (i < collada_pack_size_ptr[md])
 				{
 					if
 					(
-						p_x == collada_pack_ptr[m][i].p_x &&
-						p_y == collada_pack_ptr[m][i].p_y &&
-						p_z == collada_pack_ptr[m][i].p_z &&
+						p_x == collada_pack_ptr[md][i].p_x &&
+						p_y == collada_pack_ptr[md][i].p_y &&
+						p_z == collada_pack_ptr[md][i].p_z &&
 
-						n_x == collada_pack_ptr[m][i].n_x &&
-						n_y == collada_pack_ptr[m][i].n_y &&
-						n_z == collada_pack_ptr[m][i].n_z &&
+						n_x == collada_pack_ptr[md][i].n_x &&
+						n_y == collada_pack_ptr[md][i].n_y &&
+						n_z == collada_pack_ptr[md][i].n_z &&
 
-						t_x == collada_pack_ptr[m][i].t_x &&
-						t_y == collada_pack_ptr[m][i].t_y
+						t_x == collada_pack_ptr[md][i].t_x &&
+						t_y == collada_pack_ptr[md][i].t_y
 					)
 					{
 						pass = 1;
@@ -209,8 +209,8 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 							{
 								if
 								(
-									joint_ptr[j] != collada_pack_ptr[m][i].joint_ptr[j] ||
-									weight_ptr[j] != collada_pack_ptr[m][i].weight_ptr[j]
+									joint_ptr[j] != collada_pack_ptr[md][i].joint_ptr[j] ||
+									weight_ptr[j] != collada_pack_ptr[md][i].weight_ptr[j]
 								)
 								{
 									pass = 0;
@@ -231,12 +231,12 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 					++i;
 				}
 
-				++index_size_ptr[m];
-				index_ptr[m] = realloc(index_ptr[m], sizeof(uint32_t) * index_size_ptr[m]);
+				++index_size_ptr[md];
+				index_ptr[md] = realloc(index_ptr[md], sizeof(uint32_t) * index_size_ptr[md]);
 				if (pass == 0)
 				{
-					uint32_t new_index = collada_pack_size_ptr[m];
-					++collada_pack_size_ptr[m];
+					const uint32_t new_index = collada_pack_size_ptr[md];
+					++collada_pack_size_ptr[md];
 
 					collada_Pack new_collada_pack =
 					{
@@ -252,10 +252,10 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 						new_collada_pack.max_bone = max_bone;
 					}
 
-					collada_pack_ptr[m] = realloc(collada_pack_ptr[m], sizeof(collada_Pack) * collada_pack_size_ptr[m]);
-					collada_pack_ptr[m][new_index] = new_collada_pack;
+					collada_pack_ptr[md] = realloc(collada_pack_ptr[md], sizeof(collada_Pack) * collada_pack_size_ptr[md]);
+					collada_pack_ptr[md][new_index] = new_collada_pack;
 
-					index_ptr[m][index_size_ptr[m] - 1] = new_index;
+					index_ptr[md][index_size_ptr[md] - 1] = new_index;
 				}
 				else
 				{
@@ -264,7 +264,7 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 						free(joint_ptr);
 						free(weight_ptr);
 					}
-					index_ptr[m][index_size_ptr[m] - 1] = i;
+					index_ptr[md][index_size_ptr[md] - 1] = i;
 				}
 			}
 		}
@@ -278,24 +278,22 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 
 void graphic_reader_fixAnimation(collada_Source* collada_source_ptr)
 {
-	uint32_t max_bone = collada_source_ptr->max_bone;
-
-	for (uint32_t y = 0; y < collada_source_ptr->v_bone_size; ++y)
+	for (uint32_t v = 0; v < collada_source_ptr->v_bone_size; ++v)
 	{
-		for (uint32_t x = 0; x < max_bone; ++x)
+		for (uint8_t mb = 0; mb < collada_source_ptr->max_bone; ++mb)
 		{
-			if (strcmp(collada_source_ptr->v_bone_ptr[y], collada_source_ptr->collada_bone_ptr[x].name_ptr[0]) == 0)
+			if (strcmp(collada_source_ptr->v_bone_ptr[v], collada_source_ptr->collada_bone_ptr[mb].name_ptr[0]) == 0)
 			{
-				uint32_t y_index = y * collada_source_ptr->max_frame * 16;
+				const uint32_t v_mf_16 = v * collada_source_ptr->max_frame * 16;
 
-				for (uint32_t z = 0; z < collada_source_ptr->max_frame; ++z)
+				for (uint32_t mf = 0; mf < collada_source_ptr->max_frame; ++mf)
 				{
-					uint32_t z_index = z * 16;
+					const uint32_t mf_16 = mf * 16;
 
-					collada_source_ptr->transform_ptr[y_index + 3 + z_index] -= collada_source_ptr->collada_bone_ptr[x].visual_ptr[3];
-					collada_source_ptr->transform_ptr[y_index + 7 + z_index] -= collada_source_ptr->collada_bone_ptr[x].visual_ptr[7];
-					collada_source_ptr->transform_ptr[y_index + 11 + z_index] -= collada_source_ptr->collada_bone_ptr[x].visual_ptr[11];
-					m4x4_inverse(collada_source_ptr->transform_ptr, y_index + z_index);
+					collada_source_ptr->transform_ptr[v_mf_16 + 3 + mf_16] -= collada_source_ptr->collada_bone_ptr[mb].visual_ptr[3];
+					collada_source_ptr->transform_ptr[v_mf_16 + 7 + mf_16] -= collada_source_ptr->collada_bone_ptr[mb].visual_ptr[7];
+					collada_source_ptr->transform_ptr[v_mf_16 + 11 + mf_16] -= collada_source_ptr->collada_bone_ptr[mb].visual_ptr[11];
+					m4x4_inverse(collada_source_ptr->transform_ptr, v_mf_16 + mf_16);
 				}
 			}
 		}

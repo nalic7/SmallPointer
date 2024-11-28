@@ -1,18 +1,17 @@
-#include <stdint.h>
-void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
+void file_writer_collada(const collada_Source* collada_source_ptr, const char* path)
 {
-	uint32_t max_data = collada_source_ptr->max_data;
-	for (uint32_t m = 0; m < max_data; ++m)
+	const uint32_t max_data = collada_source_ptr->max_data;
+	for (uint32_t md = 0; md < max_data; ++md)
 	{
-		uint32_t collada_pack_size = collada_source_ptr->collada_pack_size_ptr[m];
-		char* name_ptr = collada_source_ptr->data_ptr[m];
+		const uint32_t collada_pack_size = collada_source_ptr->collada_pack_size_ptr[md];
+		const char* data_ptr = collada_source_ptr->data_ptr[md];
 
-		char* n0_ptr = math_combine(path, name_ptr);
+		char* n0_ptr = math_combine(path, data_ptr);
 		mkdir(n0_ptr, 0700);
 
 		char* n1_ptr = math_combine(n0_ptr, C_INDEX_FILE);
 		FILE* index_file = fopen(n1_ptr, "wb");
-		fwrite(collada_source_ptr->index_ptr[m], sizeof(float), collada_source_ptr->index_size_ptr[m], index_file);
+		fwrite(collada_source_ptr->index_ptr[md], sizeof(float), collada_source_ptr->index_size_ptr[md], index_file);
 		free(n1_ptr);
 		fclose(index_file);
 
@@ -46,10 +45,10 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 			free(n1_ptr);
 		}
 
-		uint8_t max_joint = collada_source_ptr->max_joint_ptr[m];
+		const uint8_t max_joint = collada_source_ptr->max_joint_ptr[md];
 		for (uint32_t p = 0; p < collada_pack_size; ++p)
 		{
-			collada_Pack collada_pack = collada_source_ptr->collada_pack_ptr[m][p];
+			const collada_Pack collada_pack = collada_source_ptr->collada_pack_ptr[md][p];
 			fwrite(&collada_pack.p_x, sizeof(float), 1, vertex_file);
 			fwrite(&collada_pack.p_y, sizeof(float), 1, vertex_file);
 			fwrite(&collada_pack.p_z, sizeof(float), 1, vertex_file);
@@ -91,7 +90,7 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 
 	if (collada_source_ptr->is_animated)
 	{
-		uint32_t max_bone = collada_source_ptr->max_bone;
+		const uint8_t max_bone = collada_source_ptr->max_bone;
 
 		mkdir(path, 0700);
 		char* n1_ptr = math_combine(path, C_BINDPOSE_FILE);
@@ -111,11 +110,11 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 
 		char* n2_ptr = math_combine(n1_ptr, "/bone.dat");
 		file = fopen(n2_ptr, "w");
-		for (uint32_t m = 0; m < max_bone; ++m)
+		for (uint8_t mb = 0; mb < max_bone; ++mb)
 		{
-			collada_Bone bonedata = collada_source_ptr->collada_bone_ptr[m];
-			fwrite(bonedata.name_ptr[0], sizeof(char), strlen(bonedata.name_ptr[0]), file);
-			if (m != max_bone - 1)
+			const collada_Bone collada_bone = collada_source_ptr->collada_bone_ptr[mb];
+			fwrite(collada_bone.name_ptr[0], sizeof(char), strlen(collada_bone.name_ptr[0]), file);
+			if (mb != max_bone - 1)
 			{
 				char n = '\n';
 				fwrite(&n, sizeof(char), 1, file);
@@ -126,7 +125,7 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 
 		n2_ptr = math_combine(n1_ptr, "/joint.dat");
 		file = fopen(n2_ptr, "w");
-		for (uint32_t m = 0; m < max_data; ++m)
+		for (uint32_t md = 0; md < max_data; ++md)
 		{
 			// uint8_t max_joint = 0;
 			// for (uint32_t j = 0; j < collada_source_ptr->vcount_size_ptr[m]; ++j)
@@ -137,13 +136,13 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 			// 	}
 			// }
 			fwrite(path, sizeof(char), strlen(path), file);
-			fwrite(collada_source_ptr->data_ptr[m], sizeof(char), strlen(collada_source_ptr->data_ptr[m]), file);
+			fwrite(collada_source_ptr->data_ptr[md], sizeof(char), strlen(collada_source_ptr->data_ptr[md]), file);
 			char n = ' ';
 			fwrite(&n, sizeof(char), 1, file);
-			char* n_ptr = math_get(collada_source_ptr->max_joint_ptr[m]);
+			char* n_ptr = math_get(collada_source_ptr->max_joint_ptr[md]);
 			fwrite(n_ptr, sizeof(uint8_t), 1, file);
 			free(n_ptr);
-			if (m != max_data - 1)
+			if (md != max_data - 1)
 			{
 				n = '\n';
 				fwrite(&n, sizeof(char), 1, file);
@@ -158,15 +157,15 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 		n1_ptr = math_combine(path, "/bone/");
 		mkdir(n1_ptr, 0700);
 
-		for (uint32_t m = 0; m < max_bone; ++m)
+		for (uint8_t mb = 0; mb < max_bone; ++mb)
 		{
-			char* n_ptr = math_get(m);
+			char* n_ptr = math_get(mb);
 			n2_ptr = math_combine(n1_ptr, n_ptr);
 			free(n_ptr);
 			n_ptr = math_combine(n2_ptr, ".bin");
 			free(n2_ptr);
 			file = fopen(n_ptr, "wb");
-			fwrite(collada_source_ptr->bone_ptr[m], sizeof(uint8_t), collada_source_ptr->bone_size_ptr[m], file);
+			fwrite(collada_source_ptr->bone_ptr[mb], sizeof(uint8_t), collada_source_ptr->bone_size_ptr[mb], file);
 			free(n_ptr);
 			fclose(file);
 		}

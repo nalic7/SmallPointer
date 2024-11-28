@@ -1,4 +1,4 @@
-char file_reader_match(FILE* file_ptr, const char* mchar_ptr[], size_t size)
+char file_reader_match(FILE* file_ptr, const char* mchar_ptr[], const uint32_t size)
 {
 	char* char_ptr[size];
 	for (uint32_t i = 0; i < size; ++i)
@@ -12,7 +12,7 @@ char file_reader_match(FILE* file_ptr, const char* mchar_ptr[], size_t size)
 	char _char;
 	while ((_char = fgetc(file_ptr)))
 	{
-		for (int i = 0; i < size; ++i)
+		for (uint32_t i = 0; i < size; ++i)
 		{
 			if (_char == mchar_ptr[i][char_index[i]])
 			{
@@ -190,16 +190,16 @@ float* file_reader_float(FILE* file_ptr, const char* e_char_ptr, float* float_pt
 	return float_ptr;
 }
 
-int* file_reader_int(FILE* file_ptr, const char* e_char_ptr, int* int_ptr, uint32_t* size)
+int32_t* file_reader_int(FILE* file_ptr, const char* e_char_ptr, int32_t* int_ptr, uint32_t* size)
 {
 	char* n_char_ptr = malloc(sizeof(char));
 	n_char_ptr[sizeof(char) - 1] = '\0';
-	int n_index = 0;
+	uint32_t n_index = 0;
 
 	// char f_char[sizeof(int)];
 	char* se_char_ptr = malloc(sizeof(char));
 	se_char_ptr[sizeof(char) - 1] = '\0';
-	int se_index = 0;
+	uint32_t se_index = 0;
 
 	// // Hexadecimal (base 16)
 	// num = strtol(str, &endptr, 16);
@@ -225,7 +225,7 @@ int* file_reader_int(FILE* file_ptr, const char* e_char_ptr, int* int_ptr, uint3
 
 			if (_char == ' ')
 			{
-				int_ptr = realloc(int_ptr, (*size + 1) * sizeof(int));
+				int_ptr = realloc(int_ptr, (*size + 1) * sizeof(int32_t));
 				int_ptr[*size] = atoi(n_char_ptr);
 				++*size;
 
@@ -248,7 +248,7 @@ int* file_reader_int(FILE* file_ptr, const char* e_char_ptr, int* int_ptr, uint3
 		{
 			if (n_index != 0)
 			{
-				int_ptr = realloc(int_ptr, (*size + 1) * sizeof(int));
+				int_ptr = realloc(int_ptr, (*size + 1) * sizeof(int32_t));
 				int_ptr[*size] = atoi(n_char_ptr);
 				++*size;
 			}

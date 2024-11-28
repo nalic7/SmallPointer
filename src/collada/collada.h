@@ -43,7 +43,7 @@ typedef struct
 	uint32_t max_frame;
 
 	//s0-bone
-	uint32_t max_bone;//-2
+	uint8_t max_bone;//-2
 
 	collada_Bone* collada_bone_ptr;
 
