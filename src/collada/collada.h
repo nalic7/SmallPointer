@@ -1,7 +1,6 @@
 #ifndef NALI_COLLADA_PARSER_H
 #define NALI_COLLADA_PARSER_H
 
-#include <stdint.h>
 #define C_IN "./C_I"
 #define C_OUT "./C_O"
 
