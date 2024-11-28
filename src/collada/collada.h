@@ -62,7 +62,6 @@ typedef struct
 	uint32_t armature_size;
 
 	char** joint_ptr;
-	float* weight_ptr;//V1-V4
 	float* bind_pose_ptr;//M4x4
 	//e0-bone
 
@@ -80,6 +79,9 @@ typedef struct
 
 	int** p_ptr;//V[]
 	uint32_t* p_size_ptr;
+
+	float** weight_ptr;//V1-V4
+	uint32_t* weight_size_ptr;
 
 	int** v_ptr;//V[]
 	uint32_t* v_size_ptr;//V[]

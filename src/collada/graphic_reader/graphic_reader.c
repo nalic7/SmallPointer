@@ -1,4 +1,3 @@
-#include <stdint.h>
 uint32_t graphic_reader_count(char* char_ptr, char c_char)
 {
 	uint32_t v = 0;
@@ -37,27 +36,35 @@ void graphic_reader_makeBones(collada_Source* collada_source_ptr)
 
 	collada_Bone* bonedata_vector = collada_source_ptr->collada_bone_ptr;
 
-	for (int w = 0; w < max_bone; ++w)
+	for (int16_t w = 0; w < max_bone; ++w)
 	{
-		for (int y = 0; y < max_bone; ++y)
+		for (int16_t y = 0; y < max_bone; ++y)
 		{
 			if (strcmp(collada_source_ptr->joint_ptr[w], bonedata_vector[y].name_ptr[0]) == 0)
 			{
-				bone_ptr[w] = malloc(sizeof(uint8_t));
-				bone_ptr[w][0] = w;
-
 				uint32_t max_z = collada_source_ptr->space_ptr[w];
 				uint32_t index = 1;
 
-				for (int z = y - 1; z - 1 > -2; --z)
+				bone_ptr[w] = malloc(sizeof(uint8_t));
+				bone_ptr[w][0] = w;
+
+				for (int16_t z = y - 1; z != -1; --z)
 				{
 					uint32_t new_max_z = collada_source_ptr->space_ptr[z];
 					if (max_z > new_max_z)
 					{
 						max_z = new_max_z;
-						++index;
-						bone_ptr[w] = realloc(bone_ptr[w], sizeof(uint8_t) * index);
-						bone_ptr[w][index - 1] = z;
+
+						for (int16_t h = 0; h < max_bone; ++h)
+						{
+							if (strcmp(collada_source_ptr->joint_ptr[h], bonedata_vector[z].name_ptr[0]) == 0)
+							{
+								++index;
+								bone_ptr[w] = realloc(bone_ptr[w], sizeof(uint8_t) * index);
+								bone_ptr[w][index - 1] = h;
+								break;
+							}
+						}
 					}
 				}
 
@@ -141,7 +148,7 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 						{
 							uint32_t step = v_by_p0 + max_bone * 2;
 							joint_ptr[max_bone] = collada_source_ptr->v_ptr[m][step];
-							weight_ptr[max_bone] = collada_source_ptr->weight_ptr[collada_source_ptr->v_ptr[m][step + 1]];
+							weight_ptr[max_bone] = collada_source_ptr->weight_ptr[m][collada_source_ptr->v_ptr[m][step + 1]];
 
 							if (weight_ptr[max_bone] == 0)
 							{

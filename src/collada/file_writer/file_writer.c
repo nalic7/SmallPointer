@@ -1,3 +1,4 @@
+#include <stdint.h>
 void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 {
 	uint32_t max_data = collada_source_ptr->max_data;
@@ -64,6 +65,14 @@ void file_writer_collada(collada_Source* collada_source_ptr, const char* path)
 			{
 				fwrite(collada_pack.joint_ptr, sizeof(uint8_t), max_joint, joint_file);
 				fwrite(collada_pack.weight_ptr, sizeof(float), max_joint, weight_file);
+				// for (uint8_t i = 0; i < 4; ++i)
+				// {
+				// 	// if (collada_pack.weight_ptr[i] != 0 && collada_pack.weight_ptr[i] != 1)
+				// 	if (collada_pack.weight_ptr[i] > 0.4 && collada_pack.weight_ptr[i] < 0.6)
+				// 	{
+				// 		float aa = collada_pack.weight_ptr[i];
+				// 	}
+				// }
 			}
 		}
 

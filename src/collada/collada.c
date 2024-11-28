@@ -148,6 +148,8 @@ int main_skin(void* d_name_ptr)
 
 		collada_source.vcount_size_ptr = malloc(0);
 		collada_source.vcount_ptr = malloc(0);
+		collada_source.weight_size_ptr = malloc(0);
+		collada_source.weight_ptr = malloc(0);
 		collada_source.v_size_ptr = malloc(0);
 		collada_source.v_ptr = malloc(0);
 
@@ -180,13 +182,15 @@ int main_skin(void* d_name_ptr)
 				max_bone = 0;
 				collada_source.bind_pose_ptr = malloc(0);
 				collada_source.bind_pose_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.bind_pose_ptr, &max_bone);
-
-				file_reader_match(file_ptr, (const char*[]){"weights-array"}, 1);
-				file_reader_match(file_ptr, (const char*[]){">"}, 1);
-				max_bone = 0;
-				collada_source.weight_ptr = malloc(0);
-				collada_source.weight_ptr = file_reader_float(file_ptr, "</float_array>", collada_source.weight_ptr, &max_bone);
 			}
+
+			file_reader_match(file_ptr, (const char*[]){"weights-array"}, 1);
+			file_reader_match(file_ptr, (const char*[]){">"}, 1);
+			collada_source.weight_size_ptr = realloc(collada_source.weight_size_ptr, ui_size);
+			collada_source.weight_size_ptr[v_index] = 0;
+			collada_source.weight_ptr = realloc(collada_source.weight_ptr, fs_size);
+			collada_source.weight_ptr[v_index] = 0;
+			collada_source.weight_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.weight_ptr[v_index], &collada_source.weight_size_ptr[v_index]);
 
 			file_reader_match(file_ptr, (const char*[]){"<vcount>"}, 1);
 			collada_source.vcount_size_ptr = realloc(collada_source.vcount_size_ptr, ui_size);
@@ -289,7 +293,6 @@ int main_skin(void* d_name_ptr)
 		free(collada_source.collada_bone_ptr);
 
 		free(collada_source.joint_ptr);
-		free(collada_source.weight_ptr);
 		free(collada_source.bind_pose_ptr);
 
 		free(collada_source.space_ptr);
@@ -333,6 +336,7 @@ int main_skin(void* d_name_ptr)
 		{
 			free(collada_source.v_ptr[m]);
 			free(collada_source.vcount_ptr[m]);
+			free(collada_source.weight_ptr[m]);
 
 			for (uint32_t p = 0; p < collada_source.collada_pack_size_ptr[m]; ++p)
 			{
@@ -364,6 +368,9 @@ int main_skin(void* d_name_ptr)
 
 		free(collada_source.vcount_ptr);
 		free(collada_source.vcount_size_ptr);
+
+		free(collada_source.weight_ptr);
+		free(collada_source.weight_size_ptr);
 	}
 
 	free(collada_source.index_ptr);
