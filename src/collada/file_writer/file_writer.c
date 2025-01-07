@@ -96,12 +96,66 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 		char* n1_ptr = math_combine(path, C_BINDPOSE_FILE);
 		FILE* file = fopen(n1_ptr, "wb");
 		fwrite(collada_source_ptr->bind_pose_ptr, sizeof(float), max_bone * 16, file);
+		// float* bind_pose_ptr = collada_source_ptr->bind_pose_ptr;
+		// for (uint8_t mb = 0; mb < max_bone; ++mb)
+		// {
+		// 	fwrite(bind_pose_ptr, sizeof(float), (16 - 4), file);
+		// 	bind_pose_ptr += 16 - 4;
+		// 	if (*bind_pose_ptr != 0)
+		// 	{
+		// 		info("bp0 !0");
+		// 	}
+		// 	++bind_pose_ptr;
+		// 	if (*bind_pose_ptr != 0)
+		// 	{
+		// 		info("bp1 !0");
+		// 	}
+		// 	++bind_pose_ptr;
+		// 	if (*bind_pose_ptr != 0)
+		// 	{
+		// 		info("bp2 !0");
+		// 	}
+		// 	++bind_pose_ptr;
+		// 	if (*bind_pose_ptr != 1)
+		// 	{
+		// 		info("bp3 !1");
+		// 	}
+		// 	++bind_pose_ptr;
+		// }
+
 		free(n1_ptr);
 		fclose(file);
 
 		n1_ptr = math_combine(path, C_TRANSFORM_FILE);
 		file = fopen(n1_ptr, "wb");
 		fwrite(collada_source_ptr->transform_ptr, sizeof(float), max_bone * collada_source_ptr->max_frame * 16, file);
+		// float* transform_ptr = collada_source_ptr->transform_ptr;
+		// for (uint32_t mb = 0; mb < max_bone * collada_source_ptr->max_frame; ++mb)
+		// {
+		// 	fwrite(transform_ptr, sizeof(float), (16 - 4), file);
+		// 	transform_ptr += 16 - 4;
+		// 	if (*transform_ptr != 0)
+		// 	{
+		// 		info("a0 !0");
+		// 	}
+		// 	++transform_ptr;
+		// 	if (*transform_ptr != 0)
+		// 	{
+		// 		info("a1 !0");
+		// 	}
+		// 	++transform_ptr;
+		// 	if (*transform_ptr != 0)
+		// 	{
+		// 		info("a2 !0");
+		// 	}
+		// 	++transform_ptr;
+		// 	if (*transform_ptr != 1)
+		// 	{
+		// 		info("a3 !1");
+		// 	}
+		// 	++transform_ptr;
+		// }
+
 		free(n1_ptr);
 		fclose(file);
 
