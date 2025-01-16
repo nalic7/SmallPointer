@@ -100,7 +100,9 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 
 		float
 			p_x = 0, p_y = 0, p_z = 0,
-			n_x = 0, n_y = 0, n_z = 0,
+			#ifdef C_OUT_NORMAL
+				n_x = 0, n_y = 0, n_z = 0,
+			#endif
 			t_x = 0, t_y = 0;
 		uint8_t* joint_ptr;
 		float* weight_ptr;
@@ -169,10 +171,12 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 					}
 					break;
 				case 1:
-					sd = p0 * 3;
-					n_x = collada_source_ptr->normal_ptr[md][sd];
-					n_y = collada_source_ptr->normal_ptr[md][sd + 1];
-					n_z = collada_source_ptr->normal_ptr[md][sd + 2];
+					#ifdef C_OUT_NORMAL
+						sd = p0 * 3;
+						n_x = collada_source_ptr->normal_ptr[md][sd];
+						n_y = collada_source_ptr->normal_ptr[md][sd + 1];
+						n_z = collada_source_ptr->normal_ptr[md][sd + 2];
+					#endif
 					break;
 				case 2:
 					sd = p0 * 2;
@@ -193,9 +197,11 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 						p_y == collada_pack_ptr[md][i].p_y &&
 						p_z == collada_pack_ptr[md][i].p_z &&
 
-						n_x == collada_pack_ptr[md][i].n_x &&
-						n_y == collada_pack_ptr[md][i].n_y &&
-						n_z == collada_pack_ptr[md][i].n_z &&
+						#ifdef C_OUT_NORMAL
+							n_x == collada_pack_ptr[md][i].n_x &&
+							n_y == collada_pack_ptr[md][i].n_y &&
+							n_z == collada_pack_ptr[md][i].n_z &&
+						#endif
 
 						t_x == collada_pack_ptr[md][i].t_x &&
 						t_y == collada_pack_ptr[md][i].t_y
@@ -241,7 +247,9 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 					collada_Pack new_collada_pack =
 					{
 						.p_x = p_x, .p_y = p_y, .p_z = p_z,
-						.n_x = n_x, .n_y = n_y, .n_z = n_z,
+						#ifdef C_OUT_NORMAL
+							.n_x = n_x, .n_y = n_y, .n_z = n_z,
+						#endif
 						.t_x = t_x, .t_y = t_y,
 					};
 

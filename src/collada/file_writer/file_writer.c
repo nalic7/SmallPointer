@@ -20,10 +20,12 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 		FILE* vertex_file = fopen(n1_ptr, "ab");
 		free(n1_ptr);
 
-		// n1_ptr = math_combine(n0_ptr, C_NORMAL_FILE);
-		// remove(n1_ptr);
-		// FILE* normal_file = fopen(n1_ptr, "ab");
-		// free(n1_ptr);
+		#ifdef C_OUT_NORMAL
+			n1_ptr = math_combine(n0_ptr, C_NORMAL_FILE);
+			remove(n1_ptr);
+			FILE* normal_file = fopen(n1_ptr, "ab");
+			free(n1_ptr);
+		#endif
 
 		n1_ptr = math_combine(n0_ptr, C_TEXCOORD_FILE);
 		remove(n1_ptr);
@@ -53,9 +55,11 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 			fwrite(&collada_pack.p_y, sizeof(float), 1, vertex_file);
 			fwrite(&collada_pack.p_z, sizeof(float), 1, vertex_file);
 
-			// fwrite(&collada_pack.n_x, sizeof(float), 1, normal_file);
-			// fwrite(&collada_pack.n_y, sizeof(float), 1, normal_file);
-			// fwrite(&collada_pack.n_z, sizeof(float), 1, normal_file);
+			#ifdef C_OUT_NORMAL
+				fwrite(&collada_pack.n_x, sizeof(float), 1, normal_file);
+				fwrite(&collada_pack.n_y, sizeof(float), 1, normal_file);
+				fwrite(&collada_pack.n_z, sizeof(float), 1, normal_file);
+			#endif
 
 			fwrite(&collada_pack.t_x, sizeof(float), 1, texcoord_file);
 			fwrite(&collada_pack.t_y, sizeof(float), 1, texcoord_file);
@@ -76,7 +80,9 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 		}
 
 		fclose(vertex_file);
-		// fclose(normal_file);
+		#ifdef C_OUT_NORMAL
+			fclose(normal_file);
+		#endif
 		fclose(texcoord_file);
 
 		if (collada_source_ptr->is_animated)

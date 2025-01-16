@@ -6,9 +6,12 @@
 
 #define C_FIX_ANIMATED 1
 // #define C_CURVE 1
+#define C_OUT_NORMAL 0
 #define C_ARMATURE_NAME "<animation id=\""
 #define C_VERTEX_FILE "/vertex.bin"
-#define C_NORMAL_FILE "/normal.bin"
+#ifdef C_OUT_NORMAL
+	#define C_NORMAL_FILE "/normal.bin"
+#endif
 #define C_TEXCOORD_FILE "/texcoord.bin"
 #define C_JOINT_FILE "/joint.bin"
 #define C_WEIGHT_FILE "/weight.bin"
@@ -22,7 +25,9 @@ typedef struct
 {
 	float
 		p_x, p_y, p_z,
-		n_x, n_y, n_z,
+		#ifdef C_OUT_NORMAL
+			n_x, n_y, n_z,
+		#endif
 		t_x, t_y;
 	uint8_t* joint_ptr;
 	float* weight_ptr;
@@ -72,8 +77,10 @@ typedef struct
 
 	float** vertex_ptr;//V3
 	uint32_t* vertex_size_ptr;
-	float** normal_ptr;//V3
-	uint32_t* normal_size_ptr;
+	#ifdef C_OUT_NORMAL
+		float** normal_ptr;//V3
+		uint32_t* normal_size_ptr;
+	#endif
 	float** texcoord_ptr;//V2
 	uint32_t* texcoord_size_ptr;
 
