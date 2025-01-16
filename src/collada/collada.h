@@ -6,7 +6,7 @@
 
 #define C_FIX_ANIMATED 1
 // #define C_CURVE 1
-#define C_OUT_NORMAL 0
+// #define C_OUT_NORMAL 1
 #define C_ARMATURE_NAME "<animation id=\""
 #define C_VERTEX_FILE "/vertex.bin"
 #ifdef C_OUT_NORMAL
