@@ -27,10 +27,12 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 			free(n1_ptr);
 		#endif
 
-		n1_ptr = math_combine(n0_ptr, C_TEXCOORD_FILE);
-		remove(n1_ptr);
-		FILE* texcoord_file = fopen(n1_ptr, "ab");
-		free(n1_ptr);
+		#ifdef C_OUT_TEXCOORD
+			n1_ptr = math_combine(n0_ptr, C_TEXCOORD_FILE);
+			remove(n1_ptr);
+			FILE* texcoord_file = fopen(n1_ptr, "ab");
+			free(n1_ptr);
+		#endif
 
 		FILE* joint_file;
 		FILE* weight_file;
@@ -61,8 +63,10 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 				fwrite(&collada_pack.n_z, sizeof(float), 1, normal_file);
 			#endif
 
-			fwrite(&collada_pack.t_x, sizeof(float), 1, texcoord_file);
-			fwrite(&collada_pack.t_y, sizeof(float), 1, texcoord_file);
+			#ifdef C_OUT_TEXCOORD
+				fwrite(&collada_pack.t_x, sizeof(float), 1, texcoord_file);
+				fwrite(&collada_pack.t_y, sizeof(float), 1, texcoord_file);
+			#endif
 
 			if (collada_source_ptr->is_animated)
 			{
@@ -83,7 +87,9 @@ void file_writer_collada(const collada_Source* collada_source_ptr, const char* p
 		#ifdef C_OUT_NORMAL
 			fclose(normal_file);
 		#endif
-		fclose(texcoord_file);
+		#ifdef C_OUT_TEXCOORD
+			fclose(texcoord_file);
+		#endif
 
 		if (collada_source_ptr->is_animated)
 		{

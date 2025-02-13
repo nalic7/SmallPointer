@@ -99,11 +99,13 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 		index_size_ptr[md] = 0;
 
 		float
-			p_x = 0, p_y = 0, p_z = 0,
 			#ifdef C_OUT_NORMAL
 				n_x = 0, n_y = 0, n_z = 0,
 			#endif
-			t_x = 0, t_y = 0;
+			#ifdef C_OUT_TEXCOORD
+				t_x = 0, t_y = 0,
+			#endif
+			p_x = 0, p_y = 0, p_z = 0;
 		uint8_t* joint_ptr;
 		float* weight_ptr;
 		uint8_t max_bone = 0;
@@ -179,9 +181,11 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 					#endif
 					break;
 				case 2:
-					sd = p0 * 2;
-					t_x = collada_source_ptr->texcoord_ptr[md][sd];
-					t_y = collada_source_ptr->texcoord_ptr[md][sd + 1];
+					#ifdef C_OUT_TEXCOORD
+						sd = p0 * 2;
+						t_x = collada_source_ptr->texcoord_ptr[md][sd];
+						t_y = collada_source_ptr->texcoord_ptr[md][sd + 1];
+					#endif
 			}
 
 			if (id == 2)
@@ -193,18 +197,20 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 				{
 					if
 					(
-						p_x == collada_pack_ptr[md][i].p_x &&
-						p_y == collada_pack_ptr[md][i].p_y &&
-						p_z == collada_pack_ptr[md][i].p_z &&
-
 						#ifdef C_OUT_NORMAL
 							n_x == collada_pack_ptr[md][i].n_x &&
 							n_y == collada_pack_ptr[md][i].n_y &&
 							n_z == collada_pack_ptr[md][i].n_z &&
 						#endif
 
-						t_x == collada_pack_ptr[md][i].t_x &&
-						t_y == collada_pack_ptr[md][i].t_y
+						#ifdef C_OUT_TEXCOORD
+							t_x == collada_pack_ptr[md][i].t_x &&
+							t_y == collada_pack_ptr[md][i].t_y &&
+						#endif
+
+						p_x == collada_pack_ptr[md][i].p_x &&
+						p_y == collada_pack_ptr[md][i].p_y &&
+						p_z == collada_pack_ptr[md][i].p_z
 					)
 					{
 						pass = 1;
@@ -250,7 +256,9 @@ void graphic_reader_mix(collada_Source* collada_source_ptr)
 						#ifdef C_OUT_NORMAL
 							.n_x = n_x, .n_y = n_y, .n_z = n_z,
 						#endif
-						.t_x = t_x, .t_y = t_y,
+						#ifdef C_OUT_TEXCOORD
+							.t_x = t_x, .t_y = t_y,
+						#endif
 					};
 
 					if (collada_source_ptr->is_animated)

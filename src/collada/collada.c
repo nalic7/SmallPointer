@@ -91,8 +91,10 @@ int main_skin(void* d_name_ptr)
 			collada_source.normal_size_ptr = malloc(0);
 			collada_source.normal_ptr = malloc(0);
 		#endif
-		collada_source.texcoord_size_ptr = malloc(0);
-		collada_source.texcoord_ptr = malloc(0);
+		#ifdef C_OUT_TEXCOORD
+			collada_source.texcoord_size_ptr = malloc(0);
+			collada_source.texcoord_ptr = malloc(0);
+		#endif
 		collada_source.p_size_ptr = malloc(0);
 		collada_source.p_ptr = malloc(0);
 
@@ -127,13 +129,15 @@ int main_skin(void* d_name_ptr)
 				collada_source.normal_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.normal_ptr[v_index], &collada_source.normal_size_ptr[v_index]);
 			#endif
 
-			file_reader_match(file_ptr, (const char*[]){"map-0-array"}, 1);
-			file_reader_match(file_ptr, (const char*[]){">"}, 1);
-			collada_source.texcoord_size_ptr = realloc(collada_source.texcoord_size_ptr, ui_size);
-			collada_source.texcoord_size_ptr[v_index] = 0;
-			collada_source.texcoord_ptr = realloc(collada_source.texcoord_ptr, fs_size);
-			collada_source.texcoord_ptr[v_index] = malloc(0);
-			collada_source.texcoord_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.texcoord_ptr[v_index], &collada_source.texcoord_size_ptr[v_index]);
+			#ifdef C_OUT_TEXCOORD
+				file_reader_match(file_ptr, (const char*[]){"map-0-array"}, 1);
+				file_reader_match(file_ptr, (const char*[]){">"}, 1);
+				collada_source.texcoord_size_ptr = realloc(collada_source.texcoord_size_ptr, ui_size);
+				collada_source.texcoord_size_ptr[v_index] = 0;
+				collada_source.texcoord_ptr = realloc(collada_source.texcoord_ptr, fs_size);
+				collada_source.texcoord_ptr[v_index] = malloc(0);
+				collada_source.texcoord_ptr[v_index] = file_reader_float(file_ptr, "</float_array>", collada_source.texcoord_ptr[v_index], &collada_source.texcoord_size_ptr[v_index]);
+			#endif
 
 			file_reader_match(file_ptr, (const char*[]){"<p>"}, 1);
 			collada_source.p_size_ptr = realloc(collada_source.p_size_ptr, ui_size);
@@ -331,7 +335,9 @@ int main_skin(void* d_name_ptr)
 		#ifdef C_OUT_NORMAL
 			free(collada_source.normal_ptr[m]);
 		#endif
-		free(collada_source.texcoord_ptr[m]);
+		#ifdef C_OUT_TEXCOORD
+			free(collada_source.texcoord_ptr[m]);
+		#endif
 
 		free(collada_source.p_ptr[m]);
 
@@ -362,8 +368,10 @@ int main_skin(void* d_name_ptr)
 		free(collada_source.normal_ptr);
 		free(collada_source.normal_size_ptr);
 	#endif
-	free(collada_source.texcoord_ptr);
-	free(collada_source.texcoord_size_ptr);
+	#ifdef C_OUT_TEXCOORD
+		free(collada_source.texcoord_ptr);
+		free(collada_source.texcoord_size_ptr);
+	#endif
 
 	free(collada_source.p_ptr);
 	free(collada_source.p_size_ptr);
