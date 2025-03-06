@@ -1,16 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
+set(VK_DEBUG 1)
+set(SCENE 1)
 # set(GLTF 1)
-set(COLLADA 1)
+# set(COLLADA 1)
 # set(LWJGL64 1)
 # set(NALIGL 1)
 # set(NALIAL 1)
 
-# if(GLTF)
+if (SCENE)
+  set(P_NAME scene)
+# elseif(GLTF)
 #   set(P_NAME gltf)
-# elseif(COLLADA)
-if(COLLADA)
+elseif(COLLADA)
   set(P_NAME collada)
 elseif(LWJGL64)
   set(P_NAME lwjgl64)
@@ -44,8 +47,57 @@ set(CMAKE_C_STANDARD_REQUIRED On)
 #
 #   target_compile_definitions(${P_NAME} PRIVATE PCH_GLTF=1)
 #
-# elseif(COLLADA)
-if(COLLADA)
+if(SCENE)
+
+  set(FOO PCH_SCENE=1)
+  set(SOURCES
+    src/math/math.c
+    src/math/m4x4/m4x4.c
+    src/surface/surface.c
+    src/al/al.c
+    src/vk/vk.c
+    src/vk/instance/instance.c
+    src/vk/instance/physical_device/physical_device.c
+    src/vk/instance/physical_device/queue/queue.c
+    src/vk/instance/device/device.c
+    src/vk/surface/surface.c
+    src/vk/swapchain/swapchain.c
+    src/vk/fence/fence.c
+    src/vk/semaphore/semaphore.c
+    src/vk/commandbuffer/commandpool/commandpool.c
+    src/vk/commandbuffer/commandbuffer.c
+    src/vk/heap/imageview/image/image.c
+    src/vk/heap/imageview/imageview.c
+    src/vk/shadermodule/shadermodule.c
+    src/scene/scene.c
+  )
+
+  if (VK_DEBUG)
+    list(APPEND FOO NALI_VK_DEBUG=1)
+    list(APPEND SOURCES src/vk/instance/debug/debug.c)
+  endif()
+
+  add_executable(${P_NAME} ${SOURCES})
+
+  target_include_directories(${P_NAME} PRIVATE
+    vulkan
+    AL
+  )
+
+  target_link_libraries(${P_NAME}
+    m
+    vulkan
+    openal
+    wayland-client
+  )
+
+  target_compile_definitions(${P_NAME} PRIVATE ${FOO})
+
+  # set_target_properties(${P_NAME} PROPERTIES
+  #   CMAKE_INSTALL_RPATH "$ORIGIN/../lib"
+  # )
+
+elseif(COLLADA)
 
   add_executable(${P_NAME}
     src/math/math.c
@@ -66,7 +118,6 @@ elseif(LWJGL64)
 
   set(JAVA_HOME lib/jdk8u412-b08/)
   # set(JAVA_HOME "lib/jdk-21.0.4+7/")
-  set(VULKAN_SDK lib/vulkan-1.3.290.0/x86_64/)
 
   find_package(Qt6 REQUIRED COMPONENTS Widgets WaylandClient)
   find_package(X11 REQUIRED)
@@ -115,24 +166,14 @@ elseif(LWJGL64)
   target_include_directories(${P_NAME} PRIVATE
     ${JAVA_HOME}include
     ${JAVA_HOME}include/${OS_NAME}
-    ${VULKAN_SDK}include
-    /usr/include/qt6/QtWaylandClient/6.7.3/QtWaylandClient/private
-    ../openal-soft/include/AL
-    # ${WAYLAND_CLIENT_INCLUDE_DIR}
-    # ${OPENGL_INCLUDE_DIRS}
+    vulkan
+    AL
   )
-
-  link_directories(${VULKAN_SDK}lib)
 
   target_link_libraries(${P_NAME}
     vulkan
-    ${WAYLAND_CLIENT_LIBRARY}
-    Qt6::Widgets
-    Qt6::WaylandClient
-    /home/nali/GitHub/openal-soft/build/libopenal.so
-    # ${OPENGL_LIBRARIES}
-    # ${X11_LIBRARIES}
-    # png
+    openal
+    wayland-client
   )
 
   target_compile_definitions(${P_NAME} PRIVATE PCH_LWJGL64=1)
@@ -159,11 +200,11 @@ elseif(NALIAL)
   target_include_directories(${P_NAME} PRIVATE
     ${JAVA_HOME}include
     ${JAVA_HOME}include/${OS_NAME}
-    ../openal-soft/include/AL
+    AL
   )
 
   target_link_libraries(${P_NAME}
-    /home/nali/GitHub/openal-soft/build/libopenal.so
+    openal
   )
 
   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL=1)

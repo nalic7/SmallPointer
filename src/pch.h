@@ -14,6 +14,51 @@
 // 	#include "math/math.h"
 //
 // #endif
+#ifdef PCH_SCENE
+
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include <stdint.h>
+	#include <sys/stat.h>
+	#include <ctype.h>
+	#include <dirent.h>
+	#include <math.h>
+	#include <threads.h>
+
+	#include <wayland-client.h>
+
+	#include <AL/al.h>
+	#include <AL/alc.h>
+
+	#include <vulkan/vulkan.h>
+	#include <vulkan/vulkan_wayland.h>
+
+	#include "math/math.h"
+	#include "math/m4x4/m4x4.h"
+
+	#include "al/al.h"
+
+	#include "surface/surface.h"
+	#include "vk/vk.h"
+	#include "vk/instance/instance.h"
+	#ifdef NALI_VK_DEBUG
+		#include "vk/instance/debug/debug.h"
+	#endif
+	#include "vk/instance/physical_device/physical_device.h"
+	#include "vk/instance/physical_device/queue/queue.h"
+	#include "vk/surface/surface.h"
+	#include "vk/instance/device/device.h"
+	#include "vk/swapchain/swapchain.h"
+	#include "vk/fence/fence.h"
+	#include "vk/semaphore/semaphore.h"
+	#include "vk/commandbuffer/commandpool/commandpool.h"
+	#include "vk/commandbuffer/commandbuffer.h"
+	#include "vk/heap/imageview/image/image.h"
+	#include "vk/heap/imageview/imageview.h"
+	#include "vk/shadermodule/shadermodule.h"
+
+#endif
 #ifdef PCH_COLLADA
 
 	#include <stdio.h>

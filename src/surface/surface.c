@@ -16,9 +16,9 @@ struct wl_display* m_wl_display;
 struct wl_registry* wl_registry;
 struct wl_compositor* wl_compositor;
 struct wl_surface* m_wl_surface;
-struct xdg_wm_base* xdg_wm_base;
-struct xdg_surface* xdg_surface;
-struct xdg_toplevel* xdg_toplevel;
+// struct xdg_wm_base* xdg_wm_base;
+// struct xdg_surface* xdg_surface;
+// struct xdg_toplevel* xdg_toplevel;
 
 struct wl_seat* wl_seat;
 struct wl_keyboard* wl_keyboard;
@@ -119,24 +119,24 @@ void wl_registry_listener_global(void* data, struct wl_registry* wl_registry, ui
 	info("wl_registry_listener_global_interface %s", interface)
 	if (strcmp(interface, wl_compositor_interface.name) == 0)
 	{
-		// info("run_compositor")
+		info("found %s", wl_compositor_interface.name)
 		wl_compositor = wl_registry_bind(wl_registry, name, &wl_compositor_interface, 1);
 	}
 	// else if (strcmp(interface, wl_shell_interface.name) == 0)
 	// {
-	//	 shell = wl_registry_bind(wl_registry, name, &wl_shell_interface, 1);
-	//	 info("wl_shell")
+	// 	shell = wl_registry_bind(wl_registry, name, &wl_shell_interface, 1);
+	// 	info("wl_shell")
 	// }
-	else if (strcmp(interface, xdg_wm_base_interface.name) == 0)
-	{
-		// info("run_xdg_wm_base")
-		xdg_wm_base = wl_registry_bind(wl_registry, name, &xdg_wm_base_interface, 1);
-	}
-	else if (strcmp(interface, "wl_seat") == 0)
-	{
-		wl_seat = wl_registry_bind(wl_registry, name, &wl_seat_interface, 1);
-		wl_seat_add_listener(wl_seat, &wl_seat_listener, NULL);
-	}
+	// else if (strcmp(interface, xdg_wm_base_interface.name) == 0)
+	// {
+	// 	// info("run_xdg_wm_base")
+	// 	xdg_wm_base = wl_registry_bind(wl_registry, name, &xdg_wm_base_interface, 1);
+	// }
+	// else if (strcmp(interface, "wl_seat") == 0)
+	// {
+	// 	wl_seat = wl_registry_bind(wl_registry, name, &wl_seat_interface, 1);
+	// 	wl_seat_add_listener(wl_seat, &wl_seat_listener, NULL);
+	// }
 	// else
 	// {
 	//	 info("Failed to get compositor or shell")
@@ -154,71 +154,71 @@ struct wl_registry_listener registry_listener =
 	.global_remove = wl_registry_listener_remove
 };
 
-void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_surface, uint32_t serial)
-{
-	// info("run_xdg_surface_listener_configure")
-	// if (_xdg_surface == xdg_surface)
-	// {
-	//	 xdg_surface_ack_configure(xdg_surface, serial);
+// void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_surface, uint32_t serial)
+// {
+// 	// info("run_xdg_surface_listener_configure")
+// 	// if (_xdg_surface == xdg_surface)
+// 	// {
+// 	//	 xdg_surface_ack_configure(xdg_surface, serial);
 
-	//	 wl_surface_commit(m_wl_surface);
-	// }
-}
+// 	//	 wl_surface_commit(m_wl_surface);
+// 	// }
+// }
 
-struct xdg_surface_listener xdg_surface_listener =
-{
-	.configure = xdg_surface_listener_configure
-};
+// struct xdg_surface_listener xdg_surface_listener =
+// {
+// 	.configure = xdg_surface_listener_configure
+// };
 
-void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xdg_toplevel, int32_t width, int32_t height, struct wl_array* states)
-{
-	if (_xdg_toplevel == xdg_toplevel)
-	{
-		// info("run_xdg_toplevel_listener_configure w%d h%d", width, height)
+// void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xdg_toplevel, int32_t width, int32_t height, struct wl_array* states)
+// {
+// 	// if (_xdg_toplevel == xdg_toplevel)
+// 	// {
+// 	// 	// info("run_xdg_toplevel_listener_configure w%d h%d", width, height)
 
-		if (width > 0 && height > 0)
-		{
-			m_width = width;
-			m_height = height;
-		}
+// 	// 	if (width > 0 && height > 0)
+// 	// 	{
+// 	// 		m_width = width;
+// 	// 		m_height = height;
+// 	// 	}
 
-		// // If the width or height is zero, it might indicate an issue with the initial size.
-		// if (width > 0 && height > 0)
-		// {
-		//	 // Optionally resize your content or update layout here
-		//	 // xdg_toplevel_set_min_size(xdg_toplevel, width, height);
-		//	 // xdg_toplevel_set_max_size(xdg_toplevel, width, height);
-		// }
+// 	// 	// // If the width or height is zero, it might indicate an issue with the initial size.
+// 	// 	// if (width > 0 && height > 0)
+// 	// 	// {
+// 	// 	//	 // Optionally resize your content or update layout here
+// 	// 	//	 // xdg_toplevel_set_min_size(xdg_toplevel, width, height);
+// 	// 	//	 // xdg_toplevel_set_max_size(xdg_toplevel, width, height);
+// 	// 	// }
 
-		// Respond to the configuration
-		// wl_surface_commit(m_wl_surface);
-	}
-}
+// 	// 	// Respond to the configuration
+// 	// 	// wl_surface_commit(m_wl_surface);
+// 	// }
+// }
 
-void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_toplevel)
-{
-	// info("run_xdg_toplevel_listener_close")
-	// cleanup();
-	exit(EXIT_SUCCESS);
-}
+// void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_toplevel)
+// {
+// 	// info("run_xdg_toplevel_listener_close")
+// 	// cleanup();
+// 	exit(EXIT_SUCCESS);
+// }
 
-void xdg_toplevel_listener_configure_bounds(void* data, struct xdg_toplevel* xdg_toplevel, int32_t width, int32_t height)
-{
-	// info("run_xdg_toplevel_listener_configure_bounds")
-}
+// void xdg_toplevel_listener_configure_bounds(void* data, struct xdg_toplevel* xdg_toplevel, int32_t width, int32_t height)
+// {
+// 	// info("run_xdg_toplevel_listener_configure_bounds")
+// }
 
-void xdg_toplevel_listener_wm_capabilities(void* data, struct xdg_toplevel* xdg_toplevel, struct wl_array* capabilities)
-{
-	// info("run_xdg_toplevel_listener_wm_capabilities")
-}
+// void xdg_toplevel_listener_wm_capabilities(void* data, struct xdg_toplevel* xdg_toplevel, struct wl_array* capabilities)
+// {
+// 	// info("run_xdg_toplevel_listener_wm_capabilities")
+// }
 
-struct xdg_toplevel_listener xdg_toplevel_listener =
-{
-	.configure = xdg_toplevel_listener_configure,
-	.close = xdg_toplevel_listener_close,
-	.configure_bounds = xdg_toplevel_listener_configure_bounds,
-	.wm_capabilities = xdg_toplevel_listener_wm_capabilities
-};
+// struct xdg_toplevel_listener xdg_toplevel_listener =
+// {
+// 	.configure = xdg_toplevel_listener_configure,
+// 	.close = xdg_toplevel_listener_close,
+// 	.configure_bounds = xdg_toplevel_listener_configure_bounds,
+// 	.wm_capabilities = xdg_toplevel_listener_wm_capabilities
+// };
 
 // Event loop
 int surface_loop(void* arg)
@@ -326,7 +326,7 @@ void surface_init()
 	}
 
 	wl_registry_add_listener(wl_registry, &registry_listener, NULL);
-	// wl_display_dispatch(m_wl_display);
+	wl_display_dispatch(m_wl_display);
 	wl_display_roundtrip(m_wl_display);
 
 	if (!wl_compositor)
@@ -334,10 +334,10 @@ void surface_init()
 		error("COMPOSITOR_NULL")
 	}
 
-	if (!xdg_wm_base)
-	{
-		error("XDG_WM_BASE_NULL")
-	}
+	// if (!xdg_wm_base)
+	// {
+	// 	error("XDG_WM_BASE_NULL")
+	// }
 
 	// if (!shell)
 	// {
@@ -366,25 +366,25 @@ void surface_init()
 	// wl_shell_surface_set_toplevel(shell_surface);
 
 	// Create an XDG surface
-	xdg_surface = xdg_wm_base_get_xdg_surface(xdg_wm_base, m_wl_surface);
-	if (!xdg_surface)
-	{
-		error("xdg_wm_base_get_xdg_surface")
-	}
+	// xdg_surface = xdg_wm_base_get_xdg_surface(xdg_wm_base, m_wl_surface);
+	// if (!xdg_surface)
+	// {
+	// 	error("xdg_wm_base_get_xdg_surface")
+	// }
 
-	xdg_surface_add_listener(xdg_surface, &xdg_surface_listener, NULL);
+	// xdg_surface_add_listener(xdg_surface, &xdg_surface_listener, NULL);
 
-	// Create an XDG toplevel
-	xdg_toplevel = xdg_surface_get_toplevel(xdg_surface);
-	if (!xdg_toplevel)
-	{
-		error("xdg_surface_get_toplevel")
-	}
+	// // Create an XDG toplevel
+	// xdg_toplevel = xdg_surface_get_toplevel(xdg_surface);
+	// if (!xdg_toplevel)
+	// {
+	// 	error("xdg_surface_get_toplevel")
+	// }
 
-	xdg_toplevel_add_listener(xdg_toplevel, &xdg_toplevel_listener, NULL);
-	// Set title
-	// xdg_toplevel_set_title(xdg_toplevel, "Wayland-XDG");
-	// xdg_toplevel_set_app_id(xdg_toplevel, "Wayland-XDG");
+	// xdg_toplevel_add_listener(xdg_toplevel, &xdg_toplevel_listener, NULL);
+	// // Set title
+	// // xdg_toplevel_set_title(xdg_toplevel, "Wayland-XDG");
+	// // xdg_toplevel_set_app_id(xdg_toplevel, "Wayland-XDG");
 
 	m_width = 800;
 	m_height = 600;

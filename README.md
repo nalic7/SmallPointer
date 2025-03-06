@@ -1,6 +1,22 @@
+# Scene
+<span style="font-size: large; ">
+
+>CMakeLists.txt
+
+	#...
+	set(VK_DEBUG 1)
+	set(SCENE 1)
+	#...
+</span>
+
 # Collada Parser
 <span style="font-size: large; ">
 
+>CMakeLists.txt
+
+	#...
+	set(COLLADA 1)
+	#...
 >Install
 1. Blender
 2. CMake / nvim / VSCode
@@ -9,9 +25,7 @@
 
 		C/C++ Debug (gdb)
 		clangd
-		CMake
 		CMake Tools
-		CodeLLDB
 
 >Edit Model In Blender
 1. Apply[Ctrl+A] -> All Transforms
@@ -36,20 +50,15 @@
 
 </span>
 
-# Small Render
+# LWJGL64
 <span style="font-size: large; ">
 
 >JVM arguments
 
 	-Dorg.lwjgl.librarypath=/path
 	-Dorg.lwjgl3.glfw.libname=/path
->Library
-1. Vulkan 1.3.290.0
-2. OpenAL-Soft 1.23.1
-3. Java jdk8u412-b08
-4. Wayland
-5. Qt6
-6. X11
-7. GL
 
 </span>
+
+# NALIGL
+# NALIAL

@@ -43,8 +43,13 @@ void vk_makeDevice(uint32_t device)
 		.enabledExtensionCount = sizeof(deviceextensions) / sizeof(deviceextensions[0]),
 		.ppEnabledExtensionNames = deviceextensions,
 
-		.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
-		.ppEnabledLayerNames = ppEnabledLayerNames
+		#ifdef NALI_VK_DEBUG
+			.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
+			.ppEnabledLayerNames = ppEnabledLayerNames
+		#else
+			.enabledLayerCount = 0,
+			.ppEnabledLayerNames = VK_NULL_HANDLE
+		#endif
 	};
 
 	if (vkCreateDevice(vkphysicaldevice, &vkdevicecreateinfo, VK_NULL_HANDLE, &m_vkdevice_ptr[device]) != VK_SUCCESS)

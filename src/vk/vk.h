@@ -40,7 +40,9 @@ extern VkCommandPool** m_vkcommandpool_ptr;
 extern uint32_t m_device;
 extern uint32_t m_graphic;
 
-extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
+#ifdef NALI_VK_DEBUG
+    extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
+#endif
 // } vk;
 
 // extern vk m_vk;

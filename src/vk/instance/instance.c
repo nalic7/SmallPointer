@@ -3,13 +3,17 @@ const char* ppEnabledExtensionNames[] =
 	VK_KHR_SURFACE_EXTENSION_NAME,
 	VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
 
-	VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+	#ifdef NALI_VK_DEBUG
+		VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+	#endif
 };
 
-const char* ppEnabledLayerNames[] =
-{
-	"VK_LAYER_KHRONOS_validation"
-};
+#ifdef NALI_VK_DEBUG
+	const char* ppEnabledLayerNames[] =
+	{
+		"VK_LAYER_KHRONOS_validation"
+	};
+#endif
 
 void vk_makeInstance()
 {
@@ -33,8 +37,13 @@ void vk_makeInstance()
 		.flags = 0,
 		.pNext = VK_NULL_HANDLE,
 
-		.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
-		.ppEnabledLayerNames = ppEnabledLayerNames
+		#ifdef NALI_VK_DEBUG
+			.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
+			.ppEnabledLayerNames = ppEnabledLayerNames
+		#else
+			.enabledLayerCount = 0,
+			.ppEnabledLayerNames = VK_NULL_HANDLE
+		#endif
 	};
 
 	if (vkCreateInstance(&vkinstancecreateinfo, VK_NULL_HANDLE, &m_vkinstance) != VK_SUCCESS)

@@ -740,7 +740,9 @@ void vk_init()
 {
 	vk_makeInstance();
 	vk_makeSurface();
-	vk_makeDebug();
+	#ifdef NALI_VK_DEBUG
+		vk_makeDebug();
+	#endif
 	vk_makePhysicalDevice();
 
 	m_vkdevice_ptr = malloc(sizeof(VkDevice) * m_max_device);
