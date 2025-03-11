@@ -1,0 +1,25 @@
+void vk_setPipelineViewportStateCreateInfo(uint32_t device, VkPipelineViewportStateCreateFlags vkpipelineviewportstatecreateflags, VkPipelineViewportStateCreateInfo* vkpipelineviewportstatecreateinfo_ptr)
+{
+	VkExtent2D vkextent2d = m_vkswapchainkhr_vkextent2d_ptr[device];
+	VkViewport vkviewport =
+	{
+		.x = 0,
+		.y = 0,
+		.width = vkextent2d.width,
+		.height = vkextent2d.height,
+		.minDepth = 0.0F,
+		.maxDepth = 1.0F
+	};
+	VkRect2D vkrect2d =
+	{
+		.offset = {0, 0},
+		.extent = vkextent2d
+	};
+	vkpipelineviewportstatecreateinfo_ptr->sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	vkpipelineviewportstatecreateinfo_ptr->viewportCount = 1;
+	vkpipelineviewportstatecreateinfo_ptr->pViewports = &vkviewport;
+	vkpipelineviewportstatecreateinfo_ptr->scissorCount = 1;
+	vkpipelineviewportstatecreateinfo_ptr->pScissors = &vkrect2d;
+	vkpipelineviewportstatecreateinfo_ptr->flags = vkpipelineviewportstatecreateflags;
+	vkpipelineviewportstatecreateinfo_ptr->pNext = VK_NULL_HANDLE;
+}

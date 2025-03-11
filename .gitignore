@@ -36,3 +36,5 @@ build
 .cache
 out
 *.json
+
+asset

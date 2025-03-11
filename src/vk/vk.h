@@ -30,6 +30,11 @@ extern VkPresentModeKHR** m_vkpresentmodekhr_ptr;
 extern uint32_t* m_vkswapchainkhr_present_mode_ptr;
 
 extern VkImage** m_vkswapchainkhr_vkimage_ptr;
+extern VkExtent2D* m_vkswapchainkhr_vkextent2d_ptr;
+extern VkFormat* m_vkswapchainkhr_vkformat_ptr;
+extern VkRenderPass* m_vkswapchainkhr_vkrenderpass_ptr;
+extern VkImageView** m_vkswapchainkhr_vkimageview_ptr;
+extern VkFramebuffer** m_vkswapchainkhr_vkframebuffer_ptr;
 
 extern VkFence* m_vkfence_ptr;
 extern VkSemaphore*** m_vksemaphore_ptr;
@@ -41,7 +46,7 @@ extern uint32_t m_device;
 extern uint32_t m_graphic;
 
 #ifdef NALI_VK_DEBUG
-    extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
+	extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 #endif
 // } vk;
 

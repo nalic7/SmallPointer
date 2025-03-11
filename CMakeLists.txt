@@ -51,30 +51,38 @@ if(SCENE)
 
   set(FOO PCH_SCENE=1)
   set(SOURCES
+    src/file/file.c
     src/math/math.c
     src/math/m4x4/m4x4.c
     src/surface/surface.c
+    src/file/file.c
     src/al/al.c
     src/vk/vk.c
-    src/vk/instance/instance.c
-    src/vk/instance/physical_device/physical_device.c
-    src/vk/instance/physical_device/queue/queue.c
-    src/vk/instance/device/device.c
-    src/vk/surface/surface.c
-    src/vk/swapchain/swapchain.c
-    src/vk/fence/fence.c
-    src/vk/semaphore/semaphore.c
-    src/vk/commandbuffer/commandpool/commandpool.c
-    src/vk/commandbuffer/commandbuffer.c
-    src/vk/heap/imageview/image/image.c
-    src/vk/heap/imageview/imageview.c
-    src/vk/shadermodule/shadermodule.c
+    src/vk/buffer/instance/instance.c
+    src/vk/buffer/instance/physical_device/physical_device.c
+    src/vk/buffer/instance/physical_device/queue/queue.c
+    src/vk/buffer/instance/device/device.c
+    src/vk/buffer/surface/surface.c
+    src/vk/buffer/swapchain/swapchain.c
+    src/vk/buffer/fence/fence.c
+    src/vk/buffer/semaphore/semaphore.c
+    src/vk/buffer/commandbuffer/commandpool/commandpool.c
+    src/vk/buffer/commandbuffer/commandbuffer.c
+    src/vk/buffer/buffer.c
+    src/vk/buffer/imageview/image/image.c
+    src/vk/buffer/imageview/imageview.c
+    src/vk/buffer/shadermodule/shadermodule.c
+    src/vk/buffer/renderpass/renderpass.c
+    src/vk/buffer/framebuffer/framebuffer.c
     src/scene/scene.c
   )
 
+  file(GLOB_RECURSE G_SOURCES src/vk/buffer/graphicspipelines/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
   if (VK_DEBUG)
     list(APPEND FOO NALI_VK_DEBUG=1)
-    list(APPEND SOURCES src/vk/instance/debug/debug.c)
+    list(APPEND SOURCES src/vk/buffer/instance/debug/debug.c)
   endif()
 
   add_executable(${P_NAME} ${SOURCES})

@@ -34,6 +34,8 @@
 	#include <vulkan/vulkan.h>
 	#include <vulkan/vulkan_wayland.h>
 
+	#include "file/file.h"
+
 	#include "math/math.h"
 	#include "math/m4x4/m4x4.h"
 
@@ -41,22 +43,36 @@
 
 	#include "surface/surface.h"
 	#include "vk/vk.h"
-	#include "vk/instance/instance.h"
+	#include "vk/buffer/instance/instance.h"
 	#ifdef NALI_VK_DEBUG
-		#include "vk/instance/debug/debug.h"
+		#include "vk/buffer/instance/debug/debug.h"
 	#endif
-	#include "vk/instance/physical_device/physical_device.h"
-	#include "vk/instance/physical_device/queue/queue.h"
-	#include "vk/surface/surface.h"
-	#include "vk/instance/device/device.h"
-	#include "vk/swapchain/swapchain.h"
-	#include "vk/fence/fence.h"
-	#include "vk/semaphore/semaphore.h"
-	#include "vk/commandbuffer/commandpool/commandpool.h"
-	#include "vk/commandbuffer/commandbuffer.h"
-	#include "vk/heap/imageview/image/image.h"
-	#include "vk/heap/imageview/imageview.h"
-	#include "vk/shadermodule/shadermodule.h"
+	#include "vk/buffer/instance/physical_device/physical_device.h"
+	#include "vk/buffer/instance/physical_device/queue/queue.h"
+	#include "vk/buffer/surface/surface.h"
+	#include "vk/buffer/instance/device/device.h"
+	#include "vk/buffer/renderpass/renderpass.h"
+	#include "vk/buffer/framebuffer/framebuffer.h"
+	#include "vk/buffer/swapchain/swapchain.h"
+	#include "vk/buffer/fence/fence.h"
+	#include "vk/buffer/semaphore/semaphore.h"
+	#include "vk/buffer/commandbuffer/commandpool/commandpool.h"
+	#include "vk/buffer/commandbuffer/commandbuffer.h"
+	#include "vk/buffer/buffer.h"
+	#include "vk/buffer/imageview/image/image.h"
+	#include "vk/buffer/imageview/imageview.h"
+	#include "vk/buffer/shadermodule/shadermodule.h"
+
+	#include "vk/buffer/graphicspipelines/pipelinelayout/pipelinelayout.h"
+	#include "vk/buffer/graphicspipelines/pipelinecolorblendstatecreateinfo/pipelinecolorblendstatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelinedynamicstatecreateinfo/pipelinedynamicstatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelineinputassemblystatecreateinfo/pipelineinputassemblystatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelinemultisamplestatecreateinfo/pipelinemultisamplestatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelinerasterizationstatecreateinfo/pipelinerasterizationstatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelineshaderstagecreateinfo/pipelineshaderstagecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelinevertexinputstatecreateinfo/pipelinevertexinputstatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/pipelineviewportstatecreateinfo/pipelineviewportstatecreateinfo.h"
+	#include "vk/buffer/graphicspipelines/graphicspipelines.h"
 
 #endif
 #ifdef PCH_COLLADA

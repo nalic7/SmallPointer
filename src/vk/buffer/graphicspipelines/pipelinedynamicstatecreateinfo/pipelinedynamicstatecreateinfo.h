@@ -1,0 +1,6 @@
+#ifndef NALI_VK_PIPELINEDYNAMICSTATECREATEINFO_H
+#define NALI_VK_PIPELINEDYNAMICSTATECREATEINFO_H
+
+void vk_setPipelineDynamicStateCreateInfo(VkPipelineDynamicStateCreateFlags vkpipelinedynamicstatecreateflags, VkPipelineDynamicStateCreateInfo* vkpipelinedynamicstatecreateinfo_ptr);
+
+#endif

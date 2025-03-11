@@ -1,0 +1,6 @@
+#ifndef NALI_VK_PIPELINECOLORBLENDSTATECREATEINFO_H
+#define NALI_VK_PIPELINECOLORBLENDSTATECREATEINFO_H
+
+void vk_setPipelineColorBlendStateCreateInfo(VkPipelineColorBlendStateCreateFlags vkpipelinecolorblendstatecreateflags, VkPipelineColorBlendStateCreateInfo* vkpipelinecolorblendstatecreateinfo_ptr);
+
+#endif
