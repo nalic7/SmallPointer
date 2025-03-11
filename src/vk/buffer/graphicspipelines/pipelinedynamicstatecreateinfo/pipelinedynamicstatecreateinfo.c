@@ -1,13 +1,8 @@
-void vk_setPipelineDynamicStateCreateInfo(VkPipelineDynamicStateCreateFlags vkpipelinedynamicstatecreateflags, VkPipelineDynamicStateCreateInfo* vkpipelinedynamicstatecreateinfo_ptr)
+void vk_setPipelineDynamicStateCreateInfo(VkDynamicState* vkdynamicstate_ptr, uint32_t vkdynamicstate_ptr_size, VkPipelineDynamicStateCreateFlags vkpipelinedynamicstatecreateflags, VkPipelineDynamicStateCreateInfo* vkpipelinedynamicstatecreateinfo_ptr)
 {
-	VkDynamicState vkdynamicstate_array[] =
-	{
-		VK_DYNAMIC_STATE_VIEWPORT,
-		VK_DYNAMIC_STATE_SCISSOR
-	};
 	vkpipelinedynamicstatecreateinfo_ptr->sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-	vkpipelinedynamicstatecreateinfo_ptr->dynamicStateCount = sizeof(vkdynamicstate_array) / sizeof(VkDynamicState);
-	vkpipelinedynamicstatecreateinfo_ptr->pDynamicStates = vkdynamicstate_array;
+	vkpipelinedynamicstatecreateinfo_ptr->dynamicStateCount = vkdynamicstate_ptr_size;
+	vkpipelinedynamicstatecreateinfo_ptr->pDynamicStates = vkdynamicstate_ptr;
 	vkpipelinedynamicstatecreateinfo_ptr->flags = vkpipelinedynamicstatecreateflags;
 	vkpipelinedynamicstatecreateinfo_ptr->pNext = VK_NULL_HANDLE;
 }

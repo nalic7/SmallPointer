@@ -24,11 +24,27 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 	VkPipelineMultisampleStateCreateInfo vkpipelinemultisamplestatecreateinfo;
 	vk_setPipelineMultisampleStateCreateInfo(0, &vkpipelinemultisamplestatecreateinfo);
 
+	VkPipelineColorBlendAttachmentState vkpipelinecolorblendattachmentstate =
+	{
+		.blendEnable = VK_FALSE,
+		.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
+		.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+		.colorBlendOp = VK_BLEND_OP_ADD,
+		.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+		.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
+		.alphaBlendOp = VK_BLEND_OP_ADD,
+		.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT
+	};
 	VkPipelineColorBlendStateCreateInfo vkpipelinecolorblendstatecreateinfo;
-	vk_setPipelineColorBlendStateCreateInfo(0, &vkpipelinecolorblendstatecreateinfo);
+	vk_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, 0, &vkpipelinecolorblendstatecreateinfo);
 
+	VkDynamicState vkdynamicstate_array[] =
+	{
+		VK_DYNAMIC_STATE_VIEWPORT,
+		VK_DYNAMIC_STATE_SCISSOR
+	};
 	VkPipelineDynamicStateCreateInfo vkpipelinedynamicstatecreateinfo;
-	vk_setPipelineDynamicStateCreateInfo(0, &vkpipelinedynamicstatecreateinfo);
+	vk_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, 0, &vkpipelinedynamicstatecreateinfo);
 
 	VkGraphicsPipelineCreateInfo vkgraphicspipelinecreateinfo =
 	{
