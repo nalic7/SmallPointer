@@ -1,4 +1,4 @@
-void vk_makeImageView(uint32_t device, VkImage image, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags, VkImageView* vkimageview_ptr)
+void vk_makeImageView(uint32_t device, VkImage image, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags, VkImageViewCreateFlags vkimageviewcreateflags, VkImageView* vkimageview_ptr)
 {
 	VkImageViewCreateInfo vkimageviewcreateinfo =
 	{
@@ -17,7 +17,7 @@ void vk_makeImageView(uint32_t device, VkImage image, VkFormat vkformat, VkImage
 		.components.b = VK_COMPONENT_SWIZZLE_IDENTITY,
 		.components.a = VK_COMPONENT_SWIZZLE_IDENTITY,
 
-		.flags = 0,
+		.flags = vkimageviewcreateflags,
 		.pNext = VK_NULL_HANDLE
 	};
 	vkCreateImageView(m_vkdevice_ptr[device], &vkimageviewcreateinfo, VK_NULL_HANDLE, vkimageview_ptr);

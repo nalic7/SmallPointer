@@ -107,15 +107,19 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 	//re
 	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &images, VK_NULL_HANDLE);
 
+	info("images %d", images)
+
 	m_vkswapchainkhr_vkimage_ptr[device] = malloc(sizeof(VkImage) * images);
+	m_vkswapchainkhr_vkimageview_ptr[device] = malloc(sizeof(VkImageView) * images);
+	m_vkswapchainkhr_vkframebuffer_ptr[device] = malloc(sizeof(VkFramebuffer) * images);
 
 	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &images, m_vkswapchainkhr_vkimage_ptr[device]);
 
-	vk_makeRenderPass(m_device, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device]);
+	vk_makeRenderPass(device, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device]);
 
 	for (uint32_t i = 0; i < images; ++i)
 	{
-		vk_makeImageView(device, *m_vkswapchainkhr_vkimage_ptr[device], vksurfaceformatkhr.format, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i]);
+		vk_makeImageView(device, *m_vkswapchainkhr_vkimage_ptr[device], vksurfaceformatkhr.format, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i]);
 		vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i], &m_vkswapchainkhr_vkrenderpass_ptr[device], &m_vkswapchainkhr_vkframebuffer_ptr[device][i]);
 	}
 }

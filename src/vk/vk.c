@@ -119,16 +119,19 @@ void vk_init()
 	m_vkdevice_ptr = malloc(sizeof(VkDevice) * m_max_device);
 
 	m_vkswapchainkhr_ptr = malloc(sizeof(VkSwapchainKHR) * m_max_device);
-	m_vkswapchainkhr_vkimage_ptr = malloc(sizeof(VkImage *) * m_max_device);
+	m_vkswapchainkhr_vkimage_ptr = malloc(sizeof(VkImage*) * m_max_device);
 
 	m_vksurfacecapabilitieskhr_ptr = malloc(sizeof(VkSurfaceCapabilitiesKHR) * m_max_device);
 	m_vkswapchainkhr_vkextent2d_ptr = malloc(sizeof(VkExtent2D) * m_max_device);
 	m_vkswapchainkhr_vkformat_ptr = malloc(sizeof(VkFormat) * m_max_device);
+	m_vkswapchainkhr_vkrenderpass_ptr = malloc(sizeof(VkRenderPass) * m_max_device);
+	m_vkswapchainkhr_vkimageview_ptr = malloc(sizeof(VkImageView*) * m_max_device);
+	m_vkswapchainkhr_vkframebuffer_ptr = malloc(sizeof(VkFramebuffer*) * m_max_device);
 
 	m_vkswapchainkhr_format_ptr = malloc(sizeof(uint32_t) * m_max_device);
 	m_vkswapchainkhr_present_mode_ptr = malloc(sizeof(uint32_t) * m_max_device);
-	m_vksurfaceformatkhr_ptr = malloc(sizeof(VkSurfaceFormatKHR *) * m_max_device);
-	m_vkpresentmodekhr_ptr = malloc(sizeof(VkPresentModeKHR *) * m_max_device);
+	m_vksurfaceformatkhr_ptr = malloc(sizeof(VkSurfaceFormatKHR*) * m_max_device);
+	m_vkpresentmodekhr_ptr = malloc(sizeof(VkPresentModeKHR*) * m_max_device);
 
 	m_vkfence_ptr = malloc(sizeof(VkFence) * m_max_device);
 	m_vksemaphore_ptr = malloc(sizeof(VkSemaphore *) * m_max_device);

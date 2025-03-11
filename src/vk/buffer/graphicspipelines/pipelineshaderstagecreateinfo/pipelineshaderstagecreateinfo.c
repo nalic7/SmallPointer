@@ -1,11 +1,11 @@
 void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, VkPipelineShaderStageCreateFlags vkpipelineshaderstagecreateflags_vert, VkPipelineShaderStageCreateFlags vkpipelineshaderstagecreateflags_frag, VkShaderModule* vkshadermodule_vert_ptr, VkShaderModule* vkshadermodule_frag_ptr, VkPipelineShaderStageCreateInfo vkpipelineshaderstagecreateinfo_array[])
 {
 	uint32_t size = 0;
-	uint32_t* uint32_t_ptr = file_uint32_t("../vert.spv", &size);
+	uint32_t* uint32_t_ptr = file_uint32_t("../asset/vert.spv", &size);
 	vk_makeShaderModule(device, uint32_t_ptr, size, 0, vkshadermodule_vert_ptr);
 	free(uint32_t_ptr);
 
-	uint32_t_ptr = file_uint32_t("../frag.spv", &size);
+	uint32_t_ptr = file_uint32_t("../asset/frag.spv", &size);
 	vk_makeShaderModule(device, uint32_t_ptr, size, 0, vkshadermodule_frag_ptr);
 	free(uint32_t_ptr);
 
