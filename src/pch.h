@@ -1,20 +1,6 @@
-// #ifdef PCH_GLTF
-//
-// 	#define GLTF_IN "./G_I"
-// 	#define GLTF_OUT "./G_O"
-//
-// 	// #include <stdio.h>
-// 	// #include <stdlib.h>
-// 	#include <stdint.h>
-// 	#include <sys/stat.h>
-// 	#include <dirent.h>
-// 	#include <math.h>
-// 	#include <threads.h>
-//
-// 	#include "math/math.h"
-//
-// #endif
 #ifdef PCH_SCENE
+
+	#define SGPU
 
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -26,7 +12,12 @@
 	#include <math.h>
 	#include <threads.h>
 
+	#include <linux/input.h>
+
 	#include <wayland-client.h>
+	#include <xdg-shell.h>
+	// #include <wayland-server.h>
+	// #include <wayland-util.h>
 
 	#include <AL/al.h>
 	#include <AL/alc.h>
@@ -42,6 +33,15 @@
 	#include "al/al.h"
 
 	#include "surface/surface.h"
+	#include "surface/wayland/client/client.h"
+	#include "surface/wayland/client/register/register.h"
+	#include "surface/wayland/client/seat/seat.h"
+	#include "surface/wayland/client/seat/keyboard/keyboard.h"
+	#include "surface/wayland/client/seat/pointer/pointer.h"
+	#include "surface/wayland/client/xdg/surface/surface.h"
+	#include "surface/wayland/client/xdg/toplevel/toplevel.h"
+	#include "surface/wayland/client/xdg/wm_base/wm_base.h"
+
 	#include "vk/vk.h"
 	#include "vk/buffer/instance/instance.h"
 	#ifdef NALI_VK_DEBUG
@@ -193,6 +193,9 @@
 	#include <alc.h>
 
 #endif
+
+// #define info(format, ...)
+// #define error(format, ...)
 
 #define info(format, ...) \
 	printf("nali_info: " format "\n", ##__VA_ARGS__); \

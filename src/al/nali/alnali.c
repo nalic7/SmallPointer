@@ -1,5 +1,5 @@
-ALCdevice* m_alcdevice;
-ALCcontext* alccontext;
+static ALCdevice* alcdevice;
+static ALCcontext* alccontext;
 
 JNIEXPORT void JNICALL Java_com_nali_NaliAL_init(JNIEnv* __env, jclass clazz)
 {

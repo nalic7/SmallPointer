@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.10)
 set(OS_NAME linux)
 set(VK_DEBUG 1)
 set(SCENE 1)
-# set(GLTF 1)
 # set(COLLADA 1)
 # set(LWJGL64 1)
 # set(NALIGL 1)
@@ -30,23 +29,6 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++21")
 
-# if(GLTF)
-#
-#   add_executable(${P_NAME}
-#     src/math/math.c
-#     src/gltf/gltf.c
-#   )
-#
-#   target_include_directories(${P_NAME} PRIVATE
-#     ../cgltf
-#   )
-#
-#   target_link_libraries(${P_NAME}
-#     m
-#   )
-#
-#   target_compile_definitions(${P_NAME} PRIVATE PCH_GLTF=1)
-#
 if(SCENE)
 
   set(FOO PCH_SCENE=1)
@@ -75,9 +57,13 @@ if(SCENE)
     src/vk/buffer/renderpass/renderpass.c
     src/vk/buffer/framebuffer/framebuffer.c
     src/scene/scene.c
+    lib/wayland/xdg-shell.c
   )
 
   file(GLOB_RECURSE G_SOURCES src/vk/buffer/graphicspipelines/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
+  file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
   if (VK_DEBUG)
@@ -90,6 +76,7 @@ if(SCENE)
   target_include_directories(${P_NAME} PRIVATE
     vulkan
     AL
+    lib/wayland
   )
 
   target_link_libraries(${P_NAME}

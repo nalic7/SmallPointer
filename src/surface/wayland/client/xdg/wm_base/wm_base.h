@@ -1,0 +1,6 @@
+#ifndef NALI_WAYLAND_CLIENT_WM_BASE_H
+#define NALI_WAYLAND_CLIENT_WM_BASE_H
+
+extern struct xdg_wm_base_listener m_xdg_wm_base_listener;
+
+#endif

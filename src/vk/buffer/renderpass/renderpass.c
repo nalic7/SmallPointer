@@ -1,4 +1,4 @@
-void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkRenderPass* vkrenderpass_ptr)
+void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkDependencyFlags vkdependencyflags, VkRenderPass* vkrenderpass_ptr)
 {
 	VkAttachmentDescription vkattachmentdescription =
 	{
@@ -35,6 +35,18 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 		.flags = vksubpassdescriptionflags,
 	};
 
+	VkSubpassDependency vksubpassdependency =
+	{
+		.srcSubpass = VK_SUBPASS_EXTERNAL,
+		.dstSubpass = 0,
+		.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		.srcAccessMask = 0,
+		// .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+		.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+		// .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+		.dependencyFlags = vkdependencyflags
+	};
 	VkRenderPassCreateInfo vkrenderpasscreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
@@ -43,12 +55,17 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 		.subpassCount = 1,
 		.pSubpasses = &vksubpassdescription,
 
-		.dependencyCount = 0,
-		.pDependencies = VK_NULL_HANDLE,
+		.dependencyCount = 1,
+		.pDependencies = &vksubpassdependency,
 
 		.flags = vkrenderpasscreateflags,
 		.pNext = VK_NULL_HANDLE
 	};
 
 	vkCreateRenderPass(m_vkdevice_ptr[device], &vkrenderpasscreateinfo, VK_NULL_HANDLE, vkrenderpass_ptr);
+	// VkResult vkresult = vkCreateRenderPass(m_vkdevice_ptr[device], &vkrenderpasscreateinfo, VK_NULL_HANDLE, vkrenderpass_ptr);
+	// if (vkresult != VK_SUCCESS)
+	// {
+	// 	error("vkCreateRenderPass %d", vkresult)
+	// }
 }

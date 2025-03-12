@@ -1,7 +1,8 @@
 int main()
 {
-	surface_init();
+	wlc_init();
 	vk_init();
+	al_init();
 	while (1)
 	{
 

@@ -3,14 +3,15 @@ void vk_makeSurface(VkWaylandSurfaceCreateFlagsKHR vkwaylandsurfacecreateflagskh
 	VkWaylandSurfaceCreateInfoKHR vkwaylandsurfacecreateinfokhr =
 	{
 		.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
-		.display = m_wl_display,
+		.display = m_wl_display_client,
 		.surface = m_wl_surface,
-		.flags = 0,
+		.flags = vkwaylandsurfacecreateflagskhr,
 		.pNext = VK_NULL_HANDLE
 	};
 
-	if (vkCreateWaylandSurfaceKHR(m_vkinstance, &vkwaylandsurfacecreateinfokhr, VK_NULL_HANDLE, &m_vksurfacekhr) != VK_SUCCESS)
+	VkResult vkresult = vkCreateWaylandSurfaceKHR(m_vkinstance, &vkwaylandsurfacecreateinfokhr, VK_NULL_HANDLE, &m_vksurfacekhr);
+	if (vkresult != VK_SUCCESS)
 	{
-		error("vkCreateWaylandSurfaceKHR")
+		error("vkCreateWaylandSurfaceKHR %d", vkresult)
 	}
 }

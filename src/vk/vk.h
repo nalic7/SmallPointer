@@ -33,6 +33,7 @@ extern VkImage** m_vkswapchainkhr_vkimage_ptr;
 extern VkExtent2D* m_vkswapchainkhr_vkextent2d_ptr;
 extern VkFormat* m_vkswapchainkhr_vkformat_ptr;
 extern VkRenderPass* m_vkswapchainkhr_vkrenderpass_ptr;
+// extern VkRenderPass** m_vkswapchainkhr_vkrenderpass_ptr;
 extern VkImageView** m_vkswapchainkhr_vkimageview_ptr;
 extern VkFramebuffer** m_vkswapchainkhr_vkframebuffer_ptr;
 

@@ -1,10 +1,10 @@
-VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT* vkdebugutilsmessengercallbackdataext, void* data)
+static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT* vkdebugutilsmessengercallbackdataext, void* data)
 {
 	info(">vk_debug: %s", vkdebugutilsmessengercallbackdataext->pMessage)
 	return 0;
 }
 
-VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebugUtilsMessengerCreateInfoEXT* vkdebugutilsmessengercreateinfoext, const VkAllocationCallbacks* vkallocationcallbacks, VkDebugUtilsMessengerEXT* vkdebugutilsmessengerext)
+static VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebugUtilsMessengerCreateInfoEXT* vkdebugutilsmessengercreateinfoext, const VkAllocationCallbacks* vkallocationcallbacks, VkDebugUtilsMessengerEXT* vkdebugutilsmessengerext)
 {
 	PFN_vkCreateDebugUtilsMessengerEXT pfn_vkcreatedebugutilsmessengerext = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(vkinstance, "vkCreateDebugUtilsMessengerEXT");
 
@@ -33,8 +33,9 @@ void vk_makeDebug(VkDebugUtilsMessengerCreateFlagsEXT vkdebugutilsmessengercreat
 	};
 
 	// if (vkCreateDebugUtilsMessengerEXT(vk->vkinstance, &vkdebugutilsmessengercreateinfoext, VK_NULL_HANDLE, &vk->vkdebugutilsmessengerext) != VK_SUCCESS)
-	if (createDebugUtilsMessengerEXT(m_vkinstance, &vkdebugutilsmessengercreateinfoext, VK_NULL_HANDLE, &m_vkdebugutilsmessengerext) != VK_SUCCESS)
+	VkResult vkresult = createDebugUtilsMessengerEXT(m_vkinstance, &vkdebugutilsmessengercreateinfoext, VK_NULL_HANDLE, &m_vkdebugutilsmessengerext);
+	if (vkresult != VK_SUCCESS)
 	{
-		error("vkCreateDebugUtilsMessengerEXT")
+		error("vkCreateDebugUtilsMessengerEXT %d", vkresult)
 	}
 }

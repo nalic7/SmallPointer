@@ -1,0 +1,6 @@
+#ifndef NALI_WAYLAND_CLIENT_TOPLEVEL_H
+#define NALI_WAYLAND_CLIENT_TOPLEVEL_H
+
+extern struct xdg_toplevel_listener m_xdg_toplevel_listener;
+
+#endif

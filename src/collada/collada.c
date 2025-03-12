@@ -1,6 +1,6 @@
 static uint32_t thrd = 0;
 
-int main_skin(void* d_name_ptr)
+static int skin(void* d_name_ptr)
 {
 	// info("skin %s\n", (char*)name)
 
@@ -487,7 +487,7 @@ int main()
 			// }
 
 			// if (result != thrd_success)
-			if (thrd_create(&thread, main_skin, (void*)d_name_ptr) != thrd_success)
+			if (thrd_create(&thread, skin, (void*)d_name_ptr) != thrd_success)
 			{
 				error("thrd_create")
 			}

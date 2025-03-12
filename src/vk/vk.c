@@ -28,6 +28,7 @@ VkImage** m_vkswapchainkhr_vkimage_ptr;
 VkExtent2D* m_vkswapchainkhr_vkextent2d_ptr;
 VkFormat* m_vkswapchainkhr_vkformat_ptr;
 VkRenderPass* m_vkswapchainkhr_vkrenderpass_ptr;
+// VkRenderPass** m_vkswapchainkhr_vkrenderpass_ptr;
 VkImageView** m_vkswapchainkhr_vkimageview_ptr;
 VkFramebuffer** m_vkswapchainkhr_vkframebuffer_ptr;
 
@@ -44,21 +45,192 @@ uint32_t m_graphic = 0;
 	VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 #endif
 
-int vk_loop(void* arg)
+static void clean()
 {
+	//exit
+	// for (uint32_t d = 0; d < m_max_device; ++d)
+	// {
+	// }
+	// vkDestroySurfaceKHR(m_vkinstance, m_vksurfacekhr, NULL);
+	// vkDestroyInstance(m_vkinstance, NULL);
+	m_vkinstance = VK_NULL_HANDLE;
+}
+
+static int loop(void* arg)
+{
+	VkDevice vkdevice = m_vkdevice_ptr[m_device];
+	VkFence* vkfence_ptr = &m_vkfence_ptr[m_device];
+	VkSwapchainKHR vkswapchainkhr = m_vkswapchainkhr_ptr[m_device];
+	VkExtent2D vkextent2d = m_vkswapchainkhr_vkextent2d_ptr[m_device];
+	VkSemaphore imageAvailableSemaphore = m_vksemaphore_ptr[m_device][m_graphic][0];
+	VkSemaphore renderFinishedSemaphore = m_vksemaphore_ptr[m_device][m_graphic][1];
+	VkQueue vkqueue = m_vkqueue_graphics_ptr[m_device][m_graphic];
+
 	VkPipelineLayout vkpipelinelayout;
 	VkPipeline vkpipeline;
 	vk_makeGraphicsPipeline(m_device, 0, &m_vkswapchainkhr_vkrenderpass_ptr[m_device], &vkpipelinelayout, &vkpipeline);
 
-	while (1)
+	VkCommandBuffer vkcommandbuffer;
+	vk_makeCommandBuffer(m_device, m_graphic, &vkcommandbuffer, 1);
+
+	VkCommandBufferBeginInfo vkcommandbufferbegininfo =
 	{
-		struct timespec ts = {5, 0};//5sec
-		thrd_sleep(&ts, NULL);
+		.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+		.pInheritanceInfo = VK_NULL_HANDLE,
+
+		// .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+		.flags = 0,
+		.pNext = VK_NULL_HANDLE
+	};
+
+	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
+	{
+		vkWaitForFences(vkdevice, 1, vkfence_ptr, VK_TRUE, UINT64_MAX);
+		vkResetFences(vkdevice, 1, vkfence_ptr);
+
+		uint32_t imageIndex;
+		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, vkswapchainkhr, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+		// info("image %d", imageIndex)
+		// info("vkextent2d.width %d", vkextent2d.width)
+		// info("vkextent2d.height %d", vkextent2d.height)
+		// if (vkresult != VK_SUCCESS && vkresult != VK_SUBOPTIMAL_KHR)
+		if (vkresult != VK_SUCCESS)
+		{
+			//recreate
+			error("vkAcquireNextImageKHR %d", vkresult)
+		}
+
+		// VkPipelineLayout vkpipelinelayout;
+		// VkPipeline vkpipeline;
+		// vk_makeGraphicsPipeline(m_device, 0, &m_vkswapchainkhr_vkrenderpass_ptr[m_device][imageIndex], &vkpipelinelayout, &vkpipeline);
+
+		// VkCommandBuffer vkcommandbuffer;
+		// vk_makeCommandBuffer(m_device, m_graphic, &vkcommandbuffer, 1);
+
+		// VkCommandBufferBeginInfo vkcommandbufferbegininfo =
+		// {
+		// 	.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+		// 	.pInheritanceInfo = VK_NULL_HANDLE,
+
+		// 	// .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+		// 	.flags = 0,
+		// 	.pNext = VK_NULL_HANDLE
+		// };
+
+		//s0-command
+		// vkResetCommandPool(vkdevice, m_vkcommandpool_ptr[m_device][m_graphic], 0);
+		// vkResetCommandBuffer(vkcommandbuffer, 0);
+		vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
+
+			VkClearColorValue vkclearcolorvalue =
+			{
+				.float32 = {1.0F, 0.0F, 0.0F, 1.0F}
+			};
+			VkClearDepthStencilValue vkcleardepthstencilvalue =
+			{
+				.depth = 1.0F,
+				.stencil = 0.0F
+			};
+			VkClearValue vkclearvalue[2] =
+			{
+				{.color = vkclearcolorvalue},
+				{.depthStencil = vkcleardepthstencilvalue}
+			};
+			VkRenderPassBeginInfo vkrenderpassbegininfo =
+			{
+				.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+				.renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device],
+				// .renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device][imageIndex],
+				.framebuffer = m_vkswapchainkhr_vkframebuffer_ptr[m_device][imageIndex],
+				.renderArea.offset = {0, 0},
+				.renderArea.extent = vkextent2d,
+				.clearValueCount = 2,
+				.pClearValues = vkclearvalue,
+
+				.pNext = VK_NULL_HANDLE
+			};
+
+			vkCmdBeginRenderPass(vkcommandbuffer, &vkrenderpassbegininfo, VK_SUBPASS_CONTENTS_INLINE);
+
+				vkCmdBindPipeline(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
+
+				VkViewport vkviewport =
+				{
+					.x = 0.0F,
+					.y = 0.0F,
+					.width = vkextent2d.width,
+					.height = vkextent2d.height,
+					.minDepth = 0.0F,
+					.maxDepth = 1.0F
+				};
+				vkCmdSetViewport(vkcommandbuffer, 0, 1, &vkviewport);
+
+				VkRect2D vkrect2d =
+				{
+					.offset = {0, 0},
+					.extent = vkextent2d
+				};
+				vkCmdSetScissor(vkcommandbuffer, 0, 1, &vkrect2d);
+
+				vkCmdDraw(vkcommandbuffer, 3, 1, 0, 0);
+
+			vkCmdEndRenderPass(vkcommandbuffer);
+
+		vkEndCommandBuffer(vkcommandbuffer);
+		//e0-command
+
+		VkSemaphore waitSemaphores[] = {imageAvailableSemaphore};
+		VkSemaphore signalSemaphores[] = {renderFinishedSemaphore};
+		VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+		VkSubmitInfo vksubmitinfo =
+		{
+			.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+			.waitSemaphoreCount = 1,
+			.pWaitSemaphores = waitSemaphores,
+			.pWaitDstStageMask = waitStages,
+			.commandBufferCount = 1,
+			.pCommandBuffers = &vkcommandbuffer,
+			.signalSemaphoreCount = 1,
+			.pSignalSemaphores = signalSemaphores,
+
+			.pNext = VK_NULL_HANDLE
+		};
+
+		// vkQueueWaitIdle(vkqueue);
+		vkQueueSubmit(vkqueue, 1, &vksubmitinfo, *vkfence_ptr);
+
+		VkSwapchainKHR swapChains[] = {vkswapchainkhr};
+		VkPresentInfoKHR vkpresentinfokhr =
+		{
+			.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+			.waitSemaphoreCount = 1,
+			.pWaitSemaphores = signalSemaphores,
+
+			.swapchainCount = 1,
+			.pSwapchains = swapChains,
+
+			.pImageIndices = &imageIndex,
+
+			.pResults = VK_NULL_HANDLE,
+			.pNext = VK_NULL_HANDLE
+		};
+
+		vkQueuePresentKHR(vkqueue, &vkpresentinfokhr);
+
+		// struct timespec ts = {5, 0};//5sec
+		// thrd_sleep(&ts, NULL);
+
+		// vkFreeCommandBuffers(vkdevice, m_vkcommandpool_ptr[m_device][m_graphic], 1, &vkcommandbuffer);
+		// vkDestroyPipeline(vkdevice, vkpipeline, VK_NULL_HANDLE);
+		// vkDestroyPipelineLayout(vkdevice, vkpipelinelayout, VK_NULL_HANDLE);
 	}
+
+	clean();
+
 	return 0;
 }
 
-void checkE(uint32_t d)
+static void checkE(uint32_t d)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[d];
 
@@ -93,7 +265,32 @@ void checkE(uint32_t d)
 	info("device_extension_support %d", extensionssupported)
 }
 
-void vinfo(uint32_t device)
+static void checkIE()
+{
+	uint32_t extensionCount = 0;
+	vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &extensionCount, VK_NULL_HANDLE);
+
+	VkExtensionProperties* extensions = malloc(sizeof(VkExtensionProperties) * extensionCount);
+	if (extensions == VK_NULL_HANDLE)
+	{
+		error("VkExtensionProperties VK_NULL_HANDLE")
+	}
+
+	VkResult vkresult = vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &extensionCount, extensions);
+	if (vkresult != VK_SUCCESS)
+	{
+		error("vkEnumerateInstanceExtensionProperties %d", vkresult)
+	}
+
+	for (uint32_t i = 0; i < extensionCount; ++i)
+	{
+		info("%d %s", i, extensions[i].extensionName)
+	}
+
+	free(extensions);
+}
+
+static void vinfo(uint32_t device)
 {
 	VkPhysicalDeviceProperties vkphysicaldeviceproperties;
 	vkGetPhysicalDeviceProperties(m_vkphysicaldevice_ptr[device], &vkphysicaldeviceproperties);
@@ -104,11 +301,12 @@ void vinfo(uint32_t device)
 		VK_VERSION_MAJOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
-	);
+	)
 }
 
 void vk_init()
 {
+	checkIE();
 	vk_makeInstance(0);
 	vk_makeSurface(0);
 	#ifdef NALI_VK_DEBUG
@@ -125,6 +323,7 @@ void vk_init()
 	m_vkswapchainkhr_vkextent2d_ptr = malloc(sizeof(VkExtent2D) * m_max_device);
 	m_vkswapchainkhr_vkformat_ptr = malloc(sizeof(VkFormat) * m_max_device);
 	m_vkswapchainkhr_vkrenderpass_ptr = malloc(sizeof(VkRenderPass) * m_max_device);
+	// m_vkswapchainkhr_vkrenderpass_ptr = malloc(sizeof(VkRenderPass*) * m_max_device);
 	m_vkswapchainkhr_vkimageview_ptr = malloc(sizeof(VkImageView*) * m_max_device);
 	m_vkswapchainkhr_vkframebuffer_ptr = malloc(sizeof(VkFramebuffer*) * m_max_device);
 
@@ -167,7 +366,7 @@ void vk_init()
 	}
 
 	thrd_t thread;
-	int result = thrd_create(&thread, vk_loop, NULL);
+	int result = thrd_create(&thread, loop, NULL);
 	if (result != thrd_success)
 	{
 		error("thrd_create")

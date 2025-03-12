@@ -1,6 +1,6 @@
 #ifndef NALI_VK_RENDERPASS_H
 #define NALI_VK_RENDERPASS_H
 
-void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkRenderPass* vkrenderpass_ptr);
+void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkDependencyFlags vkdependencyflags, VkRenderPass* vkrenderpass_ptr);
 
 #endif

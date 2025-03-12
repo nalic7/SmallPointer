@@ -46,8 +46,9 @@ void vk_makeInstance(VkInstanceCreateFlags vkinstancecreateflags)
 		#endif
 	};
 
-	if (vkCreateInstance(&vkinstancecreateinfo, VK_NULL_HANDLE, &m_vkinstance) != VK_SUCCESS)
+	VkResult vkresult = vkCreateInstance(&vkinstancecreateinfo, VK_NULL_HANDLE, &m_vkinstance);
+	if (vkresult != VK_SUCCESS)
 	{
-		error("vkCreateInstance")
+		error("vkCreateInstance %d", vkresult)
 	}
 }

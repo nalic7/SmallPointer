@@ -6,9 +6,10 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 	m_vkswapchainkhr_format_ptr[device] = 0;
 	m_vkswapchainkhr_present_mode_ptr[device] = 0;
 
-	if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vksurfacecapabilitieskhr_ptr[device]) != VK_SUCCESS)
+	VkResult vkresult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vksurfacecapabilitieskhr_ptr[device]);
+	if (vkresult != VK_SUCCESS)
 	{
-		error("vkGetPhysicalDeviceSurfaceCapabilitiesKHR")
+		error("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkresult)
 	}
 
 	vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_format_ptr[device], VK_NULL_HANDLE);
@@ -42,13 +43,14 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 		}
 	}
 
-	VkPresentModeKHR vkpresentmodekhr = VK_PRESENT_MODE_FIFO_KHR;//VK_PRESENT_MODE_IMMEDIATE_KHR
+	VkPresentModeKHR vkpresentmodekhr = VK_PRESENT_MODE_FIFO_RELAXED_KHR;//VK_PRESENT_MODE_IMMEDIATE_KHR
 	for (uint32_t i = 0; i < m_vkswapchainkhr_present_mode_ptr[device]; ++i)
 	{
 		VkPresentModeKHR s_vkpresentmodekhr = m_vkpresentmodekhr_ptr[device][i];
 		info("VkPresentModeKHR %d", s_vkpresentmodekhr)
 		//VK_PRESENT_MODE_FIFO_KHR (V-Sync)
-		if (s_vkpresentmodekhr == VK_PRESENT_MODE_MAILBOX_KHR)
+		// if (s_vkpresentmodekhr == VK_PRESENT_MODE_MAILBOX_KHR)
+		if (s_vkpresentmodekhr == VK_PRESENT_MODE_FIFO_KHR)
 		{
 			vkpresentmodekhr = s_vkpresentmodekhr;
 		}
@@ -79,7 +81,7 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 		.preTransform = m_vksurfacecapabilitieskhr_ptr[device].currentTransform,
 		.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
 		.presentMode = vkpresentmodekhr,
-		.clipped = 1,
+		.clipped = VK_TRUE,
 
 		.queueFamilyIndexCount = max_graphics,
 		.pQueueFamilyIndices = m_graphics_ptr[device],
@@ -99,9 +101,10 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 		vkswapchaincreateinfokhr.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	}
 
-	if (vkCreateSwapchainKHR(m_vkdevice_ptr[device], &vkswapchaincreateinfokhr, VK_NULL_HANDLE, &m_vkswapchainkhr_ptr[device]) != VK_SUCCESS)
+	vkresult = vkCreateSwapchainKHR(m_vkdevice_ptr[device], &vkswapchaincreateinfokhr, VK_NULL_HANDLE, &m_vkswapchainkhr_ptr[device]);
+	if (vkresult != VK_SUCCESS)
 	{
-		error("vkCreateSwapchainKHR")
+		error("vkCreateSwapchainKHR %d", vkresult)
 	}
 
 	//re
@@ -112,14 +115,18 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 	m_vkswapchainkhr_vkimage_ptr[device] = malloc(sizeof(VkImage) * images);
 	m_vkswapchainkhr_vkimageview_ptr[device] = malloc(sizeof(VkImageView) * images);
 	m_vkswapchainkhr_vkframebuffer_ptr[device] = malloc(sizeof(VkFramebuffer) * images);
+	// m_vkswapchainkhr_vkrenderpass_ptr[device] = malloc(sizeof(VkRenderPass) * images);
 
 	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &images, m_vkswapchainkhr_vkimage_ptr[device]);
 
-	vk_makeRenderPass(device, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device]);
+	vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device]);
 
 	for (uint32_t i = 0; i < images; ++i)
 	{
-		vk_makeImageView(device, *m_vkswapchainkhr_vkimage_ptr[device], vksurfaceformatkhr.format, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i]);
+		// vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device][i]);
+
+		vk_makeImageView(device, &m_vkswapchainkhr_vkimage_ptr[device][i], &vksurfaceformatkhr.format, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i]);
 		vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i], &m_vkswapchainkhr_vkrenderpass_ptr[device], &m_vkswapchainkhr_vkframebuffer_ptr[device][i]);
+		// vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i], &m_vkswapchainkhr_vkrenderpass_ptr[device][i], &m_vkswapchainkhr_vkframebuffer_ptr[device][i]);
 	}
 }
