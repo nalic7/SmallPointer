@@ -1,0 +1,7 @@
+#ifndef NALI_NETWORK_SERVER_H
+#define NALI_NETWORK_SERVER_H
+
+#define PORT 8080
+#define BUFFER_SIZE 1024
+
+#endif

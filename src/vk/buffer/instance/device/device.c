@@ -1,7 +1,7 @@
 void vk_makeDevice(uint32_t device, VkDeviceQueueCreateFlags vkdevicequeuecreateflags, VkDeviceCreateFlags vkdevicecreateflags)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
-	uint8_t max_graphics = m_max_graphics_ptr[device];
+	uint8_t max_graphics = m_max_graphic_ptr[device];
 	// QueueList queuelist = vk_findQueue(vk, vkphysicaldevice);
 
 	info("max_graphics %d", max_graphics)
@@ -18,11 +18,11 @@ void vk_makeDevice(uint32_t device, VkDeviceQueueCreateFlags vkdevicequeuecreate
 
 	for (uint32_t i = 0; i < max_graphics; ++i)
 	{
-		info("use_graphic %d", m_graphics_ptr[device][i])
+		info("use_graphic %d", m_graphic_ptr[device][i])
 		VkDeviceQueueCreateInfo vkdevicequeuecreateinfo = 
 		{
 			.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-			.queueFamilyIndex = m_graphics_ptr[device][i],
+			.queueFamilyIndex = m_graphic_ptr[device][i],
 			.queueCount = 1,
 			.pQueuePriorities = &queuepriority,
 
@@ -64,10 +64,10 @@ void vk_makeDevice(uint32_t device, VkDeviceQueueCreateFlags vkdevicequeuecreate
 
 	vkCreateDevice(vkphysicaldevice, &vkdevicecreateinfo, VK_NULL_HANDLE, &m_vkdevice_ptr[device]);
 
-	m_vkqueue_graphics_ptr[device] = malloc(max_graphics * sizeof(VkQueue));
+	m_vkqueue_ptr[device] = malloc(max_graphics * sizeof(VkQueue));
 
 	for (uint32_t i = 0; i < max_graphics; ++i)
 	{
-		vkGetDeviceQueue(m_vkdevice_ptr[device], m_graphics_ptr[device][i], 0, &m_vkqueue_graphics_ptr[device][i]);
+		vkGetDeviceQueue(m_vkdevice_ptr[device], m_graphic_ptr[device][i], 0, &m_vkqueue_ptr[device][i]);
 	}
 }

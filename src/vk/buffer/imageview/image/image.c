@@ -41,3 +41,5 @@ void vk_genImage(uint32_t device, VkImage vkimage, VkDeviceMemory* vkdevicememor
 
 	vkBindImageMemory(vkdevice, vkimage, *vkdevicememory_ptr, 0);
 }
+
+//vkCmdBlitImage vkCmdCopyImage VK_QUEUE_TRANSFER_BIT

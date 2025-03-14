@@ -3,7 +3,7 @@ void vk_makeCommandPool(uint32_t device, VkCommandPoolCreateFlags vkcommandpoolc
 	VkCommandPoolCreateInfo vkcommandpoolcreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-		.queueFamilyIndex = m_graphics_ptr[device][graphic],
+		.queueFamilyIndex = m_graphic_ptr[device][graphic],
 		.flags = vkcommandpoolcreateflags,
 		.pNext = VK_NULL_HANDLE
 	};

@@ -74,6 +74,9 @@
 	#include "vk/buffer/graphicspipelines/pipelineviewportstatecreateinfo/pipelineviewportstatecreateinfo.h"
 	#include "vk/buffer/graphicspipelines/graphicspipelines.h"
 
+	// #include <unistd.h>
+	// #include <arpa/inet.h>
+
 #endif
 #ifdef PCH_COLLADA
 

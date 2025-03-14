@@ -1,7 +1,7 @@
 void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreateflagskhr)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
-	uint8_t max_graphics = m_max_graphics_ptr[device];
+	uint8_t max_graphics = m_max_graphic_ptr[device];
 
 	m_vkswapchainkhr_format_ptr[device] = 0;
 	m_vkswapchainkhr_present_mode_ptr[device] = 0;
@@ -84,7 +84,7 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 		.clipped = VK_TRUE,
 
 		.queueFamilyIndexCount = max_graphics,
-		.pQueueFamilyIndices = m_graphics_ptr[device],
+		.pQueueFamilyIndices = m_graphic_ptr[device],
 
 		.oldSwapchain = VK_NULL_HANDLE,
 

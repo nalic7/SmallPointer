@@ -4,9 +4,9 @@ VkInstance m_vkinstance;
 uint32_t m_max_device;
 
 VkPhysicalDevice* m_vkphysicaldevice_ptr;
-uint8_t* m_max_graphics_ptr;
-uint32_t** m_graphics_ptr;
-VkQueue** m_vkqueue_graphics_ptr;
+uint8_t* m_max_graphic_ptr;
+uint32_t** m_graphic_ptr;
+VkQueue** m_vkqueue_ptr;
 
 VkDevice* m_vkdevice_ptr;
 //D
@@ -32,14 +32,15 @@ VkRenderPass* m_vkswapchainkhr_vkrenderpass_ptr;
 VkImageView** m_vkswapchainkhr_vkimageview_ptr;
 VkFramebuffer** m_vkswapchainkhr_vkframebuffer_ptr;
 
-VkFence* m_vkfence_ptr;
+VkFence** m_vkfence_ptr;
 VkSemaphore*** m_vksemaphore_ptr;
 
 VkCommandPool** m_vkcommandpool_ptr;
 //S
 
 uint32_t m_device = 0;
-uint32_t m_graphic = 0;
+uint32_t m_queue_graphic = 0;
+uint32_t m_queue_render = 0;//need sync
 
 #ifdef NALI_VK_DEBUG
 	VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
@@ -56,22 +57,40 @@ static void clean()
 	m_vkinstance = VK_NULL_HANDLE;
 }
 
+enum render_state_enum
+{
+	RSE_MULTIPLE_QUEUE = 1
+};
+
 static int loop(void* arg)
 {
+	// m_queue_graphic = 0;
+	// m_queue_render = 0;
 	VkDevice vkdevice = m_vkdevice_ptr[m_device];
-	VkFence* vkfence_ptr = &m_vkfence_ptr[m_device];
+	VkFence* graphic_vkfence_ptr = &m_vkfence_ptr[m_device][0];
+	VkFence* transfer_vkfence_ptr = &m_vkfence_ptr[m_device][1];
 	VkSwapchainKHR vkswapchainkhr = m_vkswapchainkhr_ptr[m_device];
 	VkExtent2D vkextent2d = m_vkswapchainkhr_vkextent2d_ptr[m_device];
-	VkSemaphore imageAvailableSemaphore = m_vksemaphore_ptr[m_device][m_graphic][0];
-	VkSemaphore renderFinishedSemaphore = m_vksemaphore_ptr[m_device][m_graphic][1];
-	VkQueue vkqueue = m_vkqueue_graphics_ptr[m_device][m_graphic];
+
+	VkSemaphore render_transfer_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][1];
+
+	VkSemaphore image_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_graphic][0];
+	// VkSemaphore image_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][0];
+	VkSemaphore render_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_graphic][1];
+	// VkSemaphore render_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][1];
+	VkQueue vkqueue_graphic = m_vkqueue_ptr[m_device][m_queue_graphic];
+	VkQueue vkqueue_render = m_vkqueue_ptr[m_device][m_queue_render];
+
+	char render_state = m_queue_graphic != m_queue_render ? RSE_MULTIPLE_QUEUE : 0;
+	VkSemaphore* render_vksemaphore_ptr = (render_state & RSE_MULTIPLE_QUEUE) == 0 ? &render_vksemaphore : &render_transfer_vksemaphore;
 
 	VkPipelineLayout vkpipelinelayout;
 	VkPipeline vkpipeline;
 	vk_makeGraphicsPipeline(m_device, 0, &m_vkswapchainkhr_vkrenderpass_ptr[m_device], &vkpipelinelayout, &vkpipeline);
 
 	VkCommandBuffer vkcommandbuffer;
-	vk_makeCommandBuffer(m_device, m_graphic, &vkcommandbuffer, 1);
+	vk_makeCommandBuffer(m_device, m_queue_graphic, &vkcommandbuffer, 1);
+	// vk_makeCommandBuffer(m_device, m_queue_render, &vkcommandbuffer, 1);
 
 	VkCommandBufferBeginInfo vkcommandbufferbegininfo =
 	{
@@ -83,20 +102,47 @@ static int loop(void* arg)
 		.pNext = VK_NULL_HANDLE
 	};
 
+	VkSwapchainKHR swapChains[] = {vkswapchainkhr};
+	VkPresentInfoKHR vkpresentinfokhr =
+	{
+		.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+		.waitSemaphoreCount = 1,
+		.pWaitSemaphores = &render_vksemaphore,
+
+		.swapchainCount = 1,
+		.pSwapchains = swapChains,
+
+		// .pImageIndices = &image_index,
+
+		.pResults = VK_NULL_HANDLE,
+		.pNext = VK_NULL_HANDLE
+	};
+
 	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
 	{
-		vkWaitForFences(vkdevice, 1, vkfence_ptr, VK_TRUE, UINT64_MAX);
-		vkResetFences(vkdevice, 1, vkfence_ptr);
+		vkWaitForFences(vkdevice, 1, graphic_vkfence_ptr, VK_TRUE, UINT64_MAX);
+		vkResetFences(vkdevice, 1, graphic_vkfence_ptr);
 
-		uint32_t imageIndex;
-		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, vkswapchainkhr, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+		if ((render_state & RSE_MULTIPLE_QUEUE) == RSE_MULTIPLE_QUEUE)
+		{
+			vkWaitForFences(vkdevice, 1, transfer_vkfence_ptr, VK_TRUE, UINT64_MAX);
+			vkResetFences(vkdevice, 1, transfer_vkfence_ptr);
+		}
+
+		if ((m_surface_state & NALI_SURFACE_C_S_RE) == NALI_SURFACE_C_S_RE)
+		{
+			//recreate
+			m_surface_state &= 255 - NALI_SURFACE_C_S_RE;
+		}
+
+		uint32_t image_index;
+		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, vkswapchainkhr, UINT64_MAX, image_vksemaphore, VK_NULL_HANDLE, &image_index);
 		// info("image %d", imageIndex)
 		// info("vkextent2d.width %d", vkextent2d.width)
 		// info("vkextent2d.height %d", vkextent2d.height)
 		// if (vkresult != VK_SUCCESS && vkresult != VK_SUBOPTIMAL_KHR)
 		if (vkresult != VK_SUCCESS)
 		{
-			//recreate
 			error("vkAcquireNextImageKHR %d", vkresult)
 		}
 
@@ -141,7 +187,7 @@ static int loop(void* arg)
 				.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
 				.renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device],
 				// .renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device][imageIndex],
-				.framebuffer = m_vkswapchainkhr_vkframebuffer_ptr[m_device][imageIndex],
+				.framebuffer = m_vkswapchainkhr_vkframebuffer_ptr[m_device][image_index],
 				.renderArea.offset = {0, 0},
 				.renderArea.extent = vkextent2d,
 				.clearValueCount = 2,
@@ -179,43 +225,47 @@ static int loop(void* arg)
 		vkEndCommandBuffer(vkcommandbuffer);
 		//e0-command
 
-		VkSemaphore waitSemaphores[] = {imageAvailableSemaphore};
-		VkSemaphore signalSemaphores[] = {renderFinishedSemaphore};
-		VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 		VkSubmitInfo vksubmitinfo =
 		{
 			.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
 			.waitSemaphoreCount = 1,
-			.pWaitSemaphores = waitSemaphores,
-			.pWaitDstStageMask = waitStages,
+			.pWaitSemaphores = &image_vksemaphore,
+			.pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
 			.commandBufferCount = 1,
 			.pCommandBuffers = &vkcommandbuffer,
 			.signalSemaphoreCount = 1,
-			.pSignalSemaphores = signalSemaphores,
+			.pSignalSemaphores = render_vksemaphore_ptr,
 
 			.pNext = VK_NULL_HANDLE
 		};
 
-		// vkQueueWaitIdle(vkqueue);
-		vkQueueSubmit(vkqueue, 1, &vksubmitinfo, *vkfence_ptr);
+		// vkQueueWaitIdle(vkqueue_render);
+		vkQueueSubmit(vkqueue_graphic, 1, &vksubmitinfo, *graphic_vkfence_ptr);
+		// vkQueueSubmit(vkqueue_render, 1, &vksubmitinfo, *vkfence_ptr);
 
-		VkSwapchainKHR swapChains[] = {vkswapchainkhr};
-		VkPresentInfoKHR vkpresentinfokhr =
+		vkpresentinfokhr.pImageIndices = &image_index;
+		if ((render_state & RSE_MULTIPLE_QUEUE) == RSE_MULTIPLE_QUEUE)
 		{
-			.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
-			.waitSemaphoreCount = 1,
-			.pWaitSemaphores = signalSemaphores,
+			VkSubmitInfo vksubmitinfo =
+			{
+				.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+				.waitSemaphoreCount = 1,
+				.pWaitSemaphores = &render_transfer_vksemaphore,
+				.pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+				.commandBufferCount = 0,
+				.signalSemaphoreCount = 1,
+				.pSignalSemaphores = &render_vksemaphore,
 
-			.swapchainCount = 1,
-			.pSwapchains = swapChains,
+				.pNext = VK_NULL_HANDLE
+			};
+			vkQueueSubmit(vkqueue_render, 1, &vksubmitinfo, *transfer_vkfence_ptr);
 
-			.pImageIndices = &imageIndex,
-
-			.pResults = VK_NULL_HANDLE,
-			.pNext = VK_NULL_HANDLE
-		};
-
-		vkQueuePresentKHR(vkqueue, &vkpresentinfokhr);
+			vkQueuePresentKHR(vkqueue_render, &vkpresentinfokhr);
+		}
+		else
+		{
+			vkQueuePresentKHR(vkqueue_graphic, &vkpresentinfokhr);
+		}
 
 		// struct timespec ts = {5, 0};//5sec
 		// thrd_sleep(&ts, NULL);
@@ -332,7 +382,7 @@ void vk_init()
 	m_vksurfaceformatkhr_ptr = malloc(sizeof(VkSurfaceFormatKHR*) * m_max_device);
 	m_vkpresentmodekhr_ptr = malloc(sizeof(VkPresentModeKHR*) * m_max_device);
 
-	m_vkfence_ptr = malloc(sizeof(VkFence) * m_max_device);
+	m_vkfence_ptr = malloc(sizeof(VkFence*) * m_max_device);
 	m_vksemaphore_ptr = malloc(sizeof(VkSemaphore *) * m_max_device);
 
 	m_vkcommandpool_ptr = malloc(sizeof(VkCommandPool *) * m_max_device);
@@ -343,14 +393,19 @@ void vk_init()
 		checkE(d);
 		vinfo(d);
 
-		m_graphics_ptr[d] = malloc(sizeof(uint32_t));
+		m_graphic_ptr[d] = malloc(sizeof(uint32_t));
 
 		vk_makeQueue(d);
 		vk_makeDevice(d, 0, 0);
 		vk_makeSwapchain(d, 0);
-		vk_makeFence(d);
 
-		uint8_t max_graphics = m_max_graphics_ptr[d];
+		m_vkfence_ptr[d] = malloc(sizeof(VkFence) * 2);
+		for (uint32_t gi = 0; gi < 2; ++gi)
+		{
+			vk_makeFence(d, &m_vkfence_ptr[d][gi]);
+		}
+
+		uint8_t max_graphics = m_max_graphic_ptr[d];
 
 		m_vksemaphore_ptr[d] = malloc(sizeof(VkSemaphore **) * max_graphics);
 

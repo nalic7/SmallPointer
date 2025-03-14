@@ -9,9 +9,9 @@ extern VkInstance m_vkinstance;
 extern uint32_t m_max_device;
 
 extern VkPhysicalDevice* m_vkphysicaldevice_ptr;
-extern uint8_t* m_max_graphics_ptr;
-extern uint32_t** m_graphics_ptr;
-extern VkQueue** m_vkqueue_graphics_ptr;
+extern uint8_t* m_max_graphic_ptr;
+extern uint32_t** m_graphic_ptr;
+extern VkQueue** m_vkqueue_ptr;
 
 extern VkDevice* m_vkdevice_ptr;
 //D
@@ -37,14 +37,15 @@ extern VkRenderPass* m_vkswapchainkhr_vkrenderpass_ptr;
 extern VkImageView** m_vkswapchainkhr_vkimageview_ptr;
 extern VkFramebuffer** m_vkswapchainkhr_vkframebuffer_ptr;
 
-extern VkFence* m_vkfence_ptr;
+extern VkFence** m_vkfence_ptr;
 extern VkSemaphore*** m_vksemaphore_ptr;
 
 extern VkCommandPool** m_vkcommandpool_ptr;
 //S
 
 extern uint32_t m_device;
-extern uint32_t m_graphic;
+extern uint32_t m_queue_graphic;
+extern uint32_t m_queue_render;
 
 #ifdef NALI_VK_DEBUG
 	extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
