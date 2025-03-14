@@ -117,6 +117,7 @@ static void clean(VkPipelineLayout* vkpipelinelayout_ptr, VkPipeline* vkpipeline
 	free(m_vkswapchainkhr_vkformat_ptr);
 	free(m_vkswapchainkhr_vkrenderpass_ptr);
 
+	free(m_vksurfaceformatkhr_image_ptr);
 	free(m_vkswapchainkhr_vkimageview_ptr);
 	free(m_vkswapchainkhr_vkframebuffer_ptr);
 

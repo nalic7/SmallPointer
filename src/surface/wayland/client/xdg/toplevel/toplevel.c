@@ -33,8 +33,8 @@ static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_top
 		thrd_sleep(&ts, NULL);
 	}
 	wlc_clean();
-	exit(EXIT_SUCCESS);
 	info("xdg_toplevel_listener_close 1")
+	exit(EXIT_SUCCESS);
 }
 
 static void xdg_toplevel_listener_configure_bounds(void* data, struct xdg_toplevel* xdg_toplevel, int32_t width, int32_t height)
