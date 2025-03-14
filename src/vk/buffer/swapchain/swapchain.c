@@ -56,7 +56,7 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 		}
 	}
 
-	uint32_t images = 0;
+	// uint32_t images = 0;
 
 	VkExtent2D vkextent2d =
 	{
@@ -108,20 +108,21 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 	}
 
 	//re
-	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &images, VK_NULL_HANDLE);
+	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &m_vksurfaceformatkhr_image_ptr[device], VK_NULL_HANDLE);
 
-	info("images %d", images)
+	uint32_t vksurfaceformatkhr_image = m_vksurfaceformatkhr_image_ptr[device];
+	info("vksurfaceformatkhr_image %d", vksurfaceformatkhr_image)
 
-	m_vkswapchainkhr_vkimage_ptr[device] = malloc(sizeof(VkImage) * images);
-	m_vkswapchainkhr_vkimageview_ptr[device] = malloc(sizeof(VkImageView) * images);
-	m_vkswapchainkhr_vkframebuffer_ptr[device] = malloc(sizeof(VkFramebuffer) * images);
+	m_vkswapchainkhr_vkimage_ptr[device] = malloc(sizeof(VkImage) * vksurfaceformatkhr_image);
+	m_vkswapchainkhr_vkimageview_ptr[device] = malloc(sizeof(VkImageView) * vksurfaceformatkhr_image);
+	m_vkswapchainkhr_vkframebuffer_ptr[device] = malloc(sizeof(VkFramebuffer) * vksurfaceformatkhr_image);
 	// m_vkswapchainkhr_vkrenderpass_ptr[device] = malloc(sizeof(VkRenderPass) * images);
 
-	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &images, m_vkswapchainkhr_vkimage_ptr[device]);
+	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &vksurfaceformatkhr_image, m_vkswapchainkhr_vkimage_ptr[device]);
 
 	vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device]);
 
-	for (uint32_t i = 0; i < images; ++i)
+	for (uint32_t i = 0; i < vksurfaceformatkhr_image; ++i)
 	{
 		// vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device][i]);
 

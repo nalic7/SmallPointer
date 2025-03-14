@@ -23,6 +23,7 @@ extern VkSwapchainKHR* m_vkswapchainkhr_ptr;
 
 extern VkSurfaceCapabilitiesKHR* m_vksurfacecapabilitieskhr_ptr;
 
+extern uint32_t* m_vksurfaceformatkhr_image_ptr;
 extern VkSurfaceFormatKHR** m_vksurfaceformatkhr_ptr;
 extern uint32_t* m_vkswapchainkhr_format_ptr;
 

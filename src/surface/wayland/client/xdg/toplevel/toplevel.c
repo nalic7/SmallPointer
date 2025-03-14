@@ -25,6 +25,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 
 static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_toplevel)
 {
+	info("xdg_toplevel_listener_close 0")
 	m_surface_state |= NALI_SURFACE_C_S_CLEAN;
 	while (m_vkinstance != VK_NULL_HANDLE)
 	{
@@ -33,6 +34,7 @@ static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_top
 	}
 	wlc_clean();
 	exit(EXIT_SUCCESS);
+	info("xdg_toplevel_listener_close 1")
 }
 
 static void xdg_toplevel_listener_configure_bounds(void* data, struct xdg_toplevel* xdg_toplevel, int32_t width, int32_t height)

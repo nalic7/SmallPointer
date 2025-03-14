@@ -77,6 +77,17 @@
 	// #include <unistd.h>
 	// #include <arpa/inet.h>
 
+	#include <libavformat/avformat.h>
+	#include <libavcodec/avcodec.h>
+	// // #include <libavutil/avutil.h>
+
+	#include <libavutil/imgutils.h>
+	// #include <libavutil/avassert.h>
+
+	// #include <libswscale/swscale.h>
+
+	#include "ffmpeg/ffmpeg.h"
+
 #endif
 #ifdef PCH_COLLADA
 

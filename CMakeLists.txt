@@ -58,6 +58,7 @@ if(SCENE)
     src/vk/buffer/framebuffer/framebuffer.c
     src/scene/scene.c
     lib/wayland/xdg-shell.c
+    src/ffmpeg/ffmpeg.c
   )
 
   file(GLOB_RECURSE G_SOURCES src/vk/buffer/graphicspipelines/*.c)
@@ -74,8 +75,6 @@ if(SCENE)
   add_executable(${P_NAME} ${SOURCES})
 
   target_include_directories(${P_NAME} PRIVATE
-    vulkan
-    AL
     lib/wayland
   )
 
@@ -84,6 +83,10 @@ if(SCENE)
     vulkan
     openal
     wayland-client
+
+    avcodec
+    avformat
+    avutil
   )
 
   target_compile_definitions(${P_NAME} PRIVATE ${FOO})
@@ -161,8 +164,6 @@ elseif(LWJGL64)
   target_include_directories(${P_NAME} PRIVATE
     ${JAVA_HOME}include
     ${JAVA_HOME}include/${OS_NAME}
-    vulkan
-    AL
   )
 
   target_link_libraries(${P_NAME}
