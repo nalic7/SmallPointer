@@ -10,6 +10,8 @@
 	#include <ctype.h>
 	#include <dirent.h>
 	#include <math.h>
+
+	#include <time.h>
 	#include <threads.h>
 
 	#include <linux/input.h>

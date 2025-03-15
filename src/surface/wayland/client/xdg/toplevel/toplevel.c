@@ -27,6 +27,7 @@ static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_top
 {
 	info("xdg_toplevel_listener_close 0")
 	m_surface_state |= NALI_SURFACE_C_S_CLEAN;
+	al_clean();
 	while (m_vkinstance != VK_NULL_HANDLE)
 	{
 		struct timespec ts = {1, 0};

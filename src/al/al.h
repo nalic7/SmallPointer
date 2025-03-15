@@ -5,5 +5,6 @@ extern ALCdevice* m_alcdevice;
 // extern ALCcontext* alccontext;
 
 void al_init();
+void al_clean();
 
 #endif

@@ -1,16 +1,19 @@
 void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCreateFlags vkpipelinerasterizationstatecreateflags, VkPipelineRasterizationStateCreateInfo* vkpipelinerasterizationstatecreateinfo_ptr)
 {
-	vkpipelinerasterizationstatecreateinfo_ptr->sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-	vkpipelinerasterizationstatecreateinfo_ptr->depthClampEnable = VK_FALSE;
-	vkpipelinerasterizationstatecreateinfo_ptr->rasterizerDiscardEnable = VK_FALSE;
-	vkpipelinerasterizationstatecreateinfo_ptr->polygonMode = VK_POLYGON_MODE_FILL;
-	vkpipelinerasterizationstatecreateinfo_ptr->cullMode = VK_CULL_MODE_BACK_BIT;
-	vkpipelinerasterizationstatecreateinfo_ptr->frontFace = VK_FRONT_FACE_CLOCKWISE;
-	vkpipelinerasterizationstatecreateinfo_ptr->depthBiasEnable = VK_FALSE;
-	vkpipelinerasterizationstatecreateinfo_ptr->depthBiasConstantFactor = 0;
-	vkpipelinerasterizationstatecreateinfo_ptr->depthBiasClamp = 0;
-	vkpipelinerasterizationstatecreateinfo_ptr->depthBiasSlopeFactor = 0;
-	vkpipelinerasterizationstatecreateinfo_ptr->lineWidth = 1.0F;
-	vkpipelinerasterizationstatecreateinfo_ptr->flags = vkpipelinerasterizationstatecreateflags;
-	vkpipelinerasterizationstatecreateinfo_ptr->pNext = VK_NULL_HANDLE;
+	*vkpipelinerasterizationstatecreateinfo_ptr = (VkPipelineRasterizationStateCreateInfo)
+	{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
+		.depthClampEnable = VK_FALSE,
+		.rasterizerDiscardEnable = VK_FALSE,
+		.polygonMode = VK_POLYGON_MODE_FILL,
+		.cullMode = VK_CULL_MODE_BACK_BIT,
+		.frontFace = VK_FRONT_FACE_CLOCKWISE,
+		.depthBiasEnable = VK_FALSE,
+		.depthBiasConstantFactor = 0,
+		.depthBiasClamp = 0,
+		.depthBiasSlopeFactor = 0,
+		.lineWidth = 1.0F,
+		.flags = vkpipelinerasterizationstatecreateflags,
+		.pNext = VK_NULL_HANDLE
+	};
 }

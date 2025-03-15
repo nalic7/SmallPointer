@@ -15,11 +15,14 @@ void vk_setPipelineViewportStateCreateInfo(uint32_t device, VkPipelineViewportSt
 		.offset = {0, 0},
 		.extent = vkextent2d
 	};
-	vkpipelineviewportstatecreateinfo_ptr->sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-	vkpipelineviewportstatecreateinfo_ptr->viewportCount = 1;
-	vkpipelineviewportstatecreateinfo_ptr->pViewports = &vkviewport;
-	vkpipelineviewportstatecreateinfo_ptr->scissorCount = 1;
-	vkpipelineviewportstatecreateinfo_ptr->pScissors = &vkrect2d;
-	vkpipelineviewportstatecreateinfo_ptr->flags = vkpipelineviewportstatecreateflags;
-	vkpipelineviewportstatecreateinfo_ptr->pNext = VK_NULL_HANDLE;
+	*vkpipelineviewportstatecreateinfo_ptr = (VkPipelineViewportStateCreateInfo)
+	{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
+		.viewportCount = 1,
+		.pViewports = &vkviewport,
+		.scissorCount = 1,
+		.pScissors = &vkrect2d,
+		.flags = vkpipelineviewportstatecreateflags,
+		.pNext = VK_NULL_HANDLE
+	};
 }

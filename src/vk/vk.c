@@ -64,20 +64,7 @@ static void clean(VkPipelineLayout* vkpipelinelayout_ptr, VkPipeline* vkpipeline
 		VkDevice vkdevice = m_vkdevice_ptr[d];
 		uint8_t max_graphics = m_max_graphic_ptr[d];
 
-		for (uint32_t i = 0; i < m_vksurfaceformatkhr_image_ptr[d]; ++i)
-		{
-			vkDestroyFramebuffer(vkdevice, m_vkswapchainkhr_vkframebuffer_ptr[d][i], VK_NULL_HANDLE);
-			vkDestroyImageView(vkdevice, m_vkswapchainkhr_vkimageview_ptr[d][i], VK_NULL_HANDLE);
-		}
-		vkDestroyRenderPass(vkdevice, m_vkswapchainkhr_vkrenderpass_ptr[d], VK_NULL_HANDLE);
-		vkDestroySwapchainKHR(vkdevice, m_vkswapchainkhr_ptr[d], VK_NULL_HANDLE);
-
-		free(m_vkswapchainkhr_vkimage_ptr[d]);
-	
-		free(m_vkswapchainkhr_vkimageview_ptr[d]);
-		free(m_vkswapchainkhr_vkframebuffer_ptr[d]);
-		free(m_vksurfaceformatkhr_ptr[d]);
-		free(m_vkpresentmodekhr_ptr[d]);
+		vk_cleanSwapchain(d);
 
 		for (uint8_t g = 0; g < max_graphics; ++g)
 		{
@@ -152,6 +139,13 @@ static void clean(VkPipelineLayout* vkpipelinelayout_ptr, VkPipeline* vkpipeline
 
 static int loop(void* arg)
 {
+	clock_t frame_start, frame_end;
+	uint32_t frame;
+	clock_t frame_time;
+
+	//clock
+	frame_start = time(0);
+
 	// m_queue_graphic = 0;
 	// m_queue_render = 0;
 	VkDevice vkdevice = m_vkdevice_ptr[m_device];
@@ -160,17 +154,38 @@ static int loop(void* arg)
 	VkSwapchainKHR vkswapchainkhr = m_vkswapchainkhr_ptr[m_device];
 	VkExtent2D vkextent2d = m_vkswapchainkhr_vkextent2d_ptr[m_device];
 
-	VkSemaphore render_transfer_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][1];
-
-	VkSemaphore image_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_graphic][0];
-	// VkSemaphore image_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][0];
-	VkSemaphore render_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_graphic][1];
-	// VkSemaphore render_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][1];
 	VkQueue vkqueue_graphic = m_vkqueue_ptr[m_device][m_queue_graphic];
 	VkQueue vkqueue_render = m_vkqueue_ptr[m_device][m_queue_render];
 
 	char render_state = m_queue_graphic != m_queue_render ? RSE_MULTIPLE_QUEUE : 0;
+	VkSemaphore image_vksemaphore;
+	VkSemaphore render_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_graphic][1];
+	VkSemaphore render_transfer_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][1];
 	VkSemaphore* render_vksemaphore_ptr = (render_state & RSE_MULTIPLE_QUEUE) == 0 ? &render_vksemaphore : &render_transfer_vksemaphore;
+
+	VkSubmitInfo render_vksubmitinfo;
+	VkPipelineStageFlags render_vkpipelinestageflags_array[] = {VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT};
+	if ((render_state & RSE_MULTIPLE_QUEUE) == 0)
+	{
+		image_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_graphic][0];
+	}
+	else
+	{
+		image_vksemaphore = m_vksemaphore_ptr[m_device][m_queue_render][0];
+
+		render_vksubmitinfo = (VkSubmitInfo)
+		{
+			.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+			.waitSemaphoreCount = 1,
+			.pWaitSemaphores = &render_transfer_vksemaphore,
+			.pWaitDstStageMask = render_vkpipelinestageflags_array,
+			.commandBufferCount = 0,
+			.signalSemaphoreCount = 1,
+			.pSignalSemaphores = &render_vksemaphore,
+
+			.pNext = VK_NULL_HANDLE
+		};
+	}
 
 	VkPipelineLayout vkpipelinelayout;
 	VkPipeline vkpipeline;
@@ -179,6 +194,20 @@ static int loop(void* arg)
 	VkCommandBuffer vkcommandbuffer;
 	vk_makeCommandBuffer(m_device, m_queue_graphic, &vkcommandbuffer, 1);
 	// vk_makeCommandBuffer(m_device, m_queue_render, &vkcommandbuffer, 1);
+
+	VkSubmitInfo image_vksubmitinfo =
+	{
+		.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+		.waitSemaphoreCount = 1,
+		.pWaitSemaphores = &image_vksemaphore,
+		.pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
+		.commandBufferCount = 1,
+		.pCommandBuffers = &vkcommandbuffer,
+		.signalSemaphoreCount = 1,
+		.pSignalSemaphores = render_vksemaphore_ptr,
+
+		.pNext = VK_NULL_HANDLE
+	};
 
 	VkCommandBufferBeginInfo vkcommandbufferbegininfo =
 	{
@@ -190,7 +219,6 @@ static int loop(void* arg)
 		.pNext = VK_NULL_HANDLE
 	};
 
-	VkSwapchainKHR swapChains[] = {vkswapchainkhr};
 	VkPresentInfoKHR vkpresentinfokhr =
 	{
 		.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
@@ -198,13 +226,57 @@ static int loop(void* arg)
 		.pWaitSemaphores = &render_vksemaphore,
 
 		.swapchainCount = 1,
-		.pSwapchains = swapChains,
+		.pSwapchains = &vkswapchainkhr,
 
 		// .pImageIndices = &image_index,
 
 		.pResults = VK_NULL_HANDLE,
 		.pNext = VK_NULL_HANDLE
 	};
+
+	//s0-buffer
+	VkClearColorValue vkclearcolorvalue =
+	{
+		.float32 = {0.0F, 0.0F, 0.0F, 1.0F}
+	};
+	VkClearDepthStencilValue vkcleardepthstencilvalue =
+	{
+		.depth = 1.0F,
+		.stencil = 0.0F
+	};
+	VkClearValue vkclearvalue[2] =
+	{
+		{.color = vkclearcolorvalue},
+		{.depthStencil = vkcleardepthstencilvalue}
+	};
+	VkRenderPassBeginInfo vkrenderpassbegininfo =
+	{
+		.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+		.renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device],
+		// .renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device][imageIndex],
+		.renderArea.offset = {0, 0},
+		.renderArea.extent = vkextent2d,
+		.clearValueCount = 2,
+		.pClearValues = vkclearvalue,
+
+		.pNext = VK_NULL_HANDLE
+	};
+	//
+	VkViewport vkviewport =
+	{
+		.x = 0.0F,
+		.y = 0.0F,
+		.width = vkextent2d.width,
+		.height = vkextent2d.height,
+		.minDepth = 0.0F,
+		.maxDepth = 1.0F
+	};
+	VkRect2D vkrect2d =
+	{
+		.offset = {0, 0},
+		.extent = vkextent2d
+	};
+	//e0-buffer
 
 	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
 	{
@@ -219,8 +291,18 @@ static int loop(void* arg)
 
 		if ((m_surface_state & NALI_SURFACE_C_S_RE) == NALI_SURFACE_C_S_RE)
 		{
-			//recreate
 			m_surface_state &= 255 - NALI_SURFACE_C_S_RE;
+			vk_cleanSwapchain(m_device);
+			vk_makeSwapchain(m_device, 0);
+
+			vkswapchainkhr = m_vkswapchainkhr_ptr[m_device];
+			vkrenderpassbegininfo.renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device];
+
+			vkextent2d = m_vkswapchainkhr_vkextent2d_ptr[m_device];
+			vkviewport.width = vkextent2d.width;
+			vkviewport.height = vkextent2d.height;
+			vkrenderpassbegininfo.renderArea.extent = vkextent2d;
+			vkrect2d.extent = vkextent2d;
 		}
 
 		uint32_t image_index;
@@ -233,6 +315,9 @@ static int loop(void* arg)
 		{
 			error("vkAcquireNextImageKHR %d", vkresult)
 		}
+
+		vkrenderpassbegininfo.framebuffer = m_vkswapchainkhr_vkframebuffer_ptr[m_device][image_index],
+		vkpresentinfokhr.pImageIndices = &image_index;
 
 		// VkPipelineLayout vkpipelinelayout;
 		// VkPipeline vkpipeline;
@@ -256,54 +341,12 @@ static int loop(void* arg)
 		// vkResetCommandBuffer(vkcommandbuffer, 0);
 		vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
 
-			VkClearColorValue vkclearcolorvalue =
-			{
-				.float32 = {0.0F, 0.0F, 0.0F, 1.0F}
-			};
-			VkClearDepthStencilValue vkcleardepthstencilvalue =
-			{
-				.depth = 1.0F,
-				.stencil = 0.0F
-			};
-			VkClearValue vkclearvalue[2] =
-			{
-				{.color = vkclearcolorvalue},
-				{.depthStencil = vkcleardepthstencilvalue}
-			};
-			VkRenderPassBeginInfo vkrenderpassbegininfo =
-			{
-				.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-				.renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device],
-				// .renderPass = m_vkswapchainkhr_vkrenderpass_ptr[m_device][imageIndex],
-				.framebuffer = m_vkswapchainkhr_vkframebuffer_ptr[m_device][image_index],
-				.renderArea.offset = {0, 0},
-				.renderArea.extent = vkextent2d,
-				.clearValueCount = 2,
-				.pClearValues = vkclearvalue,
-
-				.pNext = VK_NULL_HANDLE
-			};
-
 			vkCmdBeginRenderPass(vkcommandbuffer, &vkrenderpassbegininfo, VK_SUBPASS_CONTENTS_INLINE);
 
 				vkCmdBindPipeline(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
 
-				VkViewport vkviewport =
-				{
-					.x = 0.0F,
-					.y = 0.0F,
-					.width = vkextent2d.width,
-					.height = vkextent2d.height,
-					.minDepth = 0.0F,
-					.maxDepth = 1.0F
-				};
 				vkCmdSetViewport(vkcommandbuffer, 0, 1, &vkviewport);
 
-				VkRect2D vkrect2d =
-				{
-					.offset = {0, 0},
-					.extent = vkextent2d
-				};
 				vkCmdSetScissor(vkcommandbuffer, 0, 1, &vkrect2d);
 
 				vkCmdDraw(vkcommandbuffer, 3, 1, 0, 0);
@@ -313,40 +356,13 @@ static int loop(void* arg)
 		vkEndCommandBuffer(vkcommandbuffer);
 		//e0-command
 
-		VkSubmitInfo vksubmitinfo =
-		{
-			.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-			.waitSemaphoreCount = 1,
-			.pWaitSemaphores = &image_vksemaphore,
-			.pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
-			.commandBufferCount = 1,
-			.pCommandBuffers = &vkcommandbuffer,
-			.signalSemaphoreCount = 1,
-			.pSignalSemaphores = render_vksemaphore_ptr,
-
-			.pNext = VK_NULL_HANDLE
-		};
-
 		// vkQueueWaitIdle(vkqueue_render);
-		vkQueueSubmit(vkqueue_graphic, 1, &vksubmitinfo, *graphic_vkfence_ptr);
+		vkQueueSubmit(vkqueue_graphic, 1, &image_vksubmitinfo, *graphic_vkfence_ptr);
 		// vkQueueSubmit(vkqueue_render, 1, &vksubmitinfo, *vkfence_ptr);
 
-		vkpresentinfokhr.pImageIndices = &image_index;
 		if ((render_state & RSE_MULTIPLE_QUEUE) == RSE_MULTIPLE_QUEUE)
 		{
-			VkSubmitInfo vksubmitinfo =
-			{
-				.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-				.waitSemaphoreCount = 1,
-				.pWaitSemaphores = &render_transfer_vksemaphore,
-				.pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
-				.commandBufferCount = 0,
-				.signalSemaphoreCount = 1,
-				.pSignalSemaphores = &render_vksemaphore,
-
-				.pNext = VK_NULL_HANDLE
-			};
-			vkQueueSubmit(vkqueue_render, 1, &vksubmitinfo, *transfer_vkfence_ptr);
+			vkQueueSubmit(vkqueue_render, 1, &render_vksubmitinfo, *transfer_vkfence_ptr);
 
 			vkQueuePresentKHR(vkqueue_render, &vkpresentinfokhr);
 		}
@@ -361,6 +377,20 @@ static int loop(void* arg)
 		// vkFreeCommandBuffers(vkdevice, m_vkcommandpool_ptr[m_device][m_graphic], 1, &vkcommandbuffer);
 		// vkDestroyPipeline(vkdevice, vkpipeline, VK_NULL_HANDLE);
 		// vkDestroyPipelineLayout(vkdevice, vkpipelinelayout, VK_NULL_HANDLE);
+
+		++frame;
+		frame_end = time(0);
+		frame_time = frame_end - frame_start;
+		if (frame_time >= 1)
+		// if (frame == 144)
+		{
+			// end = clock();
+			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			frame_start = frame_end;
+			info("time %ld", frame_time)
+			info("frame %d", frame)
+			frame = 0;
+		}
 	}
 
 	vkWaitForFences(vkdevice, 1, graphic_vkfence_ptr, VK_TRUE, UINT64_MAX);

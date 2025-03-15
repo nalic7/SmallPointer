@@ -1,9 +1,11 @@
 static void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_surface, uint32_t serial)
 {
+	// info("xdg_surface_listener_configure")
 	xdg_surface_ack_configure(m_xdg_surface, serial);
-	// if ((state & NALI_SURFACE_C_S_CONFIG) == 0)
+	// if ((m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0)
 	// {
-	// 	state |= NALI_SURFACE_C_S_CONFIG;
+	// 	m_surface_state |= NALI_SURFACE_C_S_CONFIG;
+	// 	info("NALI_SURFACE_C_S_CONFIG")
 	// }
 	// else
 	// {

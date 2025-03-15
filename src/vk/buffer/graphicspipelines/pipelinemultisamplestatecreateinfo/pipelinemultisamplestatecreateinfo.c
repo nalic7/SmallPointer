@@ -1,12 +1,15 @@
 void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateFlags vkpipelinemultisamplestatecreateflags, VkPipelineMultisampleStateCreateInfo* vkpipelinemultisamplestatecreateinfo_ptr)
 {
-	vkpipelinemultisamplestatecreateinfo_ptr->sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-	vkpipelinemultisamplestatecreateinfo_ptr->sampleShadingEnable = VK_FALSE;
-	vkpipelinemultisamplestatecreateinfo_ptr->rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-	vkpipelinemultisamplestatecreateinfo_ptr->minSampleShading = 0;
-	vkpipelinemultisamplestatecreateinfo_ptr->pSampleMask = VK_NULL_HANDLE;
-	vkpipelinemultisamplestatecreateinfo_ptr->alphaToCoverageEnable = VK_FALSE;
-	vkpipelinemultisamplestatecreateinfo_ptr->alphaToOneEnable = VK_FALSE;
-	vkpipelinemultisamplestatecreateinfo_ptr->flags = vkpipelinemultisamplestatecreateflags;
-	vkpipelinemultisamplestatecreateinfo_ptr->pNext = VK_NULL_HANDLE;
+	*vkpipelinemultisamplestatecreateinfo_ptr = (VkPipelineMultisampleStateCreateInfo)
+	{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+		.sampleShadingEnable = VK_FALSE,
+		.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT,
+		.minSampleShading = 0,
+		.pSampleMask = VK_NULL_HANDLE,
+		.alphaToCoverageEnable = VK_FALSE,
+		.alphaToOneEnable = VK_FALSE,
+		.flags = vkpipelinemultisamplestatecreateflags,
+		.pNext = VK_NULL_HANDLE
+	};
 }

@@ -24,6 +24,7 @@ static int loop(void* arg)
 	}
 
 	error("wl_display_dispatch %d", result);
+	//recreate?
 	return 0;
 }
 void wlc_init()
@@ -56,8 +57,8 @@ void wlc_init()
 		error("wl_compositor_create_surface")
 	}
 
-	m_width = 250;
-	m_height = 250;
+	m_width = 1;
+	m_height = 1;
 
 	m_xdg_surface = xdg_wm_base_get_xdg_surface(m_xdg_wm_base, m_wl_surface);
 	m_xdg_toplevel = xdg_surface_get_toplevel(m_xdg_surface);
@@ -73,12 +74,17 @@ void wlc_init()
 	// 	i = wl_display_dispatch(m_wl_display_client);
 	// 	info("wl_display_dispatch %d", i)
 	// }
-	// while (i != -1 && (state & NALI_SURFACE_C_S_CONFIG) == 0);
+	// while (i != -1 && (m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0);
 	// wl_surface_commit(m_wl_surface);
 
+	// int i;
+	// while ((i = wl_display_dispatch(m_wl_display_client)) != 1)
+	// {
+	// 	info("wl_display_dispatch %d", i)
+	// }
+
 	thrd_t thread;
-	int result = thrd_create(&thread, loop, NULL);
-	if (result != thrd_success)
+	if (thrd_create(&thread, loop, NULL) != thrd_success)
 	{
 		error("thrd_create")
 	}
