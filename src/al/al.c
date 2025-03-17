@@ -1,24 +1,24 @@
-ALCdevice* m_alcdevice;
-ALCcontext* alccontext;
+ALCdevice* m_alcdevice_p;
+ALCcontext* alccontext_p;
 
 void al_init()
 {
 	info("run_initAL")
 
-	m_alcdevice = alcOpenDevice(NULL);
-	if (!m_alcdevice)
+	m_alcdevice_p = alcOpenDevice(NULL);
+	if (!m_alcdevice_p)
 	{
 		error("alcOpenDevice")
 	}
 
-	alccontext = alcCreateContext(m_alcdevice, NULL);
-	if (!alccontext)
+	alccontext_p = alcCreateContext(m_alcdevice_p, NULL);
+	if (!alccontext_p)
 	{
 		error("alcCreateContext")
 		// alcCloseDevice(device);
 	}
 
-	if (!alcMakeContextCurrent(alccontext))
+	if (!alcMakeContextCurrent(alccontext_p))
 	{
 		error("alcMakeContextCurrent")
 	}
@@ -37,6 +37,6 @@ void al_init()
 void al_clean()
 {
 	alcMakeContextCurrent(NULL);
-    alcDestroyContext(alccontext);
-    alcCloseDevice(m_alcdevice);
+    alcDestroyContext(alccontext_p);
+    alcCloseDevice(m_alcdevice_p);
 }

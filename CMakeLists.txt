@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
+set(CLIENT 1)
 set(VK_DEBUG 1)
 set(SCENE 1)
 # set(COLLADA 1)
@@ -57,11 +58,13 @@ if(SCENE)
     src/vk/buffer/renderpass/renderpass.c
     src/vk/buffer/framebuffer/framebuffer.c
     src/scene/scene.c
-    lib/wayland/xdg-shell.c
     src/ffmpeg/ffmpeg.c
   )
 
   file(GLOB_RECURSE G_SOURCES src/vk/buffer/graphicspipelines/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
+  file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
   file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
@@ -70,6 +73,15 @@ if(SCENE)
   if (VK_DEBUG)
     list(APPEND FOO NALI_VK_DEBUG=1)
     list(APPEND SOURCES src/vk/buffer/instance/debug/debug.c)
+  endif()
+
+  if (CLIENT)
+    list(APPEND FOO NALI_CLIENT=1)
+    list(APPEND SOURCES src/loader/client/l_client.c)
+    list(APPEND SOURCES src/network/linux/client/nw_client.c)
+  else()
+    list(APPEND SOURCES src/loader/server/l_server.c)
+    list(APPEND SOURCES src/network/linux/server/nw_server.c)
   endif()
 
   add_executable(${P_NAME} ${SOURCES})
@@ -83,6 +95,7 @@ if(SCENE)
     vulkan
     openal
     wayland-client
+    wayland-cursor
 
     avcodec
     avformat

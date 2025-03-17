@@ -1,6 +1,4 @@
-// #define NALI_INFO_SC
-
-void vk_reSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreateflagskhr, VkSurfaceFormatKHR* vksurfaceformatkhr_ptr, VkPresentModeKHR* vkpresentmodekhr_ptr, uint8_t max_graphics)
+void vk_reSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreateflagskhr, VkSurfaceFormatKHR* vksurfaceformatkhr_p, VkPresentModeKHR* vkpresentmodekhr_p, uint8_t max_graphics)
 {
 	VkExtent2D vkextent2d =
 	{
@@ -8,27 +6,27 @@ void vk_reSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreate
 		.width = m_width
 	};
 
-	m_vkswapchainkhr_vkextent2d_ptr[device] = vkextent2d;
-	m_vkswapchainkhr_vkformat_ptr[device] = vksurfaceformatkhr_ptr->format;
+	m_vkswapchainkhr_vkextent2d_p[device] = vkextent2d;
+	m_vkswapchainkhr_vkformat_p[device] = vksurfaceformatkhr_p->format;
 
 	VkSwapchainCreateInfoKHR vkswapchaincreateinfokhr =
 	{
 		.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
 		.surface = m_vksurfacekhr,
-		.minImageCount = m_vksurfacecapabilitieskhr_ptr[device].minImageCount,
-		.imageFormat = vksurfaceformatkhr_ptr->format,
-		.imageColorSpace = vksurfaceformatkhr_ptr->colorSpace,
+		.minImageCount = m_vksurfacecapabilitieskhr_p[device].minImageCount,
+		.imageFormat = vksurfaceformatkhr_p->format,
+		.imageColorSpace = vksurfaceformatkhr_p->colorSpace,
 		.imageExtent = vkextent2d,
 		.imageArrayLayers = 1,
 		.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 
-		.preTransform = m_vksurfacecapabilitieskhr_ptr[device].currentTransform,
+		.preTransform = m_vksurfacecapabilitieskhr_p[device].currentTransform,
 		.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-		.presentMode = *vkpresentmodekhr_ptr,
+		.presentMode = *vkpresentmodekhr_p,
 		.clipped = VK_TRUE,
 
 		.queueFamilyIndexCount = max_graphics,
-		.pQueueFamilyIndices = m_graphic_ptr[device],
+		.pQueueFamilyIndices = m_graphic_p[device],
 
 		.oldSwapchain = VK_NULL_HANDLE,
 
@@ -38,77 +36,77 @@ void vk_reSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreate
 		.pNext = VK_NULL_HANDLE
 	};
 
-	VkResult vkresult = vkCreateSwapchainKHR(m_vkdevice_ptr[device], &vkswapchaincreateinfokhr, VK_NULL_HANDLE, &m_vkswapchainkhr_ptr[device]);
+	VkResult vkresult = vkCreateSwapchainKHR(m_vkdevice_p[device], &vkswapchaincreateinfokhr, VK_NULL_HANDLE, &m_vkswapchainkhr_p[device]);
 	if (vkresult != VK_SUCCESS)
 	{
 		error("vkCreateSwapchainKHR %d", vkresult)
 	}
 
-	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &m_vksurfaceformatkhr_image_ptr[device], VK_NULL_HANDLE);
+	vkGetSwapchainImagesKHR(m_vkdevice_p[device], m_vkswapchainkhr_p[device], &m_vksurfaceformatkhr_image_p[device], VK_NULL_HANDLE);
 
-	uint32_t vksurfaceformatkhr_image = m_vksurfaceformatkhr_image_ptr[device];
-	#ifdef NALI_INFO_SC
+	uint32_t vksurfaceformatkhr_image = m_vksurfaceformatkhr_image_p[device];
+	#ifdef NALI_VK_INFO_SC
 		info("vksurfaceformatkhr_image %d", vksurfaceformatkhr_image)
 	#endif
 
-	m_vkswapchainkhr_vkimage_ptr[device] = malloc(sizeof(VkImage) * vksurfaceformatkhr_image);
-	m_vkswapchainkhr_vkimageview_ptr[device] = malloc(sizeof(VkImageView) * vksurfaceformatkhr_image);
-	m_vkswapchainkhr_vkframebuffer_ptr[device] = malloc(sizeof(VkFramebuffer) * vksurfaceformatkhr_image);
-	// m_vkswapchainkhr_vkrenderpass_ptr[device] = malloc(sizeof(VkRenderPass) * images);
+	m_vkswapchainkhr_vkimage_p[device] = malloc(sizeof(VkImage) * vksurfaceformatkhr_image);
+	m_vkswapchainkhr_vkimageview_p[device] = malloc(sizeof(VkImageView) * vksurfaceformatkhr_image);
+	m_vkswapchainkhr_vkframebuffer_p[device] = malloc(sizeof(VkFramebuffer) * vksurfaceformatkhr_image);
+	// m_vkswapchainkhr_vkrenderpass_p[device] = malloc(sizeof(VkRenderPass) * images);
 
-	vkGetSwapchainImagesKHR(m_vkdevice_ptr[device], m_vkswapchainkhr_ptr[device], &vksurfaceformatkhr_image, m_vkswapchainkhr_vkimage_ptr[device]);
+	vkGetSwapchainImagesKHR(m_vkdevice_p[device], m_vkswapchainkhr_p[device], &vksurfaceformatkhr_image, m_vkswapchainkhr_vkimage_p[device]);
 
-	vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device]);
+	vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_p[device]);
 
 	for (uint32_t i = 0; i < vksurfaceformatkhr_image; ++i)
 	{
-		// vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_ptr[device][i]);
+		// vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_p[device][i]);
 
-		vk_makeImageView(device, &m_vkswapchainkhr_vkimage_ptr[device][i], &vksurfaceformatkhr_ptr->format, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i]);
-		vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i], &m_vkswapchainkhr_vkrenderpass_ptr[device], &m_vkswapchainkhr_vkframebuffer_ptr[device][i]);
-		// vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_ptr[device][i], &m_vkswapchainkhr_vkrenderpass_ptr[device][i], &m_vkswapchainkhr_vkframebuffer_ptr[device][i]);
+		vk_makeImageView(device, &m_vkswapchainkhr_vkimage_p[device][i], &vksurfaceformatkhr_p->format, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_p[device][i]);
+		vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_p[device][i], &m_vkswapchainkhr_vkrenderpass_p[device], &m_vkswapchainkhr_vkframebuffer_p[device][i]);
+		// vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_p[device][i], &m_vkswapchainkhr_vkrenderpass_p[device][i], &m_vkswapchainkhr_vkframebuffer_p[device][i]);
 	}
 }
 
 void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreateflagskhr)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
-	uint8_t max_graphics = m_max_graphic_ptr[device];
+	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
+	uint8_t max_graphics = m_max_graphic_p[device];
 
-	m_vkswapchainkhr_format_ptr[device] = 0;
-	m_vkswapchainkhr_present_mode_ptr[device] = 0;
+	m_vkswapchainkhr_format_p[device] = 0;
+	m_vkswapchainkhr_present_mode_p[device] = 0;
 
-	VkResult vkresult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vksurfacecapabilitieskhr_ptr[device]);
+	VkResult vkresult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vksurfacecapabilitieskhr_p[device]);
 	if (vkresult != VK_SUCCESS)
 	{
 		error("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkresult)
 	}
 
-	vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_format_ptr[device], VK_NULL_HANDLE);
+	vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_format_p[device], VK_NULL_HANDLE);
 
-	if (m_vkswapchainkhr_format_ptr[device] != 0)
+	if (m_vkswapchainkhr_format_p[device] != 0)
 	{
-		m_vksurfaceformatkhr_ptr[device] = malloc(m_vkswapchainkhr_format_ptr[device] * sizeof(VkSurfaceFormatKHR));
-		vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_format_ptr[device], m_vksurfaceformatkhr_ptr[device]);
+		m_vksurfaceformatkhr_p[device] = malloc(m_vkswapchainkhr_format_p[device] * sizeof(VkSurfaceFormatKHR));
+		vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_format_p[device], m_vksurfaceformatkhr_p[device]);
 	}
 
-	vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_present_mode_ptr[device], VK_NULL_HANDLE);
+	vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_present_mode_p[device], VK_NULL_HANDLE);
 
-	if (m_vkswapchainkhr_present_mode_ptr[device] != 0)
+	if (m_vkswapchainkhr_present_mode_p[device] != 0)
 	{
-		m_vkpresentmodekhr_ptr[device] = malloc(m_vkswapchainkhr_present_mode_ptr[device] * sizeof(VkPresentModeKHR));
+		m_vkpresentmodekhr_p[device] = malloc(m_vkswapchainkhr_present_mode_p[device] * sizeof(VkPresentModeKHR));
 
-		vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_present_mode_ptr[device], m_vkpresentmodekhr_ptr[device]);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, m_vksurfacekhr, &m_vkswapchainkhr_present_mode_p[device], m_vkpresentmodekhr_p[device]);
 	}
 
-	VkSurfaceFormatKHR vksurfaceformatkhr = m_vksurfaceformatkhr_ptr[device][0];
-	#ifdef NALI_INFO_SC
+	VkSurfaceFormatKHR vksurfaceformatkhr = m_vksurfaceformatkhr_p[device][0];
+	#ifdef NALI_VK_INFO_SC
 		info("device %d", device)
 	#endif
-	for (uint32_t i = 0; i < m_vkswapchainkhr_format_ptr[device]; ++i)
+	for (uint32_t i = 0; i < m_vkswapchainkhr_format_p[device]; ++i)
 	{
-		VkSurfaceFormatKHR s_vksurfaceformatkhr = m_vksurfaceformatkhr_ptr[device][i];
-		#ifdef NALI_INFO_SC
+		VkSurfaceFormatKHR s_vksurfaceformatkhr = m_vksurfaceformatkhr_p[device][i];
+		#ifdef NALI_VK_INFO_SC
 			info("i %d", i)
 			info("format %d", s_vksurfaceformatkhr.format)
 			info("colorSpace %d", s_vksurfaceformatkhr.colorSpace)
@@ -120,10 +118,10 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 	}
 
 	VkPresentModeKHR vkpresentmodekhr = VK_PRESENT_MODE_IMMEDIATE_KHR;
-	for (uint32_t i = 0; i < m_vkswapchainkhr_present_mode_ptr[device]; ++i)
+	for (uint32_t i = 0; i < m_vkswapchainkhr_present_mode_p[device]; ++i)
 	{
-		VkPresentModeKHR s_vkpresentmodekhr = m_vkpresentmodekhr_ptr[device][i];
-		#ifdef NALI_INFO_SC
+		VkPresentModeKHR s_vkpresentmodekhr = m_vkpresentmodekhr_p[device][i];
+		#ifdef NALI_VK_INFO_SC
 			info("VkPresentModeKHR %d", s_vkpresentmodekhr)
 		#endif
 		if (s_vkpresentmodekhr == VK_PRESENT_MODE_FIFO_KHR)
@@ -139,25 +137,25 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 
 void vk_cleanSwapchain(uint32_t device)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
-	uint8_t max_graphics = m_max_graphic_ptr[device];
-	VkDevice vkdevice = m_vkdevice_ptr[device];
+	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
+	uint8_t max_graphics = m_max_graphic_p[device];
+	VkDevice vkdevice = m_vkdevice_p[device];
 
-	VkFramebuffer* vkframebuffer_ptr = m_vkswapchainkhr_vkframebuffer_ptr[device];
-	VkImageView* vkimageview_ptr = m_vkswapchainkhr_vkimageview_ptr[device];
-	for (uint32_t i = 0; i < m_vksurfaceformatkhr_image_ptr[device]; ++i)
+	VkFramebuffer* vkframebuffer_p = m_vkswapchainkhr_vkframebuffer_p[device];
+	VkImageView* vkimageview_p = m_vkswapchainkhr_vkimageview_p[device];
+	for (uint32_t i = 0; i < m_vksurfaceformatkhr_image_p[device]; ++i)
 	{
-		vkDestroyFramebuffer(vkdevice, vkframebuffer_ptr[i], VK_NULL_HANDLE);
-		vkDestroyImageView(vkdevice, vkimageview_ptr[i], VK_NULL_HANDLE);
+		vkDestroyFramebuffer(vkdevice, vkframebuffer_p[i], VK_NULL_HANDLE);
+		vkDestroyImageView(vkdevice, vkimageview_p[i], VK_NULL_HANDLE);
 	}
 
-	vkDestroyRenderPass(vkdevice, m_vkswapchainkhr_vkrenderpass_ptr[device], VK_NULL_HANDLE);
-	vkDestroySwapchainKHR(vkdevice, m_vkswapchainkhr_ptr[device], VK_NULL_HANDLE);
+	vkDestroyRenderPass(vkdevice, m_vkswapchainkhr_vkrenderpass_p[device], VK_NULL_HANDLE);
+	vkDestroySwapchainKHR(vkdevice, m_vkswapchainkhr_p[device], VK_NULL_HANDLE);
 
-	free(m_vkswapchainkhr_vkimage_ptr[device]);
-	free(m_vkswapchainkhr_vkimageview_ptr[device]);
-	free(m_vkswapchainkhr_vkframebuffer_ptr[device]);
+	free(m_vkswapchainkhr_vkimage_p[device]);
+	free(m_vkswapchainkhr_vkimageview_p[device]);
+	free(m_vkswapchainkhr_vkframebuffer_p[device]);
 
-	free(m_vksurfaceformatkhr_ptr[device]);
-	free(m_vkpresentmodekhr_ptr[device]);
+	free(m_vksurfaceformatkhr_p[device]);
+	free(m_vkpresentmodekhr_p[device]);
 }

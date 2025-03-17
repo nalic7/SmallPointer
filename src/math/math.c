@@ -11,12 +11,12 @@ float math_degree(float radian)
 char* math_combine(const char* str1, const char* str2)
 {
 	//auto \0
-	char* char_ptr = malloc(strlen(str1) + strlen(str2) + 1);
+	char* char_p = malloc(strlen(str1) + strlen(str2) + 1);
 
-	strcpy(char_ptr, str1);
-	strcat(char_ptr, str2);
+	strcpy(char_p, str1);
+	strcat(char_p, str2);
 
-	return char_ptr;
+	return char_p;
 }
 
 //abs(number)
@@ -29,7 +29,7 @@ uint32_t math_length(uint32_t number)
 char* math_get(uint32_t number)
 {
 	//auto \0
-	char* c_ptr = malloc(sizeof(char) * math_length(number) + 1);
-	sprintf(c_ptr, "%u", number);
-	return c_ptr;
+	char* c_p = malloc(sizeof(char) * math_length(number) + 1);
+	sprintf(c_p, "%u", number);
+	return c_p;
 }

@@ -1,7 +1,7 @@
 
 uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
+	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
 	VkPhysicalDeviceMemoryProperties vkphysicaldevicememoryproperties;
 	vkGetPhysicalDeviceMemoryProperties(vkphysicaldevice, &vkphysicaldevicememoryproperties);
 
@@ -18,9 +18,9 @@ uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropert
 	return 0;
 }
 
-void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFlagBits vkbuffercreateflagbits, VkBufferUsageFlags vkbufferusageflags, VkMemoryPropertyFlags vkmemorypropertyflags, VkBuffer* vkbuffer_ptr, VkDeviceMemory* vkdevicememory_ptr)
+void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFlagBits vkbuffercreateflagbits, VkBufferUsageFlags vkbufferusageflags, VkMemoryPropertyFlags vkmemorypropertyflags, VkBuffer* vkbuffer_p, VkDeviceMemory* vkdevicememory_p)
 {
-	VkDevice vkdevice = m_vkdevice_ptr[device];
+	VkDevice vkdevice = m_vkdevice_p[device];
 
 	VkBufferCreateInfo vkbuffercreateinfo =
 	{
@@ -38,10 +38,10 @@ void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFla
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkCreateBuffer(vkdevice, &vkbuffercreateinfo, NULL, vkbuffer_ptr);
+	vkCreateBuffer(vkdevice, &vkbuffercreateinfo, NULL, vkbuffer_p);
 
 	VkMemoryRequirements vkmemoryrequirements;
-	vkGetBufferMemoryRequirements(vkdevice, *vkbuffer_ptr, &vkmemoryrequirements);
+	vkGetBufferMemoryRequirements(vkdevice, *vkbuffer_p, &vkmemoryrequirements);
 
 	VkMemoryAllocateInfo vkmemoryallocateinfo =
 	{
@@ -51,44 +51,40 @@ void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFla
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkAllocateMemory(vkdevice, &vkmemoryallocateinfo, NULL, vkdevicememory_ptr);
+	vkAllocateMemory(vkdevice, &vkmemoryallocateinfo, NULL, vkdevicememory_p);
 
-	vkBindBufferMemory(vkdevice, *vkbuffer_ptr, *vkdevicememory_ptr, 0);
+	vkBindBufferMemory(vkdevice, *vkbuffer_p, *vkdevicememory_p, 0);
 }
 
-// const float quadVertices[] =
-// {
-// 	-1.0f, -1.0f, 0.0f, 0.0f, // Bottom-left  (UV 0,0)
-// 	1.0f, -1.0f, 1.0f, 0.0f, // Bottom-right (UV 1,0)
-// 	-1.0f,  1.0f, 0.0f, 1.0f, // Top-left     (UV 0,1)
-// 	1.0f,  1.0f, 1.0f, 1.0f  // Top-right    (UV 1,1)
-// };
+static const uint16_t model_index_uint16_t_array[] =
+{
+	0, 1, 2
+};
 
-// const uint16_t quadIndices[] =
-// {
-// 	0, 1, 2, 2, 1, 3 // Two triangles forming a quad
-// };
+static const float model_data_float_array[] =
+{
+	0.0, -0.5, 1.0, 0.0, 0.0,
+	0.5, 0.5, 0.0, 1.0, 0.0,
+	-0.5, 0.5, 0.0, 0.0, 1.0
+};
 
-// void createVertexBuffer(uint32_t device)
-// {
-// 	VkDevice vkdevice = m_vkdevice_ptr[device];
+//VK_BUFFER_USAGE_VERTEX_BUFFER_BIT -> vkbufferusageflags
+//sizeof(model_data_float_array) -> vkdevicesize
+//model_data_float_array -> buffer_data_p
 
-// 	VkDeviceSize bufferSize = sizeof(quadVertices);
-// 	vk_makeBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &vertexBuffer, &vertexBufferMemory);
-// 	void* data;
-// 	vkMapMemory(vkdevice, vertexBufferMemory, 0, bufferSize, 0, &data);
-// 	memcpy(data, quadVertices, (size_t)bufferSize);
-// 	vkUnmapMemory(vkdevice, vertexBufferMemory);
-// }
+//VK_BUFFER_USAGE_INDEX_BUFFER_BIT -> vkbufferusageflags
+//sizeof(model_index_uint16_t_array) -> vkdevicesize
+//model_index_uint16_t_array -> buffer_data_p
 
-// void createIndexBuffer(uint32_t device)
-// {
-// 	VkDevice vkdevice = m_vkdevice_ptr[device];
+//0 -> vkmemorymapflags
+void mapBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkMemoryMapFlags vkmemorymapflags, VkBufferUsageFlags vkbufferusageflags, void* buffer_data_p, VkBuffer* vkbuffer_p, VkDeviceMemory* vkdevicememory_p)
+{
+	VkDevice vkdevice = m_vkdevice_p[device];
 
-// 	VkDeviceSize bufferSize = sizeof(quadIndices);
-// 	vk_makeBuffer(bufferSize, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &indexBuffer, &indexBufferMemory);
-// 	void* data;
-// 	vkMapMemory(vkdevice, indexBufferMemory, 0, bufferSize, 0, &data);
-// 	memcpy(data, quadIndices, (size_t)bufferSize);
-// 	vkUnmapMemory(vkdevice, indexBufferMemory);
-// }
+	vk_makeBuffer(device, vkdevicesize, 0, vkbufferusageflags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vkbuffer_p, vkdevicememory_p);
+	void* data_p;
+	vkMapMemory(vkdevice, *vkdevicememory_p, 0, vkdevicesize, vkmemorymapflags, &data_p);
+	memcpy(data_p, buffer_data_p, vkdevicesize);
+	vkUnmapMemory(vkdevice, *vkdevicememory_p);
+}
+//vkDestroyBuffer

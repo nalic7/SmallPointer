@@ -60,7 +60,7 @@ void ffmpeg_read(const char *filename)
 	avframe = av_frame_alloc();
 }
 
-uint8_t* ffmpeg_png(uint32_t* width_ptr, uint32_t* height_ptr)
+uint8_t* ffmpeg_png(uint32_t* width_p, uint32_t* height_p)
 {
 	if (av_read_frame(avformatcontext, &avpacket) < 0)
 	{
@@ -72,17 +72,17 @@ uint8_t* ffmpeg_png(uint32_t* width_ptr, uint32_t* height_ptr)
 		error("avcodec_receive_frame")
 	}
 
-	*width_ptr = avframe->width;
-	*height_ptr = avframe->height;
+	*width_p = avframe->width;
+	*height_p = avframe->height;
 
-	uint8_t* data_ptr = (uint8_t*)malloc(avframe->width * avframe->height * 4);
+	uint8_t* data_p = (uint8_t*)malloc(avframe->width * avframe->height * 4);
 
 	int num_bytes = av_image_get_buffer_size(AV_PIX_FMT_RGBA, avframe->width, avframe->height, 1);
-	av_image_copy_to_buffer(data_ptr, num_bytes, (const uint8_t* const*)avframe->data, avframe->linesize, AV_PIX_FMT_RGBA, avframe->width, avframe->height, 1);
+	av_image_copy_to_buffer(data_p, num_bytes, (const uint8_t* const*)avframe->data, avframe->linesize, AV_PIX_FMT_RGBA, avframe->width, avframe->height, 1);
 
 	av_packet_unref(&avpacket);
 
-	return data_ptr;
+	return data_p;
 }
 
 void ffmpeg_clean()

@@ -1,6 +1,6 @@
-void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateFlags vkpipelinemultisamplestatecreateflags, VkPipelineMultisampleStateCreateInfo* vkpipelinemultisamplestatecreateinfo_ptr)
+void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateFlags vkpipelinemultisamplestatecreateflags, VkPipelineMultisampleStateCreateInfo* vkpipelinemultisamplestatecreateinfo_p)
 {
-	*vkpipelinemultisamplestatecreateinfo_ptr = (VkPipelineMultisampleStateCreateInfo)
+	*vkpipelinemultisamplestatecreateinfo_p = (VkPipelineMultisampleStateCreateInfo)
 	{
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
 		.sampleShadingEnable = VK_FALSE,

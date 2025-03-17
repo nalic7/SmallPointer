@@ -1,22 +1,22 @@
 // uint32_t gl11_current_texture = -1;
-// int* gl11_target_ptr;
-// int* gl11_level_ptr;
-// int* gl11_internalformat_ptr;
-// int* gl11_width_ptr;
-// int* gl11_height_ptr;
-// int* gl11_border_ptr;
-// int* gl11_format_ptr;
-// int* gl11_type_ptr;
+// int* gl11_target_p;
+// int* gl11_level_p;
+// int* gl11_internalformat_p;
+// int* gl11_width_p;
+// int* gl11_height_p;
+// int* gl11_border_p;
+// int* gl11_format_p;
+// int* gl11_type_p;
 // // need to check is address able to reach
-// long* gl11_pixels_ptr;
+// long* gl11_pixels_p;
 // // char pixels_able;
-// // unsigned char* pixels_able_ptr;
-// unsigned char** gl11_clone_char_ptr;
+// // unsigned char *pixels_able_p;
+// unsigned char **gl11_clone_char_p;
 
 // int max_texture = -1;
 // uint32_t modify_texture = 0;
-// uint32_t* gl11_modify_texture_ptr = 0;
-// long* gl11_texture_ptr;
+// uint32_t* gl11_modify_texture_p = 0;
+// long* gl11_texture_p;
 
 // JNIEXPORT jstring JNICALL Java_org_lwjgl_opengl_GL11_nglGetString(JNIEnv* env, jclass clazz, jint name, jlong function_pointer)
 // {
@@ -58,7 +58,7 @@
 
 //	 for (uint32_t i = 0; i < (max_texture + 1) && max_texture > 0; ++i)
 //	 {
-//		 long address = gl11_pixels_ptr[i];
+//		 long address = gl11_pixels_p[i];
 //		 info("%d l_address %ld", i, address)
 //		 if (address != -1)
 //		 {
@@ -72,12 +72,12 @@
 
 //	 for (uint32_t i = 0; i < (max_texture + 1) && max_texture > 0; ++i)
 //	 {
-//		 long address = gl11_pixels_ptr[i];
-//		 unsigned char* n_clone_char_ptr = gl11_clone_char_ptr[i];
-//		 info("%d c_address %p", i, n_clone_char_ptr)
-//		 if (/* n_clone_char_ptr &&  */address != -1)
+//		 long address = gl11_pixels_p[i];
+//		 unsigned char* n_clone_char_p = gl11_clone_char_p[i];
+//		 info("%d c_address %p", i, n_clone_char_p)
+//		 if (/* n_clone_char_p &&  */address != -1)
 //		 {
-//			 info("nglClear i%d r%d g%d b%d a%d", i, n_clone_char_ptr[0], n_clone_char_ptr[1], n_clone_char_ptr[2], n_clone_char_ptr[3])
+//			 info("nglClear i%d r%d g%d b%d a%d", i, n_clone_char_p[0], n_clone_char_p[1], n_clone_char_p[2], n_clone_char_p[3])
 //		 }
 
 //		 // struct timespec ts = {1, 0};
@@ -109,55 +109,55 @@
 //	 info("GL11_nglTexImage2D_type %d", type)
 //	 info("GL11_nglTexImage2D_pixels %ld", pixels)
 
-//	 info("GL_RGBA8 == gl11_internalformat_ptr[gl11_current_texture] %d", GL_RGBA8 == internalformat);
-//	 info("GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture] %d", GL_UNSIGNED_BYTE == type);
+//	 info("GL_RGBA8 == gl11_internalformat_p[gl11_current_texture] %d", GL_RGBA8 == internalformat);
+//	 info("GL_UNSIGNED_BYTE == gl11_type_p[gl11_current_texture] %d", GL_UNSIGNED_BYTE == type);
 //	 info("pixels %d", 1 && pixels);
 //	 if (/* (GL_RGBA8 == internalformat || GL_RGBA == internalformat) && (GL_UNSIGNED_BYTE == type || GL_UNSIGNED_SHORT_5_6_5 == type) &&  */pixels)
 //	 {
-//		 unsigned char* char_ptr = (unsigned char*)(intptr_t)pixels;
+//		 unsigned char* char_p = (unsigned char*)(intptr_t)pixels;
 //		 // for (int xy = 0; xy < width * height; ++xy)
 //		 // {
-//		 //	 char pixel = char_ptr[xy];
+//		 //	 char pixel = char_p[xy];
 //		 // }
 //		 size_t length = width * height * 4 * sizeof(unsigned char);//rgba as 4 byte
-//		 if (GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture])
+//		 if (GL_UNSIGNED_BYTE == gl11_type_p[gl11_current_texture])
 //		 {
 
 //		 }
-//		 if (GL_UNSIGNED_SHORT_5_6_5 == gl11_type_ptr[gl11_current_texture])
+//		 if (GL_UNSIGNED_SHORT_5_6_5 == gl11_type_p[gl11_current_texture])
 //		 {
 //			 length = width * height * 2 * sizeof(unsigned char);//r5bit g6bit b5bit as 2 byte
 //		 }
-//		 unsigned char* n_clone_char_ptr = malloc(length);
-//		 memcpy(n_clone_char_ptr, char_ptr, length);
+//		 unsigned char* n_clone_char_p = malloc(length);
+//		 memcpy(n_clone_char_p, char_p, length);
 //		 // pixels_able = 1;
-//		 gl11_pixels_ptr[gl11_current_texture] = pixels;
-//		 info("s_gl11_pixels_ptr[gl11_current_texture] %ld", gl11_pixels_ptr[gl11_current_texture]);
-//		 gl11_clone_char_ptr[gl11_current_texture] = n_clone_char_ptr;
-//		 info("s_gl11_clone_char_ptr[gl11_current_texture] %p", gl11_clone_char_ptr[gl11_current_texture]);
+//		 gl11_pixels_p[gl11_current_texture] = pixels;
+//		 info("s_gl11_pixels_p[gl11_current_texture] %ld", gl11_pixels_p[gl11_current_texture]);
+//		 gl11_clone_char_p[gl11_current_texture] = n_clone_char_p;
+//		 info("s_gl11_clone_char_p[gl11_current_texture] %p", gl11_clone_char_p[gl11_current_texture]);
 //	 }
 //	 else
 //	 {
 //		 // pixels_able = 0;
-//		 gl11_pixels_ptr[gl11_current_texture] = -1;
-//		 info("f_gl11_pixels_ptr[gl11_current_texture] %ld", gl11_pixels_ptr[gl11_current_texture]);
-//		 gl11_clone_char_ptr[gl11_current_texture] = realloc(gl11_clone_char_ptr[gl11_current_texture], 0);
-//		 info("f_gl11_clone_char_ptr[gl11_current_texture] %p", gl11_clone_char_ptr[gl11_current_texture]);
+//		 gl11_pixels_p[gl11_current_texture] = -1;
+//		 info("f_gl11_pixels_p[gl11_current_texture] %ld", gl11_pixels_p[gl11_current_texture]);
+//		 gl11_clone_char_p[gl11_current_texture] = realloc(gl11_clone_char_p[gl11_current_texture], 0);
+//		 info("f_gl11_clone_char_p[gl11_current_texture] %p", gl11_clone_char_p[gl11_current_texture]);
 //	 }
 
 //	 //
 //	 //use pixels address as index
-//	 gl11_target_ptr[gl11_current_texture] = target;
-//	 gl11_level_ptr[gl11_current_texture] = level;
-//	 gl11_internalformat_ptr[gl11_current_texture] = internalformat;
-//	 gl11_width_ptr[gl11_current_texture] = width;
-//	 gl11_height_ptr[gl11_current_texture] = height;
-//	 gl11_border_ptr[gl11_current_texture] = border;
-//	 gl11_format_ptr[gl11_current_texture] = format;
-//	 gl11_type_ptr[gl11_current_texture] = type;
+//	 gl11_target_p[gl11_current_texture] = target;
+//	 gl11_level_p[gl11_current_texture] = level;
+//	 gl11_internalformat_p[gl11_current_texture] = internalformat;
+//	 gl11_width_p[gl11_current_texture] = width;
+//	 gl11_height_p[gl11_current_texture] = height;
+//	 gl11_border_p[gl11_current_texture] = border;
+//	 gl11_format_p[gl11_current_texture] = format;
+//	 gl11_type_p[gl11_current_texture] = type;
 
-//	 info("gl11_internalformat_ptr[gl11_current_texture] %d", gl11_internalformat_ptr[gl11_current_texture]);
-//	 info("gl11_type_ptr[gl11_current_texture] %d", gl11_type_ptr[gl11_current_texture]);
+//	 info("gl11_internalformat_p[gl11_current_texture] %d", gl11_internalformat_p[gl11_current_texture]);
+//	 info("gl11_type_p[gl11_current_texture] %d", gl11_type_p[gl11_current_texture]);
 // }
 
 // JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGetTexLevelParameteriv(JNIEnv* env, jclass clazz, jint target, jint level, jint pname, jlong params, jlong function_pointer)
@@ -175,7 +175,7 @@
 //	 info("gl11_current_texture %d", gl11_current_texture)
 //	 info("max_texture+1 %d", max_texture+1)
 //	 info("textures_remaining %d", textures_n)
-//	 info("g_tex_ptr %ld", textures)
+//	 info("g_tex_p %ld", textures)
 //	 // ++texture_id;
 //	 for (uint32_t i = 0; i < textures_n; ++i)
 //	 {
@@ -187,8 +187,8 @@
 //		 if (modify_texture > 0)
 //		 {
 //			 --modify_texture;
-//			 texture_index = gl11_modify_texture_ptr[modify_texture];
-//			 gl11_modify_texture_ptr = realloc(gl11_modify_texture_ptr, sizeof(uint32_t) * modify_texture);
+//			 texture_index = gl11_modify_texture_p[modify_texture];
+//			 gl11_modify_texture_p = realloc(gl11_modify_texture_p, sizeof(uint32_t) * modify_texture);
 //		 }
 //		 else
 //		 {
@@ -197,20 +197,20 @@
 
 //			 size_t long_size = sizeof(long) * (max_texture + 1);
 //			 size_t int_size = sizeof(int) * (max_texture + 1);
-//			 gl11_texture_ptr = realloc(gl11_texture_ptr, long_size);
-//			 gl11_target_ptr = realloc(gl11_target_ptr, int_size);
-//			 gl11_level_ptr = realloc(gl11_level_ptr, int_size);
-//			 gl11_internalformat_ptr = realloc(gl11_internalformat_ptr, int_size);
-//			 gl11_width_ptr = realloc(gl11_width_ptr, int_size);
-//			 gl11_height_ptr = realloc(gl11_height_ptr, int_size);
-//			 gl11_border_ptr = realloc(gl11_border_ptr, int_size);
-//			 gl11_format_ptr = realloc(gl11_format_ptr, int_size);
-//			 gl11_type_ptr = realloc(gl11_type_ptr, int_size);
-//			 gl11_pixels_ptr = realloc(gl11_pixels_ptr, long_size);
-//			 gl11_clone_char_ptr = realloc(gl11_clone_char_ptr, sizeof(unsigned char*) * (max_texture + 1));
-//			 info("o_gl11_clone_char_ptr[%d] %p", max_texture, gl11_clone_char_ptr[max_texture])
-//			 gl11_clone_char_ptr[max_texture] = malloc(0);
-//			 info("n_gl11_clone_char_ptr[%d] %p", max_texture, gl11_clone_char_ptr[max_texture])
+//			 gl11_texture_p = realloc(gl11_texture_p, long_size);
+//			 gl11_target_p = realloc(gl11_target_p, int_size);
+//			 gl11_level_p = realloc(gl11_level_p, int_size);
+//			 gl11_internalformat_p = realloc(gl11_internalformat_p, int_size);
+//			 gl11_width_p = realloc(gl11_width_p, int_size);
+//			 gl11_height_p = realloc(gl11_height_p, int_size);
+//			 gl11_border_p = realloc(gl11_border_p, int_size);
+//			 gl11_format_p = realloc(gl11_format_p, int_size);
+//			 gl11_type_p = realloc(gl11_type_p, int_size);
+//			 gl11_pixels_p = realloc(gl11_pixels_p, long_size);
+//			 gl11_clone_char_p = realloc(gl11_clone_char_p, sizeof(unsigned char*) * (max_texture + 1));
+//			 info("o_gl11_clone_char_p[%d] %p", max_texture, gl11_clone_char_p[max_texture])
+//			 gl11_clone_char_p[max_texture] = malloc(0);
+//			 info("n_gl11_clone_char_p[%d] %p", max_texture, gl11_clone_char_p[max_texture])
 //		 }
 
 //		 info("gl11_textures_buffer[%d] <- %d", i, texture_index)
@@ -219,7 +219,7 @@
 //		 buffer[i] = texture_index;
 //		 // size_t size = sizeof(long) * (texture_index + 1);
 
-//		 // gl11_texture_ptr[texture_index] = textures;
+//		 // gl11_texture_p[texture_index] = textures;
 //	 }
 // }
 
@@ -229,7 +229,7 @@
 //	 // info("run_GL11$nglDeleteTextures_0")
 
 //	 info("textures_remaining %d", textures_n)
-//	 info("d_tex_ptr %ld", textures)
+//	 info("d_tex_p %ld", textures)
 //	 info("gl11_current_texture %d", gl11_current_texture)
 //	 info("max_texture+1 %d", max_texture+1)
 
@@ -237,20 +237,20 @@
 //	 for (int i = 0; i < textures_n; ++i)
 //	 {
 //		 info("gl11_textures_buffer[%d] %d", i, buffer[i])
-//		 // free((int*)(intptr_t)gl11_texture_ptr[buffer[i]]);
-//		 // gl11_texture_ptr[buffer[i]] = 0;
+//		 // free((int*)(intptr_t)gl11_texture_p[buffer[i]]);
+//		 // gl11_texture_p[buffer[i]] = 0;
 //		 ++modify_texture;
-//		 gl11_modify_texture_ptr = realloc(gl11_modify_texture_ptr, sizeof(uint32_t) * modify_texture);
-//		 gl11_modify_texture_ptr[modify_texture - 1] = buffer[i];
-//		 // if (gl11_clone_char_ptr[buffer[i]] && gl11_pixels_ptr[buffer[i]] != -1)
+//		 gl11_modify_texture_p = realloc(gl11_modify_texture_p, sizeof(uint32_t) * modify_texture);
+//		 gl11_modify_texture_p[modify_texture - 1] = buffer[i];
+//		 // if (gl11_clone_char_p[buffer[i]] && gl11_pixels_p[buffer[i]] != -1)
 //		 // {
 //		 info("buffer[i] %d", buffer[i])
 //		 info("max_texture %d", max_texture)
-//		 info("max_texture %p", gl11_clone_char_ptr[buffer[i]])
-//		 // free(gl11_clone_char_ptr[buffer[i]]);
-//		 gl11_clone_char_ptr[buffer[i]] = realloc(gl11_clone_char_ptr[buffer[i]], 0);
+//		 info("max_texture %p", gl11_clone_char_p[buffer[i]])
+//		 // free(gl11_clone_char_p[buffer[i]]);
+//		 gl11_clone_char_p[buffer[i]] = realloc(gl11_clone_char_p[buffer[i]], 0);
 //		 // }
-//		 gl11_pixels_ptr[buffer[i]] = -1;
+//		 gl11_pixels_p[buffer[i]] = -1;
 //	 }
 
 //	 //use textures_n address to get to int as texture_id
@@ -318,52 +318,52 @@
 //	 info("GL11_nglTexSubImage2D_type %d", type)
 //	 info("GL11_nglTexSubImage2D_pixels %ld", pixels)
 
-//	 info("gl11_internalformat_ptr[gl11_current_texture] %d", gl11_internalformat_ptr[gl11_current_texture]);
-//	 info("gl11_type_ptr[gl11_current_texture] %d", gl11_type_ptr[gl11_current_texture]);
-//	 info("GL_RGBA8 == gl11_internalformat_ptr[gl11_current_texture] %d", GL_RGBA8 == gl11_internalformat_ptr[gl11_current_texture]);
-//	 info("GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture] %d", GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture]);
+//	 info("gl11_internalformat_p[gl11_current_texture] %d", gl11_internalformat_p[gl11_current_texture]);
+//	 info("gl11_type_p[gl11_current_texture] %d", gl11_type_p[gl11_current_texture]);
+//	 info("GL_RGBA8 == gl11_internalformat_p[gl11_current_texture] %d", GL_RGBA8 == gl11_internalformat_p[gl11_current_texture]);
+//	 info("GL_UNSIGNED_BYTE == gl11_type_p[gl11_current_texture] %d", GL_UNSIGNED_BYTE == gl11_type_p[gl11_current_texture]);
 //	 info("pixels %d", 1 && pixels);
-//	 if (/* (GL_RGBA8 == gl11_internalformat_ptr[gl11_current_texture] || GL_RGBA == gl11_internalformat_ptr[gl11_current_texture]) && (GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture] || GL_UNSIGNED_SHORT_5_6_5 == gl11_type_ptr[gl11_current_texture]) &&  */pixels)
+//	 if (/* (GL_RGBA8 == gl11_internalformat_p[gl11_current_texture] || GL_RGBA == gl11_internalformat_p[gl11_current_texture]) && (GL_UNSIGNED_BYTE == gl11_type_p[gl11_current_texture] || GL_UNSIGNED_SHORT_5_6_5 == gl11_type_p[gl11_current_texture]) &&  */pixels)
 //	 {
-//		 unsigned char* char_ptr = (unsigned char*)(intptr_t)pixels;
+//		 unsigned char* char_p = (unsigned char*)(intptr_t)pixels;
 //		 // for (int xy = 0; xy < width * height; ++xy)
 //		 // {
-//		 //	 char pixel = char_ptr[xy];
+//		 //	 char pixel = char_p[xy];
 //		 // }
 //		 size_t length = width * height * 4 * sizeof(unsigned char);//rgba as 4 byte
-//		 if (GL_UNSIGNED_BYTE == gl11_type_ptr[gl11_current_texture])
+//		 if (GL_UNSIGNED_BYTE == gl11_type_p[gl11_current_texture])
 //		 {
 
 //		 }
-//		 if (GL_UNSIGNED_SHORT_5_6_5 == gl11_type_ptr[gl11_current_texture])
+//		 if (GL_UNSIGNED_SHORT_5_6_5 == gl11_type_p[gl11_current_texture])
 //		 {
 //			 length = width * height * 2 * sizeof(unsigned char);//r5bit g6bit b5bit as 2 byte
 //		 }
-//		 unsigned char* n_clone_char_ptr = malloc(length);
-//		 memcpy(n_clone_char_ptr, char_ptr, length);
+//		 unsigned char* n_clone_char_p = malloc(length);
+//		 memcpy(n_clone_char_p, char_p, length);
 //		 // pixels_able = 1;
-//		 gl11_pixels_ptr[gl11_current_texture] = pixels;
-//		 info("s_gl11_pixels_ptr[gl11_current_texture] %ld", gl11_pixels_ptr[gl11_current_texture]);
-//		 gl11_clone_char_ptr[gl11_current_texture] = n_clone_char_ptr;
-//		 info("s_gl11_clone_char_ptr[gl11_current_texture] %p", gl11_clone_char_ptr[gl11_current_texture]);
+//		 gl11_pixels_p[gl11_current_texture] = pixels;
+//		 info("s_gl11_pixels_p[gl11_current_texture] %ld", gl11_pixels_p[gl11_current_texture]);
+//		 gl11_clone_char_p[gl11_current_texture] = n_clone_char_p;
+//		 info("s_gl11_clone_char_p[gl11_current_texture] %p", gl11_clone_char_p[gl11_current_texture]);
 //	 }
 //	 else
 //	 {
 //		 // pixels_able = 0;
-//		 gl11_pixels_ptr[gl11_current_texture] = -1;
-//		 gl11_clone_char_ptr[gl11_current_texture] = realloc(gl11_clone_char_ptr[gl11_current_texture], 0);
-//		 info("f_gl11_pixels_ptr[gl11_current_texture] %ld", gl11_pixels_ptr[gl11_current_texture]);
-//		 info("f_gl11_clone_char_ptr[gl11_current_texture] %p", gl11_clone_char_ptr[gl11_current_texture]);
+//		 gl11_pixels_p[gl11_current_texture] = -1;
+//		 gl11_clone_char_p[gl11_current_texture] = realloc(gl11_clone_char_p[gl11_current_texture], 0);
+//		 info("f_gl11_pixels_p[gl11_current_texture] %ld", gl11_pixels_p[gl11_current_texture]);
+//		 info("f_gl11_clone_char_p[gl11_current_texture] %p", gl11_clone_char_p[gl11_current_texture]);
 //	 }
 //	 //
 //	 //use pixels address as index
 
-//	 // gl11_target_ptr[gl11_current_texture] = target;
-//	 // gl11_level_ptr[gl11_current_texture] = level;
-//	 // gl11_width_ptr[gl11_current_texture] = width;
-//	 // gl11_height_ptr[gl11_current_texture] = height;
-//	 // gl11_format_ptr[gl11_current_texture] = format;
-//	 // gl11_type_ptr[gl11_current_texture] = type;
+//	 // gl11_target_p[gl11_current_texture] = target;
+//	 // gl11_level_p[gl11_current_texture] = level;
+//	 // gl11_width_p[gl11_current_texture] = width;
+//	 // gl11_height_p[gl11_current_texture] = height;
+//	 // gl11_format_p[gl11_current_texture] = format;
+//	 // gl11_type_p[gl11_current_texture] = type;
 // }
 
 // JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglEnable(JNIEnv* env, jclass clazz, jint cap, jlong function_pointer)

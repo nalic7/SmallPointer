@@ -3,14 +3,8 @@
 
 extern float m_m4x4_mat[16];
 
-void m4x4_inverse(float* mat_ptr, uint32_t index);
-
-// struct TransformComponents
-// {
-//	 float rotation[3];
-//	 float scale[3];
-//	 float translation[3];
-// };
+void m4x4_inverse(float* m4x4_p, uint32_t index);
+void m4x4_perspective(float fov, float aspect, float z_near, float z_far, float* m4x4_p);
 
 // struct M4x4
 // {

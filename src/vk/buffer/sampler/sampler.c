@@ -1,4 +1,4 @@
-void vk_makeSampler(uint32_t device, VkSamplerCreateFlags vksamplercreateflags, VkSampler* vksampler_ptr)
+void vk_makeSampler(uint32_t device, VkSamplerCreateFlags vksamplercreateflags, VkSampler* vksampler_p)
 {
 	VkSamplerCreateInfo vksamplercreateinfo =
 	{
@@ -24,5 +24,5 @@ void vk_makeSampler(uint32_t device, VkSamplerCreateFlags vksamplercreateflags, 
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkCreateSampler(m_vkdevice_ptr[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_ptr);
+	vkCreateSampler(m_vkdevice_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p);
 }

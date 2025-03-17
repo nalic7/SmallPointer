@@ -1,8 +1,8 @@
-void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecreateflags, VkRenderPass* vkrenderpass_ptr, VkPipelineLayout* vkpipelinelayout_ptr, VkPipeline* vkpipeline_ptr)
+void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecreateflags, VkRenderPass* vkrenderpass_p, VkPipelineLayout* vkpipelinelayout_p, VkPipeline* vkpipeline_p)
 {
-	VkDevice vkdevice = m_vkdevice_ptr[device];
+	VkDevice vkdevice = m_vkdevice_p[device];
 
-	vk_makePipelineLayout(device, 0, vkpipelinelayout_ptr);
+	vk_makePipelineLayout(device, 0, vkpipelinelayout_p);
 
 	VkShaderModule vkshadermodule_vert;
 	VkShaderModule vkshadermodule_frag;
@@ -60,8 +60,8 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 		.pDepthStencilState = VK_NULL_HANDLE,
 		.pColorBlendState = &vkpipelinecolorblendstatecreateinfo,
 		.pDynamicState = &vkpipelinedynamicstatecreateinfo,
-		.layout = *vkpipelinelayout_ptr,
-		.renderPass = *vkrenderpass_ptr,
+		.layout = *vkpipelinelayout_p,
+		.renderPass = *vkrenderpass_p,
 		.subpass = 0,
 		.basePipelineHandle = VK_NULL_HANDLE,
 
@@ -71,7 +71,7 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkCreateGraphicsPipelines(vkdevice, VK_NULL_HANDLE, 1, &vkgraphicspipelinecreateinfo, VK_NULL_HANDLE, vkpipeline_ptr);
+	vkCreateGraphicsPipelines(vkdevice, VK_NULL_HANDLE, 1, &vkgraphicspipelinecreateinfo, VK_NULL_HANDLE, vkpipeline_p);
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
 	vkDestroyShaderModule(vkdevice, vkshadermodule_vert, VK_NULL_HANDLE);

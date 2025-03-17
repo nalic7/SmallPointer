@@ -84,19 +84,19 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLContext_nLoadOpenGLLibrary(JNIEnv
 	// info("run_nLoadOpenGLLibrary_0")
 	initOpenGL();
 
-	// gl11_target_ptr = malloc(0);
-	// gl11_level_ptr = malloc(0);
-	// gl11_internalformat_ptr = malloc(0);
-	// gl11_width_ptr = malloc(0);
-	// gl11_height_ptr = malloc(0);
-	// gl11_border_ptr = malloc(0);
-	// gl11_format_ptr = malloc(0);
-	// gl11_type_ptr = malloc(0);
-	// gl11_pixels_ptr = malloc(0);
-	gl11_modify_texture_ptr = malloc(0);
-	gl11_texture_ptr = malloc(0);
-	// gl11_clone_char_ptr = malloc(0);
-	// info("gl11_clone_char_ptr %p", gl11_clone_char_ptr)
+	// gl11_target_p = malloc(0);
+	// gl11_level_p = malloc(0);
+	// gl11_internalformat_p = malloc(0);
+	// gl11_width_p = malloc(0);
+	// gl11_height_p = malloc(0);
+	// gl11_border_p = malloc(0);
+	// gl11_format_p = malloc(0);
+	// gl11_type_p = malloc(0);
+	// gl11_pixels_p = malloc(0);
+	gl11_modify_texture_p = malloc(0);
+	gl11_texture_p = malloc(0);
+	// gl11_clone_char_p = malloc(0);
+	// info("gl11_clone_char_p %p", gl11_clone_char_p)
 
 	gl11_int8_pixels = malloc(0);
 	gl11_width = malloc(0);

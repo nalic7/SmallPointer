@@ -1,11 +1,11 @@
-void vk_makeImageView(uint32_t device, VkImage* image_ptr, VkFormat* vkformat_ptr, VkImageAspectFlags vkimageaspectflags, VkImageViewCreateFlags vkimageviewcreateflags, VkImageView* vkimageview_ptr)
+void vk_makeImageView(uint32_t device, VkImage* image_p, VkFormat* vkformat_p, VkImageAspectFlags vkimageaspectflags, VkImageViewCreateFlags vkimageviewcreateflags, VkImageView* vkimageview_p)
 {
 	VkImageViewCreateInfo vkimageviewcreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-		.image = *image_ptr,
+		.image = *image_p,
 		.viewType = VK_IMAGE_VIEW_TYPE_2D,
-		.format = *vkformat_ptr,
+		.format = *vkformat_p,
 		.subresourceRange.aspectMask = vkimageaspectflags,
 		.subresourceRange.baseMipLevel = 0,
 		.subresourceRange.levelCount = 1,
@@ -20,5 +20,5 @@ void vk_makeImageView(uint32_t device, VkImage* image_ptr, VkFormat* vkformat_pt
 		.flags = vkimageviewcreateflags,
 		.pNext = VK_NULL_HANDLE
 	};
-	vkCreateImageView(m_vkdevice_ptr[device], &vkimageviewcreateinfo, VK_NULL_HANDLE, vkimageview_ptr);
+	vkCreateImageView(m_vkdevice_p[device], &vkimageviewcreateinfo, VK_NULL_HANDLE, vkimageview_p);
 }

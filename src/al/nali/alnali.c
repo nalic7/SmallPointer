@@ -37,8 +37,8 @@ JNIEXPORT jint JNICALL Java_com_nali_NaliAL_alGenBuffers(JNIEnv* __env, jclass c
 
 JNIEXPORT void JNICALL Java_com_nali_NaliAL_alBufferData(JNIEnv* __env, jclass clazz, jint buffer, jint format, jlong data, jint data_size, jint freq)
 {
-	ALvoid* data_ptr = (ALvoid* )(intptr_t)data;
-	alBufferData((ALuint)buffer, (ALenum)format, data_ptr, (ALsizei)data_size, (ALsizei)freq);
+	ALvoid* data_p = (ALvoid* )(intptr_t)data;
+	alBufferData((ALuint)buffer, (ALenum)format, data_p, (ALsizei)data_size, (ALsizei)freq);
 }
 
 JNIEXPORT void JNICALL Java_com_nali_NaliAL_alSourcef(JNIEnv* __env, jclass clazz, jint source, jint pname, jfloat value)
@@ -95,6 +95,6 @@ JNIEXPORT void JNICALL Java_com_nali_NaliAL_alListener3f(JNIEnv* __env, jclass c
 
 JNIEXPORT void JNICALL Java_com_nali_NaliAL_alListenerfv(JNIEnv* __env, jclass clazz, jint pname, jlong value)
 {
-	ALfloat* value_ptr = (ALfloat*)(intptr_t)value;
-	alListenerfv((ALenum)pname, value_ptr);
+	ALfloat* value_p = (ALfloat*)(intptr_t)value;
+	alListenerfv((ALenum)pname, value_p);
 }

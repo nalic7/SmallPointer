@@ -1,6 +1,7 @@
 #ifdef PCH_SCENE
 
-	#define SGPU
+	#define NALI_VK_SGPU
+	// #define NALI_VK_INFO_SC
 
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -16,8 +17,11 @@
 
 	#include <linux/input.h>
 
-	#include <wayland-client.h>
+	// #include <wayland-client.h>
+	#include <wayland-cursor.h>
 	#include <xdg-shell.h>
+	#include <pointer-constraints-unstable-v1.h>
+	#include <relative-pointer-unstable-v1.h>
 	// #include <wayland-server.h>
 	// #include <wayland-util.h>
 
@@ -43,6 +47,9 @@
 	#include "surface/wayland/client/xdg/surface/surface.h"
 	#include "surface/wayland/client/xdg/toplevel/toplevel.h"
 	#include "surface/wayland/client/xdg/wm_base/wm_base.h"
+	#include "surface/wayland/client/zwp/zwp.h"
+	#include "surface/wayland/client/zwp/locked/locked.h"
+	#include "surface/wayland/client/zwp/relative/relative.h"
 
 	#include "vk/vk.h"
 	#include "vk/buffer/instance/instance.h"
@@ -78,6 +85,19 @@
 
 	// #include <unistd.h>
 	// #include <arpa/inet.h>
+	// #include <sys/epoll.h>
+
+	// #define NALI_SC_PORT 11111
+
+	// #include "loader/both/l_both.h"
+	// #include "network/linux/both/nw_both.h"
+	// #ifdef NALI_CLIENT
+	// 	#include "loader/client/l_client.h"
+	// 	#include "network/linux/client/nw_client.h"
+	// #else
+	// 	#include "loader/server/l_server.h"
+	// 	#include "network/linux/server/nw_server.h"
+	// #endif
 
 	#include <libavformat/avformat.h>
 	#include <libavcodec/avcodec.h>

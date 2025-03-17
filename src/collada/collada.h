@@ -34,16 +34,16 @@ typedef struct
 			t_x, t_y,
 		#endif
 		p_x, p_y, p_z;
-	uint8_t* joint_ptr;
-	float* weight_ptr;
+	uint8_t *joint_p;
+	float *weight_p;
 	uint8_t max_bone;
 } collada_Pack;
 
 typedef struct
 {
-	char** name_ptr;
+	char **name_p;
   uint32_t name_size;
-	float* visual_ptr;//M4x4
+	float *visual_p;//M4x4
   uint32_t visual_size;
 } collada_Bone;
 
@@ -55,58 +55,58 @@ typedef struct
 	//s0-bone
 	uint8_t max_bone;//-2
 
-	collada_Bone* collada_bone_ptr;
+	collada_Bone *collada_bone_p;
 
-	uint32_t* space_ptr;
+	uint32_t *space_p;
 
-	uint8_t** bone_ptr;
-	uint32_t* bone_size_ptr;
+	uint8_t **bone_p;
+	uint32_t *bone_size_p;
 
-	char** v_bone_ptr;
+	char **v_bone_p;
 	uint32_t v_bone_size;
-	// float* time_ptr;
-	// uint32_t time_size_ptr;
-	float* transform_ptr;
+	// float *time_p;
+	// uint32_t time_size_p;
+	float *transform_p;
 	uint32_t transform_size;
-	char** armature_ptr;
+	char **armature_p;
 	uint32_t armature_size;
 
-	char** joint_ptr;
-	float* bind_pose_ptr;//M4x4
+	char **joint_p;
+	float *bind_pose_p;//M4x4
 	//e0-bone
 
 	//s0-data
-	uint8_t* max_joint_ptr;
-	char** data_ptr;
+	uint8_t *max_joint_p;
+	char **data_p;
 	uint32_t max_data;
 
-	float** vertex_ptr;//V3
-	uint32_t* vertex_size_ptr;
+	float **vertex_p;//V3
+	uint32_t *vertex_size_p;
 	#ifdef C_OUT_NORMAL
-		float** normal_ptr;//V3
-		uint32_t* normal_size_ptr;
+		float **normal_p;//V3
+		uint32_t *normal_size_p;
 	#endif
 	#ifdef C_OUT_TEXCOORD
-		float** texcoord_ptr;//V2
-		uint32_t* texcoord_size_ptr;
+		float **texcoord_p;//V2
+		uint32_t *texcoord_size_p;
 	#endif
 
-	int** p_ptr;//V[]
-	uint32_t* p_size_ptr;
+	int **p_p;//V[]
+	uint32_t *p_size_p;
 
-	float** weight_ptr;//V1-V4
-	uint32_t* weight_size_ptr;
+	float **weight_p;//V1-V4
+	uint32_t *weight_size_p;
 
-	int** v_ptr;//V[]
-	uint32_t* v_size_ptr;//V[]
-	int** vcount_ptr;//V[]
-	uint32_t* vcount_size_ptr;//V[]
+	int **v_p;//V[]
+	uint32_t *v_size_p;//V[]
+	int **vcount_p;//V[]
+	uint32_t *vcount_size_p;//V[]
 
-	uint32_t** index_ptr;
-	uint32_t* index_size_ptr;
+	uint32_t **index_p;
+	uint32_t *index_size_p;
 
-	collada_Pack** collada_pack_ptr;
-	uint32_t* collada_pack_size_ptr;
+	collada_Pack **collada_pack_p;
+	uint32_t *collada_pack_size_p;
 	//e0-data
 } collada_Source;
 

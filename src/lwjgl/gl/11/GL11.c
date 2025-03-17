@@ -1,6 +1,6 @@
 uint32_t gl11_gl_texture_2d = 0;
-uint32_t* gl11_modify_texture_ptr = 0;
-long* gl11_texture_ptr;
+uint32_t* gl11_modify_texture_p = 0;
+long* gl11_texture_p;
 
 uint32_t max_texture = 0;
 uint32_t modify_texture = 0;
@@ -184,16 +184,16 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGenTextures(JNIEnv* env, jc
 {
 	for (uint32_t i = 0; i < textures_n; ++i)
 	{
-		int* int_ptr = (int*)(intptr_t)textures;
+		int* int_p = (int*)(intptr_t)textures;
 		int texture_index;
 
-		info("g_gl11_textures_buffer[%d] -> %d", i, int_ptr[i])
+		info("g_gl11_textures_buffer[%d] -> %d", i, int_p[i])
 
 		if (modify_texture > 0)
 		{
 			--modify_texture;
-			texture_index = gl11_modify_texture_ptr[modify_texture];
-			gl11_modify_texture_ptr = realloc(gl11_modify_texture_ptr, sizeof(uint32_t) * modify_texture);
+			texture_index = gl11_modify_texture_p[modify_texture];
+			gl11_modify_texture_p = realloc(gl11_modify_texture_p, sizeof(uint32_t) * modify_texture);
 		}
 		else
 		{
@@ -202,12 +202,12 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglGenTextures(JNIEnv* env, jc
 
 			size_t long_size = sizeof(long) * max_texture;
 			size_t int_size = sizeof(int) * max_texture;
-			gl11_texture_ptr = realloc(gl11_texture_ptr, long_size);
+			gl11_texture_p = realloc(gl11_texture_p, long_size);
 		}
 
 		info("g_gl11_textures_buffer[%d] <- %d", i, texture_index)
 
-		int_ptr[i] = texture_index;
+		int_p[i] = texture_index;
 	}
 }
 
@@ -218,8 +218,8 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglDeleteTextures(JNIEnv* env,
 	{
 		info("d_gl11_textures_buffer[%d] -> %d", i, buffer[i])
 		++modify_texture;
-		gl11_modify_texture_ptr = realloc(gl11_modify_texture_ptr, sizeof(uint32_t) * modify_texture);
-		gl11_modify_texture_ptr[modify_texture - 1] = buffer[i];
+		gl11_modify_texture_p = realloc(gl11_modify_texture_p, sizeof(uint32_t) * modify_texture);
+		gl11_modify_texture_p[modify_texture - 1] = buffer[i];
 	}
 }
 
@@ -254,10 +254,10 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexParameterf(JNIEnv* env, 
 }
 
 // long *gl11_pixels;
-uint32_t** gl11_int8_pixels;
-int* gl11_width;
-int* gl11_height;
-int* gl11_type;
+uint32_t **gl11_int8_pixels;
+int *gl11_width;
+int *gl11_height;
+int *gl11_type;
 uint32_t max_pixels = 0;
 
 // int img_loop(void* v)
@@ -269,27 +269,27 @@ uint32_t max_pixels = 0;
 //	 // for (uint32_t i = 0; i < max_pixels; ++i)
 //	 // {
 //	 //	 uint32_t num = get_num_digits(png);
-//	 //	 char* num_char_ptr = malloc(num + 1);
-//	 //	 snprintf(num_char_ptr, num + 1, "%d", png++);
-//	 //	 char* mid_char_ptr = combine("output/", num_char_ptr);
-//	 //	 char* final_char_ptr = combine(mid_char_ptr, ".png");
-//	 //	 save_png(final_char_ptr, (intptr_t)gl11_pixels[i], gl11_width[i], gl11_height[i], gl11_type[i]);
-//	 //	 free(final_char_ptr);
-//	 //	 free(mid_char_ptr);
-//	 //	 free(num_char_ptr);
+//	 //	 char* num_char_p = malloc(num + 1);
+//	 //	 snprintf(num_char_p, num + 1, "%d", png++);
+//	 //	 char* mid_char_p = combine("output/", num_char_p);
+//	 //	 char* final_char_p = combine(mid_char_p, ".png");
+//	 //	 save_png(final_char_p, (intptr_t)gl11_pixels[i], gl11_width[i], gl11_height[i], gl11_type[i]);
+//	 //	 free(final_char_p);
+//	 //	 free(mid_char_p);
+//	 //	 free(num_char_p);
 //	 // }
 
 //	 for (uint32_t i = 0; i < max_pixels; ++i)
 //	 {
 //		 uint32_t num = get_num_digits(png);
-//		 char* num_char_ptr = malloc(num + 1);
-//		 snprintf(num_char_ptr, num + 1, "%d", png++);
-//		 char* mid_char_ptr = combine("output/", num_char_ptr);
-//		 char* final_char_ptr = combine(mid_char_ptr, ".png");
-//		 save_png(final_char_ptr, gl11_int8_pixels[i], gl11_width[i], gl11_height[i], gl11_type[i]);
-//		 free(final_char_ptr);
-//		 free(mid_char_ptr);
-//		 free(num_char_ptr);
+//		 char* num_char_p = malloc(num + 1);
+//		 snprintf(num_char_p, num + 1, "%d", png++);
+//		 char* mid_char_p = combine("output/", num_char_p);
+//		 char* final_char_p = combine(mid_char_p, ".png");
+//		 save_png(final_char_p, gl11_int8_pixels[i], gl11_width[i], gl11_height[i], gl11_type[i]);
+//		 free(final_char_p);
+//		 free(mid_char_p);
+//		 free(num_char_p);
 //	 }
 //	 return 0;
 // }
@@ -307,28 +307,28 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL11_nglTexSubImage2D(JNIEnv* env, 
 		gl11_type = realloc(gl11_type, sizeof(int) * max_pixels);
 
 		size_t length = width * height * 4;
-		uint32_t* n_clone_char_ptr = malloc(length);
-		memcpy(n_clone_char_ptr, (uint32_t*)(intptr_t)pixels, length);
+		uint32_t* n_clone_char_p = malloc(length);
+		memcpy(n_clone_char_p, (uint32_t*)(intptr_t)pixels, length);
 //		 // pixels_able = 1;
-//		 gl11_pixels_ptr[gl11_current_texture] = pixels;
-//		 info("s_gl11_pixels_ptr[gl11_current_texture] %ld", gl11_pixels_ptr[gl11_current_texture]);
-//		 gl11_clone_char_ptr[gl11_current_texture] = n_clone_char_ptr;
-//		 info("s_gl11_clone_char_ptr[gl11_current_texture] %p", gl11_clone_char_ptr[gl11_current_texture]);
+//		 gl11_pixels_p[gl11_current_texture] = pixels;
+//		 info("s_gl11_pixels_p[gl11_current_texture] %ld", gl11_pixels_p[gl11_current_texture]);
+//		 gl11_clone_char_p[gl11_current_texture] = n_clone_char_p;
+//		 info("s_gl11_clone_char_p[gl11_current_texture] %p", gl11_clone_char_p[gl11_current_texture]);
 
-		gl11_int8_pixels[index] = n_clone_char_ptr;
+		gl11_int8_pixels[index] = n_clone_char_p;
 		// gl11_pixels[index] = pixels;
 		gl11_width[index] = width;
 		gl11_height[index] = height;
 		gl11_type[index] = type;
 		// uint32_t num = get_num_digits(png);
-		// char* num_char_ptr = malloc(num + 1);
-		// snprintf(num_char_ptr, num + 1, "%d", png++);
-		// char* mid_char_ptr = combine("output/", num_char_ptr);
-		// char* final_char_ptr = combine(mid_char_ptr, ".png");
-		// save_png(final_char_ptr, (intptr_t)pixels, width, height, type);
-		// free(final_char_ptr);
-		// free(mid_char_ptr);
-		// free(num_char_ptr);
+		// char* num_char_p = malloc(num + 1);
+		// snprintf(num_char_p, num + 1, "%d", png++);
+		// char* mid_char_p = combine("output/", num_char_p);
+		// char* final_char_p = combine(mid_char_p, ".png");
+		// save_png(final_char_p, (intptr_t)pixels, width, height, type);
+		// free(final_char_p);
+		// free(mid_char_p);
+		// free(num_char_p);
 	}
 
 	// if (!start)

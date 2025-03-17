@@ -1,8 +1,8 @@
-void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkDependencyFlags vkdependencyflags, VkRenderPass* vkrenderpass_ptr)
+void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkDependencyFlags vkdependencyflags, VkRenderPass* vkrenderpass_p)
 {
 	VkAttachmentDescription vkattachmentdescription =
 	{
-		.format = m_vkswapchainkhr_vkformat_ptr[device],
+		.format = m_vkswapchainkhr_vkformat_p[device],
 		.samples = VK_SAMPLE_COUNT_1_BIT,
 		.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
 		.storeOp = VK_ATTACHMENT_STORE_OP_STORE,
@@ -62,8 +62,8 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkCreateRenderPass(m_vkdevice_ptr[device], &vkrenderpasscreateinfo, VK_NULL_HANDLE, vkrenderpass_ptr);
-	// VkResult vkresult = vkCreateRenderPass(m_vkdevice_ptr[device], &vkrenderpasscreateinfo, VK_NULL_HANDLE, vkrenderpass_ptr);
+	vkCreateRenderPass(m_vkdevice_p[device], &vkrenderpasscreateinfo, VK_NULL_HANDLE, vkrenderpass_p);
+	// VkResult vkresult = vkCreateRenderPass(m_vkdevice_p[device], &vkrenderpasscreateinfo, VK_NULL_HANDLE, vkrenderpass_p);
 	// if (vkresult != VK_SUCCESS)
 	// {
 	// 	error("vkCreateRenderPass %d", vkresult)

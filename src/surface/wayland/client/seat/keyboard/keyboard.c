@@ -6,6 +6,13 @@ static void wl_keyboard_listener_keymap(void* data, struct wl_keyboard* wl_keybo
 static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
 {
 	// info("wl_keyboard_listener_key key %d", key)
+	if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
+	{
+		if (key == KEY_TAB)
+		{
+			wlczwp_setPointer();
+		}
+	}
 }
 
 static void wl_keyboard_listener_enter(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, struct wl_surface* surface, struct wl_array* keys)

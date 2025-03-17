@@ -1,7 +1,7 @@
 static void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_surface, uint32_t serial)
 {
 	// info("xdg_surface_listener_configure")
-	xdg_surface_ack_configure(m_xdg_surface, serial);
+	xdg_surface_ack_configure(m_xdg_surface_p, serial);
 	// if ((m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0)
 	// {
 	// 	m_surface_state |= NALI_SURFACE_C_S_CONFIG;
@@ -9,7 +9,7 @@ static void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_
 	// }
 	// else
 	// {
-	wl_surface_commit(m_wl_surface);
+	wl_surface_commit(m_wl_surface_p);
 	// }
 }
 

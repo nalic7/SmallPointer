@@ -3,6 +3,7 @@
 
 extern uint32_t m_width;
 extern uint32_t m_height;
+extern uint8_t m_pointer_id;
 
 // #define NALI_SURFACE_C_S_CONFIG 1
 #define NALI_SURFACE_C_S_CLEAN 1

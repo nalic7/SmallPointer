@@ -1,22 +1,22 @@
 void vk_makeQueue(uint32_t device)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_ptr[device];
+	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
 
 	uint32_t queuefamilies = 0;
 
 	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &queuefamilies, VK_NULL_HANDLE);
 
-	VkQueueFamilyProperties* vkqueuefamilyproperties_ptr = malloc(queuefamilies * sizeof(VkQueueFamilyProperties));
+	VkQueueFamilyProperties* vkqueuefamilyproperties_p = malloc(queuefamilies * sizeof(VkQueueFamilyProperties));
 
-	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &queuefamilies, vkqueuefamilyproperties_ptr);
+	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &queuefamilies, vkqueuefamilyproperties_p);
 
-	m_max_graphic_ptr[device] = 0;
+	m_max_graphic_p[device] = 0;
 
 	info("queue_families %d", queuefamilies)
 
 	for (uint32_t i = 0; i < queuefamilies; i++)
 	{
-		VkQueueFamilyProperties vkqueuefamilyproperties = vkqueuefamilyproperties_ptr[i];
+		VkQueueFamilyProperties vkqueuefamilyproperties = vkqueuefamilyproperties_p[i];
 		if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 		{
 			info("VK_QUEUE_GRAPHICS_BIT %d", i);
@@ -29,11 +29,11 @@ void vk_makeQueue(uint32_t device)
 
 		if (surface_support)
 		{
-			info("index/size %d", m_max_graphic_ptr[device])
-			info("byte size %ld", (m_max_graphic_ptr[device] + 1) * sizeof(uint32_t))
-			m_graphic_ptr[device] = realloc(m_graphic_ptr[device], (m_max_graphic_ptr[device] + 1) * sizeof(uint32_t));
-			m_graphic_ptr[device][m_max_graphic_ptr[device]++] = i;
-			info("new_size %d", m_max_graphic_ptr[device])
+			info("index/size %d", m_max_graphic_p[device])
+			info("byte size %ld", (m_max_graphic_p[device] + 1) * sizeof(uint32_t))
+			m_graphic_p[device] = realloc(m_graphic_p[device], (m_max_graphic_p[device] + 1) * sizeof(uint32_t));
+			m_graphic_p[device][m_max_graphic_p[device]++] = i;
+			info("new_size %d", m_max_graphic_p[device])
 			info("surface_1 %d", i);
 			m_queue_render = i;
 		}
@@ -59,7 +59,7 @@ void vk_makeQueue(uint32_t device)
 		}
 	}
 
-	info("queuelist_max_graphics %d", m_max_graphic_ptr[device])
+	info("queuelist_max_graphics %d", m_max_graphic_p[device])
 
-	free(vkqueuefamilyproperties_ptr);
+	free(vkqueuefamilyproperties_p);
 }

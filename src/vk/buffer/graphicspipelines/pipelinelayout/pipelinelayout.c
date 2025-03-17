@@ -1,4 +1,4 @@
-void vk_makePipelineLayout(uint32_t device, VkPipelineLayoutCreateFlags vkpipelinelayoutcreateflags, VkPipelineLayout* vkpipelinelayout_ptr)
+void vk_makePipelineLayout(uint32_t device, VkPipelineLayoutCreateFlags vkpipelinelayoutcreateflags, VkPipelineLayout* vkpipelinelayout_p)
 {
 	VkPipelineLayoutCreateInfo vkpipelinelayoutcreateinfo =
 	{
@@ -14,5 +14,5 @@ void vk_makePipelineLayout(uint32_t device, VkPipelineLayoutCreateFlags vkpipeli
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkCreatePipelineLayout(m_vkdevice_ptr[device], &vkpipelinelayoutcreateinfo, VK_NULL_HANDLE, vkpipelinelayout_ptr);
+	vkCreatePipelineLayout(m_vkdevice_p[device], &vkpipelinelayoutcreateinfo, VK_NULL_HANDLE, vkpipelinelayout_p);
 }

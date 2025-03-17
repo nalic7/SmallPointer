@@ -23,18 +23,18 @@ uint32_t* file_uint32_t(const char* filename, uint32_t* file_size)
 		error("uint32_t");
 	}
 
-	uint32_t* uint32_t_ptr = (uint32_t*)malloc(*file_size);
-	if (uint32_t_ptr == NULL)
+	uint32_t* uint32_t_p = (uint32_t*)malloc(*file_size);
+	if (uint32_t_p == NULL)
 	{
 		error("malloc");
 	}
 
-	size_t bytesRead = fread(uint32_t_ptr, sizeof(uint32_t), size, file);
+	size_t bytesRead = fread(uint32_t_p, sizeof(uint32_t), size, file);
 	if (bytesRead != size)
 	{
 		error("fread");
 	}
 
 	fclose(file);
-	return uint32_t_ptr;
+	return uint32_t_p;
 }

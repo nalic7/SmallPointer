@@ -6,6 +6,6 @@ void vk_makeSemaphore(uint32_t device, uint32_t graphic, VkSemaphoreCreateFlags 
 		.pNext = VK_NULL_HANDLE,
 		.flags = vksemaphorecreateflags
 	};
-	vkCreateSemaphore(m_vkdevice_ptr[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, &m_vksemaphore_ptr[device][graphic][0]);//img
-	vkCreateSemaphore(m_vkdevice_ptr[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, &m_vksemaphore_ptr[device][graphic][1]);//render
+	vkCreateSemaphore(m_vkdevice_p[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, &m_vksemaphore_p[device][graphic][0]);//img
+	vkCreateSemaphore(m_vkdevice_p[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, &m_vksemaphore_p[device][graphic][1]);//render
 }

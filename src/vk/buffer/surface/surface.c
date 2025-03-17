@@ -3,8 +3,8 @@ void vk_makeSurface(VkWaylandSurfaceCreateFlagsKHR vkwaylandsurfacecreateflagskh
 	VkWaylandSurfaceCreateInfoKHR vkwaylandsurfacecreateinfokhr =
 	{
 		.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
-		.display = m_wl_display_client,
-		.surface = m_wl_surface,
+		.display = m_wl_display_client_p,
+		.surface = m_wl_surface_p,
 		.flags = vkwaylandsurfacecreateflagskhr,
 		.pNext = VK_NULL_HANDLE
 	};

@@ -7,7 +7,7 @@ void vk_makePhysicalDevice()
 {
 	uint32_t physical_device;
 
-	#ifdef SGPU
+	#ifdef NALI_VK_SGPU
 		physical_device = 1;
 	#else
 		vkEnumeratePhysicalDevices(m_vkinstance, &physical_device, VK_NULL_HANDLE);
@@ -20,10 +20,10 @@ void vk_makePhysicalDevice()
 	#endif
 	m_max_device = physical_device;
 
-	m_vkphysicaldevice_ptr = malloc(sizeof(VkPhysicalDevice) * physical_device);
-	m_vkqueue_ptr = malloc(sizeof(VkQueue*) * physical_device);
-	m_graphic_ptr = malloc(sizeof(uint32_t*) * physical_device);
-	m_max_graphic_ptr = malloc(sizeof(uint8_t) * physical_device);
+	m_vkphysicaldevice_p = malloc(sizeof(VkPhysicalDevice) * physical_device);
+	m_vkqueue_p = malloc(sizeof(VkQueue*) * physical_device);
+	m_graphic_p = malloc(sizeof(uint32_t*) * physical_device);
+	m_max_graphic_p = malloc(sizeof(uint8_t) * physical_device);
 
-	vkEnumeratePhysicalDevices(m_vkinstance, &physical_device, m_vkphysicaldevice_ptr);
+	vkEnumeratePhysicalDevices(m_vkinstance, &physical_device, m_vkphysicaldevice_p);
 }

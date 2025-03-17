@@ -4,6 +4,7 @@
 >CMakeLists.txt
 
 	#...
+	set(CLIENT 1)
 	set(VK_DEBUG 1)
 	set(SCENE 1)
 	#...

@@ -1,6 +1,6 @@
-void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCreateFlags vkpipelinerasterizationstatecreateflags, VkPipelineRasterizationStateCreateInfo* vkpipelinerasterizationstatecreateinfo_ptr)
+void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCreateFlags vkpipelinerasterizationstatecreateflags, VkPipelineRasterizationStateCreateInfo* vkpipelinerasterizationstatecreateinfo_p)
 {
-	*vkpipelinerasterizationstatecreateinfo_ptr = (VkPipelineRasterizationStateCreateInfo)
+	*vkpipelinerasterizationstatecreateinfo_p = (VkPipelineRasterizationStateCreateInfo)
 	{
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
 		.depthClampEnable = VK_FALSE,

@@ -22,7 +22,7 @@ JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_LinuxDisplay_openDisplay(JNIEnv* e
 	return -1;
 }
 
-JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nInternAtom(JNIEnv* env, jclass unused, jlong display_ptr, jstring atom_name_obj, jboolean only_if_exists)
+JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nInternAtom(JNIEnv* env, jclass unused, jlong display_p, jstring atom_name_obj, jboolean only_if_exists)
 {
 	// //avoid x11
 	// info("run_nInternAtom_0")
@@ -50,7 +50,7 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nIsXF86VidModeSupp
 	return JNI_TRUE;
 }
 
-JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nGetDefaultScreen(JNIEnv* env, jclass unused, jlong display_ptr)
+JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nGetDefaultScreen(JNIEnv* env, jclass unused, jlong display_p)
 {
 	// //avoid x11
 	// info("run_nGetDefaultScreen_0")
@@ -89,32 +89,32 @@ JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nCreateWindow(JNIEnv*
 	return -1;
 }
 
-JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nSetClassHint(JNIEnv* env, jclass clazz, jlong display, jlong window_ptr, jlong wm_name, jlong wm_class)
+JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nSetClassHint(JNIEnv* env, jclass clazz, jlong display, jlong window_p, jlong wm_name, jlong wm_class)
 {
 	// //avoid x11
 	// info("run_nSetClassHint_0")
 }
 
-JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_mapRaised(JNIEnv* env, jclass unused, jlong display, jlong window_ptr)
+JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_mapRaised(JNIEnv* env, jclass unused, jlong display, jlong window_p)
 {
 	// //avoid x11
 	// info("run_mapRaised_0")
 }
 
-JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nCreateBlankCursor(JNIEnv* env, jclass unused, jlong display_ptr, jlong window_ptr)
+JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nCreateBlankCursor(JNIEnv* env, jclass unused, jlong display_p, jlong window_p)
 {
 	// //avoid x11
 	// info("run_nCreateBlankCursor_0")
 	return -1;
 }
 
-JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nSetTitle(JNIEnv* env, jclass clazz, jlong display, jlong window_ptr, jlong title, jint len)
+JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nSetTitle(JNIEnv* env, jclass clazz, jlong display, jlong window_p, jlong title, jint len)
 {
 	// //avoid x11
 	// info("run_nSetTitle_0")
 }
 
-JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nSetWindowIcon(JNIEnv* env, jclass clazz, jlong display, jlong window_ptr, jobject icons_buffer, jint icons_buffer_size)
+JNIEXPORT void JNICALL Java_org_lwjgl_opengl_LinuxDisplay_nSetWindowIcon(JNIEnv* env, jclass clazz, jlong display, jlong window_p, jobject icons_buffer, jint icons_buffer_size)
 {
 	// //avoid x11
 	// info("run_nSetWindowIcon_0")

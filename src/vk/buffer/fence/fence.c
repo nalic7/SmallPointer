@@ -1,4 +1,4 @@
-void vk_makeFence(uint32_t device, VkFence* vkfence_ptr)
+void vk_makeFence(uint32_t device, VkFence* vkfence_p)
 {
 	VkFenceCreateInfo vkfencecreateinfo =
 	{
@@ -6,5 +6,5 @@ void vk_makeFence(uint32_t device, VkFence* vkfence_ptr)
 		.flags = VK_FENCE_CREATE_SIGNALED_BIT,
 		.pNext = VK_NULL_HANDLE
 	};
-	vkCreateFence(m_vkdevice_ptr[device], &vkfencecreateinfo, VK_NULL_HANDLE, vkfence_ptr);
+	vkCreateFence(m_vkdevice_p[device], &vkfencecreateinfo, VK_NULL_HANDLE, vkfence_p);
 }

@@ -1,4 +1,4 @@
-void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkImageCreateFlags vkimagecreateflags, VkImageUsageFlags vkimageusageflags, VkImage* vkimage_ptr)
+void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkImageCreateFlags vkimagecreateflags, VkImageUsageFlags vkimageusageflags, VkImage* vkimage_p)
 {
 	VkImageCreateInfo vkimagecreateinfo =
 	{
@@ -20,12 +20,12 @@ void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkI
 		.queueFamilyIndexCount = 0,
 		.pQueueFamilyIndices = VK_NULL_HANDLE
 	};
-	vkCreateImage(m_vkdevice_ptr[device], &vkimagecreateinfo, VK_NULL_HANDLE, vkimage_ptr);
+	vkCreateImage(m_vkdevice_p[device], &vkimagecreateinfo, VK_NULL_HANDLE, vkimage_p);
 }
 
-void vk_genImage(uint32_t device, VkImage vkimage, VkDeviceMemory* vkdevicememory_ptr)
+void vk_genImage(uint32_t device, VkImage vkimage, VkDeviceMemory* vkdevicememory_p)
 {
-	VkDevice vkdevice = m_vkdevice_ptr[device];
+	VkDevice vkdevice = m_vkdevice_p[device];
 	VkMemoryRequirements vkmemoryrequirements;
 	vkGetImageMemoryRequirements(vkdevice, vkimage, &vkmemoryrequirements);
 
@@ -37,9 +37,9 @@ void vk_genImage(uint32_t device, VkImage vkimage, VkDeviceMemory* vkdevicememor
 		.pNext = VK_NULL_HANDLE
 	};
 
-	vkAllocateMemory(vkdevice, &vkmemoryallocateinfo, VK_NULL_HANDLE, vkdevicememory_ptr);
+	vkAllocateMemory(vkdevice, &vkmemoryallocateinfo, VK_NULL_HANDLE, vkdevicememory_p);
 
-	vkBindImageMemory(vkdevice, vkimage, *vkdevicememory_ptr, 0);
+	vkBindImageMemory(vkdevice, vkimage, *vkdevicememory_p, 0);
 }
 
 //vkCmdBlitImage vkCmdCopyImage VK_QUEUE_TRANSFER_BIT
