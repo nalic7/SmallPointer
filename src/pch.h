@@ -1,8 +1,5 @@
 #ifdef PCH_SCENE
 
-	#define NALI_VK_SGPU
-	// #define NALI_VK_INFO_SC
-
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
@@ -10,105 +7,108 @@
 	#include <sys/stat.h>
 	#include <ctype.h>
 	#include <dirent.h>
-	#include <math.h>
 
 	#include <time.h>
 	#include <threads.h>
 
-	#include <linux/input.h>
+	#ifdef NALI_CLIENT
+		#define NALI_VK_SGPU
+		// #define NALI_VK_INFO_SC
 
-	// #include <wayland-client.h>
-	#include <wayland-cursor.h>
-	#include <xdg-shell.h>
-	#include <pointer-constraints-unstable-v1.h>
-	#include <relative-pointer-unstable-v1.h>
-	// #include <wayland-server.h>
-	// #include <wayland-util.h>
+		#include <math.h>
 
-	#include <AL/al.h>
-	#include <AL/alc.h>
+		#include <linux/input.h>
 
-	#include <vulkan/vulkan.h>
-	#include <vulkan/vulkan_wayland.h>
+		// #include <wayland-client.h>
+		#include <wayland-cursor.h>
+		#include <xdg-shell.h>
+		#include <pointer-constraints-unstable-v1.h>
+		#include <relative-pointer-unstable-v1.h>
+		// #include <wayland-server.h>
+		// #include <wayland-util.h>
 
-	#include "file/file.h"
+		#include <AL/al.h>
+		#include <AL/alc.h>
 
-	#include "math/math.h"
-	#include "math/m4x4/m4x4.h"
+		#include <vulkan/vulkan.h>
+		#include <vulkan/vulkan_wayland.h>
 
-	#include "al/al.h"
+		#include "file/file.h"
 
-	#include "surface/surface.h"
-	#include "surface/wayland/client/client.h"
-	#include "surface/wayland/client/register/register.h"
-	#include "surface/wayland/client/seat/seat.h"
-	#include "surface/wayland/client/seat/keyboard/keyboard.h"
-	#include "surface/wayland/client/seat/pointer/pointer.h"
-	#include "surface/wayland/client/xdg/surface/surface.h"
-	#include "surface/wayland/client/xdg/toplevel/toplevel.h"
-	#include "surface/wayland/client/xdg/wm_base/wm_base.h"
-	#include "surface/wayland/client/zwp/zwp.h"
-	#include "surface/wayland/client/zwp/locked/locked.h"
-	#include "surface/wayland/client/zwp/relative/relative.h"
+		#include "math/math.h"
+		#include "math/m4x4/m4x4.h"
 
-	#include "vk/vk.h"
-	#include "vk/buffer/instance/instance.h"
-	#ifdef NALI_VK_DEBUG
-		#include "vk/buffer/instance/debug/debug.h"
+		#include "al/al.h"
+
+		#include "surface/surface.h"
+		#include "surface/wayland/client/client.h"
+		#include "surface/wayland/client/register/register.h"
+		#include "surface/wayland/client/seat/seat.h"
+		#include "surface/wayland/client/seat/keyboard/keyboard.h"
+		#include "surface/wayland/client/seat/pointer/pointer.h"
+		#include "surface/wayland/client/xdg/surface/surface.h"
+		#include "surface/wayland/client/xdg/toplevel/toplevel.h"
+		#include "surface/wayland/client/xdg/wm_base/wm_base.h"
+		#include "surface/wayland/client/zwp/zwp.h"
+		#include "surface/wayland/client/zwp/locked/locked.h"
+		#include "surface/wayland/client/zwp/relative/relative.h"
+
+		#include "vk/release/vk/vk.h"
+		#include "vk/release/instance/instance.h"
+		#ifdef NALI_VK_DEBUG
+			#include "vk/debug/debug.h"
+		#endif
+		#include "vk/release/instance/physical_device/physical_device.h"
+		#include "vk/release/instance/physical_device/queue/queue.h"
+		#include "vk/release/surface/surface.h"
+		#include "vk/release/instance/device/device.h"
+		#include "vk/release/renderpass/renderpass.h"
+		#include "vk/release/framebuffer/framebuffer.h"
+		#include "vk/release/swapchain/swapchain.h"
+		#include "vk/release/fence/fence.h"
+		#include "vk/release/semaphore/semaphore.h"
+		#include "vk/release/commandbuffer/commandpool/commandpool.h"
+		#include "vk/release/commandbuffer/commandbuffer.h"
+		#include "vk/release/buffer/buffer.h"
+		#include "vk/release/imageview/image/image.h"
+		#include "vk/release/imageview/imageview.h"
+		#include "vk/release/shadermodule/shadermodule.h"
+
+		#include "vk/release/graphicspipelines/pipelinelayout/pipelinelayout.h"
+		#include "vk/release/graphicspipelines/pipelinecolorblendstatecreateinfo/pipelinecolorblendstatecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelinedynamicstatecreateinfo/pipelinedynamicstatecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelineinputassemblystatecreateinfo/pipelineinputassemblystatecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelinemultisamplestatecreateinfo/pipelinemultisamplestatecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelinerasterizationstatecreateinfo/pipelinerasterizationstatecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelineshaderstagecreateinfo/pipelineshaderstagecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelinevertexinputstatecreateinfo/pipelinevertexinputstatecreateinfo.h"
+		#include "vk/release/graphicspipelines/pipelineviewportstatecreateinfo/pipelineviewportstatecreateinfo.h"
+		#include "vk/release/graphicspipelines/graphicspipelines.h"
+
+		#include <libavformat/avformat.h>
+		#include <libavcodec/avcodec.h>
+		// // #include <libavutil/avutil.h>
+	
+		#include <libavutil/imgutils.h>
+		// #include <libavutil/avassert.h>
+	
+		// #include <libswscale/swscale.h>
+		#include "ffmpeg/ffmpeg.h"
+
+		#include "loader/client/client.h"
+		// #include "network/linux/client/nw_client.h"
+	#else
+		#include "loader/server/l_server.h"
+		#include "network/linux/server/nw_server.h"
 	#endif
-	#include "vk/buffer/instance/physical_device/physical_device.h"
-	#include "vk/buffer/instance/physical_device/queue/queue.h"
-	#include "vk/buffer/surface/surface.h"
-	#include "vk/buffer/instance/device/device.h"
-	#include "vk/buffer/renderpass/renderpass.h"
-	#include "vk/buffer/framebuffer/framebuffer.h"
-	#include "vk/buffer/swapchain/swapchain.h"
-	#include "vk/buffer/fence/fence.h"
-	#include "vk/buffer/semaphore/semaphore.h"
-	#include "vk/buffer/commandbuffer/commandpool/commandpool.h"
-	#include "vk/buffer/commandbuffer/commandbuffer.h"
-	#include "vk/buffer/buffer.h"
-	#include "vk/buffer/imageview/image/image.h"
-	#include "vk/buffer/imageview/imageview.h"
-	#include "vk/buffer/shadermodule/shadermodule.h"
-
-	#include "vk/buffer/graphicspipelines/pipelinelayout/pipelinelayout.h"
-	#include "vk/buffer/graphicspipelines/pipelinecolorblendstatecreateinfo/pipelinecolorblendstatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelinedynamicstatecreateinfo/pipelinedynamicstatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelineinputassemblystatecreateinfo/pipelineinputassemblystatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelinemultisamplestatecreateinfo/pipelinemultisamplestatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelinerasterizationstatecreateinfo/pipelinerasterizationstatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelineshaderstagecreateinfo/pipelineshaderstagecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelinevertexinputstatecreateinfo/pipelinevertexinputstatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/pipelineviewportstatecreateinfo/pipelineviewportstatecreateinfo.h"
-	#include "vk/buffer/graphicspipelines/graphicspipelines.h"
-
-	// #include <unistd.h>
-	// #include <arpa/inet.h>
-	// #include <sys/epoll.h>
-
-	// #define NALI_SC_PORT 11111
 
 	// #include "loader/both/l_both.h"
 	// #include "network/linux/both/nw_both.h"
-	// #ifdef NALI_CLIENT
-	// 	#include "loader/client/l_client.h"
-	// 	#include "network/linux/client/nw_client.h"
-	// #else
-	// 	#include "loader/server/l_server.h"
-	// 	#include "network/linux/server/nw_server.h"
-	// #endif
 
-	#include <libavformat/avformat.h>
-	#include <libavcodec/avcodec.h>
-	// // #include <libavutil/avutil.h>
-
-	#include <libavutil/imgutils.h>
-	// #include <libavutil/avassert.h>
-
-	// #include <libswscale/swscale.h>
-
-	#include "ffmpeg/ffmpeg.h"
+	#include <unistd.h>
+	#include <arpa/inet.h>
+	#include <sys/epoll.h>
+	#define NALI_SC_PORT 11111
 
 #endif
 #ifdef PCH_COLLADA

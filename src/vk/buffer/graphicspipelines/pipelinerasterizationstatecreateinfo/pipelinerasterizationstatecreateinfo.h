@@ -1,6 +1,0 @@
-#ifndef NALI_VK_PIPELINERASTERIZATIONSTATECREATEINFO_H
-#define NALI_VK_PIPELINERASTERIZATIONSTATECREATEINFO_H
-
-void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCreateFlags vkpipelinerasterizationstatecreateflags, VkPipelineRasterizationStateCreateInfo* vkpipelinerasterizationstatecreateinfo_p);
-
-#endif

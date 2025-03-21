@@ -1,126 +1,106 @@
-// static int
-// 	client_socket,
-// 	epoll;
+static int
+	server_socket,
+	client_socket,
+	epoll;
 
-// uint16_t m_max_epoll_event = 2;
+static uint16_t m_max_epoll_event = 2;
 
-// static struct epoll_event ev;
-// static struct epoll_event* epoll_event_p;
+static struct epoll_event stack_epoll_event;
+static struct epoll_event *epoll_event_p;
 
-// void nws_init()
-// {
-// 	struct sockaddr_in sockaddr_in;
-// 	int addrlen = sizeof(sockaddr_in);
+void nws_init()
+{
+	epoll_event_p = malloc(sizeof(struct epoll_event) * m_max_epoll_event);
 
-// 	if ((m_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-// 	{
-// 		error("socket")
-// 	}
+	struct sockaddr_in server_sockaddr_in, client_sockaddr_in;
+	socklen_t addrlen = sizeof(server_sockaddr_in);
 
-// 	sockaddr_in.sin_family = AF_INET;
-// 	sockaddr_in.sin_addr.s_addr = INADDR_ANY;
-// 	sockaddr_in.sin_port = htons(NALI_SC_PORT);
-// 	if (bind(m_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)) < 0)
-// 	{
-// 		error("bind")
-// 	}
+	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+	{
+		error("socket")
+	}
 
-// 	if (listen(m_socket, 3) < 0)
-// 	{
-// 		error("listen")
-// 	}
-// 	info("PORT %d", NALI_SC_PORT)
+	// bzero((char *)sockaddr_in_p, sizeof(struct sockaddr_in));
+	server_sockaddr_in.sin_family = AF_INET;
+	server_sockaddr_in.sin_addr.s_addr = INADDR_ANY;
+	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
+	if (bind(server_socket, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)) < 0)
+	{
+		error("bind")
+	}
 
-// 	epoll = epoll_create1(0);
-// 	if (epoll == -1)
-// 	{
-// 		error("epoll_create1")
-// 	}
+	if (listen(server_socket, 3) < 0)
+	{
+		error("listen")
+	}
+	info("PORT %d", NALI_SC_PORT)
 
-// 	ev.events = EPOLLIN;
-//     ev.data.fd = m_socket;
-//     if (epoll_ctl(epoll, EPOLL_CTL_ADD, m_socket, &ev) == -1)
-// 	{
-// 		error("epoll_ctl")
-//     }
+	epoll = epoll_create1(0);
+	if (epoll == -1)
+	{
+		error("epoll_create1")
+	}
 
-// 	if ((client_socket = accept(m_socket, (struct sockaddr*)&sockaddr_in, (socklen_t*)&addrlen)) < 0)
-// 	{
-// 		error("accept")
-// 	}
+	stack_epoll_event.events = EPOLLIN;
+	stack_epoll_event.data.fd = server_socket;
+	if (epoll_ctl(epoll, EPOLL_CTL_ADD, server_socket, &stack_epoll_event) == -1)
+	{
+		error("epoll_ctl")
+	}
 
-// 	nwb_init();
-// }
+	while (1)
+	{
+		int event_count = epoll_wait(epoll, epoll_event_p, m_max_epoll_event, -1);
 
-// void nws_key(char* char_p)
-// {
-// 	if (strcmp(char_p, "s") == 0)
-// 	{
-// 		uint8_t size = sizeof(uint16_t) + 1;
-// 		char* message = malloc(size);
-// 		((uint16_t*)message)[0] = 1;
-// 		message[sizeof(uint16_t)] = 'c';
-// 		if (send(client_socket, message, size, 0) <= 0)
-// 		{
-// 			error("send")
-// 		}
-// 	}
-// }
+		for (int i = 0; i < event_count; i++)
+		{
+			int fd = epoll_event_p[i].data.fd;
 
-// void nws_clean()
-// {
-// 	close(m_socket);
-// 	close(client_socket);
-// }
+			if (fd == server_socket)
+			{
+				if ((client_socket = accept(server_socket, (struct sockaddr*)&client_sockaddr_in, &addrlen)) < 0)
+				{
+					error("accept")
+				}
 
-// int main() {
-// 	while (1) {
-// 		FD_ZERO(&read_fds);
-// 		FD_SET(server_socket, &read_fds);
-// 		max_sd = server_socket;
+				stack_epoll_event.events = EPOLLIN;
+				stack_epoll_event.data.fd = client_socket;
+				epoll_ctl(epoll, EPOLL_CTL_ADD, client_socket, &stack_epoll_event);
+			}
+			else
+			{
+				char buffer[1024];
+				int bytes_read = recv(fd, buffer, sizeof(buffer), 0);
+				if (bytes_read <= 0)
+				{
+					close(fd);
+				}
+				else
+				{
+					send(fd, buffer, bytes_read, 0);
+				}
+			}
+		}
+	}
+}
 
-// 		// Add client sockets to set
-// 		for (i = 0; i < MAX_CLIENTS; i++) {
-// 			if (client_sockets[i] > 0)
-// 				FD_SET(client_sockets[i], &read_fds);
-// 			if (client_sockets[i] > max_sd)
-// 				max_sd = client_sockets[i];
-// 		}
+void nws_key(char *char_p)
+{
+	if (strcmp(char_p, "s") == 0)
+	{
+		uint8_t size = sizeof(uint16_t) + 1;
+		char *message = malloc(size);
+		((uint16_t*)message)[0] = 1;
+		message[sizeof(uint16_t)] = 'c';
+		if (send(client_socket, message, size, 0) <= 0)
+		{
+			error("send")
+		}
+	}
+}
 
-// 		// Wait for activity
-// 		activity = select(0, &read_fds, NULL, NULL, NULL);
-
-// 		// New connection
-// 		if (FD_ISSET(server_socket, &read_fds)) {
-// 			client_socket = accept(server_socket, (struct sockaddr*)&client_addr, &addr_len);
-// 			printf("New client connected\n");
-
-// 			// Store client socket
-// 			for (i = 0; i < MAX_CLIENTS; i++) {
-// 				if (client_sockets[i] == 0) {
-// 					client_sockets[i] = client_socket;
-// 					break;
-// 				}
-// 			}
-// 		}
-
-// 		// Check each client for incoming messages
-// 		for (i = 0; i < MAX_CLIENTS; i++) {
-// 			if (client_sockets[i] > 0 && FD_ISSET(client_sockets[i], &read_fds)) {
-// 				char buffer[1024];
-// 				int bytes_read = read(client_sockets[i], buffer, sizeof(buffer));
-// 				if (bytes_read <= 0) {
-// 					// Client disconnected
-// 					close(client_sockets[i]);
-// 					client_sockets[i] = 0;
-// 					printf("Client disconnected\n");
-// 				} else {
-// 					buffer[bytes_read] = '\0';
-// 					printf("Received: %s\n", buffer);
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	return 0;
-// }
+void nws_clean()
+{
+	close(server_socket);
+	close(client_socket);
+}

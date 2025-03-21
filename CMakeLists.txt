@@ -40,48 +40,31 @@ if(SCENE)
     src/surface/surface.c
     src/file/file.c
     src/al/al.c
-    src/vk/vk.c
-    src/vk/buffer/instance/instance.c
-    src/vk/buffer/instance/physical_device/physical_device.c
-    src/vk/buffer/instance/physical_device/queue/queue.c
-    src/vk/buffer/instance/device/device.c
-    src/vk/buffer/surface/surface.c
-    src/vk/buffer/swapchain/swapchain.c
-    src/vk/buffer/fence/fence.c
-    src/vk/buffer/semaphore/semaphore.c
-    src/vk/buffer/commandbuffer/commandpool/commandpool.c
-    src/vk/buffer/commandbuffer/commandbuffer.c
-    src/vk/buffer/buffer.c
-    src/vk/buffer/imageview/image/image.c
-    src/vk/buffer/imageview/imageview.c
-    src/vk/buffer/shadermodule/shadermodule.c
-    src/vk/buffer/renderpass/renderpass.c
-    src/vk/buffer/framebuffer/framebuffer.c
     src/scene/scene.c
     src/ffmpeg/ffmpeg.c
   )
 
-  file(GLOB_RECURSE G_SOURCES src/vk/buffer/graphicspipelines/*.c)
-  list(APPEND SOURCES ${G_SOURCES})
-
-  file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
-  list(APPEND SOURCES ${G_SOURCES})
-
-  file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
-  list(APPEND SOURCES ${G_SOURCES})
-
-  if (VK_DEBUG)
-    list(APPEND FOO NALI_VK_DEBUG=1)
-    list(APPEND SOURCES src/vk/buffer/instance/debug/debug.c)
-  endif()
-
   if (CLIENT)
+    if (VK_DEBUG)
+      list(APPEND FOO NALI_VK_DEBUG=1)
+      list(APPEND SOURCES src/vk/debug/debug.c)
+    endif()
+
+    file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+  
+    file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+  
+    file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+
     list(APPEND FOO NALI_CLIENT=1)
-    list(APPEND SOURCES src/loader/client/l_client.c)
-    list(APPEND SOURCES src/network/linux/client/nw_client.c)
+    list(APPEND SOURCES src/loader/client/client.c)
+    # list(APPEND SOURCES src/network/linux/client/nw_client.c)
   else()
-    list(APPEND SOURCES src/loader/server/l_server.c)
-    list(APPEND SOURCES src/network/linux/server/nw_server.c)
+    # list(APPEND SOURCES src/loader/server/l_server.c)
+    # list(APPEND SOURCES src/network/linux/server/nw_server.c)
   endif()
 
   add_executable(${P_NAME} ${SOURCES})

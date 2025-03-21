@@ -1,6 +1,0 @@
-#ifndef NALI_VK_PIPELINEVERTEXINPUTSTATECREATEINFO_H
-#define NALI_VK_PIPELINEVERTEXINPUTSTATECREATEINFO_H
-
-void vk_setPipelineVertexInputStateCreateInfo(VkPipelineVertexInputStateCreateFlags vkpipelinevertexinputstatecreateflags, VkPipelineVertexInputStateCreateInfo* vkpipelinevertexinputstatecreateinfo_p);
-
-#endif
