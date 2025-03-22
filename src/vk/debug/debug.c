@@ -39,3 +39,12 @@ void vk_makeDebug(VkDebugUtilsMessengerCreateFlagsEXT vkdebugutilsmessengercreat
 		error("vkCreateDebugUtilsMessengerEXT %d", vkresult)
 	}
 }
+
+void vk_freeDebug()
+{
+	PFN_vkDestroyDebugUtilsMessengerEXT pfn_vkdestroydebugutilsmessengerext = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(m_vkinstance, "vkDestroyDebugUtilsMessengerEXT");
+	if (pfn_vkdestroydebugutilsmessengerext != NULL)
+	{
+		pfn_vkdestroydebugutilsmessengerext(m_vkinstance, m_vkdebugutilsmessengerext, VK_NULL_HANDLE);
+	}
+}

@@ -1,8 +1,6 @@
 #ifndef NALI_VK_H
 #define NALI_VK_H
 
-// typedef struct
-// {
 extern VkInstance m_vkinstance;
 
 //D
@@ -32,10 +30,15 @@ extern uint32_t *m_vkswapchainkhr_present_mode_p;
 
 extern VkImage **m_vkswapchainkhr_vkimage_p;
 extern VkExtent2D *m_vkswapchainkhr_vkextent2d_p;
-extern VkFormat *m_vkswapchainkhr_vkformat_p;
+// extern VkFormat *m_vkswapchainkhr_vkformat_p;
 extern VkRenderPass *m_vkswapchainkhr_vkrenderpass_p;
 // extern VkRenderPass **m_vkswapchainkhr_vkrenderpass_p;
-extern VkImageView **m_vkswapchainkhr_vkimageview_p;
+extern VkImageView **m_vkswapchainkhr_vkimageview_color_p;
+
+extern VkImageView *m_vkswapchainkhr_vkimageview_depth_p;
+extern VkImage *m_vkswapchainkhr_vkimage_depth_p;
+extern VkDeviceMemory *m_vkswapchainkhr_vkdevicememory_depth_p;
+
 extern VkFramebuffer **m_vkswapchainkhr_vkframebuffer_p;
 
 extern VkFence **m_vkfence_p;
@@ -51,9 +54,9 @@ extern uint32_t m_queue_render;
 #ifdef NALI_VK_DEBUG
 	extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 #endif
-// } vk;
 
-// extern vk m_vk;
+#define NALI_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM
+#define NALI_VK_DEPTH_FORMAT VK_FORMAT_D32_SFLOAT//VK_FORMAT_D16_UNORM
 
 void vk_init();
 int vk_loop(void *arg);

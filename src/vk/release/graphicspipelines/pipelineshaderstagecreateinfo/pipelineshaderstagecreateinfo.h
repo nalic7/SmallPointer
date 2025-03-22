@@ -1,6 +1,0 @@
-#ifndef NALI_VK_PIPELINESHADERSTAGECREATEINFO_H
-#define NALI_VK_PIPELINESHADERSTAGECREATEINFO_H
-
-void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, VkPipelineShaderStageCreateFlags vkpipelineshaderstagecreateflags_vert, VkPipelineShaderStageCreateFlags vkpipelineshaderstagecreateflags_frag, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo vkpipelineshaderstagecreateinfo_array[]);
-
-#endif

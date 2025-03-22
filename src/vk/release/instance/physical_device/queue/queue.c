@@ -47,15 +47,26 @@ void vk_makeQueue(uint32_t device)
 			info("VK_QUEUE_TRANSFER_BIT %d", i);
 		}
 
+		//check image format here
 		VkFormatProperties vkformatproperties;
-		vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, VK_FORMAT_R8G8B8A8_UNORM, &vkformatproperties);
+		vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, NALI_VK_COLOR_FORMAT, &vkformatproperties);
 		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
 		{
-			info("VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
+			info("VK_FORMAT_R8G8B8A8_UNORM VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
 		}
 		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
 		{
-			info("VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
+			info("VK_FORMAT_R8G8B8A8_UNORM VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
+		}
+
+		vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, NALI_VK_DEPTH_FORMAT, &vkformatproperties);
+		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
+		{
+			info("VK_FORMAT_D16_UNORM VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
+		}
+		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
+		{
+			info("VK_FORMAT_D16_UNORM VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
 		}
 	}
 

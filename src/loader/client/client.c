@@ -24,6 +24,13 @@ static const float nali_g_data_float_array[] =
 	-0.5, 0.5, 0.0, 0.0, 1.0
 };
 
+static const float nali_uniform[] =
+{
+	//m4x4
+	//m4x4
+	//m4x4
+};
+
 void lc_init()
 {
 	//load file
@@ -105,6 +112,7 @@ void lc_clearVK(uint32_t device)
 	free(m_nali_g_data_vkdevicememory_p);
 }
 
+//from file
 void lc_setVkVertexInputBindingDescription(VkVertexInputBindingDescription *vkvertexinputbindingdescription_p)
 {
 	vkvertexinputbindingdescription_p[0] = (VkVertexInputBindingDescription)
@@ -131,4 +139,61 @@ void lc_setVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *
 		.format = VK_FORMAT_R32G32B32_SFLOAT,
 		.offset = sizeof(float) * 2
 	};
+}
+
+void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
+{
+	VkDescriptorSetLayoutBinding vkdescriptorsetlayoutbinding_array[2];
+	vkdescriptorsetlayoutbinding_array[0] = (VkDescriptorSetLayoutBinding)
+	{
+		.binding = 0,
+		.descriptorCount = 1,
+		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,//VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+		.pImmutableSamplers = VK_NULL_HANDLE,
+		.stageFlags = VK_SHADER_STAGE_VERTEX_BIT//VK_SHADER_STAGE_VERTEX_BIT VK_SHADER_STAGE_FRAGMENT_BIT
+	};
+	vkdescriptorsetlayoutbinding_array[1] = (VkDescriptorSetLayoutBinding)
+	{
+		.binding = 1,
+		.descriptorCount = 1,
+		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		.pImmutableSamplers = VK_NULL_HANDLE,
+		.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+	};
+	vk_makeDescriptorSetLayout(m_device, 0, vkdescriptorsetlayoutbinding_array, 2, vkdescriptorsetlayout_p);
+}
+
+void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
+{
+	vkdescriptorpoolsize_p[0] = (VkDescriptorPoolSize)
+	{
+		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+		.descriptorCount = 1
+	};
+	vkdescriptorpoolsize_p[1] = (VkDescriptorPoolSize)
+	{
+		.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		.descriptorCount = 1
+	};
+}
+
+//VkBufferCreateInfo
+//.size = sizeof(nali_uniform)
+//.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+void lc_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkWriteDescriptorSet *vkwritedescriptorset_p)
+{
+	VkDescriptorBufferInfo vkdescriptorbufferinfo =
+	{
+		// .buffer = *vkbuffer_p,
+		.offset = 0,
+		// .range = vkdevicesize
+	};
+	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, &vkdescriptorbufferinfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p, vkwritedescriptorset_p, 0);
+	VkDescriptorImageInfo vkdescriptorimageinfo =
+	{
+		.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		// .imageView = imageView,
+		// .sampler = sampler
+	};
+	vk_setVkWriteDescriptorSet(m_device, 1, &vkdescriptorimageinfo, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset_p, vkwritedescriptorset_p, 1);
 }

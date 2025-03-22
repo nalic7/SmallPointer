@@ -1,13 +1,6 @@
-void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecreateflags, VkRenderPass *vkrenderpass_p, VkPipelineLayout *vkpipelinelayout_p, VkPipeline *vkpipeline_p)
+void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecreateflags, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass *vkrenderpass_p, VkPipelineLayout *vkpipelinelayout_p, VkPipeline *vkpipeline_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
-
-	vk_makePipelineLayout(device, 0, vkpipelinelayout_p);
-
-	VkShaderModule vkshadermodule_vert;
-	VkShaderModule vkshadermodule_frag;
-	VkPipelineShaderStageCreateInfo vkpipelineshaderstagecreateinfo_array[2];
-	vk_setVkPipelineShaderStageCreateInfo(device, 0, 0, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 
 	VkVertexInputBindingDescription vkvertexinputbindingdescription_array;
 	VkVertexInputAttributeDescription vkvertexinputattributedescription_array[2];
@@ -50,18 +43,21 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 	VkPipelineDynamicStateCreateInfo vkpipelinedynamicstatecreateinfo;
 	vk_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, 0, &vkpipelinedynamicstatecreateinfo);
 
+	VkPipelineDepthStencilStateCreateInfo vkpipelinedepthstencilstatecreateinfo;
+	vk_setPipelineDepthStencilStateCreateInfo(0, &vkpipelinedepthstencilstatecreateinfo);
+
 	VkGraphicsPipelineCreateInfo vkgraphicspipelinecreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
 		.stageCount = 2,
-		.pStages = vkpipelineshaderstagecreateinfo_array,
+		.pStages = vkpipelineshaderstagecreateinfo_p,
 		.pVertexInputState = &vkpipelinevertexinputstatecreateinfo,
 		.pInputAssemblyState = &vkpipelineinputassemblystatecreateinfo,
 		.pTessellationState = VK_NULL_HANDLE,
 		.pViewportState = &vkpipelineviewportstatecreateinfo,
 		.pRasterizationState = &vkpipelinerasterizationstatecreateinfo,
 		.pMultisampleState = &vkpipelinemultisamplestatecreateinfo,
-		.pDepthStencilState = VK_NULL_HANDLE,
+		.pDepthStencilState = &vkpipelinedepthstencilstatecreateinfo,
 		.pColorBlendState = &vkpipelinecolorblendstatecreateinfo,
 		.pDynamicState = &vkpipelinedynamicstatecreateinfo,
 		.layout = *vkpipelinelayout_p,
@@ -76,7 +72,4 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 	};
 
 	vkCreateGraphicsPipelines(vkdevice, VK_NULL_HANDLE, 1, &vkgraphicspipelinecreateinfo, VK_NULL_HANDLE, vkpipeline_p);
-
-	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
-	vkDestroyShaderModule(vkdevice, vkshadermodule_vert, VK_NULL_HANDLE);
 }

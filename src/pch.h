@@ -74,16 +74,21 @@
 		#include "vk/release/imageview/imageview.h"
 		#include "vk/release/shadermodule/shadermodule.h"
 
-		#include "vk/release/graphicspipelines/pipelinelayout/pipelinelayout.h"
-		#include "vk/release/graphicspipelines/pipelinecolorblendstatecreateinfo/pipelinecolorblendstatecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelinedynamicstatecreateinfo/pipelinedynamicstatecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelineinputassemblystatecreateinfo/pipelineinputassemblystatecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelinemultisamplestatecreateinfo/pipelinemultisamplestatecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelinerasterizationstatecreateinfo/pipelinerasterizationstatecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelineshaderstagecreateinfo/pipelineshaderstagecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelinevertexinputstatecreateinfo/pipelinevertexinputstatecreateinfo.h"
-		#include "vk/release/graphicspipelines/pipelineviewportstatecreateinfo/pipelineviewportstatecreateinfo.h"
-		#include "vk/release/graphicspipelines/graphicspipelines.h"
+		#include "vk/release/descriptorset/descriptorset.h"
+		#include "vk/release/descriptorset/layout/layout.h"
+		#include "vk/release/descriptorset/pool/pool.h"
+
+		#include "vk/release/graphicspipeline/pipelinelayout/pipelinelayout.h"
+		#include "vk/release/graphicspipeline/colorblendstatecreateinfo/colorblendstatecreateinfo.h"
+		#include "vk/release/graphicspipeline/dynamicstatecreateinfo/dynamicstatecreateinfo.h"
+		#include "vk/release/graphicspipeline/inputassemblystatecreateinfo/inputassemblystatecreateinfo.h"
+		#include "vk/release/graphicspipeline/multisamplestatecreateinfo/multisamplestatecreateinfo.h"
+		#include "vk/release/graphicspipeline/rasterizationstatecreateinfo/rasterizationstatecreateinfo.h"
+		#include "vk/release/graphicspipeline/shaderstagecreateinfo/shaderstagecreateinfo.h"
+		#include "vk/release/graphicspipeline/vertexinputstatecreateinfo/vertexinputstatecreateinfo.h"
+		#include "vk/release/graphicspipeline/viewportstatecreateinfo/viewportstatecreateinfo.h"
+		#include "vk/release/graphicspipeline/depthstencilstatecreateinfo/depthstencilstatecreateinfo.h"
+		#include "vk/release/graphicspipeline/graphicspipeline.h"
 
 		#include <libavformat/avformat.h>
 		#include <libavcodec/avcodec.h>
@@ -241,4 +246,3 @@
 	printf("nali_error: " format "\n", ##__VA_ARGS__); \
 	fflush(stdout); \
 	exit(EXIT_FAILURE);
-

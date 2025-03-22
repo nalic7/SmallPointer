@@ -1,5 +1,5 @@
-ALCdevice* m_alcdevice_p;
-ALCcontext* alccontext_p;
+ALCdevice *m_alcdevice_p;
+ALCcontext *alccontext_p;
 
 void al_init()
 {
@@ -10,6 +10,8 @@ void al_init()
 	{
 		error("alcOpenDevice")
 	}
+
+	info("ALC_DEVICE_SPECIFIER %s", alcGetString(m_alcdevice_p, ALC_DEVICE_SPECIFIER))
 
 	alccontext_p = alcCreateContext(m_alcdevice_p, NULL);
 	if (!alccontext_p)
