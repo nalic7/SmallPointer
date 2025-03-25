@@ -54,6 +54,10 @@
 extern VkBuffer **m_nali_g_index_vkbuffer_p;
 extern VkBuffer **m_nali_g_data_vkbuffer_p;
 
+extern uint32_t **m_nali_g_image_wh_uint32_t_p;
+extern VkImage *m_nali_g_image_vkimage_p;
+extern VkBuffer *m_nali_g_image_vkbuffer_p;
+
 void lc_init();
 
 void lc_initVK();
@@ -64,5 +68,6 @@ void lc_setVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *
 
 void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p);
 void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p);
+void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p);
 
 #endif

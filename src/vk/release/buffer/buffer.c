@@ -51,13 +51,12 @@ void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFla
 	};
 
 	vkAllocateMemory(vkdevice, &vkmemoryallocateinfo, VK_NULL_HANDLE, vkdevicememory_p);
+	vkBindBufferMemory(vkdevice, *vkbuffer_p, *vkdevicememory_p, 0);
 }
 
-void vk_mapBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkMemoryMapFlags vkmemorymapflags, void *buffer_data_p, VkBuffer *vkbuffer_p, VkDeviceMemory *vkdevicememory_p)
+void vk_mapBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkMemoryMapFlags vkmemorymapflags, void *buffer_data_p, VkDeviceMemory *vkdevicememory_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
-
-	vkBindBufferMemory(vkdevice, *vkbuffer_p, *vkdevicememory_p, 0);
 
 	void *data_p;
 	vkMapMemory(vkdevice, *vkdevicememory_p, 0, vkdevicesize, vkmemorymapflags, &data_p);

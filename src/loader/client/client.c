@@ -1,12 +1,26 @@
 // uint16_t **m_nali_g_index_p;
-VkDeviceSize **m_nali_g_index_vkdevicesize_p;
+// VkDeviceSize **m_nali_g_index_vkdevicesize_p;
 VkBuffer **m_nali_g_index_vkbuffer_p;
 VkDeviceMemory **m_nali_g_index_vkdevicememory_p;
 
 // float **m_nali_g_data_p;
-VkDeviceSize **m_nali_g_data_vkdevicesize_p;
+// VkDeviceSize **m_nali_g_data_vkdevicesize_p;
 VkBuffer **m_nali_g_data_vkbuffer_p;
 VkDeviceMemory **m_nali_g_data_vkdevicememory_p;
+
+// VkDeviceSize *m_nali_g_ubo_vkdevicesize_p;
+VkBuffer *m_nali_g_ubo_vkbuffer_p;
+VkDeviceMemory *m_nali_g_ubo_vkdevicememory_p;
+
+uint8_t **m_nali_g_image_uint8_t_p;
+uint32_t **m_nali_g_image_wh_uint32_t_p;
+VkImage *m_nali_g_image_vkimage_p;
+VkImageView *m_nali_g_image_vkimageview_p;
+// VkSampler *m_nali_g_image_vksampler_p;
+VkDeviceMemory *m_nali_g_image_vkimage_vkdevicememory_p;
+
+VkBuffer *m_nali_g_image_vkbuffer_p;
+VkDeviceMemory *m_nali_g_image_vkbuffer_vkdevicememory_p;
 
 // uint32_t **m_nali_t_pixel_p;
 
@@ -14,21 +28,63 @@ VkDeviceMemory **m_nali_g_data_vkdevicememory_p;
 
 static const uint16_t nali_g_index_uint16_t_array[] =
 {
-	0, 1, 2
+	// 0, 1, 2
+	0, 1, 2,
+	2, 3, 0
 };
+
+//float + uint16_t
+// void *nali_g_data_void_p;
 
 static const float nali_g_data_float_array[] =
 {
-	0.0, -0.5, 1.0, 0.0, 0.0,
-	0.5, 0.5, 0.0, 1.0, 0.0,
-	-0.5, 0.5, 0.0, 0.0, 1.0
+	// 0.0, -0.5, 1.0, 0.0, 0.0,
+	// 0.5, 0.5, 0.0, 1.0, 0.0,
+	// -0.5, 0.5, 0.0, 0.0, 1.0
+
+	-1.0F, -1.0F, 0.0F, 0.0F,//bottom left
+	1.0F, -1.0F, 1.0F, 0.0F,//bottom right
+	1.0F,  1.0F, 1.0F, 1.0F,//top right
+	-1.0F,  1.0F, 0.0F, 1.0F//top left
 };
 
-static const float nali_uniform[] =
+// static const float nali_g_v_float_array[] =
+// {
+// 	// 0.0, -0.5, 1.0, 0.0, 0.0,
+// 	// 0.5, 0.5, 0.0, 1.0, 0.0,
+// 	// -0.5, 0.5, 0.0, 0.0, 1.0
+
+// 	-1.0F, -1.0F,//bottom left
+// 	1.0F, -1.0F,//bottom right
+// 	1.0F,  1.0F,//top right
+// 	-1.0F,  1.0F//top left
+// };
+
+// static const int16_t nali_g_t_int16_t_array[] =
+// {
+// 	0, 0,
+// 	512, 0,
+// 	512, 512,
+// 	0, 512
+// };
+
+static const float nali_uniform_float_array[] =
 {
 	//m4x4
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1,
 	//m4x4
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1,
 	//m4x4
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1
 };
 
 void lc_init()
@@ -48,33 +104,121 @@ void lc_initVK()
 	//load shader
 
 	// m_nali_g_index_p = malloc(sizeof(uint16_t *) * 1);
-	m_nali_g_index_vkdevicesize_p = malloc(sizeof(VkDeviceSize *) * 1);
+	// m_nali_g_index_vkdevicesize_p = malloc(sizeof(VkDeviceSize *) * 1);
 	m_nali_g_index_vkbuffer_p = malloc(sizeof(VkBuffer *) * 1);
 	m_nali_g_index_vkdevicememory_p = malloc(sizeof(VkDeviceMemory *) * 1);
 
-	m_nali_g_index_vkdevicesize_p[0] = malloc(sizeof(VkDeviceSize) * 1);
-	m_nali_g_index_vkdevicesize_p[0][0] = sizeof(nali_g_index_uint16_t_array);
+	// m_nali_g_index_vkdevicesize_p[0] = malloc(sizeof(VkDeviceSize) * 1);
+	// m_nali_g_index_vkdevicesize_p[0][0] = sizeof(nali_g_index_uint16_t_array);
 	m_nali_g_index_vkbuffer_p[0] = malloc(sizeof(VkBuffer) * 1);
 	m_nali_g_index_vkdevicememory_p[0] = malloc(sizeof(VkDeviceMemory) * 1);
 
 	// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT -> VkMemoryPropertyFlagBits
-	vk_makeBuffer(m_device, m_nali_g_index_vkdevicesize_p[0][0], 0, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
-	vk_mapBuffer(m_device, m_nali_g_index_vkdevicesize_p[0][0], 0, (void *)nali_g_index_uint16_t_array, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
+	VkDeviceSize vkdevicesize = sizeof(nali_g_index_uint16_t_array);
+	// vk_makeBuffer(m_device, m_nali_g_index_vkdevicesize_p[0][0], 0, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
+	// vk_mapBuffer(m_device, m_nali_g_index_vkdevicesize_p[0][0], 0, (void *)nali_g_index_uint16_t_array, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
+	vk_makeBuffer(m_device, vkdevicesize, 0, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
+	vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_g_index_uint16_t_array, m_nali_g_index_vkdevicememory_p[0]);
 
 	// m_nali_g_data_p = malloc(sizeof(float *) * 1);
-	m_nali_g_data_vkdevicesize_p = malloc(sizeof(VkDeviceSize *) * 1);
+	// m_nali_g_data_vkdevicesize_p = malloc(sizeof(VkDeviceSize *) * 1);
 	m_nali_g_data_vkbuffer_p = malloc(sizeof(VkBuffer *) * 1);
 	m_nali_g_data_vkdevicememory_p = malloc(sizeof(VkDeviceMemory *) * 1);
 
-	m_nali_g_data_vkdevicesize_p[0] = malloc(sizeof(VkDeviceSize) * 1);
-	m_nali_g_data_vkdevicesize_p[0][0] = sizeof(nali_g_data_float_array);
+	// m_nali_g_data_vkdevicesize_p[0] = malloc(sizeof(VkDeviceSize) * 1);
+	// m_nali_g_data_vkdevicesize_p[0][0] = sizeof(nali_g_data_float_array);
 	m_nali_g_data_vkbuffer_p[0] = malloc(sizeof(VkBuffer) * 1);
 	m_nali_g_data_vkdevicememory_p[0] = malloc(sizeof(VkDeviceMemory) * 1);
 
-	vk_makeBuffer(m_device, m_nali_g_data_vkdevicesize_p[0][0], 0, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
-	vk_mapBuffer(m_device, m_nali_g_data_vkdevicesize_p[0][0], 0, (void *)nali_g_data_float_array, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
+	m_nali_g_ubo_vkbuffer_p = malloc(sizeof(VkBuffer) * 1);
+	m_nali_g_ubo_vkdevicememory_p = malloc(sizeof(VkDeviceMemory) * 1);
+
+	m_nali_g_image_uint8_t_p = malloc(sizeof(uint8_t *) * 1);
+
+	m_nali_g_image_wh_uint32_t_p = malloc(sizeof(uint32_t *) * 1);
+	m_nali_g_image_wh_uint32_t_p[0] = malloc(sizeof(uint32_t) * 2);
+
+	m_nali_g_image_vkimage_p = malloc(sizeof(VkImage) * 1);
+	m_nali_g_image_vkimageview_p = malloc(sizeof(VkImageView) * 1);
+	// m_nali_g_image_vksampler_p = malloc(sizeof(VkSampler) * 1);
+	m_nali_g_image_vkimage_vkdevicememory_p = malloc(sizeof(VkDeviceMemory) * 1);
+
+	m_nali_g_image_vkbuffer_p = malloc(sizeof(VkBuffer) * 1);
+	m_nali_g_image_vkbuffer_vkdevicememory_p = malloc(sizeof(VkDeviceMemory) * 1);
+
+	vkdevicesize = sizeof(nali_g_data_float_array);
+	// vkdevicesize = sizeof(nali_g_v_float_array) + sizeof(nali_g_t_int16_t_array);
+	// nali_g_data_void_p = malloc(vkdevicesize);
+	// void *temp_nali_g_data_void_p = nali_g_data_void_p;
+	// for (uint8_t u = 0; u < 4; ++u)
+	// {
+	// 	// info("f %d %f", u, *(nali_g_v_float_array + u))
+	// 	// info("d %d %d", u, *(nali_g_t_int16_t_array + u))
+	// 	memcpy(temp_nali_g_data_void_p, nali_g_v_float_array + u * 2, sizeof(float));
+	// 	info("x0 %d %f", u, *(float *)temp_nali_g_data_void_p)
+	// 	// temp_nali_g_data_void_p = (float *)temp_nali_g_data_void_p + 1;
+	// 	temp_nali_g_data_void_p += sizeof(float);
+
+	// 	memcpy(temp_nali_g_data_void_p, nali_g_v_float_array + u * 2 + 1, sizeof(float));
+	// 	info("x1 %d %f", u, *(float *)temp_nali_g_data_void_p)
+	// 	// temp_nali_g_data_void_p = (float *)temp_nali_g_data_void_p + 1;
+	// 	temp_nali_g_data_void_p += sizeof(float);
+
+	// 	memcpy(temp_nali_g_data_void_p, nali_g_t_int16_t_array + u * 2, sizeof(int16_t));
+	// 	info("y0 %d %d", u, *(int16_t *)temp_nali_g_data_void_p)
+	// 	// temp_nali_g_data_void_p = (int16_t *)temp_nali_g_data_void_p + 1;
+	// 	temp_nali_g_data_void_p += sizeof(int16_t);
+
+	// 	memcpy(temp_nali_g_data_void_p, nali_g_t_int16_t_array + u * 2 + 1, sizeof(int16_t));
+	// 	info("y1 %d %d", u, *(int16_t *)temp_nali_g_data_void_p)
+	// 	// temp_nali_g_data_void_p = (int16_t *)temp_nali_g_data_void_p + 1;
+	// 	temp_nali_g_data_void_p += sizeof(int16_t);
+	// }
+	// // vk_makeBuffer(m_device, m_nali_g_data_vkdevicesize_p[0][0], 0, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
+	// // vk_mapBuffer(m_device, m_nali_g_data_vkdevicesize_p[0][0], 0, (void *)nali_g_data_float_array, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
+	vk_makeBuffer(m_device, vkdevicesize, 0, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
+	// vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_g_data_void_p, m_nali_g_data_vkdevicememory_p[0]);
+	vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_g_data_float_array, m_nali_g_data_vkdevicememory_p[0]);
 
 	// VkVertexInputBindingDescription *vkvertexinputbindingdescription_p = malloc(sizeof(VkVertexInputBindingDescription) * 2);
+
+	vkdevicesize = sizeof(nali_uniform_float_array);
+	vk_makeBuffer(m_device, vkdevicesize, 0, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_ubo_vkbuffer_p[0], &m_nali_g_ubo_vkdevicememory_p[0]);
+	vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0]);
+
+	ffmpeg_read("../asset/image/0.png");
+	m_nali_g_image_uint8_t_p[0] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[0][0], &m_nali_g_image_wh_uint32_t_p[0][1]);
+	ffmpeg_clean();
+	vk_makeImage
+	(
+		m_device,
+		NALI_VK_COLOR_FORMAT,
+		(VkExtent3D)
+		{
+			.width = m_nali_g_image_wh_uint32_t_p[0][0],
+			.height = m_nali_g_image_wh_uint32_t_p[0][1],
+			.depth = 1
+		},
+		//line
+		// VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+		//near
+		VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		0,
+		&m_nali_g_image_vkimage_p[0]
+	);
+	vk_genImage(m_device, m_nali_g_image_vkimage_p[0], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[0]);
+	vkdevicesize = m_nali_g_image_wh_uint32_t_p[0][0] * m_nali_g_image_wh_uint32_t_p[0][1] * NALI_VK_COLOR_FORMAT_BYTE;
+	// vk_mapBuffer(m_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
+
+	vk_makeBuffer(m_device, vkdevicesize, 0, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkbuffer_p[0], &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
+	vk_mapBuffer(m_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
+
+	vk_makeImageView(m_device, m_nali_g_image_vkimage_p[0], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_nali_g_image_vkimageview_p[0]);
+	// vk_makeSampler(m_device, 0, &m_nali_g_image_vksampler_p[0]);
+
+	// info("&m_nali_g_image_vkbuffer_p[0] %p", &m_nali_g_image_vkbuffer_p[0]);
+	// info("&m_nali_g_image_vkbuffer_vkdevicememory_p[0] %p", &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
 
 	thrd_t thrd_t;
 	if (thrd_create(&thrd_t, vk_loop, NULL) != thrd_success)
@@ -86,30 +230,65 @@ void lc_initVK()
 void lc_clearVK(uint32_t device)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
-	vkDestroyBuffer(vkdevice, *m_nali_g_index_vkbuffer_p[0], VK_NULL_HANDLE);
-	vkFreeMemory(vkdevice, *m_nali_g_index_vkdevicememory_p[0], VK_NULL_HANDLE);
 
-	vkDestroyBuffer(vkdevice, *m_nali_g_data_vkbuffer_p[0], VK_NULL_HANDLE);
-	vkFreeMemory(vkdevice, *m_nali_g_data_vkdevicememory_p[0], VK_NULL_HANDLE);
-
+	//model
 	for (uint32_t i = 0; i < 1; ++i)
 	{
-		free(m_nali_g_index_vkdevicesize_p[i]);
+		vkDestroyBuffer(vkdevice, *m_nali_g_index_vkbuffer_p[i], VK_NULL_HANDLE);
+		vkFreeMemory(vkdevice, *m_nali_g_index_vkdevicememory_p[i], VK_NULL_HANDLE);
+	
+		vkDestroyBuffer(vkdevice, *m_nali_g_data_vkbuffer_p[i], VK_NULL_HANDLE);
+		vkFreeMemory(vkdevice, *m_nali_g_data_vkdevicememory_p[i], VK_NULL_HANDLE);
+
+		// free(m_nali_g_index_vkdevicesize_p[i]);
 		free(m_nali_g_index_vkbuffer_p[i]);
 		free(m_nali_g_index_vkdevicememory_p[i]);
 
-		free(m_nali_g_data_vkdevicesize_p[i]);
+		// free(m_nali_g_data_vkdevicesize_p[i]);
 		free(m_nali_g_data_vkbuffer_p[i]);
 		free(m_nali_g_data_vkdevicememory_p[i]);
 	}
 
-	free(m_nali_g_index_vkdevicesize_p);
+	// free(m_nali_g_index_vkdevicesize_p);
 	free(m_nali_g_index_vkbuffer_p);
 	free(m_nali_g_index_vkdevicememory_p);
 
-	free(m_nali_g_data_vkdevicesize_p);
+	// free(m_nali_g_data_vkdevicesize_p);
 	free(m_nali_g_data_vkbuffer_p);
 	free(m_nali_g_data_vkdevicememory_p);
+
+	//image
+	for (uint32_t i = 0; i < 1; ++i)
+	{
+		// vkDestroySampler(vkdevice, m_nali_g_image_vksampler_p[i], VK_NULL_HANDLE);
+		vkDestroyImageView(vkdevice, m_nali_g_image_vkimageview_p[i], VK_NULL_HANDLE);
+		vkDestroyImage(vkdevice, m_nali_g_image_vkimage_p[i], VK_NULL_HANDLE);
+		vkFreeMemory(vkdevice, m_nali_g_image_vkimage_vkdevicememory_p[i], VK_NULL_HANDLE);
+
+		vkDestroyBuffer(vkdevice, m_nali_g_image_vkbuffer_p[i], VK_NULL_HANDLE);
+		vkFreeMemory(vkdevice, m_nali_g_image_vkbuffer_vkdevicememory_p[i], VK_NULL_HANDLE);
+
+		free(m_nali_g_image_uint8_t_p[i]);
+		free(m_nali_g_image_wh_uint32_t_p[i]);
+	}
+
+	//ubo
+	vkDestroyBuffer(vkdevice, m_nali_g_ubo_vkbuffer_p[0], VK_NULL_HANDLE);
+	vkFreeMemory(vkdevice, m_nali_g_ubo_vkdevicememory_p[0], VK_NULL_HANDLE);
+	free(m_nali_g_ubo_vkbuffer_p);
+	free(m_nali_g_ubo_vkdevicememory_p);
+
+	free(m_nali_g_image_uint8_t_p);
+	free(m_nali_g_image_wh_uint32_t_p);
+	free(m_nali_g_image_vkimage_p);
+	free(m_nali_g_image_vkimageview_p);
+	// free(m_nali_g_image_vksampler_p);
+	free(m_nali_g_image_vkimage_vkdevicememory_p);
+
+	free(m_nali_g_image_vkbuffer_p);
+	free(m_nali_g_image_vkbuffer_vkdevicememory_p);
+
+	// free(nali_g_data_void_p);
 }
 
 //from file
@@ -118,7 +297,9 @@ void lc_setVkVertexInputBindingDescription(VkVertexInputBindingDescription *vkve
 	vkvertexinputbindingdescription_p[0] = (VkVertexInputBindingDescription)
 	{
 		.binding = 0,
-		.stride = sizeof(float) * 2 + sizeof(float) * 3,
+		// .stride = sizeof(float) * 2 + sizeof(float) * 3,
+		.stride = sizeof(float) * 2 + sizeof(float) * 2,
+		// .stride = sizeof(float) * 2 + sizeof(int16_t) * 2,
 		.inputRate = VK_VERTEX_INPUT_RATE_VERTEX
 	};
 }
@@ -136,7 +317,9 @@ void lc_setVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *
 	{
 		.binding = 0,
 		.location = 1,
-		.format = VK_FORMAT_R32G32B32_SFLOAT,
+		// .format = VK_FORMAT_R32G32B32_SFLOAT,
+		.format = VK_FORMAT_R32G32_SFLOAT,
+		// .format = VK_FORMAT_R16G16_SINT,
 		.offset = sizeof(float) * 2
 	};
 }
@@ -148,7 +331,7 @@ void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 	{
 		.binding = 0,
 		.descriptorCount = 1,
-		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,//VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,//VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC
 		.pImmutableSamplers = VK_NULL_HANDLE,
 		.stageFlags = VK_SHADER_STAGE_VERTEX_BIT//VK_SHADER_STAGE_VERTEX_BIT VK_SHADER_STAGE_FRAGMENT_BIT
 	};
@@ -156,7 +339,9 @@ void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 	{
 		.binding = 1,
 		.descriptorCount = 1,
-		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//line VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+		//near VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+		.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
 		.pImmutableSamplers = VK_NULL_HANDLE,
 		.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
 	};
@@ -172,28 +357,29 @@ void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
 	};
 	vkdescriptorpoolsize_p[1] = (VkDescriptorPoolSize)
 	{
-		.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		.type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
 		.descriptorCount = 1
 	};
 }
 
-//VkBufferCreateInfo
-//.size = sizeof(nali_uniform)
-//.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
-void lc_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkWriteDescriptorSet *vkwritedescriptorset_p)
+void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p)
 {
-	VkDescriptorBufferInfo vkdescriptorbufferinfo =
+	*vkdescriptorbufferinfo_p = (VkDescriptorBufferInfo)
 	{
-		// .buffer = *vkbuffer_p,
+		.buffer = m_nali_g_ubo_vkbuffer_p[0],
 		.offset = 0,
-		// .range = vkdevicesize
+		// .range = m_nali_g_ubo_vkdevicesize_p[0]
+		.range = sizeof(nali_uniform_float_array)
 	};
-	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, &vkdescriptorbufferinfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p, vkwritedescriptorset_p, 0);
-	VkDescriptorImageInfo vkdescriptorimageinfo =
+	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p, 0);
+	*vkdescriptorimageinfo_p = (VkDescriptorImageInfo)
 	{
-		.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		// .imageView = imageView,
-		// .sampler = sampler
+		//line VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		//near VK_IMAGE_LAYOUT_GENERAL
+		.imageLayout = VK_IMAGE_LAYOUT_GENERAL,
+		.imageView = m_nali_g_image_vkimageview_p[0],
+		// .sampler = m_nali_g_image_vksampler_p[0]
+		.sampler = VK_NULL_HANDLE
 	};
-	vk_setVkWriteDescriptorSet(m_device, 1, &vkdescriptorimageinfo, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset_p, vkwritedescriptorset_p, 1);
+	vk_setVkWriteDescriptorSet(m_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, vkdescriptorset, vkwritedescriptorset_p, 1);
 }

@@ -1,0 +1,6 @@
+#ifndef NALI_VK_CMD_IMAGEMEMORYBARRIER_H
+#define NALI_VK_CMD_IMAGEMEMORYBARRIER_H
+
+void vk_setImageMemoryBarrier(VkImageLayout src_vkimagelayout, VkImageLayout dst_vkimagelayout, VkImage vkimage, VkAccessFlags src_vkaccessflags, VkAccessFlags dst_vkaccessflags, VkImageMemoryBarrier *vkimagememorybarrier_p);
+
+#endif

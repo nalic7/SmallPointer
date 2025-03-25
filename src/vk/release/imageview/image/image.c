@@ -1,4 +1,4 @@
-void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkImageCreateFlags vkimagecreateflags, VkImageUsageFlags vkimageusageflags, VkImage *vkimage_p)
+void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkImageUsageFlags vkimageusageflags, VkImageLayout vkimagelayout, VkImageCreateFlags vkimagecreateflags, VkImage *vkimage_p)
 {
 	VkImageCreateInfo vkimagecreateinfo =
 	{
@@ -12,7 +12,7 @@ void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkI
 		.tiling = VK_IMAGE_TILING_OPTIMAL,
 		.usage = vkimageusageflags,
 		.sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-		.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+		.initialLayout = vkimagelayout,//VK_IMAGE_LAYOUT_UNDEFINED
 
 		.flags = vkimagecreateflags,
 
@@ -23,22 +23,21 @@ void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkI
 	vkCreateImage(m_vkdevice_p[device], &vkimagecreateinfo, VK_NULL_HANDLE, vkimage_p);
 }
 
-void vk_genImage(uint32_t device, VkImage *vkimage_p, VkDeviceMemory *vkdevicememory_p)
+void vk_genImage(uint32_t device, VkImage vkimage, VkMemoryPropertyFlags vkmemorypropertyflags, VkDeviceMemory *vkdevicememory_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
 	VkMemoryRequirements vkmemoryrequirements;
-	vkGetImageMemoryRequirements(vkdevice, *vkimage_p, &vkmemoryrequirements);
+	vkGetImageMemoryRequirements(vkdevice, vkimage, &vkmemoryrequirements);
 
 	VkMemoryAllocateInfo vkmemoryallocateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
 		.allocationSize = vkmemoryrequirements.size,
-		.memoryTypeIndex = vk_findMemoryType(device, vkmemoryrequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+		.memoryTypeIndex = vk_findMemoryType(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags),
 		.pNext = VK_NULL_HANDLE
 	};
 
 	vkAllocateMemory(vkdevice, &vkmemoryallocateinfo, VK_NULL_HANDLE, vkdevicememory_p);
-
-	vkBindImageMemory(vkdevice, *vkimage_p, *vkdevicememory_p, 0);
+	vkBindImageMemory(vkdevice, vkimage, *vkdevicememory_p, 0);
 }
 //vkCmdBlitImage vkCmdCopyImage VK_QUEUE_TRANSFER_BIT

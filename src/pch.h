@@ -73,6 +73,7 @@
 		#include "vk/release/imageview/image/image.h"
 		#include "vk/release/imageview/imageview.h"
 		#include "vk/release/shadermodule/shadermodule.h"
+		#include "vk/release/sampler/sampler.h"
 
 		#include "vk/release/descriptorset/descriptorset.h"
 		#include "vk/release/descriptorset/layout/layout.h"
@@ -89,6 +90,10 @@
 		#include "vk/release/graphicspipeline/viewportstatecreateinfo/viewportstatecreateinfo.h"
 		#include "vk/release/graphicspipeline/depthstencilstatecreateinfo/depthstencilstatecreateinfo.h"
 		#include "vk/release/graphicspipeline/graphicspipeline.h"
+
+		#include "vk/release/cmd/imagememorybarrier/imagememorybarrier.h"
+		#include "vk/release/cmd/imageblit/imageblit.h"
+		#include "vk/release/cmd/bufferimagecopy/bufferimagecopy.h"
 
 		#include <libavformat/avformat.h>
 		#include <libavcodec/avcodec.h>

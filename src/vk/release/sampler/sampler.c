@@ -3,8 +3,8 @@ void vk_makeSampler(uint32_t device, VkSamplerCreateFlags vksamplercreateflags, 
 	VkSamplerCreateInfo vksamplercreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-		.magFilter = VK_FILTER_LINEAR,
-		.minFilter = VK_FILTER_LINEAR,
+		.magFilter = VK_FILTER_NEAREST,//VK_FILTER_LINEAR
+		.minFilter = VK_FILTER_NEAREST,//VK_FILTER_LINEAR
 		.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
 		.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
 		.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
@@ -13,7 +13,7 @@ void vk_makeSampler(uint32_t device, VkSamplerCreateFlags vksamplercreateflags, 
 		.unnormalizedCoordinates = VK_FALSE,
 		.compareEnable = VK_FALSE,
 		.compareOp = VK_COMPARE_OP_ALWAYS,
-		.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+		.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST,//VK_SAMPLER_MIPMAP_MODE_LINEAR
 
 		.flags = vksamplercreateflags,
 		.mipLodBias = 0,

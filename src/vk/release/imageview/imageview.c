@@ -1,9 +1,9 @@
-void vk_makeImageView(uint32_t device, VkImage *image_p, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags, VkImageViewCreateFlags vkimageviewcreateflags, VkImageView *vkimageview_p)
+void vk_makeImageView(uint32_t device, VkImage vkimage, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags, VkImageViewCreateFlags vkimageviewcreateflags, VkImageView *vkimageview_p)
 {
 	VkImageViewCreateInfo vkimageviewcreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-		.image = *image_p,
+		.image = vkimage,
 		.viewType = VK_IMAGE_VIEW_TYPE_2D,
 		.format = vkformat,
 		.subresourceRange.aspectMask = vkimageaspectflags,

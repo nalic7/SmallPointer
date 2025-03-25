@@ -203,7 +203,7 @@ int vk_loop(void *arg)
 	lc_setVkDescriptorSetLayout(&vkdescriptorsetlayout);
 
 	VkDescriptorSet vkdescriptorset;
-	vk_makeDescriptorSet(m_device, &vkdescriptorpool, &vkdescriptorsetlayout, 1, &vkdescriptorset);
+	vk_makeDescriptorSet(m_device, vkdescriptorpool, &vkdescriptorsetlayout, 1, &vkdescriptorset);
 	//e0-u
 
 	//s0-s
@@ -246,8 +246,8 @@ int vk_loop(void *arg)
 		.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
 		.pInheritanceInfo = VK_NULL_HANDLE,
 
-		// .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-		.flags = 0,
+		.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+		// .flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 
@@ -310,6 +310,92 @@ int vk_loop(void *arg)
 	};
 	//e0-buffer
 
+	//
+	// vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
+	// vkResetFences(vkdevice, 1, graphic_vkfence_p);
+
+	vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
+	VkImageMemoryBarrier vkimagememorybarrier;
+	vk_setImageMemoryBarrier(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_nali_g_image_vkimage_p[0], VK_ACCESS_NONE, VK_ACCESS_TRANSFER_WRITE_BIT, &vkimagememorybarrier);
+	vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, &vkimagememorybarrier);
+	VkBufferImageCopy vkbufferimagecopy;
+	vk_setBufferImageCopy(m_nali_g_image_wh_uint32_t_p[0][0], m_nali_g_image_wh_uint32_t_p[0][1], &vkbufferimagecopy);
+	vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[0], m_nali_g_image_vkimage_p[0], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
+	// vkEndCommandBuffer(vkcommandbuffer);
+	VkSubmitInfo cmd_vksubmitinfo =
+	{
+		.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+
+		.commandBufferCount = 1,
+		.pCommandBuffers = &vkcommandbuffer,
+
+		.waitSemaphoreCount = 0,
+		.pWaitSemaphores = VK_NULL_HANDLE,
+		// .pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_TRANSFER_BIT},
+		.pWaitDstStageMask = VK_NULL_HANDLE,
+
+		.signalSemaphoreCount = 0,
+		// .pSignalSemaphores = &render_vksemaphore,
+		.pSignalSemaphores = VK_NULL_HANDLE,
+
+		.pNext = VK_NULL_HANDLE
+	};
+	// // vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, *graphic_vkfence_p);
+	// vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, VK_NULL_HANDLE);
+	// // uint64_t semaphore_value = 0;
+	// // VkSemaphoreWaitInfo vksemaphorewaitinfo =
+	// // {
+	// // 	.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO,
+	// // 	.semaphoreCount = 1,
+	// // 	.pSemaphores = &render_vksemaphore,
+
+	// // 	.pValues = &semaphore_value,
+
+	// // 	.flags = 0,
+	// // 	.pNext = VK_NULL_HANDLE
+	// // };
+	// // vkWaitSemaphores(vkdevice, &vksemaphorewaitinfo, UINT64_MAX);
+	// vkQueueWaitIdle(vkqueue_graphic);
+
+	// // vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
+	// // vkResetFences(vkdevice, 1, graphic_vkfence_p);
+	// //
+
+	//s0-cmd image
+	// vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
+	vk_setImageMemoryBarrier(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL, m_nali_g_image_vkimage_p[0], VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, &vkimagememorybarrier);
+	vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, &vkimagememorybarrier);
+	vkEndCommandBuffer(vkcommandbuffer);
+	// vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, *graphic_vkfence_p);
+	vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, VK_NULL_HANDLE);
+	// vkWaitSemaphores(vkdevice, &vksemaphorewaitinfo, UINT64_MAX);
+	vkQueueWaitIdle(vkqueue_graphic);
+	//e0-cmd image
+
+	// //s0-check
+	// VkImageSubresource vkimagesubresource =
+	// {
+	// 	.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+	// 	.mipLevel = 0,
+	// 	.arrayLayer = 0
+	// };
+	// VkSubresourceLayout vksubresourcelayout;
+	// vkGetImageSubresourceLayout(vkdevice, m_nali_g_image_vkimage_p[0], &vkimagesubresource, &vksubresourcelayout);
+	// info("vksubresourcelayout.rowPitch %ld", vksubresourcelayout.rowPitch)
+	// info("vksubresourcelayout.depthPitch %ld", vksubresourcelayout.depthPitch)
+	// //e0-check
+
+	//s0-ubo
+	VkWriteDescriptorSet vkwritedescriptorset_array[2];
+	VkDescriptorBufferInfo vkdescriptorbufferinfo;
+	VkDescriptorImageInfo vkdescriptorimageinfo;
+	lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, &vkdescriptorimageinfo, vkwritedescriptorset_array);
+	//e0-ubo
+
+	//s0-update
+	vkUpdateDescriptorSets(vkdevice, 2, vkwritedescriptorset_array, 0, VK_NULL_HANDLE);
+	//e0-update
+
 	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
 	{
 		vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
@@ -352,10 +438,6 @@ int vk_loop(void *arg)
 		vkrenderpassbegininfo.framebuffer = m_vkswapchainkhr_vkframebuffer_p[m_device][image_index],
 		vkpresentinfokhr.pImageIndices = &image_index;
 
-		//s0-update
-		// vkUpdateDescriptorSets(vkdevice, 2, vkwritedescriptorset_array, 0, VK_NULL_HANDLE);
-		//e0-update
-
 		//s0-command
 		vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
 
@@ -370,7 +452,7 @@ int vk_loop(void *arg)
 				vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, m_nali_g_data_vkbuffer_p[0], (VkDeviceSize[]){0});
 				vkCmdBindIndexBuffer(vkcommandbuffer, *m_nali_g_index_vkbuffer_p[0], 0, VK_INDEX_TYPE_UINT16);
 				vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &vkdescriptorset, 0, VK_NULL_HANDLE);
-				vkCmdDrawIndexed(vkcommandbuffer, 3, 1, 0, 0, 0);
+				vkCmdDrawIndexed(vkcommandbuffer, 6, 1, 0, 0, 0);
 
 			vkCmdEndRenderPass(vkcommandbuffer);
 
