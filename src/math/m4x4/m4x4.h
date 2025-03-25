@@ -1,10 +1,10 @@
-#ifndef M4X4_H
-#define M4X4_H
+#ifndef NALI_MATH_M4X4_H
+#define NALI_MATH_M4X4_H
 
 extern float m_m4x4_mat[16];
 
-void m4x4_inverse(float* m4x4_p, uint32_t index);
-void m4x4_perspective(float fov, float aspect, float z_near, float z_far, float* m4x4_p);
+void m4x4_inverse(float* m4x4_p);
+void m4x4_p(float fov, float aspect, float z_near, float z_far, float* m4x4_p);
 
 // struct M4x4
 // {

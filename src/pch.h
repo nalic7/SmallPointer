@@ -37,6 +37,7 @@
 
 		#include "math/math.h"
 		#include "math/m4x4/m4x4.h"
+		#include "math/v4/v4.h"
 
 		#include "al/al.h"
 

@@ -309,7 +309,7 @@ void graphic_reader_fixAnimation(collada_Source *collada_source_p)
 					collada_source_p->transform_p[v_mf_16 + 3 + mf_16] -= collada_source_p->collada_bone_p[mb].visual_p[3];
 					collada_source_p->transform_p[v_mf_16 + 7 + mf_16] -= collada_source_p->collada_bone_p[mb].visual_p[7];
 					collada_source_p->transform_p[v_mf_16 + 11 + mf_16] -= collada_source_p->collada_bone_p[mb].visual_p[11];
-					m4x4_inverse(collada_source_p->transform_p, v_mf_16 + mf_16);
+					m4x4_inverse(collada_source_p->transform_p + v_mf_16 + mf_16);
 				}
 			}
 		}

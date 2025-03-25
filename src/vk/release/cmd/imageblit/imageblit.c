@@ -1,8 +1,8 @@
-uint32_t calculateMipLevels(uint32_t width, uint32_t height)
-{
-	uint32_t max_dimension = (width > height) ? width : height;
-	return (uint32_t)(log2(max_dimension)) + 1;
-}
+// uint32_t math_getMipMap(uint32_t width, uint32_t height)
+// {
+// 	uint32_t max_dimension = (width > height) ? width : height;
+// 	return (uint32_t)(log2(max_dimension)) + 1;
+// }
 
 // void vk_setImageBlit(uint32_t width, uint32_t height, uint32_t i, VkImageBlit *vkimageblit_p)
 void vk_setImageBlit(VkImageBlit *vkimageblit_p)

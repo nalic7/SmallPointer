@@ -35,7 +35,6 @@ if(SCENE)
   set(FOO PCH_SCENE=1)
   set(SOURCES
     src/file/file.c
-    src/math/math.c
     src/math/m4x4/m4x4.c
     src/surface/surface.c
     src/file/file.c
@@ -54,6 +53,9 @@ if(SCENE)
     list(APPEND SOURCES ${G_SOURCES})
   
     file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+
+    file(GLOB_RECURSE G_SOURCES src/math/*.c)
     list(APPEND SOURCES ${G_SOURCES})
   
     file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)

@@ -6,7 +6,7 @@ float m_m4x4_mat[] =
 	0.0F, 0.0F, 0.0F, 1.0F
 };
 
-void m4x4_inverse(float* m4x4_p, uint32_t index)
+void m4x4_inverse(float* m4x4_p)
 {
 	float identity[] =
 	{
@@ -20,7 +20,7 @@ void m4x4_inverse(float* m4x4_p, uint32_t index)
 	float s[16];
 	float t[16];
 	memcpy(s, m_m4x4_mat, sizeof(float) * 16);
-	memcpy(t, m4x4_p + index, sizeof(float) * 16);
+	memcpy(t, m4x4_p, sizeof(float) * 16);
 
 	for (i = 0; i < 3; i++)
 	{
@@ -49,7 +49,7 @@ void m4x4_inverse(float* m4x4_p, uint32_t index)
 
 		if (pivotsize == 0)
 		{
-			memcpy(m4x4_p + index, identity, sizeof(float) * 16);
+			memcpy(m4x4_p, identity, sizeof(float) * 16);
 			return;
 		}
 
@@ -91,7 +91,7 @@ void m4x4_inverse(float* m4x4_p, uint32_t index)
 
 		if ((f = t[i * 4 + i]) == 0)
 		{
-			memcpy(m4x4_p + index, identity, sizeof(float) * 16);
+			memcpy(m4x4_p, identity, sizeof(float) * 16);
 			return;
 		}
 
@@ -117,18 +117,27 @@ void m4x4_inverse(float* m4x4_p, uint32_t index)
 		}
 	}
 
-	memcpy(m4x4_p + index, s, sizeof(float) * 16);
+	memcpy(m4x4_p, s, sizeof(float) * 16);
 }
 
-void m4x4_perspective(float fov, float aspect, float z_near, float z_far, float* m4x4_p)
+void m4x4_p(float fov, float aspect, float z_near, float z_far, float* m4x4_p)
 {
-	float z_range = z_near - z_far;
-	float tan_half_fov = tanf(fov);
+	// float z_range = z_near - z_far;
+	// float tan_fov = tanf(fov);
 
-	m4x4_p[0] = 0.5F / (tan_half_fov * aspect);
-	m4x4_p[5] = 0.5F / tan_half_fov;
-	m4x4_p[10] = (-z_near - z_far) / z_range;
-	m4x4_p[11] = 1.0F;
-	m4x4_p[14] = 2.0F * z_far * z_near / z_range;
-	// m4x4_p[15] = 0.0F;
+	// m4x4_p[0] = 1.0F / (tan_fov * aspect);
+	// m4x4_p[5] = 1.0F / tan_fov;
+	// m4x4_p[10] = (-z_near - z_far) / z_range;
+	// m4x4_p[11] = 1.0F;
+	// m4x4_p[14] = 2.0F * z_far * z_near / z_range;
+
+	fov *= (M_PI / 180.0F);
+	float z_range = z_far - z_near;
+	float tan_half_fov = tanf(fov / 2.0F);
+
+	m4x4_p[0] = 1.0F / (tan_half_fov * aspect);
+	m4x4_p[5] = 1.0F / tan_half_fov;
+	m4x4_p[10] = -(z_far + z_near) / z_range;
+	m4x4_p[11] = -1.0F;
+	m4x4_p[14] = -(2.0F * z_far * z_near) / z_range;
 }

@@ -16,7 +16,7 @@ uint8_t **m_nali_g_image_uint8_t_p;
 uint32_t **m_nali_g_image_wh_uint32_t_p;
 VkImage *m_nali_g_image_vkimage_p;
 VkImageView *m_nali_g_image_vkimageview_p;
-// VkSampler *m_nali_g_image_vksampler_p;
+VkSampler *m_nali_g_image_vksampler_p;
 VkDeviceMemory *m_nali_g_image_vkimage_vkdevicememory_p;
 
 VkBuffer *m_nali_g_image_vkbuffer_p;
@@ -68,7 +68,7 @@ static const float nali_g_data_float_array[] =
 // 	0, 512
 // };
 
-static const float nali_uniform_float_array[] =
+static float nali_v_uniform_float_array[] =
 {
 	//m4x4
 	1, 0, 0, 0,
@@ -79,7 +79,7 @@ static const float nali_uniform_float_array[] =
 	1, 0, 0, 0,
 	0, 1, 0, 0,
 	0, 0, 1, 0,
-	0, 0, 0, 1,
+	0, 0, -1, 1,
 	//m4x4
 	1, 0, 0, 0,
 	0, 1, 0, 0,
@@ -87,9 +87,20 @@ static const float nali_uniform_float_array[] =
 	0, 0, 0, 1
 };
 
+// static const float nali_f_uniform_float_array[] =
+// {
+// 	//width height
+// 	512, 512
+// };
+
 void lc_init()
 {
 	//load file
+
+	float qv4_float_p[4];
+	v4_q(0, math_radian(35.0F), 0, qv4_float_p);
+	v4_mx(qv4_float_p, nali_v_uniform_float_array + 16);
+	m4x4_p(90.0F, 16.0F / 9.0F, 0.1F, 100.0F, nali_v_uniform_float_array + 16 + 16);
 	m_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
 }
 
@@ -140,7 +151,7 @@ void lc_initVK()
 
 	m_nali_g_image_vkimage_p = malloc(sizeof(VkImage) * 1);
 	m_nali_g_image_vkimageview_p = malloc(sizeof(VkImageView) * 1);
-	// m_nali_g_image_vksampler_p = malloc(sizeof(VkSampler) * 1);
+	m_nali_g_image_vksampler_p = malloc(sizeof(VkSampler) * 1);
 	m_nali_g_image_vkimage_vkdevicememory_p = malloc(sizeof(VkDeviceMemory) * 1);
 
 	m_nali_g_image_vkbuffer_p = malloc(sizeof(VkBuffer) * 1);
@@ -182,9 +193,9 @@ void lc_initVK()
 
 	// VkVertexInputBindingDescription *vkvertexinputbindingdescription_p = malloc(sizeof(VkVertexInputBindingDescription) * 2);
 
-	vkdevicesize = sizeof(nali_uniform_float_array);
+	vkdevicesize = sizeof(nali_v_uniform_float_array);
 	vk_makeBuffer(m_device, vkdevicesize, 0, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_ubo_vkbuffer_p[0], &m_nali_g_ubo_vkdevicememory_p[0]);
-	vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0]);
+	vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_v_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0]);
 
 	ffmpeg_read("../asset/image/0.png");
 	m_nali_g_image_uint8_t_p[0] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[0][0], &m_nali_g_image_wh_uint32_t_p[0][1]);
@@ -199,10 +210,10 @@ void lc_initVK()
 			.height = m_nali_g_image_wh_uint32_t_p[0][1],
 			.depth = 1
 		},
-		//line
-		// VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-		//near
-		VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
+		//sampler
+		VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+		//image2d
+		// VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		0,
 		&m_nali_g_image_vkimage_p[0]
@@ -215,7 +226,7 @@ void lc_initVK()
 	vk_mapBuffer(m_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
 
 	vk_makeImageView(m_device, m_nali_g_image_vkimage_p[0], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_nali_g_image_vkimageview_p[0]);
-	// vk_makeSampler(m_device, 0, &m_nali_g_image_vksampler_p[0]);
+	vk_makeSampler(m_device, 0, &m_nali_g_image_vksampler_p[0]);
 
 	// info("&m_nali_g_image_vkbuffer_p[0] %p", &m_nali_g_image_vkbuffer_p[0]);
 	// info("&m_nali_g_image_vkbuffer_vkdevicememory_p[0] %p", &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
@@ -260,7 +271,7 @@ void lc_clearVK(uint32_t device)
 	//image
 	for (uint32_t i = 0; i < 1; ++i)
 	{
-		// vkDestroySampler(vkdevice, m_nali_g_image_vksampler_p[i], VK_NULL_HANDLE);
+		vkDestroySampler(vkdevice, m_nali_g_image_vksampler_p[i], VK_NULL_HANDLE);
 		vkDestroyImageView(vkdevice, m_nali_g_image_vkimageview_p[i], VK_NULL_HANDLE);
 		vkDestroyImage(vkdevice, m_nali_g_image_vkimage_p[i], VK_NULL_HANDLE);
 		vkFreeMemory(vkdevice, m_nali_g_image_vkimage_vkdevicememory_p[i], VK_NULL_HANDLE);
@@ -282,7 +293,7 @@ void lc_clearVK(uint32_t device)
 	free(m_nali_g_image_wh_uint32_t_p);
 	free(m_nali_g_image_vkimage_p);
 	free(m_nali_g_image_vkimageview_p);
-	// free(m_nali_g_image_vksampler_p);
+	free(m_nali_g_image_vksampler_p);
 	free(m_nali_g_image_vkimage_vkdevicememory_p);
 
 	free(m_nali_g_image_vkbuffer_p);
@@ -339,9 +350,9 @@ void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 	{
 		.binding = 1,
 		.descriptorCount = 1,
-		//line VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-		//near VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-		.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+		//sampler VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+		//image2d VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.pImmutableSamplers = VK_NULL_HANDLE,
 		.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
 	};
@@ -357,7 +368,10 @@ void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
 	};
 	vkdescriptorpoolsize_p[1] = (VkDescriptorPoolSize)
 	{
-		.type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+		//image2d
+		// .type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+		//sampler
+		.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1
 	};
 }
@@ -369,17 +383,24 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 		.buffer = m_nali_g_ubo_vkbuffer_p[0],
 		.offset = 0,
 		// .range = m_nali_g_ubo_vkdevicesize_p[0]
-		.range = sizeof(nali_uniform_float_array)
+		.range = sizeof(nali_v_uniform_float_array)
 	};
-	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p, 0);
+	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 	*vkdescriptorimageinfo_p = (VkDescriptorImageInfo)
 	{
 		//line VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		//near VK_IMAGE_LAYOUT_GENERAL
 		.imageLayout = VK_IMAGE_LAYOUT_GENERAL,
 		.imageView = m_nali_g_image_vkimageview_p[0],
-		// .sampler = m_nali_g_image_vksampler_p[0]
-		.sampler = VK_NULL_HANDLE
+		.sampler = m_nali_g_image_vksampler_p[0]
+		// .sampler = VK_NULL_HANDLE
 	};
-	vk_setVkWriteDescriptorSet(m_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, vkdescriptorset, vkwritedescriptorset_p, 1);
+	vk_setVkWriteDescriptorSet(m_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset, vkwritedescriptorset_p + 1);
+	// *vkdescriptorbufferinfo_p = (VkDescriptorBufferInfo)
+	// {
+	// 	.buffer = ,
+	// 	.offset = 0,
+	// 	.range = 
+	// };
+	// vk_setVkWriteDescriptorSet(m_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 }

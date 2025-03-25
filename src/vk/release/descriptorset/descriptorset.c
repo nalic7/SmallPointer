@@ -12,9 +12,9 @@ void vk_makeDescriptorSet(uint32_t device, VkDescriptorPool vkdescriptorpool, Vk
 	vkAllocateDescriptorSets(m_vkdevice_p[device], &vkdescriptorsetallocateinfo, vkdescriptorset_p);
 }
 
-void vk_setVkWriteDescriptorSet(uint32_t device, uint32_t bind, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorType vkdescriptortype, VkDescriptorSet vkdescriptorset, VkWriteDescriptorSet *vkwritedescriptorset_p, uint16_t vkwritedescriptorset_index)
+void vk_setVkWriteDescriptorSet(uint32_t device, uint32_t bind, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorType vkdescriptortype, VkDescriptorSet vkdescriptorset, VkWriteDescriptorSet *vkwritedescriptorset_p)
 {
-	vkwritedescriptorset_p[vkwritedescriptorset_index] = (VkWriteDescriptorSet)
+	*vkwritedescriptorset_p = (VkWriteDescriptorSet)
 	{
 		.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
 		.dstSet = vkdescriptorset,

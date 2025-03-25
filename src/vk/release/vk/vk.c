@@ -490,11 +490,11 @@ int vk_loop(void *arg)
 		}
 	}
 
-	vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
+	// vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
 	vkQueueWaitIdle(vkqueue_graphic);
 	if (render_state & RSE_MULTIPLE_QUEUE)
 	{
-		vkWaitForFences(vkdevice, 1, transfer_vkfence_p, VK_TRUE, UINT64_MAX);
+		// vkWaitForFences(vkdevice, 1, transfer_vkfence_p, VK_TRUE, UINT64_MAX);
 		vkQueueWaitIdle(vkqueue_render);
 	}
 
