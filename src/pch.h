@@ -120,6 +120,11 @@
 	#include <arpa/inet.h>
 	#include <sys/epoll.h>
 	#define NALI_SC_PORT 11111
+	#define NALI_HOME "../asset/"
+	#define NALI_HOME_IMAGE "image"
+	#define NALI_HOME_SHADER "shader/"
+	#define NALI_HOME_SHADER_VERT "vert"
+	#define NALI_HOME_SHADER_FRAG "frag"
 
 #endif
 #ifdef PCH_COLLADA

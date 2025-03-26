@@ -1,4 +1,4 @@
-uint32_t* file_uint32_t(const char* filename, uint32_t* file_size)
+uint32_t *file_uint32_t(const char *filename, uint32_t *file_size)
 {
 	FILE *file = fopen(filename, "rb");
 	
@@ -23,7 +23,7 @@ uint32_t* file_uint32_t(const char* filename, uint32_t* file_size)
 		error("uint32_t");
 	}
 
-	uint32_t* uint32_t_p = (uint32_t*)malloc(*file_size);
+	uint32_t *uint32_t_p = (uint32_t*)malloc(*file_size);
 	if (uint32_t_p == NULL)
 	{
 		error("malloc");

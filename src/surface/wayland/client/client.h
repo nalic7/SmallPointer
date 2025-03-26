@@ -21,7 +21,7 @@ extern struct zwp_locked_pointer_v1 *m_zwp_locked_pointer_v1_p;
 extern struct zwp_relative_pointer_manager_v1 *m_zwp_relative_pointer_manager_v1_p;
 extern struct zwp_relative_pointer_v1 *m_zwp_relative_pointer_v1_p;
 
-void wlc_init();
 void wlc_clean();
+void wlc_init();
 
 #endif

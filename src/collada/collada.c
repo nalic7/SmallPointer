@@ -1,29 +1,33 @@
 static uint32_t thrd = 0;
 
-static int skin(void* d_name_p)
+static const char C_IN[] = "./C_I";
+static const char C_OUT[] = "./C_O";
+
+static int skin(void *arg)
 {
 	// info("skin %s\n", (char*)name)
 
-	char* n0_p = math_combine(C_IN, "/");
-	char* n_in_p = math_combine(n0_p, d_name_p);
-	free(n0_p);
-	n0_p = math_combine(C_OUT, "/");
-
-	FILE* file_p = fopen(n_in_p, "r");
-	if (!file_p)
-	{
-		error("fopen");
-	}
-
-	char* dot_p = strchr(d_name_p, '.');
-
+	char *d_name_char_p = ((void **)arg)[0];
+	char *dot_p = strchr(d_name_char_p, '.');
 	if (dot_p)
 	{
 		*dot_p = '\0';
 	}
 
-	char* n_out_p = math_combine(n0_p, d_name_p);
-	free(n0_p);
+	char *file_char_p = ((void **)arg)[1];
+	free(arg);
+
+	char *out_char_p = malloc(sizeof(C_OUT)-1 + 1 + strlen(d_name_char_p) + 1);
+	strcpy(out_char_p, C_OUT);
+	strcat(out_char_p, "/");
+	strcat(out_char_p, d_name_char_p);
+
+	FILE *file_p = fopen(file_char_p, "r");
+	free(file_char_p);
+	if (!file_p)
+	{
+		error("fopen");
+	}
 
 	collada_Source collada_source =
 	{
@@ -48,7 +52,7 @@ static int skin(void* d_name_p)
 		file_reader_match(file_p, (const char*[]){C_ARMATURE_NAME}, 1);
 		file_reader_match(file_p, (const char*[]){"count=\""}, 1);
 		uint32_t temp_size = 0;
-		int* int_p = malloc(0);
+		int *int_p = malloc(0);
 		int_p = file_reader_int(file_p, "\"", int_p, &temp_size);
 
 		collada_source.max_frame = int_p[0];
@@ -274,12 +278,11 @@ static int skin(void* d_name_p)
 		}
 	}
 
-	file_writer_collada(&collada_source, n_out_p);
+	file_writer_collada(&collada_source, out_char_p);
+	free(out_char_p);
 
 	fclose(file_p);
-	free(n_in_p);
-	free(n_out_p);
-	free(d_name_p);
+	free(d_name_char_p);
 
 	//s0-free
 	if (collada_source.is_animated)
@@ -448,26 +451,27 @@ int main()
 	mkdir(C_IN, 0700);
 	mkdir(C_OUT, 0700);
 
-	DIR* dir = opendir(C_IN);
+	DIR *dir = opendir(C_IN);
 	if (!dir)
 	{
 		error("opendir")
 	}
 
-	struct dirent* dirent_p;
+	struct dirent *dirent_p;
 	while ((dirent_p = readdir(dir)) != NULL)
 	{
-		char* d_name_p = strdup(dirent_p->d_name);
+		char *d_name_char_p = strdup(dirent_p->d_name);
 		// size_t size = strlen(d_name_p) + 1;
-		// char* name_p = malloc(size);
+		// char *name_p = malloc(size);
 		// memcpy(name_p, d_name_p, size);
 		struct stat _stat;
 
-		char* n0_p = math_combine(C_IN, "/");
-		char* n_in_p = math_combine(n0_p, d_name_p);
-		free(n0_p);
+		char *file_char_p = malloc(sizeof(C_IN)-1 + 1 + strlen(d_name_char_p) + 1);
+		strcpy(file_char_p, C_IN);
+		strcat(file_char_p, "/");
+		strcat(file_char_p, d_name_char_p);
 
-		if (stat(n_in_p, &_stat))
+		if (stat(file_char_p, &_stat))
 		{
 			error("stat")
 		}
@@ -487,15 +491,20 @@ int main()
 			// }
 
 			// if (result != thrd_success)
-			if (thrd_create(&thread, skin, (void*)d_name_p) != thrd_success)
+			void **arg = malloc(sizeof(void *) * 2);
+			arg[0] = d_name_char_p;
+			arg[1] = file_char_p;
+			if (thrd_create(&thread, skin, arg) != thrd_success)
 			{
 				error("thrd_create")
 			}
 
 			++thrd;
 		}
-
-		free(n_in_p);
+		else
+		{
+			free(file_char_p);
+		}
 	}
 
 	closedir(dir);

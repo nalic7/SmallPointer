@@ -70,17 +70,17 @@ static const float nali_g_data_float_array[] =
 
 static float nali_v_uniform_float_array[] =
 {
-	//m4x4
+	//m4x4 m
 	1, 0, 0, 0,
 	0, 1, 0, 0,
 	0, 0, 1, 0,
 	0, 0, 0, 1,
-	//m4x4
+	//m4x4 v
 	1, 0, 0, 0,
 	0, 1, 0, 0,
 	0, 0, 1, 0,
 	0, 0, -1, 1,
-	//m4x4
+	//m4x4 p
 	1, 0, 0, 0,
 	0, 1, 0, 0,
 	0, 0, 1, 0,
@@ -98,7 +98,7 @@ void lc_init()
 	//load file
 
 	float qv4_float_p[4];
-	v4_q(0, math_radian(35.0F), 0, qv4_float_p);
+	v4_q(0, MATH_D2R(35.0F), 0, qv4_float_p);
 	v4_mx(qv4_float_p, nali_v_uniform_float_array + 16);
 	m4x4_p(90.0F, 16.0F / 9.0F, 0.1F, 100.0F, nali_v_uniform_float_array + 16 + 16);
 	m_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
@@ -197,7 +197,16 @@ void lc_initVK()
 	vk_makeBuffer(m_device, vkdevicesize, 0, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_ubo_vkbuffer_p[0], &m_nali_g_ubo_vkdevicememory_p[0]);
 	vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_v_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0]);
 
-	ffmpeg_read("../asset/image/0.png");
+	const char image_type[] = ".png";
+	const char image_path[] = NALI_HOME NALI_HOME_IMAGE "/";
+	uint32_t index = 0;
+	size_t name_index = sizeof(image_path)-1;
+	char *image_file = malloc(name_index + math_length(index) + sizeof(image_type)-1 + 1);
+	strcpy(image_file, image_path);
+	sprintf(image_file + name_index, "%u", index);
+	strcat(image_file, image_type);
+	ffmpeg_read(image_file);
+	free(image_file);
 	m_nali_g_image_uint8_t_p[0] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[0][0], &m_nali_g_image_wh_uint32_t_p[0][1]);
 	ffmpeg_clean();
 	vk_makeImage

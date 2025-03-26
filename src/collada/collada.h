@@ -1,13 +1,10 @@
 #ifndef NALI_COLLADA_PARSER_H
 #define NALI_COLLADA_PARSER_H
 
-#define C_IN "./C_I"
-#define C_OUT "./C_O"
-
 #define C_FIX_ANIMATED 1
 // #define C_CURVE 1
 // #define C_OUT_NORMAL 1
-// #define C_OUT_TEXCOORD 1
+#define C_OUT_TEXCOORD 1
 #define C_ARMATURE_NAME "<animation id=\""
 #define C_VERTEX_FILE "/vertex.bin"
 #ifdef C_OUT_NORMAL
@@ -21,6 +18,13 @@
 #define C_BINDPOSE_FILE "/bindpose.bin"
 #define C_INDEX_FILE "/index.bin"
 #define C_TRANSFORM_FILE "/transform.bin"
+
+#define C_DOC_FILE "_Doc"
+#define C_DOC_BONE_FILE "/bone.dat"
+#define C_DOC_JOINT_FILE "/joint.dat"
+
+#define C_BONE_FILE "/bone/"
+#define C_BIN_FILE ".bin"
 // #define C_TIME_NAME "/time.bin"
 // #define C_VISUALBONE_FILE "/visualbone.bin"
 

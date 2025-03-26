@@ -1,38 +1,141 @@
-struct wl_display *m_wl_display_client_p;
-struct wl_registry *m_wl_registry_p;
-struct wl_compositor *m_wl_compositor_p;
-struct wl_surface *m_wl_surface_p;
+struct wl_display *m_wl_display_client_p = NULL;
+struct wl_registry *m_wl_registry_p = NULL;
+struct wl_compositor *m_wl_compositor_p = NULL;
+struct wl_surface *m_wl_surface_p = NULL;
 
-struct xdg_wm_base *m_xdg_wm_base_p;
-struct xdg_surface *m_xdg_surface_p;
-struct xdg_toplevel *m_xdg_toplevel_p;
+struct xdg_wm_base *m_xdg_wm_base_p = NULL;
+struct xdg_surface *m_xdg_surface_p = NULL;
+struct xdg_toplevel *m_xdg_toplevel_p = NULL;
 
-struct wl_seat *m_wl_seat_p;
-struct wl_keyboard *m_wl_keyboard_p;
-struct wl_shm *m_wl_shm_p;
-struct wl_pointer *m_wl_pointer_p;
+struct wl_seat *m_wl_seat_p = NULL;
+struct wl_keyboard *m_wl_keyboard_p = NULL;
+struct wl_shm *m_wl_shm_p = NULL;
+struct wl_pointer *m_wl_pointer_p = NULL;
 
-struct zwp_pointer_constraints_v1 *m_zwp_pointer_constraints_v1_p;
-struct zwp_locked_pointer_v1 *m_zwp_locked_pointer_v1_p;
+struct zwp_pointer_constraints_v1 *m_zwp_pointer_constraints_v1_p = NULL;
+struct zwp_locked_pointer_v1 *m_zwp_locked_pointer_v1_p = NULL;
 
-struct zwp_relative_pointer_manager_v1 *m_zwp_relative_pointer_manager_v1_p;
-struct zwp_relative_pointer_v1 *m_zwp_relative_pointer_v1_p;
+struct zwp_relative_pointer_manager_v1 *m_zwp_relative_pointer_manager_v1_p = NULL;
+struct zwp_relative_pointer_v1 *m_zwp_relative_pointer_v1_p = NULL;
 
-static int loop(void* arg)
+void wlc_clean()
 {
-	int result;
-	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
+	if (m_wl_seat_p)
 	{
-		result = wl_display_dispatch(m_wl_display_client_p);
-		if (result < 0)
-		{
-			error("wl_display_dispatch")
-		}
-		wlcp_change_cursor(1);
+		wl_seat_destroy(m_wl_seat_p);
+		m_wl_seat_p = NULL;
+	}
+	if (m_wl_keyboard_p)
+	{
+		wl_keyboard_destroy(m_wl_keyboard_p);
+		m_wl_keyboard_p = NULL;
+	}
+	if (m_wl_pointer_p)
+	{
+		wl_pointer_destroy(m_wl_pointer_p);
+		m_wl_pointer_p = NULL;
 	}
 
-	error("wl_display_dispatch %d", result);
-	//recreate?
+	if (m_xdg_toplevel_p)
+	{
+		xdg_toplevel_destroy(m_xdg_toplevel_p);
+		m_xdg_toplevel_p = NULL;
+	}
+	if (m_xdg_surface_p)
+	{
+		xdg_surface_destroy(m_xdg_surface_p);
+		m_xdg_surface_p = NULL;
+	}
+	if (m_xdg_wm_base_p)
+	{
+		xdg_wm_base_destroy(m_xdg_wm_base_p);
+		m_xdg_wm_base_p = NULL;
+	}
+
+	if (m_zwp_locked_pointer_v1_p)
+	{
+		zwp_locked_pointer_v1_destroy(m_zwp_locked_pointer_v1_p);
+		m_zwp_locked_pointer_v1_p = NULL;
+	}
+	if (m_zwp_pointer_constraints_v1_p)
+	{
+		zwp_pointer_constraints_v1_destroy(m_zwp_pointer_constraints_v1_p);
+		m_zwp_pointer_constraints_v1_p = NULL;
+	}
+
+	if (m_zwp_relative_pointer_v1_p)
+	{
+		zwp_relative_pointer_v1_destroy(m_zwp_relative_pointer_v1_p);
+		m_zwp_relative_pointer_v1_p = NULL;
+	}
+	if (m_zwp_relative_pointer_manager_v1_p)
+	{
+		zwp_relative_pointer_manager_v1_destroy(m_zwp_relative_pointer_manager_v1_p);
+		m_zwp_relative_pointer_manager_v1_p = NULL;
+	}
+
+	if (m_wl_surface_p)
+	{
+		wl_surface_destroy(m_wl_surface_p);
+		m_wl_surface_p = NULL;
+	}
+	if (m_wl_compositor_p)
+	{
+		wl_compositor_destroy(m_wl_compositor_p);
+		m_wl_compositor_p = NULL;
+	}
+	if (m_wl_shm_p)
+	{
+		wl_shm_destroy(m_wl_shm_p);
+		m_wl_shm_p = NULL;
+	}
+
+	if (m_wl_registry_p)
+	{
+		wl_registry_destroy(m_wl_registry_p);
+		m_wl_registry_p = NULL;
+	}
+	if (m_wl_display_client_p)
+	{
+		wl_display_disconnect(m_wl_display_client_p);
+		m_wl_display_client_p = NULL;
+	}
+}
+
+static int start(void* arg)
+{
+	struct timespec ts = {1, 0};
+	thrd_sleep(&ts, NULL);
+	// if (m_surface_state & NALI_SURFACE_C_S_WAIT)
+	// {
+	m_surface_state |= NALI_SURFACE_C_S_CONFIG;
+	// }
+}
+static int loop(void* arg)
+{
+	thrd_t thrd_t;
+	if (thrd_create(&thrd_t, start, NULL) != thrd_success)
+	{
+		error("thrd_create")
+	}
+	int result = wl_display_dispatch(m_wl_display_client_p);
+	// m_surface_state |= NALI_SURFACE_C_S_WAIT;
+
+	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0 && result > -1)
+	{
+		wlcp_change_cursor(1);
+		result = wl_display_dispatch(m_wl_display_client_p);
+	}
+
+	// m_surface_state &= 255 - (NALI_SURFACE_C_S_WAIT + NALI_SURFACE_C_S_CONFIG);
+	m_surface_state &= 255 - NALI_SURFACE_C_S_CONFIG;
+	if (result < 0)
+	{
+		info("re_wl")
+		info("wl_display_dispatch %d", result);
+		wlc_clean();
+		wlc_init();
+	}
 	return 0;
 }
 void wlc_init()
@@ -93,74 +196,5 @@ void wlc_init()
 	if (thrd_create(&thrd_t, loop, NULL) != thrd_success)
 	{
 		error("thrd_create")
-	}
-}
-
-void wlc_clean()
-{
-	if (m_wl_seat_p)
-	{
-		wl_seat_destroy(m_wl_seat_p);
-	}
-	if (m_wl_keyboard_p)
-	{
-		wl_keyboard_destroy(m_wl_keyboard_p);
-	}
-	if (m_wl_pointer_p)
-	{
-		wl_pointer_destroy(m_wl_pointer_p);
-	}
-
-	if (m_xdg_toplevel_p)
-	{
-		xdg_toplevel_destroy(m_xdg_toplevel_p);
-	}
-	if (m_xdg_surface_p)
-	{
-		xdg_surface_destroy(m_xdg_surface_p);
-	}
-	if (m_xdg_wm_base_p)
-	{
-		xdg_wm_base_destroy(m_xdg_wm_base_p);
-	}
-
-	if (m_zwp_locked_pointer_v1_p)
-	{
-		zwp_locked_pointer_v1_destroy(m_zwp_locked_pointer_v1_p);
-	}
-	if (m_zwp_pointer_constraints_v1_p)
-	{
-		zwp_pointer_constraints_v1_destroy(m_zwp_pointer_constraints_v1_p);
-	}
-
-	if (m_zwp_relative_pointer_v1_p)
-	{
-		zwp_relative_pointer_v1_destroy(m_zwp_relative_pointer_v1_p);
-	}
-	if (m_zwp_relative_pointer_manager_v1_p)
-	{
-		zwp_relative_pointer_manager_v1_destroy(m_zwp_relative_pointer_manager_v1_p);
-	}
-
-	if (m_wl_surface_p)
-	{
-		wl_surface_destroy(m_wl_surface_p);
-	}
-	if (m_wl_compositor_p)
-	{
-		wl_compositor_destroy(m_wl_compositor_p);
-	}
-	if (m_wl_shm_p)
-	{
-		wl_shm_destroy(m_wl_shm_p);
-	}
-
-	if (m_wl_registry_p)
-	{
-		wl_registry_destroy(m_wl_registry_p);
-	}
-	if (m_wl_display_client_p)
-	{
-		wl_display_disconnect(m_wl_display_client_p);
 	}
 }

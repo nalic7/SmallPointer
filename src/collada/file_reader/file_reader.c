@@ -4,7 +4,7 @@ char file_reader_match(FILE *file_p, const char *mchar_p[], const uint32_t size)
 	for (uint32_t i = 0; i < size; ++i)
 	{
 		char_p[i] = malloc(sizeof(char));
-		char_p[i][sizeof(char) - 1] = '\0';
+		char_p[i][0] = '\0';
 	}
 	uint32_t char_index[size];
 	memset(char_index, 0, size * sizeof(uint32_t));
@@ -16,14 +16,14 @@ char file_reader_match(FILE *file_p, const char *mchar_p[], const uint32_t size)
 		{
 			if (_char == mchar_p[i][char_index[i]])
 			{
-				char_p[i] = realloc(char_p[i], (char_index[i] + sizeof(char) + 1) * sizeof(char));
+				char_p[i] = realloc(char_p[i], char_index[i] + 1 + 1);
 				char_p[i][char_index[i]] = _char;
 				char_p[i][char_index[i]++ + 1] = '\0';
 			}
 			else
 			{
 				char_p[i] = realloc(char_p[i], sizeof(char));
-				char_p[i][sizeof(char) - 1] = '\0';
+				char_p[i][0] = '\0';
 				char_index[i] = 0;
 			}
 
@@ -45,15 +45,15 @@ char file_reader_match(FILE *file_p, const char *mchar_p[], const uint32_t size)
 char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char_p, char **char_p, uint32_t *size)
 {
 	char *c_p = malloc(sizeof(char));
-	c_p[sizeof(char) - 1] = '\0';
+	c_p[0] = '\0';
 	uint32_t c_index = 0;
 
 	char *sf_char_p = malloc(sizeof(char));
-	sf_char_p[sizeof(char) - 1] = '\0';
+	sf_char_p[0] = '\0';
 	uint32_t sf_index = 0;
 
 	char *se_char_p = malloc(sizeof(char));
-	se_char_p[sizeof(char) - 1] = '\0';
+	se_char_p[0] = '\0';
 	uint32_t se_index = 0;
 
 	char _char;
@@ -62,7 +62,7 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 		char write = 1;
 		if (_char == f_char_p[sf_index])
 		{
-			sf_char_p = realloc(sf_char_p, (sf_index + sizeof(char) + 1) * sizeof(char));
+			sf_char_p = realloc(sf_char_p, sf_index + 1 + 1);
 			sf_char_p[sf_index] = _char;
 			sf_char_p[sf_index++ + 1] = '\0';
 			write = 0;
@@ -70,7 +70,7 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 
 		if (_char == e_char_p[se_index])
 		{
-			se_char_p = realloc(se_char_p, (se_index + sizeof(char) + 1) * sizeof(char));
+			se_char_p = realloc(se_char_p, se_index + 1 + 1);
 			se_char_p[se_index] = _char;
 			se_char_p[se_index++ + 1] = '\0';
 			write = 0;
@@ -79,14 +79,14 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 		if (write)
 		{
 			sf_char_p = realloc(sf_char_p, sizeof(char));
-			sf_char_p[sizeof(char) - 1] = '\0';
+			sf_char_p[0] = '\0';
 			sf_index = 0;
 
 			se_char_p = realloc(se_char_p, sizeof(char));
-			se_char_p[sizeof(char) - 1] = '\0';
+			se_char_p[0] = '\0';
 			se_index = 0;
 
-			c_p = realloc(c_p, (c_index + sizeof(char) + 1) * sizeof(char));
+			c_p = realloc(c_p, c_index + 1 + 1);
 			c_p[c_index] = _char;
 			c_p[c_index++ + 1] = '\0';
 		}
@@ -94,13 +94,13 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 		if (strcmp(f_char_p, sf_char_p) == 0)
 		{
 			char_p = realloc(char_p, (*size + 1) * sizeof(char*));
-			size_t length = (c_index + sizeof(char) + 1) * sizeof(char);
+			size_t length = c_index + 1 + 1;
 			char_p[*size] = malloc(length);
 			memcpy(char_p[*size], c_p, length);
 			++*size;
 
 			c_p = realloc(c_p, sizeof(char));
-			c_p[sizeof(char) - 1] = '\0';
+			c_p[0] = '\0';
 			c_index = 0;
 		}
 
@@ -109,7 +109,7 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 			if (c_index != 0)
 			{
 				char_p = realloc(char_p, (*size + 1) * sizeof(char*));
-				size_t length = (c_index + sizeof(char) + 1) * sizeof(char);
+				size_t length = c_index + 1 + 1;
 				char_p[*size] = malloc(length);
 				memcpy(char_p[*size], c_p, length);
 				++*size;
@@ -130,11 +130,11 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 float *file_reader_float(FILE *file_p, const char *e_char_p, float *float_p, uint32_t *size)
 {
 	char *n_char_p = malloc(sizeof(char));//'\0'
-	n_char_p[sizeof(char) - 1] = '\0';
+	n_char_p[0] = '\0';
 	uint32_t n_index = 0;
 
 	char *se_char_p = malloc(sizeof(char));
-	se_char_p[sizeof(char) - 1] = '\0';
+	se_char_p[0] = '\0';
 	uint32_t se_index = 0;
 
 	char _char;
@@ -142,14 +142,14 @@ float *file_reader_float(FILE *file_p, const char *e_char_p, float *float_p, uin
 	{
 		if (_char == e_char_p[se_index])
 		{
-			se_char_p = realloc(se_char_p, (se_index + sizeof(char) + 1) * sizeof(char));
+			se_char_p = realloc(se_char_p, se_index + 1 + 1);
 			se_char_p[se_index] = _char;
 			se_char_p[se_index++ + 1] = '\0';
 		}
 		else
 		{
 			se_char_p = realloc(se_char_p, sizeof(char));
-			se_char_p[sizeof(char) - 1] = '\0';
+			se_char_p[0] = '\0';
 			se_index = 0;
 
 			if (_char == ' ')
@@ -159,12 +159,12 @@ float *file_reader_float(FILE *file_p, const char *e_char_p, float *float_p, uin
 				++*size;
 
 				n_char_p = realloc(n_char_p, sizeof(char));
-				n_char_p[sizeof(char) - 1] = '\0';
+				n_char_p[0] = '\0';
 				n_index = 0;
 			}
 			else
 			{
-				n_char_p = realloc(n_char_p, (n_index + sizeof(char) + 1) * sizeof(char));
+				n_char_p = realloc(n_char_p, n_index + 1 + 1);
 				n_char_p[n_index] = _char;
 				n_char_p[n_index++ + 1] = '\0';
 			}
@@ -193,12 +193,12 @@ float *file_reader_float(FILE *file_p, const char *e_char_p, float *float_p, uin
 int32_t *file_reader_int(FILE *file_p, const char *e_char_p, int32_t *int_p, uint32_t *size)
 {
 	char *n_char_p = malloc(sizeof(char));
-	n_char_p[sizeof(char) - 1] = '\0';
+	n_char_p[0] = '\0';
 	uint32_t n_index = 0;
 
 	// char f_char[sizeof(int)];
 	char *se_char_p = malloc(sizeof(char));
-	se_char_p[sizeof(char) - 1] = '\0';
+	se_char_p[0] = '\0';
 	uint32_t se_index = 0;
 
 	// // Hexadecimal (base 16)
@@ -213,14 +213,14 @@ int32_t *file_reader_int(FILE *file_p, const char *e_char_p, int32_t *int_p, uin
 	{
 		if (_char == e_char_p[se_index])
 		{
-			se_char_p = realloc(se_char_p, (se_index + sizeof(char) + 1) * sizeof(char));
+			se_char_p = realloc(se_char_p, se_index + 1 + 1);
 			se_char_p[se_index] = _char;
 			se_char_p[se_index++ + 1] = '\0';
 		}
 		else
 		{
 			se_char_p = realloc(se_char_p, sizeof(char));
-			se_char_p[sizeof(char) - 1] = '\0';
+			se_char_p[0] = '\0';
 			se_index = 0;
 
 			if (_char == ' ')
@@ -230,12 +230,12 @@ int32_t *file_reader_int(FILE *file_p, const char *e_char_p, int32_t *int_p, uin
 				++*size;
 
 				n_char_p = realloc(n_char_p, sizeof(char));
-				n_char_p[sizeof(char) - 1] = '\0';
+				n_char_p[0] = '\0';
 				n_index = 0;
 			}
 			else
 			{
-				n_char_p = realloc(n_char_p, (n_index + sizeof(char) + 1) * sizeof(char));
+				n_char_p = realloc(n_char_p, n_index + 1 + 1);
 				n_char_p[n_index] = _char;
 				n_char_p[n_index++ + 1] = '\0';
 			}

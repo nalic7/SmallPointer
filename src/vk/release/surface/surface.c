@@ -1,5 +1,11 @@
 void vk_makeSurface(VkWaylandSurfaceCreateFlagsKHR vkwaylandsurfacecreateflagskhr)
 {
+	while ((m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0)
+	{
+		struct timespec ts = {1, 0};
+		thrd_sleep(&ts, NULL);
+	}
+
 	VkWaylandSurfaceCreateInfoKHR vkwaylandsurfacecreateinfokhr =
 	{
 		.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
