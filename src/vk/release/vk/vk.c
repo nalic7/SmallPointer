@@ -340,7 +340,7 @@ int vk_loop(void *arg)
 	vk_setImageMemoryBarrier(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_nali_g_image_vkimage_p[0], VK_ACCESS_NONE, VK_ACCESS_TRANSFER_WRITE_BIT, &vkimagememorybarrier);
 	vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, &vkimagememorybarrier);
 	VkBufferImageCopy vkbufferimagecopy;
-	vk_setBufferImageCopy(m_nali_g_image_wh_uint32_t_p[0][0], m_nali_g_image_wh_uint32_t_p[0][1], &vkbufferimagecopy);
+	vk_setBufferImageCopy(m_nali_g_image_wh_uint32_t_p[0], m_nali_g_image_wh_uint32_t_p[1], &vkbufferimagecopy);
 	vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[0], m_nali_g_image_vkimage_p[0], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
 	// vkEndCommandBuffer(vkcommandbuffer);
 	VkSubmitInfo cmd_vksubmitinfo =

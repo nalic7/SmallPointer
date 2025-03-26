@@ -461,22 +461,23 @@ int main()
 	while ((dirent_p = readdir(dir)) != NULL)
 	{
 		char *d_name_char_p = strdup(dirent_p->d_name);
-		// size_t size = strlen(d_name_p) + 1;
-		// char *name_p = malloc(size);
-		// memcpy(name_p, d_name_p, size);
-		struct stat _stat;
+		// // size_t size = strlen(d_name_p) + 1;
+		// // char *name_p = malloc(size);
+		// // memcpy(name_p, d_name_p, size);
+		// struct stat _stat;
 
 		char *file_char_p = malloc(sizeof(C_IN)-1 + 1 + strlen(d_name_char_p) + 1);
 		strcpy(file_char_p, C_IN);
 		strcat(file_char_p, "/");
 		strcat(file_char_p, d_name_char_p);
 
-		if (stat(file_char_p, &_stat))
-		{
-			error("stat")
-		}
+		// if (stat(file_char_p, &_stat))
+		// {
+		// 	error("stat")
+		// }
 
-		if (S_ISREG(_stat.st_mode))//S_ISDIR
+		// if (S_ISREG(_stat.st_mode))//S_ISDIR
+		if (dirent_p->d_type == DT_REG)
 		{
 			thrd_t thread;
 			// int result;

@@ -54,7 +54,7 @@
 extern VkBuffer **m_nali_g_index_vkbuffer_p;
 extern VkBuffer **m_nali_g_data_vkbuffer_p;
 
-extern uint32_t **m_nali_g_image_wh_uint32_t_p;
+extern uint32_t *m_nali_g_image_wh_uint32_t_p;
 extern VkImage *m_nali_g_image_vkimage_p;
 extern VkBuffer *m_nali_g_image_vkbuffer_p;
 

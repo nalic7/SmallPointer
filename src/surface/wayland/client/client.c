@@ -106,10 +106,12 @@ static int start(void* arg)
 {
 	struct timespec ts = {1, 0};
 	thrd_sleep(&ts, NULL);
-	// if (m_surface_state & NALI_SURFACE_C_S_WAIT)
-	// {
-	m_surface_state |= NALI_SURFACE_C_S_CONFIG;
-	// }
+	if ((m_surface_state & NALI_SURFACE_C_S_WAIT) == 0)
+	{
+		m_surface_state |= NALI_SURFACE_C_S_CONFIG;
+		info("start_wl")
+	}
+	return 0;
 }
 static int loop(void* arg)
 {
@@ -127,6 +129,7 @@ static int loop(void* arg)
 		result = wl_display_dispatch(m_wl_display_client_p);
 	}
 
+	m_surface_state |= NALI_SURFACE_C_S_WAIT;
 	// m_surface_state &= 255 - (NALI_SURFACE_C_S_WAIT + NALI_SURFACE_C_S_CONFIG);
 	m_surface_state &= 255 - NALI_SURFACE_C_S_CONFIG;
 	if (result < 0)
@@ -135,7 +138,9 @@ static int loop(void* arg)
 		info("wl_display_dispatch %d", result);
 		wlc_clean();
 		wlc_init();
+		//if surface fail on vk need re vksurface
 	}
+	m_surface_state &= 255 - NALI_SURFACE_C_S_WAIT;
 	return 0;
 }
 void wlc_init()

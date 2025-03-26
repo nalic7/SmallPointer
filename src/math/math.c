@@ -24,7 +24,7 @@ uint32_t math_length(uint32_t number)
 // 	return c_p;
 // }
 
-void math_set(uint32_t number, char *c_p)
-{
-	sprintf(c_p, "%u", number);
-}
+// void math_set(uint32_t number, char *c_p)
+// {
+// 	sprintf(c_p, "%u", number);
+// }

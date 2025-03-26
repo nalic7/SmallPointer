@@ -226,14 +226,13 @@ void file_writer_collada(const collada_Source* collada_source_p, const char* pat
 			// }
 			fwrite(path, sizeof(char), strlen(path), file);
 			fwrite(collada_source_p->data_p[md], sizeof(char), strlen(collada_source_p->data_p[md]), file);
-			char n = ' ';
+			char n[2];
+			fwrite(&(char){' '}, sizeof(char), 1, file);
+			sprintf(n, "%hhu", collada_source_p->max_joint_p[md]);
 			fwrite(&n, sizeof(char), 1, file);
-			math_set(collada_source_p->max_joint_p[md], &n);
-			fwrite(&n, sizeof(uint8_t), 1, file);
 			if (md != max_data - 1)
 			{
-				n = '\n';
-				fwrite(&n, sizeof(char), 1, file);
+				fwrite(&(char){'\n'}, sizeof(char), 1, file);
 				// info("%s%s %d\n", path, collada_source_p->data_p[m], max_joint)
 			}
 		}
@@ -245,21 +244,17 @@ void file_writer_collada(const collada_Source* collada_source_p, const char* pat
 		strcat(n0_p, C_BONE_FILE);
 		mkdir(n0_p, 0700);
 
-		char* n_p = malloc(0);
 		for (uint8_t mb = 0; mb < max_bone; ++mb)
 		{
-			n_p = realloc(n_p, math_length(mb) + 1);
-			math_set(mb, n_p);
-
-			n0_p = realloc(n0_p, bone_name_size + strlen(n_p) + sizeof(C_BIN_FILE)-1);
-			n0_p[bone_name_size - 1] = '\0';
-			strcat(n0_p, n_p);
+			uint32_t bone_name_number_size = bone_name_size + math_length(mb);
+			n0_p = realloc(n0_p, bone_name_number_size + sizeof(C_BIN_FILE)-1);
+			sprintf(n0_p + bone_name_size - 1, "%u", mb);
+			n0_p[bone_name_number_size - 1] = '\0';
 			strcat(n0_p, C_BIN_FILE);
 			file = fopen(n0_p, "wb");
 			fwrite(collada_source_p->bone_p[mb], sizeof(uint8_t), collada_source_p->bone_size_p[mb], file);
 			fclose(file);
 		}
-		free(n_p);
 
 		free(n0_p);
 	}
