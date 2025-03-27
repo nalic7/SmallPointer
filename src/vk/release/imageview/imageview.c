@@ -1,4 +1,4 @@
-void vk_makeImageView(uint32_t device, VkImage vkimage, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags, VkImageViewCreateFlags vkimageviewcreateflags, VkImageView *vkimageview_p)
+void vk_makeImageView(uint32_t device, VkImage vkimage, VkFormat vkformat, VkImageAspectFlags vkimageaspectflags, uint32_t mipmap, VkImageView *vkimageview_p)
 {
 	VkImageViewCreateInfo vkimageviewcreateinfo =
 	{
@@ -8,7 +8,7 @@ void vk_makeImageView(uint32_t device, VkImage vkimage, VkFormat vkformat, VkIma
 		.format = vkformat,
 		.subresourceRange.aspectMask = vkimageaspectflags,
 		.subresourceRange.baseMipLevel = 0,
-		.subresourceRange.levelCount = 1,
+		.subresourceRange.levelCount = mipmap,//1
 		.subresourceRange.baseArrayLayer = 0,
 		.subresourceRange.layerCount = 1,
 
@@ -17,7 +17,7 @@ void vk_makeImageView(uint32_t device, VkImage vkimage, VkFormat vkformat, VkIma
 		.components.b = VK_COMPONENT_SWIZZLE_IDENTITY,
 		.components.a = VK_COMPONENT_SWIZZLE_IDENTITY,
 
-		.flags = vkimageviewcreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 	vkCreateImageView(m_vkdevice_p[device], &vkimageviewcreateinfo, VK_NULL_HANDLE, vkimageview_p);

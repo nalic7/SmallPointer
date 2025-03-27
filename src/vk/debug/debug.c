@@ -18,7 +18,7 @@ static VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebu
 	}
 }
 
-void vk_makeDebug(VkDebugUtilsMessengerCreateFlagsEXT vkdebugutilsmessengercreateflagsext)
+void vk_makeDebug()
 {
 	VkDebugUtilsMessengerCreateInfoEXT vkdebugutilsmessengercreateinfoext =
 	{
@@ -27,7 +27,7 @@ void vk_makeDebug(VkDebugUtilsMessengerCreateFlagsEXT vkdebugutilsmessengercreat
 		.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
 		.pfnUserCallback = debugCallback,
 
-		.flags = vkdebugutilsmessengercreateflagsext,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE,
 		.pUserData = VK_NULL_HANDLE
 	};

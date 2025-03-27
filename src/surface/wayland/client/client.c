@@ -104,7 +104,7 @@ void wlc_clean()
 
 static int start(void* arg)
 {
-	struct timespec ts = {1, 0};
+	struct timespec ts = {2, 0};
 	thrd_sleep(&ts, NULL);
 	if ((m_surface_state & NALI_SURFACE_C_S_WAIT) == 0)
 	{

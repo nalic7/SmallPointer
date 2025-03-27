@@ -1,4 +1,4 @@
-void vk_setPipelineVertexInputStateCreateInfo(VkPipelineVertexInputStateCreateFlags vkpipelinevertexinputstatecreateflags, VkVertexInputBindingDescription *vkvertexinputbindingdescription_p, VkVertexInputAttributeDescription *vkvertexinputattributedescription_p, uint8_t vkvertexinputattributedescription_size, VkPipelineVertexInputStateCreateInfo *vkpipelinevertexinputstatecreateinfo_p)
+void vk_setPipelineVertexInputStateCreateInfo(VkVertexInputBindingDescription *vkvertexinputbindingdescription_p, VkVertexInputAttributeDescription *vkvertexinputattributedescription_p, uint8_t vkvertexinputattributedescription_size, VkPipelineVertexInputStateCreateInfo *vkpipelinevertexinputstatecreateinfo_p)
 {
 	*vkpipelinevertexinputstatecreateinfo_p = (VkPipelineVertexInputStateCreateInfo)
 	{
@@ -7,7 +7,7 @@ void vk_setPipelineVertexInputStateCreateInfo(VkPipelineVertexInputStateCreateFl
 		.pVertexBindingDescriptions = vkvertexinputbindingdescription_p,
 		.vertexAttributeDescriptionCount = vkvertexinputattributedescription_size,
 		.pVertexAttributeDescriptions = vkvertexinputattributedescription_p,
-		.flags = vkpipelinevertexinputstatecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 }

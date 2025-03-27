@@ -1,4 +1,4 @@
-VkInstance m_vkinstance;
+VkInstance m_vkinstance = NULL;
 
 //D
 uint32_t m_max_device;
@@ -12,7 +12,7 @@ VkDevice *m_vkdevice_p;
 //D
 
 //S
-VkSurfaceKHR m_vksurfacekhr;
+VkSurfaceKHR m_vksurfacekhr = NULL;
 
 VkSwapchainKHR *m_vkswapchainkhr_p;
 
@@ -44,13 +44,15 @@ VkSemaphore ***m_vksemaphore_p;
 VkCommandPool **m_vkcommandpool_p;
 //S
 
-uint32_t m_device = 0;
-uint32_t m_queue_graphic = 0;
-uint32_t m_queue_render = 0;
-
 #ifdef NALI_VK_DEBUG
 	VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 #endif
+
+float m_limits_max_sampler_anisotropy;
+
+uint32_t m_device = 0;
+uint32_t m_queue_graphic = 0;
+uint32_t m_queue_render = 0;
 
 enum render_state_enum
 {
@@ -197,7 +199,7 @@ int vk_loop(void *arg)
 	lc_setVkDescriptorPoolSize(vkdescriptorpoolsize);
 
 	VkDescriptorPool vkdescriptorpool;
-	vk_makeDescriptorSetPool(m_device, 0, vkdescriptorpoolsize, 2, &vkdescriptorpool);
+	vk_makeDescriptorSetPool(m_device, vkdescriptorpoolsize, 2, &vkdescriptorpool);
 
 	VkDescriptorSetLayout vkdescriptorsetlayout;
 	lc_setVkDescriptorSetLayout(&vkdescriptorsetlayout);
@@ -229,16 +231,16 @@ int vk_loop(void *arg)
 	sprintf(frag_file + frag_name_index, "%u", frag_index);
 	strcat(frag_file, shader_type);
 
-	vk_setVkPipelineShaderStageCreateInfo(m_device, vert_file, frag_file, 0, 0, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	vk_setVkPipelineShaderStageCreateInfo(m_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 	free(vert_file);
 	free(frag_file);
 
 	//s1-s
 	VkPipelineLayout vkpipelinelayout;
-	vk_makePipelineLayout(m_device, 0, &vkdescriptorsetlayout, 1, &vkpipelinelayout);
+	vk_makePipelineLayout(m_device, &vkdescriptorsetlayout, 1, &vkpipelinelayout);
 
 	VkPipeline vkpipeline;
-	vk_makeGraphicsPipeline(m_device, 0, vkpipelineshaderstagecreateinfo_array, &m_vkswapchainkhr_vkrenderpass_p[m_device], &vkpipelinelayout, &vkpipeline);
+	vk_makeGraphicsPipeline(m_device, vkpipelineshaderstagecreateinfo_array, &m_vkswapchainkhr_vkrenderpass_p[m_device], &vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -335,63 +337,7 @@ int vk_loop(void *arg)
 	// vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
 	// vkResetFences(vkdevice, 1, graphic_vkfence_p);
 
-	vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
-	VkImageMemoryBarrier vkimagememorybarrier;
-	vk_setImageMemoryBarrier(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_nali_g_image_vkimage_p[0], VK_ACCESS_NONE, VK_ACCESS_TRANSFER_WRITE_BIT, &vkimagememorybarrier);
-	vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, &vkimagememorybarrier);
-	VkBufferImageCopy vkbufferimagecopy;
-	vk_setBufferImageCopy(m_nali_g_image_wh_uint32_t_p[0], m_nali_g_image_wh_uint32_t_p[1], &vkbufferimagecopy);
-	vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[0], m_nali_g_image_vkimage_p[0], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
-	// vkEndCommandBuffer(vkcommandbuffer);
-	VkSubmitInfo cmd_vksubmitinfo =
-	{
-		.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-
-		.commandBufferCount = 1,
-		.pCommandBuffers = &vkcommandbuffer,
-
-		.waitSemaphoreCount = 0,
-		.pWaitSemaphores = VK_NULL_HANDLE,
-		// .pWaitDstStageMask = (VkPipelineStageFlags[]){VK_PIPELINE_STAGE_TRANSFER_BIT},
-		.pWaitDstStageMask = VK_NULL_HANDLE,
-
-		.signalSemaphoreCount = 0,
-		// .pSignalSemaphores = &render_vksemaphore,
-		.pSignalSemaphores = VK_NULL_HANDLE,
-
-		.pNext = VK_NULL_HANDLE
-	};
-	// // vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, *graphic_vkfence_p);
-	// vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, VK_NULL_HANDLE);
-	// // uint64_t semaphore_value = 0;
-	// // VkSemaphoreWaitInfo vksemaphorewaitinfo =
-	// // {
-	// // 	.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO,
-	// // 	.semaphoreCount = 1,
-	// // 	.pSemaphores = &render_vksemaphore,
-
-	// // 	.pValues = &semaphore_value,
-
-	// // 	.flags = 0,
-	// // 	.pNext = VK_NULL_HANDLE
-	// // };
-	// // vkWaitSemaphores(vkdevice, &vksemaphorewaitinfo, UINT64_MAX);
-	// vkQueueWaitIdle(vkqueue_graphic);
-
-	// // vkWaitForFences(vkdevice, 1, graphic_vkfence_p, VK_TRUE, UINT64_MAX);
-	// // vkResetFences(vkdevice, 1, graphic_vkfence_p);
-	// //
-
-	//s0-cmd image
-	// vkBeginCommandBuffer(vkcommandbuffer, &vkcommandbufferbegininfo);
-	vk_setImageMemoryBarrier(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL, m_nali_g_image_vkimage_p[0], VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, &vkimagememorybarrier);
-	vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, &vkimagememorybarrier);
-	vkEndCommandBuffer(vkcommandbuffer);
-	// vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, *graphic_vkfence_p);
-	vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, VK_NULL_HANDLE);
-	// vkWaitSemaphores(vkdevice, &vksemaphorewaitinfo, UINT64_MAX);
-	vkQueueWaitIdle(vkqueue_graphic);
-	//e0-cmd image
+	vk_cmd(vkcommandbuffer, &vkcommandbufferbegininfo, vkqueue_graphic);
 
 	// //s0-check
 	// VkImageSubresource vkimagesubresource =
@@ -432,7 +378,7 @@ int vk_loop(void *arg)
 		{
 			m_surface_state &= 255 - NALI_SURFACE_C_S_RE;
 			vk_freeSwapchain(m_device);
-			vk_makeSwapchain(m_device, 0);
+			vk_makeSwapchain(m_device);
 
 			vkswapchainkhr = m_vkswapchainkhr_p[m_device];
 			vkrenderpassbegininfo.renderPass = m_vkswapchainkhr_vkrenderpass_p[m_device];
@@ -603,15 +549,17 @@ static void vinfo(uint32_t device)
 		VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
 	)
+	m_limits_max_sampler_anisotropy = vkphysicaldeviceproperties.limits.maxSamplerAnisotropy;
+	info("maxSamplerAnisotropy %f", m_limits_max_sampler_anisotropy)
 }
 
 void vk_init()
 {
 	checkIE();
-	vk_makeInstance(0);
-	vk_makeSurface(0);
+	vk_makeInstance();
+	vk_makeSurface();
 	#ifdef NALI_VK_DEBUG
-		vk_makeDebug(0);
+		vk_makeDebug();
 	#endif
 	vk_makePhysicalDevice();
 
@@ -653,8 +601,8 @@ void vk_init()
 		m_graphic_p[d] = malloc(sizeof(uint32_t));
 
 		vk_makeQueue(d);
-		vk_makeDevice(d, 0, 0);
-		vk_makeSwapchain(d, 0);
+		vk_makeDevice(d);
+		vk_makeSwapchain(d);
 
 		uint8_t max_graphics = m_max_graphic_p[d];
 
@@ -677,7 +625,7 @@ void vk_init()
 			// m_vksemaphore_p[d][g] = malloc(sizeof(VkSemaphore) *size);
 			m_vksemaphore_p[d][g] = malloc(sizeof(VkSemaphore) * 2);
 
-			vk_makeSemaphore(d, g, 0);
+			vk_makeSemaphore(d, g);
 			vk_makeCommandPool(d, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT, g);
 		}
 	}

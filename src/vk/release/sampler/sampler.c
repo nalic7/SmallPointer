@@ -1,28 +1,39 @@
-void vk_makeSampler(uint32_t device, VkSamplerCreateFlags vksamplercreateflags, VkSampler *vksampler_p)
+void vk_makeSampler(uint32_t device, uint32_t mipmap, uint8_t line, VkSampler *vksampler_p)
 {
 	VkSamplerCreateInfo vksamplercreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-		.magFilter = VK_FILTER_NEAREST,//VK_FILTER_LINEAR
-		.minFilter = VK_FILTER_NEAREST,//VK_FILTER_LINEAR
 		.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
 		.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
 		.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-		.anisotropyEnable = VK_FALSE,
 		.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK,
 		.unnormalizedCoordinates = VK_FALSE,
 		.compareEnable = VK_FALSE,
 		.compareOp = VK_COMPARE_OP_ALWAYS,
-		.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST,//VK_SAMPLER_MIPMAP_MODE_LINEAR
 
-		.flags = vksamplercreateflags,
+		.anisotropyEnable = m_limits_max_sampler_anisotropy == 0 ? VK_FALSE : VK_TRUE,
+		.maxAnisotropy = m_limits_max_sampler_anisotropy,
+
 		.mipLodBias = 0,
-		.maxAnisotropy = 0,
 		.minLod = 0,
-		.maxLod = 0,
+		.maxLod = mipmap,//0
 
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
+
+	if (line)
+	{
+		vksamplercreateinfo.magFilter = VK_FILTER_LINEAR;
+		vksamplercreateinfo.minFilter = VK_FILTER_LINEAR;
+		vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	}
+	else
+	{
+		vksamplercreateinfo.magFilter = VK_FILTER_NEAREST;
+		vksamplercreateinfo.minFilter = VK_FILTER_NEAREST;
+		vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+	}
 
 	vkCreateSampler(m_vkdevice_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p);
 }

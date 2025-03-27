@@ -92,6 +92,7 @@
 		#include "vk/release/graphicspipeline/depthstencilstatecreateinfo/depthstencilstatecreateinfo.h"
 		#include "vk/release/graphicspipeline/graphicspipeline.h"
 
+		#include "vk/release/cmd/cmd.h"
 		#include "vk/release/cmd/imagememorybarrier/imagememorybarrier.h"
 		#include "vk/release/cmd/imageblit/imageblit.h"
 		#include "vk/release/cmd/bufferimagecopy/bufferimagecopy.h"
@@ -125,6 +126,10 @@
 	#define NALI_HOME_SHADER "shader/"
 	#define NALI_HOME_SHADER_VERT "vert"
 	#define NALI_HOME_SHADER_FRAG "frag"
+
+	#ifdef NALI_GEN
+		#include "gen/gen.h"
+	#endif
 
 #endif
 #ifdef PCH_COLLADA

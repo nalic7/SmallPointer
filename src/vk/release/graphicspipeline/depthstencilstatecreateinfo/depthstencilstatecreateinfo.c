@@ -1,4 +1,4 @@
-void vk_setPipelineDepthStencilStateCreateInfo(VkPipelineDepthStencilStateCreateFlags vkpipelinedepthstencilstatecreateflags, VkPipelineDepthStencilStateCreateInfo *vkpipelinedepthstencilstatecreateinfo_p)
+void vk_setPipelineDepthStencilStateCreateInfo(VkPipelineDepthStencilStateCreateInfo *vkpipelinedepthstencilstatecreateinfo_p)
 {
 	*vkpipelinedepthstencilstatecreateinfo_p = (VkPipelineDepthStencilStateCreateInfo)
 	{
@@ -15,7 +15,7 @@ void vk_setPipelineDepthStencilStateCreateInfo(VkPipelineDepthStencilStateCreate
 		.minDepthBounds = 0.0F,
 		.maxDepthBounds = 1.0F,
 
-		.flags = vkpipelinedepthstencilstatecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 }

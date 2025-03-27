@@ -17,7 +17,7 @@ uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropert
 	return 0;
 }
 
-void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFlagBits vkbuffercreateflagbits, VkBufferUsageFlags vkbufferusageflags, VkMemoryPropertyFlags vkmemorypropertyflags, VkBuffer *vkbuffer_p, VkDeviceMemory *vkdevicememory_p)
+void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferUsageFlags vkbufferusageflags, VkMemoryPropertyFlags vkmemorypropertyflags, VkBuffer *vkbuffer_p, VkDeviceMemory *vkdevicememory_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
 
@@ -28,12 +28,12 @@ void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFla
 		.sharingMode = VK_SHARING_MODE_EXCLUSIVE,
 
 		.usage = vkbufferusageflags,
-		.flags = vkbuffercreateflagbits,
 
 		//VK_SHARING_MODE_CONCURRENT
 		.queueFamilyIndexCount = 0,
 		.pQueueFamilyIndices = VK_NULL_HANDLE,
 
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 
@@ -54,12 +54,12 @@ void vk_makeBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkBufferCreateFla
 	vkBindBufferMemory(vkdevice, *vkbuffer_p, *vkdevicememory_p, 0);
 }
 
-void vk_mapBuffer(uint32_t device, VkDeviceSize vkdevicesize, VkMemoryMapFlags vkmemorymapflags, void *buffer_data_p, VkDeviceMemory *vkdevicememory_p)
+void vk_mapBuffer(uint32_t device, VkDeviceSize vkdevicesize, void *buffer_data_p, VkDeviceMemory *vkdevicememory_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
 
 	void *data_p;
-	vkMapMemory(vkdevice, *vkdevicememory_p, 0, vkdevicesize, vkmemorymapflags, &data_p);
+	vkMapMemory(vkdevice, *vkdevicememory_p, 0, vkdevicesize, 0, &data_p);
 	memcpy(data_p, buffer_data_p, vkdevicesize);
 	vkUnmapMemory(vkdevice, *vkdevicememory_p);
 }

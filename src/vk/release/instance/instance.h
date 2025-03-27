@@ -12,6 +12,6 @@ extern const char *ppEnabledExtensionNames[
     extern const char *ppEnabledLayerNames[1];
 #endif
 
-void vk_makeInstance(VkInstanceCreateFlags vkinstancecreateflags);
+void vk_makeInstance();
 
 #endif

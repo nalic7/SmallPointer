@@ -15,7 +15,7 @@ const char *ppEnabledExtensionNames[] =
 	};
 #endif
 
-void vk_makeInstance(VkInstanceCreateFlags vkinstancecreateflags)
+void vk_makeInstance()
 {
 	VkApplicationInfo vkapplicationinfo =
 	{
@@ -25,6 +25,7 @@ void vk_makeInstance(VkInstanceCreateFlags vkinstancecreateflags)
 		.pEngineName = "vk",
 		.engineVersion = VK_MAKE_VERSION(1, 0, 0),
 		.apiVersion = VK_API_VERSION_1_0,
+
 		.pNext = VK_NULL_HANDLE
 	};
 
@@ -34,7 +35,8 @@ void vk_makeInstance(VkInstanceCreateFlags vkinstancecreateflags)
 		.pApplicationInfo = &vkapplicationinfo,
 		.enabledExtensionCount = sizeof(ppEnabledExtensionNames) / sizeof(ppEnabledExtensionNames[0]),
 		.ppEnabledExtensionNames = ppEnabledExtensionNames,
-		.flags = vkinstancecreateflags,
+
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE,
 
 		#ifdef NALI_VK_DEBUG

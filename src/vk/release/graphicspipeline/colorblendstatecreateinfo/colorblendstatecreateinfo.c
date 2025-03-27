@@ -1,4 +1,4 @@
-void vk_setPipelineColorBlendStateCreateInfo(VkPipelineColorBlendAttachmentState *vkpipelinecolorblendattachmentstate_p, VkPipelineColorBlendStateCreateFlags vkpipelinecolorblendstatecreateflags, VkPipelineColorBlendStateCreateInfo *vkpipelinecolorblendstatecreateinfo_p)
+void vk_setPipelineColorBlendStateCreateInfo(VkPipelineColorBlendAttachmentState *vkpipelinecolorblendattachmentstate_p, VkPipelineColorBlendStateCreateInfo *vkpipelinecolorblendstatecreateinfo_p)
 {
 	*vkpipelinecolorblendstatecreateinfo_p = (VkPipelineColorBlendStateCreateInfo)
 	{
@@ -11,7 +11,7 @@ void vk_setPipelineColorBlendStateCreateInfo(VkPipelineColorBlendAttachmentState
 		.blendConstants[1] = 0.0F,
 		.blendConstants[2] = 0.0F,
 		.blendConstants[3] = 0.0F,
-		.flags = vkpipelinecolorblendstatecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 }

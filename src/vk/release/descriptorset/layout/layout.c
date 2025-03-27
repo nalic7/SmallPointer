@@ -1,4 +1,4 @@
-void vk_makeDescriptorSetLayout(uint32_t device, VkDescriptorSetLayoutCreateFlags vkdescriptorsetlayoutcreateflags, VkDescriptorSetLayoutBinding *vkdescriptorsetlayoutbinding_p, uint32_t vkdescriptorsetlayoutbinding_size, VkDescriptorSetLayout *vkdescriptorsetlayout_p)
+void vk_makeDescriptorSetLayout(uint32_t device, VkDescriptorSetLayoutBinding *vkdescriptorsetlayoutbinding_p, uint32_t vkdescriptorsetlayoutbinding_size, VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
 	VkDescriptorSetLayoutCreateInfo vkdescriptorsetlayoutcreateinfo =
 	{
@@ -6,7 +6,7 @@ void vk_makeDescriptorSetLayout(uint32_t device, VkDescriptorSetLayoutCreateFlag
 		.bindingCount = vkdescriptorsetlayoutbinding_size,
 		.pBindings = vkdescriptorsetlayoutbinding_p,
 
-		.flags = vkdescriptorsetlayoutcreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 

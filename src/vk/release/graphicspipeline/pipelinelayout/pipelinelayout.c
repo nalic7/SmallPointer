@@ -1,4 +1,4 @@
-void vk_makePipelineLayout(uint32_t device, VkPipelineLayoutCreateFlags vkpipelinelayoutcreateflags, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p)
+void vk_makePipelineLayout(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p)
 {
 	VkPipelineLayoutCreateInfo vkpipelinelayoutcreateinfo =
 	{
@@ -10,7 +10,7 @@ void vk_makePipelineLayout(uint32_t device, VkPipelineLayoutCreateFlags vkpipeli
 		.pushConstantRangeCount = 0,
 		.pPushConstantRanges = VK_NULL_HANDLE,
 
-		.flags = vkpipelinelayoutcreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 

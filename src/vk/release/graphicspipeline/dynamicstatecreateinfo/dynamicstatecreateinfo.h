@@ -1,6 +1,6 @@
 #ifndef NALI_VK_GRAPHICSPIPELINE_DYNAMICSTATECREATEINFO_H
 #define NALI_VK_GRAPHICSPIPELINE_DYNAMICSTATECREATEINFO_H
 
-void vk_setPipelineDynamicStateCreateInfo(VkDynamicState *vkdynamicstate_p, uint32_t vkdynamicstate_p_size, VkPipelineDynamicStateCreateFlags vkpipelinedynamicstatecreateflags, VkPipelineDynamicStateCreateInfo *vkpipelinedynamicstatecreateinfo_p);
+void vk_setPipelineDynamicStateCreateInfo(VkDynamicState *vkdynamicstate_p, uint32_t vkdynamicstate_p_size, VkPipelineDynamicStateCreateInfo *vkpipelinedynamicstatecreateinfo_p);
 
 #endif

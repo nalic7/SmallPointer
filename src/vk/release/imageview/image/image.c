@@ -1,4 +1,4 @@
-void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkImageUsageFlags vkimageusageflags, VkImageLayout vkimagelayout, VkImageCreateFlags vkimagecreateflags, VkImage *vkimage_p)
+void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, uint32_t mipmap, VkImageTiling vkimagetiling, VkImageUsageFlags vkimageusageflags, VkImageLayout vkimagelayout, VkImage *vkimage_p)
 {
 	VkImageCreateInfo vkimagecreateinfo =
 	{
@@ -6,19 +6,19 @@ void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, VkI
 		.imageType = VK_IMAGE_TYPE_2D,
 		.format = vkformat,
 		.extent = vkextent3d,
-		.mipLevels = 1,
+		.mipLevels = mipmap,//1
 		.arrayLayers = 1,
 		.samples = VK_SAMPLE_COUNT_1_BIT,
-		.tiling = VK_IMAGE_TILING_OPTIMAL,
+		.tiling = vkimagetiling,//VK_IMAGE_TILING_OPTIMAL
 		.usage = vkimageusageflags,
 		.sharingMode = VK_SHARING_MODE_EXCLUSIVE,
 		.initialLayout = vkimagelayout,//VK_IMAGE_LAYOUT_UNDEFINED
 
-		.flags = vkimagecreateflags,
-
-		.pNext = VK_NULL_HANDLE,
 		.queueFamilyIndexCount = 0,
-		.pQueueFamilyIndices = VK_NULL_HANDLE
+		.pQueueFamilyIndices = VK_NULL_HANDLE,
+
+		.flags = 0,
+		.pNext = VK_NULL_HANDLE
 	};
 	vkCreateImage(m_vkdevice_p[device], &vkimagecreateinfo, VK_NULL_HANDLE, vkimage_p);
 }

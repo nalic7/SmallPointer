@@ -1,6 +1,6 @@
 #ifndef NALI_VK_FILE_H
 #define NALI_VK_FILE_H
 
-uint32_t *file_uint32_t(const char *filename, uint32_t *size);
+void *file_read(const char *name_char_p, long *size_p);
 
 #endif

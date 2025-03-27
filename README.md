@@ -4,6 +4,7 @@
 >CMakeLists.txt
 
 	#...
+	set(GEN 1) // for first time
 	set(CLIENT 1)
 	set(VK_DEBUG 1)
 	set(SCENE 1)

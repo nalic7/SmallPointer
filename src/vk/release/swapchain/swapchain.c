@@ -1,94 +1,4 @@
-void vk_reSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreateflagskhr, VkSurfaceFormatKHR *vksurfaceformatkhr_p, VkPresentModeKHR *vkpresentmodekhr_p, uint8_t max_graphics)
-{
-	VkExtent2D vkextent2d =
-	{
-		.height = m_height,
-		.width = m_width
-	};
-
-	m_vkswapchainkhr_vkextent2d_p[device] = vkextent2d;
-	// m_vkswapchainkhr_vkformat_p[device] = vksurfaceformatkhr_p->format;
-
-	VkSwapchainCreateInfoKHR vkswapchaincreateinfokhr =
-	{
-		.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-		.surface = m_vksurfacekhr,
-		.minImageCount = m_vksurfacecapabilitieskhr_p[device].minImageCount,
-		// .imageFormat = m_vkswapchainkhr_vkformat_p[device],
-		.imageFormat = NALI_VK_COLOR_FORMAT,
-		.imageColorSpace = vksurfaceformatkhr_p->colorSpace,
-		.imageExtent = vkextent2d,
-		.imageArrayLayers = 1,
-		.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-
-		.preTransform = m_vksurfacecapabilitieskhr_p[device].currentTransform,
-		.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-		.presentMode = *vkpresentmodekhr_p,
-		.clipped = VK_TRUE,
-
-		.queueFamilyIndexCount = max_graphics,
-		.pQueueFamilyIndices = m_graphic_p[device],
-
-		.oldSwapchain = VK_NULL_HANDLE,
-
-		.imageSharingMode = max_graphics > 1 ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE,
-
-		.flags = vkswapchaincreateflagskhr,
-		.pNext = VK_NULL_HANDLE
-	};
-
-	VkResult vkresult = vkCreateSwapchainKHR(m_vkdevice_p[device], &vkswapchaincreateinfokhr, VK_NULL_HANDLE, &m_vkswapchainkhr_p[device]);
-	if (vkresult != VK_SUCCESS)
-	{
-		error("vkCreateSwapchainKHR %d", vkresult)
-	}
-
-	vkGetSwapchainImagesKHR(m_vkdevice_p[device], m_vkswapchainkhr_p[device], &m_vksurfaceformatkhr_image_p[device], VK_NULL_HANDLE);
-
-	uint32_t vksurfaceformatkhr_image = m_vksurfaceformatkhr_image_p[device];
-	#ifdef NALI_VK_INFO_SC
-		info("vksurfaceformatkhr_image %d", vksurfaceformatkhr_image)
-	#endif
-
-	m_vkswapchainkhr_vkimage_p[device] = malloc(sizeof(VkImage) * vksurfaceformatkhr_image);
-	m_vkswapchainkhr_vkimageview_color_p[device] = malloc(sizeof(VkImageView) * vksurfaceformatkhr_image);
-	m_vkswapchainkhr_vkframebuffer_p[device] = malloc(sizeof(VkFramebuffer) * vksurfaceformatkhr_image);
-	// m_vkswapchainkhr_vkrenderpass_p[device] = malloc(sizeof(VkRenderPass) * images);
-
-	vkGetSwapchainImagesKHR(m_vkdevice_p[device], m_vkswapchainkhr_p[device], &vksurfaceformatkhr_image, m_vkswapchainkhr_vkimage_p[device]);
-
-	vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_p[device]);
-
-	vk_makeImage
-	(
-		device,
-		NALI_VK_DEPTH_FORMAT,
-		(VkExtent3D)
-		{
-			.width = vkextent2d.width,
-			.height = vkextent2d.height,
-			.depth = 1
-		},
-		VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		0,
-		&m_vkswapchainkhr_vkimage_depth_p[device]
-	);
-	vk_genImage(device, m_vkswapchainkhr_vkimage_depth_p[device], VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &m_vkswapchainkhr_vkdevicememory_depth_p[device]);
-	vk_makeImageView(device, m_vkswapchainkhr_vkimage_depth_p[device], NALI_VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 0, &m_vkswapchainkhr_vkimageview_depth_p[device]);
-
-	for (uint32_t i = 0; i < vksurfaceformatkhr_image; ++i)
-	{
-		// vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_p[device][i]);
-
-		// vk_makeImageView(device, &m_vkswapchainkhr_vkimage_p[device][i], m_vkswapchainkhr_vkformat_p[device], VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_color_p[device][i]);
-		vk_makeImageView(device, m_vkswapchainkhr_vkimage_p[device][i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_color_p[device][i]);
-		vk_makeFrameBuffer(device, 0, (VkImageView[]){m_vkswapchainkhr_vkimageview_color_p[device][i], m_vkswapchainkhr_vkimageview_depth_p[device]}, 2, &m_vkswapchainkhr_vkrenderpass_p[device], &m_vkswapchainkhr_vkframebuffer_p[device][i]);
-		// vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_p[device][i], &m_vkswapchainkhr_vkrenderpass_p[device][i], &m_vkswapchainkhr_vkframebuffer_p[device][i]);
-	}
-}
-
-void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincreateflagskhr)
+void vk_makeSwapchain(uint32_t device)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
 	uint8_t max_graphics = m_max_graphic_p[device];
@@ -152,7 +62,95 @@ void vk_makeSwapchain(uint32_t device, VkSwapchainCreateFlagsKHR vkswapchaincrea
 
 	// uint32_t images = 0;
 
-	vk_reSwapchain(device, vkswapchaincreateflagskhr, &vksurfaceformatkhr, &vkpresentmodekhr, max_graphics);
+	// vk_reSwapchain(device, &vksurfaceformatkhr, &vkpresentmodekhr, max_graphics);
+
+	VkExtent2D vkextent2d =
+	{
+		.height = m_height,
+		.width = m_width
+	};
+
+	m_vkswapchainkhr_vkextent2d_p[device] = vkextent2d;
+	// m_vkswapchainkhr_vkformat_p[device] = vksurfaceformatkhr_p->format;
+
+	VkSwapchainCreateInfoKHR vkswapchaincreateinfokhr =
+	{
+		.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+		.surface = m_vksurfacekhr,
+		.minImageCount = m_vksurfacecapabilitieskhr_p[device].minImageCount,
+		// .imageFormat = m_vkswapchainkhr_vkformat_p[device],
+		.imageFormat = NALI_VK_COLOR_FORMAT,
+		.imageColorSpace = vksurfaceformatkhr.colorSpace,
+		.imageExtent = vkextent2d,
+		.imageArrayLayers = 1,
+		.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+
+		.preTransform = m_vksurfacecapabilitieskhr_p[device].currentTransform,
+		.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
+		.presentMode = vkpresentmodekhr,
+		.clipped = VK_TRUE,
+
+		.queueFamilyIndexCount = max_graphics,
+		.pQueueFamilyIndices = m_graphic_p[device],
+
+		.oldSwapchain = VK_NULL_HANDLE,
+
+		.imageSharingMode = max_graphics > 1 ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE,
+
+		.flags = 0,
+		.pNext = VK_NULL_HANDLE
+	};
+
+	vkresult = vkCreateSwapchainKHR(m_vkdevice_p[device], &vkswapchaincreateinfokhr, VK_NULL_HANDLE, &m_vkswapchainkhr_p[device]);
+	if (vkresult != VK_SUCCESS)
+	{
+		error("vkCreateSwapchainKHR %d", vkresult)
+	}
+
+	vkGetSwapchainImagesKHR(m_vkdevice_p[device], m_vkswapchainkhr_p[device], &m_vksurfaceformatkhr_image_p[device], VK_NULL_HANDLE);
+
+	uint32_t vksurfaceformatkhr_image = m_vksurfaceformatkhr_image_p[device];
+	#ifdef NALI_VK_INFO_SC
+		info("vksurfaceformatkhr_image %d", vksurfaceformatkhr_image)
+	#endif
+
+	m_vkswapchainkhr_vkimage_p[device] = malloc(sizeof(VkImage) * vksurfaceformatkhr_image);
+	m_vkswapchainkhr_vkimageview_color_p[device] = malloc(sizeof(VkImageView) * vksurfaceformatkhr_image);
+	m_vkswapchainkhr_vkframebuffer_p[device] = malloc(sizeof(VkFramebuffer) * vksurfaceformatkhr_image);
+	// m_vkswapchainkhr_vkrenderpass_p[device] = malloc(sizeof(VkRenderPass) * images);
+
+	vkGetSwapchainImagesKHR(m_vkdevice_p[device], m_vkswapchainkhr_p[device], &vksurfaceformatkhr_image, m_vkswapchainkhr_vkimage_p[device]);
+
+	vk_makeRenderPass(device, &m_vkswapchainkhr_vkrenderpass_p[device]);
+
+	vk_makeImage
+	(
+		device,
+		NALI_VK_DEPTH_FORMAT,
+		(VkExtent3D)
+		{
+			.width = vkextent2d.width,
+			.height = vkextent2d.height,
+			.depth = 1
+		},
+		1,
+		VK_IMAGE_TILING_OPTIMAL,
+		VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		&m_vkswapchainkhr_vkimage_depth_p[device]
+	);
+	vk_genImage(device, m_vkswapchainkhr_vkimage_depth_p[device], VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &m_vkswapchainkhr_vkdevicememory_depth_p[device]);
+	vk_makeImageView(device, m_vkswapchainkhr_vkimage_depth_p[device], NALI_VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &m_vkswapchainkhr_vkimageview_depth_p[device]);
+
+	for (uint32_t i = 0; i < vksurfaceformatkhr_image; ++i)
+	{
+		// vk_makeRenderPass(device, 0, 0, 0, 0, &m_vkswapchainkhr_vkrenderpass_p[device][i]);
+
+		// vk_makeImageView(device, &m_vkswapchainkhr_vkimage_p[device][i], m_vkswapchainkhr_vkformat_p[device], VK_IMAGE_ASPECT_COLOR_BIT, 0, &m_vkswapchainkhr_vkimageview_color_p[device][i]);
+		vk_makeImageView(device, m_vkswapchainkhr_vkimage_p[device][i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &m_vkswapchainkhr_vkimageview_color_p[device][i]);
+		vk_makeFrameBuffer(device, (VkImageView[]){m_vkswapchainkhr_vkimageview_color_p[device][i], m_vkswapchainkhr_vkimageview_depth_p[device]}, 2, &m_vkswapchainkhr_vkrenderpass_p[device], &m_vkswapchainkhr_vkframebuffer_p[device][i]);
+		// vk_makeFrameBuffer(device, 0, &m_vkswapchainkhr_vkimageview_p[device][i], &m_vkswapchainkhr_vkrenderpass_p[device][i], &m_vkswapchainkhr_vkframebuffer_p[device][i]);
+	}
 }
 
 void vk_freeSwapchain(uint32_t device)

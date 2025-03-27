@@ -1,4 +1,4 @@
-void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCreateFlags vkpipelinerasterizationstatecreateflags, VkPipelineRasterizationStateCreateInfo *vkpipelinerasterizationstatecreateinfo_p)
+void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCreateInfo *vkpipelinerasterizationstatecreateinfo_p)
 {
 	*vkpipelinerasterizationstatecreateinfo_p = (VkPipelineRasterizationStateCreateInfo)
 	{
@@ -13,7 +13,7 @@ void vk_setPipelineRasterizationStateCreateInfo(VkPipelineRasterizationStateCrea
 		.depthBiasClamp = 0,
 		.depthBiasSlopeFactor = 0,
 		.lineWidth = 1.0F,
-		.flags = vkpipelinerasterizationstatecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 }

@@ -1,4 +1,4 @@
-void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecreateflags, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass *vkrenderpass_p, VkPipelineLayout *vkpipelinelayout_p, VkPipeline *vkpipeline_p)
+void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass *vkrenderpass_p, VkPipelineLayout *vkpipelinelayout_p, VkPipeline *vkpipeline_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
 
@@ -7,19 +7,19 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 	lc_setVkVertexInputBindingDescription(&vkvertexinputbindingdescription_array);
 	lc_setVkVertexInputAttributeDescription(vkvertexinputattributedescription_array);
 	VkPipelineVertexInputStateCreateInfo vkpipelinevertexinputstatecreateinfo;
-	vk_setPipelineVertexInputStateCreateInfo(0, &vkvertexinputbindingdescription_array, vkvertexinputattributedescription_array, 2, &vkpipelinevertexinputstatecreateinfo);
+	vk_setPipelineVertexInputStateCreateInfo(&vkvertexinputbindingdescription_array, vkvertexinputattributedescription_array, 2, &vkpipelinevertexinputstatecreateinfo);
 
 	VkPipelineInputAssemblyStateCreateInfo vkpipelineinputassemblystatecreateinfo;
-	vk_setPipelineInputAssemblyStateCreateInfo(0, &vkpipelineinputassemblystatecreateinfo);
+	vk_setPipelineInputAssemblyStateCreateInfo(&vkpipelineinputassemblystatecreateinfo);
 
 	VkPipelineViewportStateCreateInfo vkpipelineviewportstatecreateinfo;
-	vk_setPipelineViewportStateCreateInfo(device, 0, &vkpipelineviewportstatecreateinfo);
+	vk_setPipelineViewportStateCreateInfo(device, &vkpipelineviewportstatecreateinfo);
 
 	VkPipelineRasterizationStateCreateInfo vkpipelinerasterizationstatecreateinfo;
-	vk_setPipelineRasterizationStateCreateInfo(0, &vkpipelinerasterizationstatecreateinfo);
+	vk_setPipelineRasterizationStateCreateInfo(&vkpipelinerasterizationstatecreateinfo);
 
 	VkPipelineMultisampleStateCreateInfo vkpipelinemultisamplestatecreateinfo;
-	vk_setPipelineMultisampleStateCreateInfo(0, &vkpipelinemultisamplestatecreateinfo);
+	vk_setPipelineMultisampleStateCreateInfo(&vkpipelinemultisamplestatecreateinfo);
 
 	VkPipelineColorBlendAttachmentState vkpipelinecolorblendattachmentstate =
 	{
@@ -33,7 +33,7 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 		.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT
 	};
 	VkPipelineColorBlendStateCreateInfo vkpipelinecolorblendstatecreateinfo;
-	vk_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, 0, &vkpipelinecolorblendstatecreateinfo);
+	vk_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, &vkpipelinecolorblendstatecreateinfo);
 
 	VkDynamicState vkdynamicstate_array[] =
 	{
@@ -41,10 +41,10 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 		VK_DYNAMIC_STATE_SCISSOR
 	};
 	VkPipelineDynamicStateCreateInfo vkpipelinedynamicstatecreateinfo;
-	vk_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, 0, &vkpipelinedynamicstatecreateinfo);
+	vk_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, &vkpipelinedynamicstatecreateinfo);
 
 	VkPipelineDepthStencilStateCreateInfo vkpipelinedepthstencilstatecreateinfo;
-	vk_setPipelineDepthStencilStateCreateInfo(0, &vkpipelinedepthstencilstatecreateinfo);
+	vk_setPipelineDepthStencilStateCreateInfo(&vkpipelinedepthstencilstatecreateinfo);
 
 	VkGraphicsPipelineCreateInfo vkgraphicspipelinecreateinfo =
 	{
@@ -67,7 +67,7 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineCreateFlags vkpipelinecr
 
 		.basePipelineIndex = 0,
 
-		.flags = vkpipelinecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 

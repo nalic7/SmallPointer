@@ -1,4 +1,4 @@
-void vk_makeDevice(uint32_t device, VkDeviceQueueCreateFlags vkdevicequeuecreateflags, VkDeviceCreateFlags vkdevicecreateflags)
+void vk_makeDevice(uint32_t device)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
 	uint8_t max_graphics = m_max_graphic_p[device];
@@ -26,7 +26,7 @@ void vk_makeDevice(uint32_t device, VkDeviceQueueCreateFlags vkdevicequeuecreate
 			.queueCount = 1,
 			.pQueuePriorities = &queuepriority,
 
-			.flags = vkdevicequeuecreateflags,
+			.flags = 0,
 			.pNext = VK_NULL_HANDLE
 		};
 		vkdevicequeuecreateinfo_p[i] = vkdevicequeuecreateinfo;
@@ -58,7 +58,7 @@ void vk_makeDevice(uint32_t device, VkDeviceQueueCreateFlags vkdevicequeuecreate
 			.ppEnabledLayerNames = VK_NULL_HANDLE,
 		#endif
 
-		.flags = vkdevicecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 

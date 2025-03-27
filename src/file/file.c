@@ -1,6 +1,6 @@
-uint32_t *file_uint32_t(const char *filename, uint32_t *file_size)
+void *file_read(const char *name_char_p, long *size_p)
 {
-	FILE *file = fopen(filename, "rb");
+	FILE *file = fopen(name_char_p, "rb");
 	
 	if (file == NULL)
 	{
@@ -9,32 +9,26 @@ uint32_t *file_uint32_t(const char *filename, uint32_t *file_size)
 
 	fseek(file, 0, SEEK_END);
 
-	*file_size = ftell(file);
-	if (*file_size == -1)
+	*size_p = ftell(file);
+	if (*size_p == -1)
 	{
 		error("ftell");
 	}
 
 	fseek(file, 0, SEEK_SET);
 
-	size_t size = *file_size / sizeof(uint32_t);
-	if (*file_size % sizeof(uint32_t) != 0)
-	{
-		error("uint32_t");
-	}
-
-	uint32_t *uint32_t_p = (uint32_t*)malloc(*file_size);
-	if (uint32_t_p == NULL)
+	void *p = malloc(*size_p);
+	if (p == NULL)
 	{
 		error("malloc");
 	}
 
-	size_t bytesRead = fread(uint32_t_p, sizeof(uint32_t), size, file);
-	if (bytesRead != size)
-	{
-		error("fread");
-	}
+	size_t read = fread(p, *size_p, 1, file);
+	// if (read != *size_p)
+	// {
+	// 	error("fread");
+	// }
 
 	fclose(file);
-	return uint32_t_p;
+	return p;
 }

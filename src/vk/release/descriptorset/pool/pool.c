@@ -1,4 +1,4 @@
-void vk_makeDescriptorSetPool(uint32_t device, VkDescriptorPoolCreateFlags vkdescriptorpoolcreateflags, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
+void vk_makeDescriptorSetPool(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
 {
 	VkDescriptorPoolCreateInfo vkdescriptorpoolcreateinfo =
 	{
@@ -7,7 +7,7 @@ void vk_makeDescriptorSetPool(uint32_t device, VkDescriptorPoolCreateFlags vkdes
 		.pPoolSizes = vkdescriptorpoolsize_p,
 		.maxSets = 1,
 
-		.flags = vkdescriptorpoolcreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 

@@ -47,13 +47,16 @@ extern VkSemaphore ***m_vksemaphore_p;
 extern VkCommandPool **m_vkcommandpool_p;
 //S
 
+#ifdef NALI_VK_DEBUG
+	extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
+#endif
+
 extern uint32_t m_device;
 extern uint32_t m_queue_graphic;
 extern uint32_t m_queue_render;
 
-#ifdef NALI_VK_DEBUG
-	extern VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
-#endif
+extern float m_limits_max_sampler_anisotropy;
+
 
 #define NALI_VK_COLOR_FORMAT_BYTE 4
 #define NALI_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM

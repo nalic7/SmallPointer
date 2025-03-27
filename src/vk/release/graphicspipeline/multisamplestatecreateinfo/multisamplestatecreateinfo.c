@@ -1,4 +1,4 @@
-void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateFlags vkpipelinemultisamplestatecreateflags, VkPipelineMultisampleStateCreateInfo *vkpipelinemultisamplestatecreateinfo_p)
+void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateInfo *vkpipelinemultisamplestatecreateinfo_p)
 {
 	*vkpipelinemultisamplestatecreateinfo_p = (VkPipelineMultisampleStateCreateInfo)
 	{
@@ -9,7 +9,7 @@ void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateFl
 		.pSampleMask = VK_NULL_HANDLE,
 		.alphaToCoverageEnable = VK_FALSE,
 		.alphaToOneEnable = VK_FALSE,
-		.flags = vkpipelinemultisamplestatecreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 }

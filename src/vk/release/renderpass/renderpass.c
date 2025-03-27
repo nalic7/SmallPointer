@@ -1,4 +1,4 @@
-void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmentdescriptionflags, VkSubpassDescriptionFlags vksubpassdescriptionflags, VkRenderPassCreateFlags vkrenderpasscreateflags, VkDependencyFlags vkdependencyflags, VkRenderPass *vkrenderpass_p)
+void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 {
 	VkAttachmentDescription vkattachmentdescription_array[2] =
 	{
@@ -13,7 +13,7 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 			.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
 			.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
 
-			.flags = vkattachmentdescriptionflags
+			.flags = 0
 		},
 		{
 			.format = NALI_VK_DEPTH_FORMAT,
@@ -25,7 +25,7 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 			.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
 			.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 
-			.flags = vkattachmentdescriptionflags
+			.flags = 0
 		}
 	};
 
@@ -49,7 +49,7 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 		},
 		.preserveAttachmentCount = 0,
 		.pPreserveAttachments = VK_NULL_HANDLE,
-		.flags = vksubpassdescriptionflags,
+		.flags = 0,
 	};
 
 	VkSubpassDependency vksubpassdependency =
@@ -62,7 +62,7 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 		.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
 		.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
 		// .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-		.dependencyFlags = vkdependencyflags
+		.dependencyFlags = 0
 	};
 	VkRenderPassCreateInfo vkrenderpasscreateinfo =
 	{
@@ -75,7 +75,7 @@ void vk_makeRenderPass(uint32_t device, VkAttachmentDescriptionFlags vkattachmen
 		.dependencyCount = 1,
 		.pDependencies = &vksubpassdependency,
 
-		.flags = vkrenderpasscreateflags,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE
 	};
 

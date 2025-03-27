@@ -1,4 +1,4 @@
-void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *frag, VkPipelineShaderStageCreateFlags vkpipelineshaderstagecreateflags_vert, VkPipelineShaderStageCreateFlags vkpipelineshaderstagecreateflags_frag, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p)
+void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *frag, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p)
 {
 	// const char *shader_folder = "../asset/shader/";
 	// const char *vert_folder = "vert/";
@@ -14,13 +14,13 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 	// char *c2 = math_combine(c1, spv_file);
 	// free(c1);
 
-	uint32_t size = 0;
+	long size = 0;
 	// uint32_t *uint32_t_p = file_uint32_t(c2, &size);
-	uint32_t *uint32_t_p = file_uint32_t(vert, &size);
+	void *p = file_read(vert, &size);
 	// free(c2);
 
-	vk_makeShaderModule(device, uint32_t_p, size, 0, vkshadermodule_vert_p);
-	free(uint32_t_p);
+	vk_makeShaderModule(device, p, size, vkshadermodule_vert_p);
+	free(p);
 
 	// c0 = math_combine(shader_folder, frag_folder);
 	// c1 = math_combine(c0, frag_file_name);
@@ -29,11 +29,11 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 	// free(c1);
 
 	// uint32_t_p = file_uint32_t(c2, &size);
-	uint32_t_p = file_uint32_t(frag, &size);
+	p = file_read(frag, &size);
 	// free(c2);
 
-	vk_makeShaderModule(device, uint32_t_p, size, 0, vkshadermodule_frag_p);
-	free(uint32_t_p);
+	vk_makeShaderModule(device, p, size, vkshadermodule_frag_p);
+	free(p);
 
 	// free(vert_file_name);
 	// free(frag_file_name);
@@ -45,7 +45,7 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 		.module = *vkshadermodule_vert_p,
 		.pName = "main",
 
-		.flags = vkpipelineshaderstagecreateflags_vert,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE,
 		.pSpecializationInfo = VK_NULL_HANDLE
 	};
@@ -56,7 +56,7 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 		.module = *vkshadermodule_frag_p,
 		.pName = "main",
 
-		.flags = vkpipelineshaderstagecreateflags_frag,
+		.flags = 0,
 		.pNext = VK_NULL_HANDLE,
 		.pSpecializationInfo = VK_NULL_HANDLE
 	};

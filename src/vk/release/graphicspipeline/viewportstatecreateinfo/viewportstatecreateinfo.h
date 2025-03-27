@@ -1,6 +1,6 @@
 #ifndef NALI_VK_GRAPHICSPIPELINE_VIEWPORTSTATECREATEINFO_H
 #define NALI_VK_GRAPHICSPIPELINE_VIEWPORTSTATECREATEINFO_H
 
-void vk_setPipelineViewportStateCreateInfo(uint32_t device, VkPipelineViewportStateCreateFlags vkpipelineviewportstatecreateflags, VkPipelineViewportStateCreateInfo *vkpipelineviewportstatecreateinfo_p);
+void vk_setPipelineViewportStateCreateInfo(uint32_t device, VkPipelineViewportStateCreateInfo *vkpipelineviewportstatecreateinfo_p);
 
 #endif

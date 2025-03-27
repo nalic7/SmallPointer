@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
+set(GEN 1)
 set(CLIENT 1)
 set(VK_DEBUG 1)
 set(SCENE 1)
@@ -43,6 +44,10 @@ if(SCENE)
     src/ffmpeg/ffmpeg.c
   )
 
+  if (GEN)
+    list(APPEND FOO NALI_GEN=1)
+    list(APPEND SOURCES src/gen/gen.c)
+  endif()
   if (CLIENT)
     if (VK_DEBUG)
       list(APPEND FOO NALI_VK_DEBUG=1)
