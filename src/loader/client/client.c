@@ -284,6 +284,7 @@ void lc_initVK()
 			//image2d
 			// VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 			VK_IMAGE_LAYOUT_UNDEFINED,
+			VK_SAMPLE_COUNT_1_BIT,
 			&m_nali_g_image_vkimage_p[u]
 		);
 		vk_genImage(m_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u]);

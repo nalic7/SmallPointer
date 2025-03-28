@@ -292,7 +292,7 @@ int vk_loop(void *arg)
 			error("vkAcquireNextImageKHR %d", vkresult)
 		}
 
-		vkrenderpassbegininfo.framebuffer = m_vkswapchainkhr_vkframebuffer_p[m_device][image_index],
+		vkrenderpassbegininfo.framebuffer = m_vkswapchainkhr_vkframebuffer_p[m_device][image_index];
 		vkpresentinfokhr.pImageIndices = &image_index;
 
 		//s0-command
@@ -448,6 +448,10 @@ static void vkinfo(uint32_t device)
 	)
 	m_limits_max_sampler_anisotropy = vkphysicaldeviceproperties.limits.maxSamplerAnisotropy;
 	info("maxSamplerAnisotropy %f", m_limits_max_sampler_anisotropy)
+
+	//VkSampleCountFlagBits
+	info("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts);
+	info("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts);
 }
 
 void vk_init()

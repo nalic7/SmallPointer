@@ -13,16 +13,12 @@ extern VkExtent2D *m_vkswapchainkhr_vkextent2d_p;
 // extern VkFormat *m_vkswapchainkhr_vkformat_p;
 extern VkRenderPass *m_vkswapchainkhr_vkrenderpass_p;
 // extern VkRenderPass **m_vkswapchainkhr_vkrenderpass_p;
-extern VkImageView **m_vkswapchainkhr_vkimageview_color_p;
-
-extern VkImageView *m_vkswapchainkhr_vkimageview_depth_p;
-extern VkImage *m_vkswapchainkhr_vkimage_depth_p;
-extern VkDeviceMemory *m_vkswapchainkhr_vkdevicememory_depth_p;
+extern VkImageView **m_vkswapchainkhr_vkimageview_p;
 
 extern VkFramebuffer **m_vkswapchainkhr_vkframebuffer_p;
 
 extern VkSurfaceCapabilitiesKHR *m_vksurfacecapabilitieskhr_p;
-extern uint32_t *m_vksurfaceformatkhr_image_p;
+// extern uint32_t *m_vksurfaceformatkhr_image_p;
 extern VkSurfaceFormatKHR **m_vksurfaceformatkhr_p;
 
 void vk_initSwapchain();

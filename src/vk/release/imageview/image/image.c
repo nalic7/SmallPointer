@@ -1,4 +1,4 @@
-void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, uint32_t mipmap, VkImageTiling vkimagetiling, VkImageUsageFlags vkimageusageflags, VkImageLayout vkimagelayout, VkImage *vkimage_p)
+void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, uint32_t mipmap, VkImageTiling vkimagetiling, VkImageUsageFlags vkimageusageflags, VkImageLayout vkimagelayout, VkSampleCountFlagBits vksamplecountflagbits, VkImage *vkimage_p)
 {
 	VkImageCreateInfo vkimagecreateinfo =
 	{
@@ -8,7 +8,7 @@ void vk_makeImage(uint32_t device, VkFormat vkformat, VkExtent3D vkextent3d, uin
 		.extent = vkextent3d,
 		.mipLevels = mipmap,//1
 		.arrayLayers = 1,
-		.samples = VK_SAMPLE_COUNT_1_BIT,
+		.samples = vksamplecountflagbits,//VK_SAMPLE_COUNT_1_BIT,
 		.tiling = vkimagetiling,//VK_IMAGE_TILING_OPTIMAL
 		.usage = vkimageusageflags,
 		.sharingMode = VK_SHARING_MODE_EXCLUSIVE,

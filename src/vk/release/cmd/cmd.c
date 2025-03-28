@@ -190,18 +190,24 @@ void vk_cmdImage(VkCommandBuffer vkcommandbuffer, VkQueue vkqueue_graphic)
 		uint32_t i2_1 = i2 + 1;
 
 		vkimagememorybarrier_array[0].image = m_nali_g_image_vkimage_p[i];
-		vkimagememorybarrier_array[0].subresourceRange.levelCount = math_mipmap(m_nali_g_image_wh_uint32_t_p[i2], m_nali_g_image_wh_uint32_t_p[i2_1]);
 		vkbufferimagecopy.imageExtent.width = m_nali_g_image_wh_uint32_t_p[i2];
 		vkbufferimagecopy.imageExtent.height = m_nali_g_image_wh_uint32_t_p[i2_1];
-		vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, vkimagememorybarrier_array);
-		vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[i], m_nali_g_image_vkimage_p[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
+
 		if (m_nali_g_image_state_uint8_t_p[i / (8/2)] & 1 << (i % (8/2)) * 2)
 		{
+			vkimagememorybarrier_array[0].subresourceRange.levelCount = math_mipmap(m_nali_g_image_wh_uint32_t_p[i2], m_nali_g_image_wh_uint32_t_p[i2_1]);
+			vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, vkimagememorybarrier_array);
+			vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[i], m_nali_g_image_vkimage_p[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
+
 			vkimagememorybarrier_array[2].image = m_nali_g_image_vkimage_p[i];
 			cmdMipmap(vkcommandbuffer, &vkimagememorybarrier_array[2], &vkimageblit, m_nali_g_image_vkimage_p[i], m_nali_g_image_wh_uint32_t_p[i2], m_nali_g_image_wh_uint32_t_p[i2_1], vkimagememorybarrier_array[0].subresourceRange.levelCount, m_nali_g_image_state_uint8_t_p[i / (8/2)] & 2 << (i % (8/2)) * 2 ? VK_FILTER_LINEAR : VK_FILTER_NEAREST);
 		}
 		else
 		{
+			vkimagememorybarrier_array[0].subresourceRange.levelCount = 1;
+			vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, vkimagememorybarrier_array);
+			vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[i], m_nali_g_image_vkimage_p[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
+
 			vkimagememorybarrier_array[1].image = m_nali_g_image_vkimage_p[i];
 			vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, &vkimagememorybarrier_array[1]);
 		}
