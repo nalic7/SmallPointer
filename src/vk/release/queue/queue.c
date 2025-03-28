@@ -46,13 +46,17 @@ void vk_setQueue(uint32_t device)
 		{
 			if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			{
-				m_queue_graphic = i;
+				m_queue_g = i;
+			}
+			else if (vkqueuefamilyproperties.queueFlags & (VK_QUEUE_COMPUTE_BIT | VK_QUEUE_TRANSFER_BIT))
+			{
+				m_queue_ct = i;
 			}
 
 			m_queue_surface_p[device] = realloc(m_queue_surface_p[device], (m_max_queue_surface_p[device] + 1) * sizeof(uint32_t));
 			m_queue_surface_p[device][m_max_queue_surface_p[device]++] = i;
 			info("surface_1 %d", i);
-			m_queue_render = i;
+			// m_queue_render = i;
 		}
 		else
 		{
@@ -69,21 +73,21 @@ void vk_setQueue(uint32_t device)
 		vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, NALI_VK_COLOR_FORMAT, &vkformatproperties);
 		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
 		{
-			info("VK_FORMAT_R8G8B8A8_UNORM VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
+			info("NALI_VK_COLOR_FORMAT VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
 		}
 		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
 		{
-			info("VK_FORMAT_R8G8B8A8_UNORM VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
+			info("NALI_VK_COLOR_FORMAT VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
 		}
 
 		vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, NALI_VK_DEPTH_FORMAT, &vkformatproperties);
 		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
 		{
-			info("VK_FORMAT_D16_UNORM VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
+			info("NALI_VK_DEPTH_FORMAT VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
 		}
 		if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
 		{
-			info("VK_FORMAT_D16_UNORM VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
+			info("NALI_VK_DEPTH_FORMAT VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
 		}
 	}
 

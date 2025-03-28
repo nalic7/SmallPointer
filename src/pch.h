@@ -12,9 +12,6 @@
 	#include <threads.h>
 
 	#ifdef NALI_CLIENT
-		#define NALI_VK_SGPU
-		// #define NALI_VK_INFO_SC
-
 		#include <math.h>
 
 		#include <linux/input.h>

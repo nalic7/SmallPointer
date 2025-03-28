@@ -1,19 +1,25 @@
 #ifndef NALI_VK_H
 #define NALI_VK_H
 
+#define NALI_VK_SGPU
+// #define NALI_VK_INFO_SC
+
 extern uint32_t m_device;
-extern uint32_t m_queue_graphic;
-extern uint32_t m_queue_render;
+extern uint32_t m_queue_g;
+extern uint32_t m_queue_ct;
 
 extern float m_limits_max_sampler_anisotropy;
 
 #define NALI_VK_COLOR_FORMAT_BYTE 4
 #define NALI_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM
+#define NALI_VK_COLOR_SPACE VK_COLOR_SPACE_SRGB_NONLINEAR_KHR
 #define NALI_VK_DEPTH_FORMAT VK_FORMAT_D32_SFLOAT//VK_FORMAT_D16_UNORM
 
 #define NALI_VK_SAMPLE_S VK_TRUE
 #define NALI_VK_SAMPLE_C VK_SAMPLE_COUNT_8_BIT
 #define NALI_VK_SAMPLE_V 1.0F
+
+#define NALI_VK_PRESENT VK_PRESENT_MODE_FIFO_KHR//VK_PRESENT_MODE_IMMEDIATE_KHR
 
 void vk_init();
 int vk_loop(void *arg);
