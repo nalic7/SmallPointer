@@ -1,3 +1,5 @@
+VkInstance m_vkinstance = VK_NULL_HANDLE;
+
 const char *ppEnabledExtensionNames[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
@@ -53,4 +55,10 @@ void vk_makeInstance()
 	{
 		error("vkCreateInstance %d", vkresult)
 	}
+}
+
+void vk_freeInstance()
+{
+	vkDestroyInstance(m_vkinstance, NULL);
+	m_vkinstance = VK_NULL_HANDLE;
 }

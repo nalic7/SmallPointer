@@ -253,6 +253,7 @@ void lc_initVK()
 	uint32_t u2;
 	uint32_t u2_1;
 	uint8_t line;
+	int vkimageusageflagbits = 0;
 	for (uint16_t u = 0; u < m_nali_g_max_image; ++u)
 	{
 		u2 = u * 2;
@@ -262,6 +263,7 @@ void lc_initVK()
 		if (m_nali_g_image_state_uint8_t_p[u / (8/2)] & 1 << (u % (8/2)) * 2)
 		{
 			mipmap = math_mipmap(m_nali_g_image_wh_uint32_t_p[u2], m_nali_g_image_wh_uint32_t_p[u2_1]);
+			vkimageusageflagbits = VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 		}
 		line = m_nali_g_image_state_uint8_t_p[u / (8/2)] & 2 << (u % (8/2)) * 2;
 
@@ -278,7 +280,7 @@ void lc_initVK()
 			mipmap,
 			line ? VK_IMAGE_TILING_LINEAR : VK_IMAGE_TILING_OPTIMAL,
 			//sampler
-			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+			vkimageusageflagbits | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			//image2d
 			// VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 			VK_IMAGE_LAYOUT_UNDEFINED,
@@ -355,21 +357,21 @@ void lc_clearVK(uint32_t device)
 		vkDestroyImage(vkdevice, m_nali_g_image_vkimage_p[i], VK_NULL_HANDLE);
 		vkFreeMemory(vkdevice, m_nali_g_image_vkimage_vkdevicememory_p[i], VK_NULL_HANDLE);
 
-		vkDestroyBuffer(vkdevice, m_nali_g_image_vkbuffer_p[i], VK_NULL_HANDLE);
-		vkFreeMemory(vkdevice, m_nali_g_image_vkbuffer_vkdevicememory_p[i], VK_NULL_HANDLE);
+		// vkDestroyBuffer(vkdevice, m_nali_g_image_vkbuffer_p[i], VK_NULL_HANDLE);
+		// vkFreeMemory(vkdevice, m_nali_g_image_vkbuffer_vkdevicememory_p[i], VK_NULL_HANDLE);
 
-		free(m_nali_g_image_uint8_t_p[i]);
+		// free(m_nali_g_image_uint8_t_p[i]);
 	}
 	free(m_nali_g_image_state_uint8_t_p);
-	free(m_nali_g_image_uint8_t_p);
+	// free(m_nali_g_image_uint8_t_p);
 	free(m_nali_g_image_wh_uint32_t_p);
 	free(m_nali_g_image_vkimage_p);
 	free(m_nali_g_image_vkimageview_p);
 	free(m_nali_g_image_vksampler_p);
 	free(m_nali_g_image_vkimage_vkdevicememory_p);
 
-	free(m_nali_g_image_vkbuffer_p);
-	free(m_nali_g_image_vkbuffer_vkdevicememory_p);
+	// free(m_nali_g_image_vkbuffer_p);
+	// free(m_nali_g_image_vkbuffer_vkdevicememory_p);
 	//e0-image
 
 	//s0-ubo
@@ -468,9 +470,9 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 	*vkdescriptorimageinfo_p = (VkDescriptorImageInfo)
 	{
-		//line VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		//near VK_IMAGE_LAYOUT_GENERAL
-		.imageLayout = VK_IMAGE_LAYOUT_GENERAL,
+		//sampler VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		//image2d VK_IMAGE_LAYOUT_GENERAL
+		.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 		.imageView = m_nali_g_image_vkimageview_p[0],
 		.sampler = m_nali_g_image_vksampler_p[0]
 		// .sampler = VK_NULL_HANDLE

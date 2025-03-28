@@ -1,4 +1,4 @@
-void vk_makeSemaphore(uint32_t device, uint32_t graphic)
+void vk_makeSemaphore(uint32_t device, VkSemaphore *vksemaphore_p)
 {
 	VkSemaphoreCreateInfo vksemaphorecreateinfo =
 	{
@@ -6,6 +6,5 @@ void vk_makeSemaphore(uint32_t device, uint32_t graphic)
 		.pNext = VK_NULL_HANDLE,
 		.flags = 0
 	};
-	vkCreateSemaphore(m_vkdevice_p[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, &m_vksemaphore_p[device][graphic][0]);//img
-	vkCreateSemaphore(m_vkdevice_p[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, &m_vksemaphore_p[device][graphic][1]);//render
+	vkCreateSemaphore(m_vkdevice_p[device], &vksemaphorecreateinfo, VK_NULL_HANDLE, vksemaphore_p);
 }

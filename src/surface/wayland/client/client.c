@@ -104,7 +104,7 @@ void wlc_clean()
 
 static int start(void* arg)
 {
-	struct timespec ts = {2, 0};
+	struct timespec ts = {1, 0};
 	thrd_sleep(&ts, NULL);
 	if ((m_surface_state & NALI_SURFACE_C_S_WAIT) == 0)
 	{
@@ -115,6 +115,7 @@ static int start(void* arg)
 }
 static int loop(void* arg)
 {
+	info("loop_wl")
 	thrd_t thrd_t;
 	if (thrd_create(&thrd_t, start, NULL) != thrd_success)
 	{
@@ -122,6 +123,7 @@ static int loop(void* arg)
 	}
 	int result = wl_display_dispatch(m_wl_display_client_p);
 	// m_surface_state |= NALI_SURFACE_C_S_WAIT;
+	info("out_wl")
 
 	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0 && result > -1)
 	{
@@ -132,6 +134,7 @@ static int loop(void* arg)
 	m_surface_state |= NALI_SURFACE_C_S_WAIT;
 	// m_surface_state &= 255 - (NALI_SURFACE_C_S_WAIT + NALI_SURFACE_C_S_CONFIG);
 	m_surface_state &= 255 - NALI_SURFACE_C_S_CONFIG;
+	info("done_wl")
 	if (result < 0)
 	{
 		info("re_wl")
@@ -191,11 +194,11 @@ void wlc_init()
 	// while (i != -1 && (m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0);
 	// wl_surface_commit(m_wl_surface);
 
-	int i;
-	while ((i = wl_display_dispatch(m_wl_display_client_p)) != 1)
-	{
-		info("wl_display_dispatch %d", i)
-	}
+	// int i;
+	// while ((i = wl_display_dispatch(m_wl_display_client_p)) != 1)
+	// {
+	// 	info("wl_display_dispatch %d", i)
+	// }
 
 	thrd_t thrd_t;
 	if (thrd_create(&thrd_t, loop, NULL) != thrd_success)

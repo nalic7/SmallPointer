@@ -1,11 +1,14 @@
+VkSurfaceKHR m_vksurfacekhr = VK_NULL_HANDLE;
+
 void vk_makeSurface()
 {
-	while ((m_surface_state & NALI_SURFACE_C_S_CONFIG + NALI_SURFACE_C_S_WAIT) == NALI_SURFACE_C_S_WAIT)
+	do
 	{
 		info("wait_vk_wl")
 		struct timespec ts = {1, 0};
 		thrd_sleep(&ts, NULL);
-	}
+		info("surface_wait %d", (m_surface_state & NALI_SURFACE_C_S_CONFIG + NALI_SURFACE_C_S_WAIT) == NALI_SURFACE_C_S_WAIT)
+	} while ((m_surface_state & NALI_SURFACE_C_S_CONFIG + NALI_SURFACE_C_S_WAIT) == NALI_SURFACE_C_S_WAIT);
 
 	VkWaylandSurfaceCreateInfoKHR vkwaylandsurfacecreateinfokhr =
 	{
@@ -22,4 +25,10 @@ void vk_makeSurface()
 	{
 		error("vkCreateWaylandSurfaceKHR %d", vkresult)
 	}
+}
+
+void vk_freeSurface()
+{
+	vkDestroySurfaceKHR(m_vkinstance, m_vksurfacekhr, NULL);
+	m_vksurfacekhr = VK_NULL_HANDLE;
 }

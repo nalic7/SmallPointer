@@ -7,11 +7,14 @@ static const uint32_t pipeline[] =
 static const uint8_t image[] =
 {
 	//mipmap line
-	// 1 + 2 +
-	// 4 + 8
+	1 + 2 +
+	4 + 8
 
-	0 + 2 +
-	0 + 8
+	// 1 + 0 +
+	// 4 + 0
+
+	// 0 + 2 +
+	// 0 + 8
 };
 
 static const uint32_t model[] =
@@ -32,6 +35,6 @@ void gen_file()
 	fclose(file);
 
 	file = fopen(NALI_HOME "image.bin", "wb");
-	fwrite(model, sizeof(char), sizeof(model), file);
+	fwrite(image, sizeof(char), sizeof(image), file);
 	fclose(file);
 }

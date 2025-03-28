@@ -55,14 +55,14 @@
 		#include "surface/wayland/client/zwp/relative/relative.h"
 
 		#include "vk/release/vk/vk.h"
-		#include "vk/release/instance/instance.h"
+		#include "vk/release/queue/device/physical_device/instance/instance.h"
 		#ifdef NALI_VK_DEBUG
 			#include "vk/debug/debug.h"
 		#endif
-		#include "vk/release/instance/physical_device/physical_device.h"
-		#include "vk/release/instance/physical_device/queue/queue.h"
+		#include "vk/release/queue/device/physical_device/physical_device.h"
+		#include "vk/release/queue/device/device.h"
+		#include "vk/release/queue/queue.h"
 		#include "vk/release/surface/surface.h"
-		#include "vk/release/instance/device/device.h"
 		#include "vk/release/renderpass/renderpass.h"
 		#include "vk/release/framebuffer/framebuffer.h"
 		#include "vk/release/swapchain/swapchain.h"
@@ -93,9 +93,6 @@
 		#include "vk/release/graphicspipeline/graphicspipeline.h"
 
 		#include "vk/release/cmd/cmd.h"
-		#include "vk/release/cmd/imagememorybarrier/imagememorybarrier.h"
-		#include "vk/release/cmd/imageblit/imageblit.h"
-		#include "vk/release/cmd/bufferimagecopy/bufferimagecopy.h"
 
 		#include <libavformat/avformat.h>
 		#include <libavcodec/avcodec.h>

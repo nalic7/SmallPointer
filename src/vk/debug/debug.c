@@ -1,3 +1,5 @@
+VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
+
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT *vkdebugutilsmessengercallbackdataext, void *data)
 {
 	info(">vk_debug: %s", vkdebugutilsmessengercallbackdataext->pMessage)

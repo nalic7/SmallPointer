@@ -1,28 +1,25 @@
+VkDevice *m_vkdevice_p;
+
+void vk_initDevice()
+{
+	m_vkdevice_p = malloc(sizeof(VkDevice) * m_physical_device);
+}
+
 void vk_makeDevice(uint32_t device)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
-	uint8_t max_graphics = m_max_graphic_p[device];
-	// QueueList queuelist = vk_findQueue(vk, vkphysicaldevice);
+	uint32_t max_queue = m_max_queue_p[device];
 
-	info("max_graphics %d", max_graphics)
-
-	VkDeviceQueueCreateInfo *vkdevicequeuecreateinfo_p = malloc(max_graphics * sizeof(VkDeviceQueueCreateInfo));
+	VkDeviceQueueCreateInfo *vkdevicequeuecreateinfo_p = malloc(max_queue * sizeof(VkDeviceQueueCreateInfo));
 
 	float queuepriority = 1.0F;
 
-	// uint32_t queueFamilyIndex[] =
-	// {
-	//	 queuelist.all,
-	//	 queuelist.now
-	// };
-
-	for (uint32_t i = 0; i < max_graphics; ++i)
+	for (uint32_t i = 0; i < max_queue; ++i)
 	{
-		info("use_graphic %d", m_graphic_p[device][i])
 		VkDeviceQueueCreateInfo vkdevicequeuecreateinfo = 
 		{
 			.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-			.queueFamilyIndex = m_graphic_p[device][i],
+			.queueFamilyIndex = i,
 			.queueCount = 1,
 			.pQueuePriorities = &queuepriority,
 
@@ -44,7 +41,7 @@ void vk_makeDevice(uint32_t device)
 	VkDeviceCreateInfo vkdevicecreateinfo =
 	{
 		.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-		.queueCreateInfoCount = max_graphics,
+		.queueCreateInfoCount = max_queue,
 		.pQueueCreateInfos = vkdevicequeuecreateinfo_p,
 		.pEnabledFeatures = &vkphysicaldevicefeatures,
 		.enabledExtensionCount = sizeof(deviceextensions) / sizeof(deviceextensions[0]),
@@ -63,11 +60,14 @@ void vk_makeDevice(uint32_t device)
 	};
 
 	vkCreateDevice(vkphysicaldevice, &vkdevicecreateinfo, VK_NULL_HANDLE, &m_vkdevice_p[device]);
+}
 
-	m_vkqueue_p[device] = malloc(max_graphics * sizeof(VkQueue));
-
-	for (uint32_t i = 0; i < max_graphics; ++i)
+void vk_freeDevice()
+{
+	for (uint32_t d = 0; d < m_physical_device; ++d)
 	{
-		vkGetDeviceQueue(m_vkdevice_p[device], m_graphic_p[device][i], 0, &m_vkqueue_p[device][i]);
+		vkDestroyDevice(m_vkdevice_p[d], VK_NULL_HANDLE);
 	}
+
+	free(m_vkdevice_p);
 }
