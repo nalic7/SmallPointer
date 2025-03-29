@@ -11,8 +11,8 @@ void vk_makePhysicalDevice()
 	#ifdef NALI_VK_SGPU
 		m_physical_device = 1;
 	#else
-		vkEnumeratePhysicalDevices(m_vkinstance, &physical_device, VK_NULL_HANDLE);
-		info("physical_device %d", physical_device)
+		vkEnumeratePhysicalDevices(m_vkinstance, &m_physical_device, VK_NULL_HANDLE);
+		info("physical_device %d", m_physical_device)
 
 		// if (!physical_device)
 		// {

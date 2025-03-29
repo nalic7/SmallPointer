@@ -10,6 +10,8 @@ extern uint32_t m_queue_ct;
 
 extern float m_limits_max_sampler_anisotropy;
 
+#define NALI_VK_VERSION VK_API_VERSION_1_3//VK_API_VERSION_1_4
+
 #define NALI_VK_COLOR_FORMAT_BYTE 4
 #define NALI_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM
 #define NALI_VK_COLOR_SPACE VK_COLOR_SPACE_SRGB_NONLINEAR_KHR

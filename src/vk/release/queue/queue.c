@@ -1,18 +1,15 @@
 uint32_t *m_max_queue_p;
-// uint32_t **m_queue_p;
 uint32_t *m_max_queue_surface_p;
-uint32_t **m_queue_surface_p;
 
+uint32_t **m_queue_surface_p;
 VkQueue **m_vkqueue_p;
 
 void vk_initQueue()
 {
 	m_max_queue_p = malloc(sizeof(uint32_t) * m_physical_device);
-	// m_queue_p = malloc(sizeof(uint32_t*) * m_physical_device);
-
 	m_max_queue_surface_p = malloc(sizeof(uint32_t) * m_physical_device);
-	m_queue_surface_p = malloc(sizeof(uint32_t*) * m_physical_device);
 
+	m_queue_surface_p = malloc(sizeof(uint32_t*) * m_physical_device);
 	m_vkqueue_p = malloc(sizeof(VkQueue*) * m_physical_device);
 }
 
@@ -111,17 +108,13 @@ void vk_freeQueue()
 {
 	for (uint32_t d = 0; d < m_physical_device; ++d)
 	{
-		for (uint32_t q = 0; q < m_max_queue_surface_p[d]; ++q)
-		{
-			// free(m_queue_p[u]);
-			free(m_queue_surface_p[q]);
-		}
+		free(m_queue_surface_p[d]);
+		free(m_vkqueue_p[d]);
 	}
 
 	free(m_max_queue_p);
-	// free(m_queue_p);
 	free(m_max_queue_surface_p);
-	free(m_queue_surface_p);
 
+	free(m_queue_surface_p);
 	free(m_vkqueue_p);
 }

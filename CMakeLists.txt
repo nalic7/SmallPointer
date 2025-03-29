@@ -12,8 +12,6 @@ set(SCENE 1)
 
 if (SCENE)
   set(P_NAME scene)
-# elseif(GLTF)
-#   set(P_NAME gltf)
 elseif(COLLADA)
   set(P_NAME collada)
 elseif(LWJGL64)
@@ -84,6 +82,7 @@ if(SCENE)
     m
     vulkan
     openal
+
     wayland-client
     wayland-cursor
 

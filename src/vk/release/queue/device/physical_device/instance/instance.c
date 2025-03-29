@@ -5,6 +5,9 @@ const char *ppEnabledExtensionNames[] =
 	VK_KHR_SURFACE_EXTENSION_NAME,
 	VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
 
+	// VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME,
+	// VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
+
 	#ifdef NALI_VK_DEBUG
 		VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 	#endif
@@ -26,7 +29,7 @@ void vk_makeInstance()
 		.applicationVersion = VK_MAKE_VERSION(1, 0, 0),
 		.pEngineName = "vk",
 		.engineVersion = VK_MAKE_VERSION(1, 0, 0),
-		.apiVersion = VK_API_VERSION_1_0,
+		.apiVersion = NALI_VK_VERSION,
 
 		.pNext = VK_NULL_HANDLE
 	};

@@ -17,13 +17,14 @@ static void clean()
 
 	vk_freeSwapchain();
 
-	vk_freeQueue();
 	vk_freeDevice();
+	vk_freeQueue();
 	vk_freePhysicalDevice();
 
 	#ifdef NALI_VK_DEBUG
 		vk_freeDebug();
 	#endif
+
 	vk_freeSurface();
 	vk_freeInstance();
 }
@@ -228,6 +229,9 @@ int vk_loop(void *arg)
 	// vkResetFences(vkdevice, 1, graphic_vkfence_p);
 
 	vk_cmd(vkcommandbuffer, &vkcommandbufferbegininfo, vkqueue_graphic);
+	// VkCommandBuffer vkcommandbuffer_ct;
+	// vk_makeCommandBuffer(m_device, m_queue_ct, &vkcommandbuffer_ct, 1);
+	// vk_cmd(vkcommandbuffer_ct, &vkcommandbufferbegininfo, m_vkqueue_p[m_device][m_queue_ct]);
 
 	// //s0-check
 	// VkImageSubresource vkimagesubresource =
@@ -456,10 +460,26 @@ void vk_init()
 	ieinfo();
 
 	vk_makeInstance();
+
+	//s0-dginfo
+	uint32_t device_group;
+	vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, 0);
+	VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
+	vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, vkphysicaldevicegroupproperties_p);
+	info("device_group %d", device_group)
+	for (uint32_t u = 0; u < device_group; ++u)
+	{
+		info("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
+	}
+	free(vkphysicaldevicegroupproperties_p);
+	//e0-dginfo
+
 	vk_makeSurface();
+
 	#ifdef NALI_VK_DEBUG
 		vk_makeDebug();
 	#endif
+
 	vk_makePhysicalDevice();
 
 	vk_initQueue();
@@ -475,9 +495,18 @@ void vk_init()
 
 		vk_setQueue(d);
 		vk_makeDevice(d);
+
+		//s0-pminfo
+		VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
+		vkGetDeviceGroupPeerMemoryFeatures(m_vkdevice_p[d], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
+		//VkPeerMemoryFeatureFlagBits
+		info("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
+		//e0-pminfo
+
 		vk_getQueue(d);
-		vk_makeSwapchain(m_max_queue_surface_p[d] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 
 		vk_makeCommandPool(d);
 	}
+
+	vk_makeSwapchain(m_max_queue_surface_p[m_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 }
