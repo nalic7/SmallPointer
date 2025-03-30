@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
+
 set(GEN 1)
 set(CLIENT 1)
 set(VK_DEBUG 1)
+
 set(SCENE 1)
 # set(COLLADA 1)
 # set(LWJGL64 1)
@@ -33,13 +35,7 @@ if(SCENE)
 
   set(FOO PCH_SCENE=1)
   set(SOURCES
-    src/file/file.c
-    src/math/m4x4/m4x4.c
-    src/surface/surface.c
-    src/file/file.c
-    src/al/al.c
     src/scene/scene.c
-    src/ffmpeg/ffmpeg.c
   )
 
   if (GEN)
@@ -51,6 +47,11 @@ if(SCENE)
       list(APPEND FOO NALI_VK_DEBUG=1)
       list(APPEND SOURCES src/vk/debug/debug.c)
     endif()
+
+    list(APPEND SOURCES src/file/file.c)
+    list(APPEND SOURCES src/surface/surface.c)
+    list(APPEND SOURCES src/al/al.c)
+    list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
 
     file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
     list(APPEND SOURCES ${G_SOURCES})
@@ -68,28 +69,32 @@ if(SCENE)
     list(APPEND SOURCES src/loader/client/client.c)
     # list(APPEND SOURCES src/network/linux/client/nw_client.c)
   else()
-    # list(APPEND SOURCES src/loader/server/l_server.c)
-    # list(APPEND SOURCES src/network/linux/server/nw_server.c)
+    list(APPEND SOURCES src/loader/server/server.c)
+    list(APPEND SOURCES src/network/linux/server/nw_server.c)
   endif()
 
   add_executable(${P_NAME} ${SOURCES})
 
-  target_include_directories(${P_NAME} PRIVATE
-    lib/wayland
-  )
+  if (CLIENT)
+    target_include_directories(${P_NAME} PRIVATE
+      lib/wayland
+    )
+  endif()
 
-  target_link_libraries(${P_NAME}
-    m
-    vulkan
-    openal
+  if (CLIENT)
+    target_link_libraries(${P_NAME}
+      m
+      vulkan
+      openal
 
-    wayland-client
-    wayland-cursor
+      wayland-client
+      wayland-cursor
 
-    avcodec
-    avformat
-    avutil
-  )
+      avcodec
+      avformat
+      avutil
+    )
+  endif()
 
   target_compile_definitions(${P_NAME} PRIVATE ${FOO})
 

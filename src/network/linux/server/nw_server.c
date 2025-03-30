@@ -8,6 +8,12 @@ static uint16_t m_max_epoll_event = 2;
 static struct epoll_event stack_epoll_event;
 static struct epoll_event *epoll_event_p;
 
+static void clean()
+{
+	close(server_socket);
+	close(client_socket);
+}
+
 void nws_init()
 {
 	epoll_event_p = malloc(sizeof(struct epoll_event) * m_max_epoll_event);
@@ -15,12 +21,12 @@ void nws_init()
 	struct sockaddr_in server_sockaddr_in, client_sockaddr_in;
 	socklen_t addrlen = sizeof(server_sockaddr_in);
 
-	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		error("socket")
 	}
 
-	// bzero((char *)sockaddr_in_p, sizeof(struct sockaddr_in));
+	memset(&server_sockaddr_in, 0, sizeof(struct sockaddr_in));
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_addr.s_addr = INADDR_ANY;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
@@ -33,7 +39,7 @@ void nws_init()
 	{
 		error("listen")
 	}
-	info("PORT %d", NALI_SC_PORT)
+	info("port %d", NALI_SC_PORT)
 
 	epoll = epoll_create1(0);
 	if (epoll == -1)
@@ -82,6 +88,8 @@ void nws_init()
 			}
 		}
 	}
+
+	clean();
 }
 
 void nws_key(char *char_p)
@@ -97,10 +105,4 @@ void nws_key(char *char_p)
 			error("send")
 		}
 	}
-}
-
-void nws_clean()
-{
-	close(server_socket);
-	close(client_socket);
 }

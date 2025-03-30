@@ -1,5 +1,29 @@
-# Scene
-<span style="font-size: large; ">
+# SETUP
+<span style="font-size: large;">
+
+1. VSCodium
+
+	settings.json
+	```json
+	{
+		"editor.largeFileOptimizations": false,
+		"editor.renderWhitespace": "all",
+		"clangd.enableCodeCompletion": false,
+		"editor.minimap.enabled": false,
+		"cmake.debugConfig.type": "lldb"
+	}
+	```
+
+	Extensions
+
+		clangd -> c
+		CMake Tools -> cmake
+		CodeLLDB -> debug
+2. Blender 3.x 4.x
+</span>
+
+### Scene
+<span style="font-size: large;">
 
 >CMakeLists.txt
 
@@ -7,27 +31,19 @@
 	set(GEN 1) // for first time
 	set(CLIENT 1)
 	set(VK_DEBUG 1)
+
 	set(SCENE 1)
 	#...
 </span>
 
-# Collada Parser
-<span style="font-size: large; ">
+### Collada Parser
+<span style="font-size: large;">
 
 >CMakeLists.txt
 
 	#...
 	set(COLLADA 1)
 	#...
->Install
-1. Blender
-2. CMake / nvim / VSCode
-
-	VSCode Extensions
-
-		C/C++ Debug (gdb)
-		clangd
-		CMake Tools
 
 >Edit Model In Blender
 1. Apply[Ctrl+A] -> All Transforms
@@ -52,8 +68,8 @@
 
 </span>
 
-# LWJGL64
-<span style="font-size: large; ">
+### LWJGL64
+<span style="font-size: large;">
 
 >JVM arguments
 
@@ -62,5 +78,5 @@
 
 </span>
 
-# NALIGL
-# NALIAL
+### NALIGL
+### NALIAL

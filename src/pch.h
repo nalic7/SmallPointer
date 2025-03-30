@@ -1,18 +1,15 @@
 #ifdef PCH_SCENE
 
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <string.h>
-	#include <stdint.h>
+	// #include <stdint.h>
 	// #include <sys/stat.h>
-	#include <ctype.h>
+	// #include <ctype.h>
 	#include <dirent.h>
 
 	#include <time.h>
 	#include <threads.h>
 
 	#ifdef NALI_CLIENT
-		#include <math.h>
+		// #include <math.h>
 
 		#include <linux/input.h>
 
@@ -27,8 +24,8 @@
 		#include <AL/al.h>
 		#include <AL/alc.h>
 
+		#define VK_USE_PLATFORM_WAYLAND_KHR
 		#include <vulkan/vulkan.h>
-		#include <vulkan/vulkan_wayland.h>
 
 		#include "file/file.h"
 
@@ -90,6 +87,8 @@
 		#include "vk/release/graphicspipeline/graphicspipeline.h"
 
 		#include "vk/release/cmd/cmd.h"
+		#include "vk/release/cmd/image/image.h"
+		#include "vk/release/cmd/draw/draw.h"
 
 		#include <libavformat/avformat.h>
 		#include <libavcodec/avcodec.h>
@@ -104,7 +103,11 @@
 		#include "loader/client/client.h"
 		// #include "network/linux/client/nw_client.h"
 	#else
-		#include "loader/server/l_server.h"
+		#include <stdio.h>
+		#include <stdlib.h>
+		#include <string.h>
+
+		#include "loader/server/server.h"
 		#include "network/linux/server/nw_server.h"
 	#endif
 

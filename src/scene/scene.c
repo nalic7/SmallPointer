@@ -7,10 +7,10 @@ int main()
 		al_init();
 		// nwc_init();
 		lc_initVK();
+		m_pointer_id = 0;
 	#else
-		// nws_init();
+		nws_init();
 	#endif
-	m_pointer_id = 0;
 	while (1)
 	{
 

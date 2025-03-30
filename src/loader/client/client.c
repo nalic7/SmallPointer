@@ -311,8 +311,9 @@ void lc_initVK()
 	vk_mapBuffer(m_device, vkdevicesize, (void *)nali_v_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0]);
 	//e0-ubo
 
+	vk_initCmdDraw();
 	thrd_t thrd_t;
-	if (thrd_create(&thrd_t, vk_loop, NULL) != thrd_success)
+	if (thrd_create(&thrd_t, vk_cmdDraw, NULL) != thrd_success)
 	{
 		error("thrd_create")
 	}

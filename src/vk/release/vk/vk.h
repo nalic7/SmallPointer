@@ -24,6 +24,6 @@ extern float m_limits_max_sampler_anisotropy;
 #define NALI_VK_PRESENT VK_PRESENT_MODE_FIFO_KHR//VK_PRESENT_MODE_IMMEDIATE_KHR
 
 void vk_init();
-int vk_loop(void *arg);
+void vk_clean();
 
 #endif
