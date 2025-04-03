@@ -1,108 +1,137 @@
+uint8_t m_net_server_state = 0;
+
 static int
-	server_socket,
-	client_socket,
-	epoll;
+	server_fd,
+	epfd;
 
-static uint16_t m_max_epoll_event = 2;
-
-static struct epoll_event stack_epoll_event;
 static struct epoll_event *epoll_event_p;
+
+// static void key(char *char_p)
+// {
+// 	if (!strcmp(char_p, "s"))
+// 	{
+// 		uint8_t size = sizeof(uint16_t) + 1;
+// 		char *message = malloc(size);
+// 		((uint16_t*)message)[0] = 1;
+// 		message[sizeof(uint16_t)] = 'c';
+// 		info("send %ld", send(client_socket, message, size, 0))
+// 		info("%s", strerror(errno))
+// 	}
+// }
+
+static uint8_t client_fd_select = 0;
+static int *client_fd_p;
 
 static void clean()
 {
-	close(server_socket);
-	close(client_socket);
+	for (uint8_t u = 0; u < NALI_MAX_CLIENT; u++)
+	{
+		if (client_fd_p[u] != -1)
+		{
+			close(client_fd_p[u]);
+			client_fd_p[u] = -1;
+		}
+	}
+
+	close(epfd);
+	close(server_fd);
+	free(epoll_event_p);
+	info("clean_nw_server")
 }
 
-void nws_init()
+static int errno_temp = 0;
+static void out()
 {
-	epoll_event_p = malloc(sizeof(struct epoll_event) * m_max_epoll_event);
+	if (errno != errno_temp)
+	{
+		info("s %d %s", errno, strerror(errno))
+	}
+	errno_temp = errno;
+}
+
+static int init(void *arg)
+{
+	epoll_event_p = malloc(sizeof(struct epoll_event) * NALI_MAX_EPOLL_EVENT);
+	client_fd_p = malloc(sizeof(int) * NALI_MAX_CLIENT);
+	memset(client_fd_p, -1, sizeof(int) * NALI_MAX_CLIENT);
 
 	struct sockaddr_in server_sockaddr_in, client_sockaddr_in;
 	socklen_t addrlen = sizeof(server_sockaddr_in);
 
-	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-	{
-		error("socket")
-	}
+	info("socket %d", server_fd = socket(AF_INET, SOCK_STREAM, 0))
+	info("%s", strerror(errno))
+
+	info("setsockopt %d", setsockopt(server_fd, SOL_SOCKET, SO_RCVTIMEO, &(struct timeval){.tv_sec = 5, .tv_usec = 0}, sizeof(struct timeval)))
+	info("%s", strerror(errno))
 
 	memset(&server_sockaddr_in, 0, sizeof(struct sockaddr_in));
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_addr.s_addr = INADDR_ANY;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
-	if (bind(server_socket, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)) < 0)
-	{
-		error("bind")
-	}
 
-	if (listen(server_socket, 3) < 0)
-	{
-		error("listen")
-	}
-	info("port %d", NALI_SC_PORT)
+	info("bind %d", bind(server_fd, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)))
+	info("%s", strerror(errno))
 
-	epoll = epoll_create1(0);
-	if (epoll == -1)
-	{
-		error("epoll_create1")
-	}
+	info("listen %d", listen(server_fd, 3))
+	info("%s", strerror(errno))
 
-	stack_epoll_event.events = EPOLLIN;
-	stack_epoll_event.data.fd = server_socket;
-	if (epoll_ctl(epoll, EPOLL_CTL_ADD, server_socket, &stack_epoll_event) == -1)
-	{
-		error("epoll_ctl")
-	}
+	info("epoll_create1 %d", epfd = epoll_create1(0))
+	info("%s", strerror(errno))
 
-	while (1)
+	info("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_ADD, server_fd, &(struct epoll_event){.events = EPOLLIN, .data.fd = server_fd}))
+	info("%s", strerror(errno))
+
+	uint8_t size;
+	uint8_t *uint8_t_p;
+	ssize_t r;
+	while (!(m_net_server_state & NALI_NET_SERVER_FAIL))
 	{
-		int event_count = epoll_wait(epoll, epoll_event_p, m_max_epoll_event, -1);
+		int event_count = epoll_wait(epfd, epoll_event_p, NALI_MAX_EPOLL_EVENT, 1000);
 
 		for (int i = 0; i < event_count; i++)
 		{
 			int fd = epoll_event_p[i].data.fd;
 
-			if (fd == server_socket)
+			if (fd == server_fd)
 			{
-				if ((client_socket = accept(server_socket, (struct sockaddr*)&client_sockaddr_in, &addrlen)) < 0)
-				{
-					error("accept")
-				}
+				info("accept %d", client_fd_p[client_fd_select] = accept(server_fd, (struct sockaddr*)&client_sockaddr_in, &addrlen))
+				info("%s", strerror(errno))
 
-				stack_epoll_event.events = EPOLLIN;
-				stack_epoll_event.data.fd = client_socket;
-				epoll_ctl(epoll, EPOLL_CTL_ADD, client_socket, &stack_epoll_event);
+				epoll_ctl(epfd, EPOLL_CTL_ADD, client_fd_p[client_fd_select], &(struct epoll_event){.events = EPOLLIN, .data.fd = client_fd_p[client_fd_select]});
+
+				++client_fd_select;
 			}
 			else
 			{
-				char buffer[1024];
-				int bytes_read = recv(fd, buffer, sizeof(buffer), 0);
-				if (bytes_read <= 0)
+				// ssize_t r = recv(fd, &size, sizeof(uint8_t), MSG_DONTWAIT);
+				r = recv(fd, &size, sizeof(uint8_t), 0);
+				info("recv %ld", r)
+				if (r == 0)
 				{
+					epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL);
 					close(fd);
+
+					client_fd_p[--client_fd_select] = -1;
 				}
 				else
 				{
-					send(fd, buffer, bytes_read, 0);
+					uint8_t_p = malloc(size);
+					r = recv(fd, &uint8_t_p, size, 0);
+					free(uint8_t_p);
 				}
 			}
 		}
+
+		out();
 	}
 
 	clean();
+	return 0;
 }
-
-void nws_key(char *char_p)
+void nws_init()
 {
-	if (strcmp(char_p, "s") == 0)
+	if (thrd_create(&(thrd_t){}, init, NULL) != thrd_success)
 	{
-		uint8_t size = sizeof(uint16_t) + 1;
-		char *message = malloc(size);
-		((uint16_t*)message)[0] = 1;
-		message[sizeof(uint16_t)] = 'c';
-		if (send(client_socket, message, size, 0) <= 0)
-		{
-			error("send")
-		}
+		error("thrd_create")
 	}
 }

@@ -27,7 +27,7 @@ char file_reader_match(FILE *file_p, const char *mchar_p[], const uint32_t size)
 				char_index[i] = 0;
 			}
 
-			if (strcmp(mchar_p[i], char_p[i]) == 0)
+			if (!strcmp(mchar_p[i], char_p[i]))
 			{
 				for (uint32_t l = 0; l < size; ++l)
 				{
@@ -91,7 +91,7 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 			c_p[c_index++ + 1] = '\0';
 		}
 
-		if (strcmp(f_char_p, sf_char_p) == 0)
+		if (!strcmp(f_char_p, sf_char_p))
 		{
 			char_p = realloc(char_p, (*size + 1) * sizeof(char*));
 			size_t length = c_index + 1 + 1;
@@ -104,7 +104,7 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 			c_index = 0;
 		}
 
-		if (strcmp(e_char_p, se_char_p) == 0)
+		if (!strcmp(e_char_p, se_char_p))
 		{
 			if (c_index != 0)
 			{
@@ -170,7 +170,7 @@ float *file_reader_float(FILE *file_p, const char *e_char_p, float *float_p, uin
 			}
 		}
 
-		if (strcmp(e_char_p, se_char_p) == 0)
+		if (!strcmp(e_char_p, se_char_p))
 		{
 			if (n_index != 0)
 			{
@@ -244,7 +244,7 @@ int32_t *file_reader_int(FILE *file_p, const char *e_char_p, int32_t *int_p, uin
 		// ++c;
 		// c %= sizeof(int);
 		// fseek(file, 1, SEEK_CUR);
-		if (strcmp(e_char_p, se_char_p) == 0)
+		if (!strcmp(e_char_p, se_char_p))
 		{
 			if (n_index != 0)
 			{

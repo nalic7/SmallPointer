@@ -11,8 +11,8 @@ void vk_makeSampler(uint32_t device, uint32_t mipmap, uint8_t line, VkSampler *v
 		.compareEnable = VK_FALSE,
 		.compareOp = VK_COMPARE_OP_ALWAYS,
 
-		.anisotropyEnable = m_limits_max_sampler_anisotropy == 0 ? VK_FALSE : VK_TRUE,
-		.maxAnisotropy = m_limits_max_sampler_anisotropy,
+		.anisotropyEnable = NALI_VK_MAX_SAMPLER_ANISOTROPY == 0 ? VK_FALSE : VK_TRUE,
+		.maxAnisotropy = NALI_VK_MAX_SAMPLER_ANISOTROPY,
 
 		.mipLodBias = 0,
 		.minLod = 0,
@@ -35,5 +35,5 @@ void vk_makeSampler(uint32_t device, uint32_t mipmap, uint8_t line, VkSampler *v
 		vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
 	}
 
-	vkCreateSampler(m_vkdevice_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p);
+	nali_info("vkCreateSampler %d", vkCreateSampler(m_vkdevice_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
 }

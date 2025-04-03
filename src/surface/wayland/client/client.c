@@ -104,23 +104,21 @@ void wlc_clean()
 
 static int loop(void* arg)
 {
-	while ((m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0)
+	while (!(m_surface_state & NALI_SURFACE_C_S_CONFIG))
 	{
-		struct timespec ts = {1, 0};
-		thrd_sleep(&ts, NULL);
+		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 
-	int result = wl_display_dispatch(m_wl_display_client_p);
-
-	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0 && result > -1)
+	int r;
+	while (!(m_surface_state & NALI_SURFACE_C_S_CLEAN) && (r = wl_display_dispatch(m_wl_display_client_p)) > -1)
 	{
 		wlcp_change_cursor(1);
-		result = wl_display_dispatch(m_wl_display_client_p);
+		r = wl_display_dispatch(m_wl_display_client_p);
 	}
 
-	if (result < 0)
+	if (r < 0)
 	{
-		info("wl_display_dispatch %d", result);
+		info("wl_display_dispatch %d", r);
 		wlc_clean();
 		wlc_init();
 		//if surface fail on vk need re vksurface
@@ -166,23 +164,7 @@ void wlc_init()
 
 	wl_surface_commit(m_wl_surface_p);
 
-	// int i;
-	// do
-	// {
-	// 	i = wl_display_dispatch(m_wl_display_client);
-	// 	info("wl_display_dispatch %d", i)
-	// }
-	// while (i != -1 && (m_surface_state & NALI_SURFACE_C_S_CONFIG) == 0);
-	// wl_surface_commit(m_wl_surface);
-
-	// int i;
-	// while ((i = wl_display_dispatch(m_wl_display_client_p)) != 1)
-	// {
-	// 	info("wl_display_dispatch %d", i)
-	// }
-
-	thrd_t thrd_t;
-	if (thrd_create(&thrd_t, loop, NULL) != thrd_success)
+	if (thrd_create(&(thrd_t){}, loop, NULL) != thrd_success)
 	{
 		error("thrd_create")
 	}

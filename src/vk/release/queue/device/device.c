@@ -16,7 +16,7 @@ void vk_makeDevice(uint32_t device)
 
 	for (uint32_t i = 0; i < max_queue; ++i)
 	{
-		VkDeviceQueueCreateInfo vkdevicequeuecreateinfo = 
+		vkdevicequeuecreateinfo_p[i] = (VkDeviceQueueCreateInfo)
 		{
 			.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
 			.queueFamilyIndex = i,
@@ -26,7 +26,6 @@ void vk_makeDevice(uint32_t device)
 			.flags = 0,
 			.pNext = VK_NULL_HANDLE
 		};
-		vkdevicequeuecreateinfo_p[i] = vkdevicequeuecreateinfo;
 	}
 
 	// VkPhysicalDeviceFeatures vkphysicaldevicefeatures =
@@ -36,30 +35,40 @@ void vk_makeDevice(uint32_t device)
 
 	VkPhysicalDeviceFeatures vkphysicaldevicefeatures;
 	vkGetPhysicalDeviceFeatures(vkphysicaldevice, &vkphysicaldevicefeatures);
-	info("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
+	nali_log("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
 
-	VkDeviceCreateInfo vkdevicecreateinfo =
-	{
-		.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-		.queueCreateInfoCount = max_queue,
-		.pQueueCreateInfos = vkdevicequeuecreateinfo_p,
-		.pEnabledFeatures = &vkphysicaldevicefeatures,
-		.enabledExtensionCount = sizeof(deviceextensions) / sizeof(deviceextensions[0]),
-		.ppEnabledExtensionNames = deviceextensions,
+	nali_info
+	(
+		"vkCreateDevice %d",
+		vkCreateDevice
+		(
+			vkphysicaldevice,
+			&(VkDeviceCreateInfo)
+			{
+				.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+				.queueCreateInfoCount = max_queue,
+				.pQueueCreateInfos = vkdevicequeuecreateinfo_p,
+				.pEnabledFeatures = &vkphysicaldevicefeatures,
+				.enabledExtensionCount = sizeof(deviceextensions) / sizeof(deviceextensions[0]),
+				.ppEnabledExtensionNames = deviceextensions,
+		
+				#ifdef NALI_VK_DEBUG
+					.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
+					.ppEnabledLayerNames = ppEnabledLayerNames,
+				#else
+					.enabledLayerCount = 0,
+					.ppEnabledLayerNames = VK_NULL_HANDLE,
+				#endif
+		
+				.flags = 0,
+				.pNext = VK_NULL_HANDLE
+			},
+			VK_NULL_HANDLE,
+			&m_vkdevice_p[device]
+		)
+	)
 
-		#ifdef NALI_VK_DEBUG
-			.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
-			.ppEnabledLayerNames = ppEnabledLayerNames,
-		#else
-			.enabledLayerCount = 0,
-			.ppEnabledLayerNames = VK_NULL_HANDLE,
-		#endif
-
-		.flags = 0,
-		.pNext = VK_NULL_HANDLE
-	};
-
-	vkCreateDevice(vkphysicaldevice, &vkdevicecreateinfo, VK_NULL_HANDLE, &m_vkdevice_p[device]);
+	free(vkdevicequeuecreateinfo_p);
 }
 
 void vk_freeDevice()

@@ -1,3 +1,6 @@
+#ifndef NALI_PCH_H
+#define NALI_PCH_H
+
 #ifdef PCH_SCENE
 
 	// #include <stdint.h>
@@ -101,11 +104,16 @@
 		#include "ffmpeg/ffmpeg.h"
 
 		#include "loader/client/client.h"
-		// #include "network/linux/client/nw_client.h"
-	#else
-		#include <stdio.h>
-		#include <stdlib.h>
-		#include <string.h>
+		#include "network/linux/client/nw_client.h"
+	#endif
+	#ifdef NALI_SERVER
+		#ifndef NALI_CLIENT
+			#include <stdio.h>
+			#include <stdlib.h>
+			#include <string.h>
+			#include <errno.h>
+		#endif
+		#include <sys/epoll.h>
 
 		#include "loader/server/server.h"
 		#include "network/linux/server/nw_server.h"
@@ -116,7 +124,7 @@
 
 	#include <unistd.h>
 	#include <arpa/inet.h>
-	#include <sys/epoll.h>
+	#include <fcntl.h>
 	#define NALI_SC_PORT 11111
 	#define NALI_HOME "../asset/"
 	#define NALI_HOME_IMAGE "image"
@@ -248,14 +256,6 @@
 
 #endif
 
-// #define info(format, ...)
-// #define error(format, ...)
+#include "debug/debug.h"
 
-#define info(format, ...) \
-	printf("nali_info: " format "\n", ##__VA_ARGS__); \
-	fflush(stdout);
-
-#define error(format, ...) \
-	printf("nali_error: " format "\n", ##__VA_ARGS__); \
-	fflush(stdout); \
-	exit(EXIT_FAILURE);
+#endif

@@ -40,7 +40,7 @@ void graphic_reader_makeBones(collada_Source *collada_source_p)
 	{
 		for (int16_t mb1 = 0; mb1 < max_bone; ++mb1)
 		{
-			if (strcmp(collada_source_p->joint_p[mb0], collada_bone_p[mb1].name_p[0]) == 0)
+			if (!strcmp(collada_source_p->joint_p[mb0], collada_bone_p[mb1].name_p[0]))
 			{
 				uint32_t max_space = collada_source_p->space_p[mb0];
 				uint8_t bone_index = 1;
@@ -57,7 +57,7 @@ void graphic_reader_makeBones(collada_Source *collada_source_p)
 
 						for (uint8_t mb2 = 0; mb2 < max_bone; ++mb2)
 						{
-							if (strcmp(collada_source_p->joint_p[mb2], collada_bone_p[sb].name_p[0]) == 0)
+							if (!strcmp(collada_source_p->joint_p[mb2], collada_bone_p[sb].name_p[0]))
 							{
 								++bone_index;
 								bone_p[mb0] = realloc(bone_p[mb0], sizeof(uint8_t) * bone_index);
@@ -298,7 +298,7 @@ void graphic_reader_fixAnimation(collada_Source *collada_source_p)
 	{
 		for (uint8_t mb = 0; mb < collada_source_p->max_bone; ++mb)
 		{
-			if (strcmp(collada_source_p->v_bone_p[v], collada_source_p->collada_bone_p[mb].name_p[0]) == 0)
+			if (!strcmp(collada_source_p->v_bone_p[v], collada_source_p->collada_bone_p[mb].name_p[0]))
 			{
 				const uint32_t v_mf_16 = v * collada_source_p->max_frame * 16;
 

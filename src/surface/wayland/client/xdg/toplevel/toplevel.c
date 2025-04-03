@@ -31,11 +31,13 @@ static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_top
 	// while (m_vkinstance != VK_NULL_HANDLE || m_client_socket != -1)
 	while (m_vkinstance != VK_NULL_HANDLE)
 	{
-		struct timespec ts = {1, 0};
-		thrd_sleep(&ts, NULL);
+		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 	wlc_clean();
 	info("xdg_toplevel_listener_close 1")
+	#ifdef NALI_DEBUG
+		debug_free();
+	#endif
 	exit(EXIT_SUCCESS);
 }
 

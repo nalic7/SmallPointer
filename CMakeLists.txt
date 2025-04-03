@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 set(OS_NAME linux)
 
+set(DEBUG 1)
 set(GEN 1)
 set(CLIENT 1)
+set(SERVER 1)
 set(VK_DEBUG 1)
 
 set(SCENE 1)
@@ -33,18 +35,22 @@ set(CMAKE_C_STANDARD_REQUIRED On)
 
 if(SCENE)
 
-  set(FOO PCH_SCENE=1)
+  set(FOO PCH_SCENE)
   set(SOURCES
     src/scene/scene.c
   )
 
+  if (DEBUG)
+    list(APPEND FOO NALI_DEBUG)
+    list(APPEND SOURCES src/debug/debug.c)
+  endif()
   if (GEN)
-    list(APPEND FOO NALI_GEN=1)
+    list(APPEND FOO NALI_GEN)
     list(APPEND SOURCES src/gen/gen.c)
   endif()
   if (CLIENT)
     if (VK_DEBUG)
-      list(APPEND FOO NALI_VK_DEBUG=1)
+      list(APPEND FOO NALI_VK_DEBUG)
       list(APPEND SOURCES src/vk/debug/debug.c)
     endif()
 
@@ -65,10 +71,12 @@ if(SCENE)
     file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
     list(APPEND SOURCES ${G_SOURCES})
 
-    list(APPEND FOO NALI_CLIENT=1)
+    list(APPEND FOO NALI_CLIENT)
     list(APPEND SOURCES src/loader/client/client.c)
-    # list(APPEND SOURCES src/network/linux/client/nw_client.c)
-  else()
+    list(APPEND SOURCES src/network/linux/client/nw_client.c)
+  endif()
+  if (SERVER)
+    list(APPEND FOO NALI_SERVER)
     list(APPEND SOURCES src/loader/server/server.c)
     list(APPEND SOURCES src/network/linux/server/nw_server.c)
   endif()
@@ -98,10 +106,6 @@ if(SCENE)
 
   target_compile_definitions(${P_NAME} PRIVATE ${FOO})
 
-  # set_target_properties(${P_NAME} PROPERTIES
-  #   CMAKE_INSTALL_RPATH "$ORIGIN/../lib"
-  # )
-
 elseif(COLLADA)
 
   add_executable(${P_NAME}
@@ -117,7 +121,7 @@ elseif(COLLADA)
     m
   )
 
-  target_compile_definitions(${P_NAME} PRIVATE PCH_COLLADA=1)
+  target_compile_definitions(${P_NAME} PRIVATE PCH_COLLADA)
 
 elseif(LWJGL64)
 
@@ -179,7 +183,7 @@ elseif(LWJGL64)
     wayland-client
   )
 
-  target_compile_definitions(${P_NAME} PRIVATE PCH_LWJGL64=1)
+  target_compile_definitions(${P_NAME} PRIVATE PCH_LWJGL64)
 
 elseif(NALIGL)
 
@@ -192,7 +196,7 @@ elseif(NALIGL)
     ${JAVA_HOME}include/${OS_NAME}
   )
 
-  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL=1)
+  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL)
 
 elseif(NALIAL)
 
@@ -210,7 +214,7 @@ elseif(NALIAL)
     openal
   )
 
-  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL=1)
+  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL)
 
 endif()
 

@@ -1,6 +1,8 @@
 # SETUP
 <span style="font-size: large;">
 
+>Linux / Android
+
 1. VSCodium
 
 	settings.json
@@ -20,6 +22,7 @@
 		CMake Tools -> cmake
 		CodeLLDB -> debug
 2. Blender 3.x 4.x
+3. dev-util/android-studio 2024.2.2.14
 </span>
 
 ### Scene
@@ -30,6 +33,7 @@
 	#...
 	set(GEN 1) // for first time
 	set(CLIENT 1)
+	set(SERVER 1)
 	set(VK_DEBUG 1)
 
 	set(SCENE 1)

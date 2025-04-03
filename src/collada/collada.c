@@ -479,23 +479,10 @@ int main()
 		// if (S_ISREG(_stat.st_mode))//S_ISDIR
 		if (dirent_p->d_type == DT_REG)
 		{
-			thrd_t thread;
-			// int result;
-
-			// if (strstr(d_name, "$bone"))
-			// {
-			// 	result = thrd_create(&thread, gen, d_name);
-			// }
-			// else
-			// {
-			// 	result = thrd_create(&thread, main_skin, d_name);
-			// }
-
-			// if (result != thrd_success)
 			void **arg = malloc(sizeof(void *) * 2);
 			arg[0] = d_name_char_p;
 			arg[1] = file_char_p;
-			if (thrd_create(&thread, skin, arg) != thrd_success)
+			if (thrd_create(&(thrd_t){}, skin, arg) != thrd_success)
 			{
 				error("thrd_create")
 			}

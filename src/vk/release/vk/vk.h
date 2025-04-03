@@ -2,13 +2,7 @@
 #define NALI_VK_H
 
 #define NALI_VK_SGPU
-// #define NALI_VK_INFO_SC
-
-extern uint32_t m_device;
-extern uint32_t m_queue_g;
-extern uint32_t m_queue_ct;
-
-extern float m_limits_max_sampler_anisotropy;
+#define NALI_VK_INFO_SC
 
 #define NALI_VK_VERSION VK_API_VERSION_1_3//VK_API_VERSION_1_4
 
@@ -22,6 +16,12 @@ extern float m_limits_max_sampler_anisotropy;
 #define NALI_VK_SAMPLE_V 1.0F
 
 #define NALI_VK_PRESENT VK_PRESENT_MODE_FIFO_KHR//VK_PRESENT_MODE_IMMEDIATE_KHR
+
+#define NALI_VK_MAX_SAMPLER_ANISOTROPY 16.0F
+
+extern uint32_t m_device;
+extern uint32_t m_queue_g;
+extern uint32_t m_queue_ct;
 
 void vk_init();
 void vk_clean();

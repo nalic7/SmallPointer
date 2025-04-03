@@ -1,3 +1,4 @@
+//vkCmdBlitImage vkCmdCopyImage VK_QUEUE_TRANSFER_BIT
 static void cmdMipmap(VkCommandBuffer vkcommandbuffer, VkImageMemoryBarrier *vkimagememorybarrier_p, VkImageBlit *vkimageblit_p, VkImage vkimage, uint32_t width, uint32_t height, uint32_t mipmap, VkFilter vkfilter)
 {
 	uint32_t half_width = width;

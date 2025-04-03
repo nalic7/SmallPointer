@@ -1,110 +1,119 @@
-static int client_socket;
+uint8_t m_net_client_state = 0;
 
-static int loopKey(void *arg)
+int m_client_socket;
+static struct sockaddr_in sockaddr_in;
+
+static void clean()
 {
-	char *char_p;
-	size_t size;
-	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
-	{
-		getline(&char_p, &size, stdin);
-
-
-
-		free(char_p);
-	}
-
-	return 0;
+	close(m_client_socket);
 }
 
-static int loopRecv(void *arg)
+static uint8_t length;
+static void get()
 {
-	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
+	// info("recv %ld", recv(m_client_socket, &length, sizeof(uint8_t), MSG_DONTWAIT))
+	// info("%s", strerror(errno))
+	// info("length %d", length)
+	recv(m_client_socket, &length, sizeof(uint8_t), MSG_DONTWAIT);
+
+	if (length > 0)
 	{
-		uint16_t length;
-		if (recv(client_socket, &length, sizeof(uint16_t), 0) <= 0)
-		{
-			error("recv")
-		}
-	
 		char *char_p = (char*)malloc(length);
-		if (!char_p)
-		{
-			error("malloc")
-		}
-	
-		if (recv(client_socket, char_p, length, 0) <= 0)
-		{
-			error("recv")
-		}
-	
-		if (1)
-		{
-			char_p = (char*)realloc(char_p, length + 1);
-			info("char_p %s", char_p)
-		}
+
+		info("recv %ld", recv(m_client_socket, char_p, length, 0))
+		info("%s", strerror(errno))
+
+		char_p = (char*)realloc(char_p, length + 1);
+		info("char_p %s", char_p)
+
 		free(char_p);
 	}
-
-	nwc_clean();
-	return 0;
 }
 
-void nwb_init()
+static int errno_temp = 0;
+static void out()
 {
-	thrd_t
-	key_thrd_t,
-	recv_thrd_t;
-	if (thrd_create(&key_thrd_t, loopKey, NULL) != thrd_success)
+	if (errno != errno_temp)
 	{
-		error("thrd_create")
+		info("c %d %s", errno, strerror(errno))
+		// m_net_client_state |= NALI_NET_CLIENT_FAIL;
 	}
-	if (thrd_create(&recv_thrd_t, loopRecv, NULL) != thrd_success)
+	else
 	{
-		error("thrd_create")
+		// m_net_client_state &= 255 - NALI_NET_CLIENT_INIT;
 	}
+	m_net_client_state &= 255 - NALI_NET_CLIENT_INIT;
+	errno_temp = errno;
 }
 
-void nwc_init(const char* ip)
+static int r;
+static int init(void *arg)
 {
-	struct sockaddr_in sockaddr_in;
+	info("sinit")
+	m_net_client_state &= 255 - NALI_NET_CLIENT_FAIL;
 
-	if ((client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	info("socket %d", r = m_client_socket = socket(AF_INET, SOCK_STREAM, 0))
+	//errno.h ECONNREFUSED ETIMEDOUT
+	info("%s", strerror(errno))
+
+	if (r < 0)
 	{
-		error("socket")
+		m_net_client_state |= NALI_NET_CLIENT_FAIL;
 	}
 
 	sockaddr_in.sin_family = AF_INET;
 	sockaddr_in.sin_port = htons(NALI_SC_PORT);
-	if (inet_pton(AF_INET, ip, &sockaddr_in.sin_addr) <= 0)
+
+	info("inet_pton %d", r = inet_pton(AF_INET, NALI_IP, &sockaddr_in.sin_addr))
+	info("%s", strerror(errno))
+
+	if (r < 0)
 	{
-		error("inet_pton")
+		m_net_client_state |= NALI_NET_CLIENT_FAIL;
 	}
 
-	if (connect(client_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)) < 0)
+	info("connect %d", r = connect(m_client_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)))
+	info("%s", strerror(errno))
+
+	if (r < 0)
 	{
-		error("connect")
+		m_net_client_state |= NALI_NET_CLIENT_FAIL;
 	}
 
-	nwb_init();
+	info("setsockopt %d", r = setsockopt(m_client_socket, SOL_SOCKET, SO_RCVTIMEO, &(struct timeval){.tv_sec = 5, .tv_usec = 0}, sizeof(struct timeval)))
+	info("%s", strerror(errno))
+
+	if (r < 0)
+	{
+		m_net_client_state |= NALI_NET_CLIENT_FAIL;
+	}
+
+	while (!(m_net_client_state & NALI_NET_CLIENT_FAIL))
+	{
+		get();
+		out();
+	}
+
+	clean();
+	m_net_client_state &= 255 - NALI_NET_CLIENT_INIT;
+	info("einit")
+	return 0;
 }
 
-void nwc_key(char *char_p)
+void nwc_init()
 {
-	if (strcmp(char_p, "c") == 0)
+	m_net_client_state |= NALI_NET_CLIENT_FAIL;
+	while (m_net_client_state & NALI_NET_CLIENT_FAIL)
 	{
-		uint8_t size = sizeof(uint16_t) + 1;
-		char *message = malloc(size);
-		((uint16_t*)message)[0] = 1;
-		message[sizeof(uint16_t)] = 'c';
-		if (send(client_socket, message, size, 0) <= 0)
+		m_net_client_state |= NALI_NET_CLIENT_INIT;
+		if (thrd_create(&(thrd_t){}, init, NULL) != thrd_success)
 		{
-			error("send")
+			error("thrd_create")
+		}
+
+		while (m_net_client_state & NALI_NET_CLIENT_INIT)
+		{
+			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 		}
 	}
-}
-
-void nwc_clean()
-{
-	close(client_socket);
-	client_socket = -1;
 }

@@ -1,18 +1,18 @@
-float m_limits_max_sampler_anisotropy;
-
 uint32_t m_device = 0;
 uint32_t m_queue_g = 0;
 uint32_t m_queue_ct = 0;
+
+#ifdef NALI_DEBUG
 
 static void einfo(uint32_t d)
 {
 	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[d];
 
 	uint32_t extensions = 0;
-	vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE);
+	nali_info("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE))
 
-	VkExtensionProperties *vkextensionproperties_p = malloc(extensions *sizeof(VkExtensionProperties));
-	vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_p);
+	VkExtensionProperties *vkextensionproperties_p = malloc(extensions * sizeof(VkExtensionProperties));
+	nali_info("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_p))
 
 	uint32_t device_extensions_size = sizeof(deviceextensions) / sizeof(deviceextensions[0]);
 	uint32_t device_extensions = 0;
@@ -21,44 +21,35 @@ static void einfo(uint32_t d)
 		VkExtensionProperties vkextensionproperties = vkextensionproperties_p[x];
 		for (uint32_t y = 0; y < device_extensions_size; ++y)
 		{
-			if (strcmp(deviceextensions[y], vkextensionproperties.extensionName) == 0)
+			if (!strcmp(deviceextensions[y], vkextensionproperties.extensionName))
 			{
 				++device_extensions;
 			}
 		}
 	}
-	info("extensions %d", extensions)
+	nali_log("extensions %d", extensions)
 	for (uint32_t x = 0; x < extensions; ++x)
 	{
 		VkExtensionProperties vkextensionproperties = vkextensionproperties_p[x];
-		info("extensionName %s", vkextensionproperties.extensionName)
+		nali_log("extensionName %s", vkextensionproperties.extensionName)
 	}
 
 	free(vkextensionproperties_p);
-	char extensionssupported = device_extensions == device_extensions_size;
-	info("device_extension_support %d", extensionssupported)
+	nali_log("device_extension_support %d", device_extensions == device_extensions_size)
 }
 
 static void ieinfo()
 {
 	uint32_t count = 0;
-	vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, VK_NULL_HANDLE);
+	nali_info("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, VK_NULL_HANDLE))
 
 	VkExtensionProperties *vkextensionproperties_p = malloc(sizeof(VkExtensionProperties) * count);
-	if (vkextensionproperties_p == VK_NULL_HANDLE)
-	{
-		error("VkExtensionProperties VK_NULL_HANDLE")
-	}
 
-	VkResult vkresult = vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, vkextensionproperties_p);
-	if (vkresult != VK_SUCCESS)
-	{
-		error("vkEnumerateInstanceExtensionProperties %d", vkresult)
-	}
+	nali_info("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, vkextensionproperties_p))
 
 	for (uint32_t i = 0; i < count; ++i)
 	{
-		info("%d %s", i, vkextensionproperties_p[i].extensionName)
+		nali_log("%d %s", i, vkextensionproperties_p[i].extensionName)
 	}
 
 	free(vkextensionproperties_p);
@@ -68,40 +59,56 @@ static void vkinfo(uint32_t device)
 {
 	VkPhysicalDeviceProperties vkphysicaldeviceproperties;
 	vkGetPhysicalDeviceProperties(m_vkphysicaldevice_p[device], &vkphysicaldeviceproperties);
-	info("Name %s", vkphysicaldeviceproperties.deviceName)
-	info
+	nali_log("Name %s", vkphysicaldeviceproperties.deviceName)
+	nali_log
 	(
 		"Vulkan MAJOR MINOR PATCH %d.%d.%d", 
 		VK_VERSION_MAJOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
 	)
-	m_limits_max_sampler_anisotropy = vkphysicaldeviceproperties.limits.maxSamplerAnisotropy;
-	info("maxSamplerAnisotropy %f", m_limits_max_sampler_anisotropy)
+	nali_log("maxSamplerAnisotropy %f", vkphysicaldeviceproperties.limits.maxSamplerAnisotropy)
 
 	//VkSampleCountFlagBits
-	info("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts);
-	info("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts);
+	nali_log("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
+	nali_log("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
 }
+
+static void dginfo()
+{
+	uint32_t device_group;
+	nali_info("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, 0))
+	VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
+	nali_info("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, vkphysicaldevicegroupproperties_p))
+	nali_log("device_group %d", device_group)
+	for (uint32_t u = 0; u < device_group; ++u)
+	{
+		nali_log("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
+	}
+	free(vkphysicaldevicegroupproperties_p);
+}
+
+static void pminfo(uint32_t device)
+{
+	VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
+	vkGetDeviceGroupPeerMemoryFeatures(m_vkdevice_p[device], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
+	//VkPeerMemoryFeatureFlagBits
+	nali_log("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
+}
+
+#endif
 
 void vk_init()
 {
-	ieinfo();
+	#ifdef NALI_DEBUG
+		ieinfo();
+	#endif
 
 	vk_makeInstance();
 
-	//s0-dginfo
-	uint32_t device_group;
-	vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, 0);
-	VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
-	vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, vkphysicaldevicegroupproperties_p);
-	info("device_group %d", device_group)
-	for (uint32_t u = 0; u < device_group; ++u)
-	{
-		info("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
-	}
-	free(vkphysicaldevicegroupproperties_p);
-	//e0-dginfo
+	#ifdef NALI_DEBUG
+		dginfo();
+	#endif
 
 	vk_makeSurface();
 
@@ -118,19 +125,18 @@ void vk_init()
 
 	for (uint32_t d = 0; d < m_physical_device; ++d)
 	{
-		info("device %d", d)
-		einfo(d);
-		vkinfo(d);
+		nali_log("device %d", d)
+		#ifdef NALI_DEBUG
+			einfo(d);
+			vkinfo(d);
+		#endif
 
 		vk_setQueue(d);
 		vk_makeDevice(d);
 
-		//s0-pminfo
-		VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
-		vkGetDeviceGroupPeerMemoryFeatures(m_vkdevice_p[d], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
-		//VkPeerMemoryFeatureFlagBits
-		info("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
-		//e0-pminfo
+		#ifdef NALI_DEBUG
+			pminfo(d);
+		#endif
 
 		vk_getQueue(d);
 

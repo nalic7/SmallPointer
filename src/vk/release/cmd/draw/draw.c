@@ -1,4 +1,4 @@
-mtx_t m_mtx_t_draw;
+mtx_t *m_mtx_t_draw_p = &(mtx_t){};
 
 static clock_t frame_start, frame_end;
 static uint32_t frame;
@@ -187,6 +187,10 @@ void vk_initCmdDraw()
 	vkpresentinfokhr.pWaitSemaphores = &vksemaphore_array[1];
 	//e0-draw
 
+	//s0-mtx
+	mtx_init(m_mtx_t_draw_p, mtx_plain);
+	//e0-mtx
+
 	frame_start = time(0);
 }
 
@@ -208,11 +212,13 @@ void freeCmdDraw()
 	}
 
 	vk_clean();
+
+	mtx_destroy(m_mtx_t_draw_p);
 }
 
 int vk_cmdDraw(void *arg)
 {
-	while ((m_surface_state & NALI_SURFACE_C_S_CLEAN) == 0)
+	while (!(m_surface_state & NALI_SURFACE_C_S_CLEAN))
 	{
 		vkWaitForFences(vkdevice, 1, &vkfence, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence);
@@ -251,7 +257,7 @@ int vk_cmdDraw(void *arg)
 
 				vkCmdSetScissor(vkcommandbuffer, 0, 1, &vkrect2d);
 
-				mtx_lock(&m_mtx_t_draw);
+				mtx_lock(m_mtx_t_draw_p);
 				for (uint16_t u = 0; u < 1; ++u)
 				{
 					//vkUpdateDescriptorSets
@@ -260,7 +266,7 @@ int vk_cmdDraw(void *arg)
 					vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &vkdescriptorset, 0, VK_NULL_HANDLE);
 					vkCmdDrawIndexed(vkcommandbuffer, 6, 1, 0, 0, 0);
 				}
-				mtx_unlock(&m_mtx_t_draw);
+				mtx_unlock(m_mtx_t_draw_p);
 
 			vkCmdEndRenderPass(vkcommandbuffer);
 

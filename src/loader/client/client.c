@@ -117,10 +117,7 @@ void lc_init()
 	const char image_type[] = ".png";
 	const char image_path[] = NALI_HOME NALI_HOME_IMAGE;
 	DIR *dir_p = opendir(image_path);
-	if (dir_p == NULL)
-	{
-		error("opendir")
-	}
+	nali_log("opendir %p", dir_p)
 
 	size_t name_index = sizeof(image_path)-1 + 1 + 1;
 	char *image_file = malloc(name_index);
@@ -168,10 +165,9 @@ void lc_init()
 
 void lc_initVK()
 {
-	while ((m_surface_state & NALI_SURFACE_C_S_RENDER_ABLE) == 0)
+	while (!(m_surface_state & NALI_SURFACE_C_S_RENDER_ABLE))
 	{
-		struct timespec ts = {1, 0};
-		thrd_sleep(&ts, NULL);
+		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 
 	//load shader
@@ -312,8 +308,7 @@ void lc_initVK()
 	//e0-ubo
 
 	vk_initCmdDraw();
-	thrd_t thrd_t;
-	if (thrd_create(&thrd_t, vk_cmdDraw, NULL) != thrd_success)
+	if (thrd_create(&(thrd_t){}, vk_cmdDraw, NULL) != thrd_success)
 	{
 		error("thrd_create")
 	}

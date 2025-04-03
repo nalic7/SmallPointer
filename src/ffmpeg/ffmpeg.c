@@ -1,84 +1,40 @@
-AVFormatContext *avformatcontext_p = NULL;
-AVCodecContext *avcodeccontext_p = NULL;
-const AVCodec *avcodec_p = NULL;
-AVFrame *avframe_p = NULL;
-AVPacket avpacket;
-// struct SwsContext *swscontext = NULL;
-int video_stream_index = -1;
+static AVFormatContext *avformatcontext_p = NULL;
+static AVCodecContext *avcodeccontext_p = NULL;
+static const AVCodec *avcodec_p = NULL;
+static AVFrame *avframe_p = NULL;
+static AVPacket avpacket;
+// static struct SwsContext *swscontext = NULL;
+static int video_stream_index = -1;
 
 void ffmpeg_read(const char *filename)
 {
-	avformat_network_init();
+	nali_info("avformat_network_init %d", avformat_network_init())
 
-	if (avformat_open_input(&avformatcontext_p, filename, NULL, NULL) < 0)
-	{
-		error("avformat_open_input")
-	}
+	nali_info("avformat_open_input %d", avformat_open_input(&avformatcontext_p, filename, NULL, NULL))
 
-	if (avformat_find_stream_info(avformatcontext_p, NULL) < 0)
-	{
-		error("avformat_find_stream_info")
-	}
+	nali_info("avformat_find_stream_info %d", avformat_find_stream_info(avformatcontext_p, NULL))
 
-	int video_stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
-	if (video_stream_index < 0)
-	{
-		error("av_find_best_stream %d", video_stream_index)
-	}
-	// for (int i = 0; i < avformatcontext->nb_streams; i++)
-	// {
-	// 	if (avformatcontext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
-	// 	{
-	// 		video_stream_index = i;
-	// 		break;
-	// 	}
-	// }
-	info("video_stream_index %d", video_stream_index)
+	int video_stream_index;
+	nali_info("av_find_best_stream %d", video_stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0))
 
-	avcodec_p = avcodec_find_decoder(avformatcontext_p->streams[video_stream_index]->codecpar->codec_id);
-	if (!avcodec_p)
-	{
-		error("avcodec_find_decoder")
-	}
+	nali_info("avcodec_find_decoder %p", avcodec_p = avcodec_find_decoder(avformatcontext_p->streams[video_stream_index]->codecpar->codec_id))
 
-	avcodeccontext_p = avcodec_alloc_context3(avcodec_p);
-	if (!avcodeccontext_p)
-	{
-		error("avcodec_alloc_context3")
-	}
+	nali_info("avcodec_alloc_context3 %p", avcodeccontext_p = avcodec_alloc_context3(avcodec_p))
 
-	if (avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[video_stream_index]->codecpar) < 0)
-	{
-		error("avcodec_parameters_to_context")
-	}
+	nali_info("avcodec_parameters_to_context %d", avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[video_stream_index]->codecpar))
 
-	if (avcodec_open2(avcodeccontext_p, avcodec_p, NULL) < 0)
-	{
-		error("avcodec_open2")
-	}
+	nali_info("avcodec_open2 %d", avcodec_open2(avcodeccontext_p, avcodec_p, NULL))
 
-	avframe_p = av_frame_alloc();
+	nali_info("av_frame_alloc %p", avframe_p = av_frame_alloc())
 }
 
 uint8_t *ffmpeg_png(uint32_t *width_p, uint32_t *height_p)
 {
-	int r = av_read_frame(avformatcontext_p, &avpacket);
-	if (r < 0)
-	{
-		error("av_read_frame %d", r)
-	}
+	nali_info("av_read_frame %d", av_read_frame(avformatcontext_p, &avpacket))
 
-	r = avcodec_send_packet(avcodeccontext_p, &avpacket);
-	if (r < 0)
-	{
-		error("avcodec_send_packet %d", r)
-	}
+	nali_info("avcodec_send_packet %d", avcodec_send_packet(avcodeccontext_p, &avpacket))
 
-	r = avcodec_receive_frame(avcodeccontext_p, avframe_p);
-	if (r < 0)
-	{
-		error("avcodec_receive_frame %d", r)
-	}
+	nali_info("avcodec_receive_frame %d", avcodec_receive_frame(avcodeccontext_p, avframe_p))
 
 	*width_p = avframe_p->width;
 	*height_p = avframe_p->height;
@@ -87,7 +43,7 @@ uint8_t *ffmpeg_png(uint32_t *width_p, uint32_t *height_p)
 
 	int num_bytes = av_image_get_buffer_size(AV_PIX_FMT_RGBA, avframe_p->width, avframe_p->height, 1);
 	uint8_t *data_p = (uint8_t *)malloc(num_bytes);
-	av_image_copy_to_buffer(data_p, num_bytes, (const uint8_t * const *)avframe_p->data, avframe_p->linesize, AV_PIX_FMT_RGBA, avframe_p->width, avframe_p->height, 1);
+	nali_info("av_image_copy_to_buffer %d", av_image_copy_to_buffer(data_p, num_bytes, (const uint8_t * const *)avframe_p->data, avframe_p->linesize, AV_PIX_FMT_RGBA, avframe_p->width, avframe_p->height, 1))
 
 	// data_p[0] = 255;
 	// data_p[1] = 0;
@@ -102,8 +58,11 @@ uint8_t *ffmpeg_png(uint32_t *width_p, uint32_t *height_p)
 void ffmpeg_clean()
 {
 	av_frame_free(&avframe_p);
+	avframe_p = NULL;
 	avcodec_free_context(&avcodeccontext_p);
+	avcodeccontext_p = NULL;
 	avformat_close_input(&avformatcontext_p);
+	avformatcontext_p = NULL;
 }
 
 // void decode()
@@ -120,7 +79,7 @@ void ffmpeg_clean()
 // 			error("avcodec_send_packet")
 // 		}
 
-// 		if (avcodec_receive_frame(avcodeccontext, avframe) == 0)
+// 		if (!avcodec_receive_frame(avcodeccontext, avframe))
 // 		{
 // 			swscontext = sws_getContext
 // 			(

@@ -2,7 +2,7 @@ VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT *vkdebugutilsmessengercallbackdataext, void *data)
 {
-	info(">vk_debug: %s", vkdebugutilsmessengercallbackdataext->pMessage)
+	nali_log(">vk_debug: %s", vkdebugutilsmessengercallbackdataext->pMessage)
 	return 0;
 }
 
@@ -22,24 +22,27 @@ static VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebu
 
 void vk_makeDebug()
 {
-	VkDebugUtilsMessengerCreateInfoEXT vkdebugutilsmessengercreateinfoext =
-	{
-		.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
-		.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
-		.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
-		.pfnUserCallback = debugCallback,
-
-		.flags = 0,
-		.pNext = VK_NULL_HANDLE,
-		.pUserData = VK_NULL_HANDLE
-	};
-
-	// if (vkCreateDebugUtilsMessengerEXT(vk->vkinstance, &vkdebugutilsmessengercreateinfoext, VK_NULL_HANDLE, &vk->vkdebugutilsmessengerext) != VK_SUCCESS)
-	VkResult vkresult = createDebugUtilsMessengerEXT(m_vkinstance, &vkdebugutilsmessengercreateinfoext, VK_NULL_HANDLE, &m_vkdebugutilsmessengerext);
-	if (vkresult != VK_SUCCESS)
-	{
-		error("vkCreateDebugUtilsMessengerEXT %d", vkresult)
-	}
+	nali_info
+	(
+		"createDebugUtilsMessengerEXT %d",
+		createDebugUtilsMessengerEXT
+		(
+			m_vkinstance,
+			&(VkDebugUtilsMessengerCreateInfoEXT)
+			{
+				.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+				.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+				.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+				.pfnUserCallback = debugCallback,
+		
+				.flags = 0,
+				.pNext = VK_NULL_HANDLE,
+				.pUserData = VK_NULL_HANDLE
+			},
+			VK_NULL_HANDLE,
+			&m_vkdebugutilsmessengerext
+		)
+	)
 }
 
 void vk_freeDebug()

@@ -89,7 +89,7 @@ void m4x4_inverse(float* m4x4_p)
 	{
 		float f;
 
-		if ((f = t[i * 4 + i]) == 0)
+		if (!(f = t[i * 4 + i]))
 		{
 			memcpy(m4x4_p, identity, sizeof(float) * 16);
 			return;

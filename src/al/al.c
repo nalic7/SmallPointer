@@ -1,29 +1,17 @@
-ALCdevice *m_alcdevice_p;
-ALCcontext *alccontext_p;
+ALCdevice *m_alcdevice_p = NULL;
+static ALCcontext *alccontext_p = NULL;
 
 void al_init()
 {
-	info("run_initAL")
+	nali_log("run_initAL")
 
-	m_alcdevice_p = alcOpenDevice(NULL);
-	if (!m_alcdevice_p)
-	{
-		error("alcOpenDevice")
-	}
+	nali_info("alcOpenDevice %p", m_alcdevice_p = alcOpenDevice(NULL))
 
-	info("ALC_DEVICE_SPECIFIER %s", alcGetString(m_alcdevice_p, ALC_DEVICE_SPECIFIER))
+	nali_log("ALC_DEVICE_SPECIFIER %s", alcGetString(m_alcdevice_p, ALC_DEVICE_SPECIFIER))
 
-	alccontext_p = alcCreateContext(m_alcdevice_p, NULL);
-	if (!alccontext_p)
-	{
-		error("alcCreateContext")
-		// alcCloseDevice(device);
-	}
+	nali_info("alcCreateContext %p", alccontext_p = alcCreateContext(m_alcdevice_p, NULL))
 
-	if (!alcMakeContextCurrent(alccontext_p))
-	{
-		error("alcMakeContextCurrent")
-	}
+	nali_info("alcMakeContextCurrent %d", alcMakeContextCurrent(alccontext_p))
 
 	// ALuint buffer;
 	// ALuint source;
@@ -40,5 +28,7 @@ void al_clean()
 {
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(alccontext_p);
+	alccontext_p = NULL;
 	alcCloseDevice(m_alcdevice_p);
+	m_alcdevice_p = NULL;
 }
