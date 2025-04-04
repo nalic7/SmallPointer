@@ -146,11 +146,13 @@ void lc_init()
 			sprintf(image_file + name_index - 1, "%u", index);
 			image_file[name_index_size - 1] = '\0';
 			strcat(image_file, image_type);
-			ffmpeg_read(image_file);
+			#ifndef NALI_OS_ANDROID
+				ffmpeg_read(image_file);
 
-			wh_index = index * 2;
-			m_nali_g_image_uint8_t_p[index] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[wh_index], &m_nali_g_image_wh_uint32_t_p[wh_index + 1]);
-			ffmpeg_clean();
+				wh_index = index * 2;
+				m_nali_g_image_uint8_t_p[index] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[wh_index], &m_nali_g_image_wh_uint32_t_p[wh_index + 1]);
+				ffmpeg_clean();
+			#endif
 		}
 	}
 	free(image_file);

@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.31)
 
-set(OS_NAME linux)
+# set(OS_NAME linux)
+set(OS_NAME android)
 
 set(DEBUG 1)
 set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-set(VK_DEBUG 1)
+# set(VK_DEBUG 1)
 
 set(SCENE 1)
 # set(COLLADA 1)
@@ -32,83 +33,106 @@ project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
 # ISO C11
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED On)
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++21")
 
 if(SCENE)
-
-  set(FOO PCH_SCENE)
+  set(TCD PCH_SCENE)
   set(SOURCES
     src/scene/scene.c
   )
 
-  if (DEBUG)
-    list(APPEND FOO NALI_DEBUG)
+  list(APPEND SOURCES src/file/file.c)
+
+  set(TLL m)
+  file(GLOB_RECURSE G_SOURCES src/math/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
+  if(DEBUG)
+    list(APPEND TCD NALI_DEBUG)
     list(APPEND SOURCES src/debug/debug.c)
   endif()
-  if (GEN)
-    list(APPEND FOO NALI_GEN)
+
+  if(GEN)
+    list(APPEND TCD NALI_GEN)
     list(APPEND SOURCES src/gen/gen.c)
   endif()
-  if (CLIENT)
+
+  if(CLIENT)
+    list(APPEND TCD NALI_CLIENT)
+
+    # list(APPEND TLL openal)
+    # list(APPEND SOURCES src/al/al.c)
+
+    # list(APPEND TLL
+    #   avcodec
+    #   avformat
+    #   avutil
+    # )
+    # list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
+
+    list(APPEND TLL vulkan)
+    file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
     if (VK_DEBUG)
-      list(APPEND FOO NALI_VK_DEBUG)
+      list(APPEND TCD NALI_VK_DEBUG)
       list(APPEND SOURCES src/vk/debug/debug.c)
     endif()
 
-    list(APPEND SOURCES src/file/file.c)
     list(APPEND SOURCES src/surface/surface.c)
-    list(APPEND SOURCES src/al/al.c)
-    list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
 
-    file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
-  
-    file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
-
-    file(GLOB_RECURSE G_SOURCES src/math/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
-  
-    file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
-
-    list(APPEND FOO NALI_CLIENT)
     list(APPEND SOURCES src/loader/client/client.c)
     list(APPEND SOURCES src/network/linux/client/nw_client.c)
   endif()
-  if (SERVER)
-    list(APPEND FOO NALI_SERVER)
+
+  if(SERVER)
+    list(APPEND TCD NALI_SERVER)
+
     list(APPEND SOURCES src/loader/server/server.c)
     list(APPEND SOURCES src/network/linux/server/nw_server.c)
   endif()
 
-  add_executable(${P_NAME} ${SOURCES})
+  if(OS_NAME STREQUAL "android")
+    list(APPEND TCD NALI_OS_ANDROID)
 
-  if (CLIENT)
-    target_include_directories(${P_NAME} PRIVATE
-      lib/wayland
+    list(APPEND TLL
+      log
+      android
     )
+
+    if(CLIENT)
+      file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
+      list(APPEND SOURCES ${G_SOURCES})
+
+      # file(GLOB_RECURSE G_SOURCES ../FFmpeg/*.c)
+      # list(APPEND SOURCES ${G_SOURCES})
+      # list(APPEND TID ../FFmpeg)
+    endif()
+
+    add_library(${P_NAME} SHARED ${SOURCES})
+  else()
+    if(CLIENT)
+      list(APPEND TLL
+        wayland-client
+        wayland-cursor
+      )
+
+      file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
+      list(APPEND SOURCES ${G_SOURCES})
+    
+      file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
+      list(APPEND SOURCES ${G_SOURCES})
+
+      list(APPEND TID lib/wayland)
+    endif()
+
+    add_executable(${P_NAME} ${SOURCES})
   endif()
 
-  if (CLIENT)
-    target_link_libraries(${P_NAME}
-      m
-      vulkan
-      openal
-
-      wayland-client
-      wayland-cursor
-
-      avcodec
-      avformat
-      avutil
-    )
+  if(TID)
+    target_include_directories(${P_NAME} PRIVATE ${TID})
   endif()
-
-  target_compile_definitions(${P_NAME} PRIVATE ${FOO})
-
+  target_link_libraries(${P_NAME} ${TLL})
+  target_compile_definitions(${P_NAME} PRIVATE ${TCD})
 elseif(COLLADA)
-
   add_executable(${P_NAME}
     src/math/math.c
     src/math/m4x4/m4x4.c
@@ -123,100 +147,89 @@ elseif(COLLADA)
   )
 
   target_compile_definitions(${P_NAME} PRIVATE PCH_COLLADA)
+# elseif(LWJGL64)
+#   set(JAVA_HOME lib/jdk8u412-b08/)
 
-elseif(LWJGL64)
+#   add_library(${P_NAME} SHARED
+#     src/surface/surface.c
+#     src/al/al.c
+#     src/vk/vk.c
+#     src/vk/instance/instance.c
+#     src/vk/instance/debug/debug.c
+#     src/vk/instance/physical_device/physical_device.c
+#     src/vk/instance/physical_device/queue/queue.c
+#     src/vk/instance/device/device.c
+#     src/vk/surface/surface.c
+#     src/vk/swapchain/swapchain.c
+#     src/vk/fence/fence.c
+#     src/vk/semaphore/semaphore.c
+#     src/vk/commandbuffer/commandpool/commandpool.c
+#     src/vk/commandbuffer/commandbuffer.c
+#     src/vk/heap/imageview/image/image.c
+#     src/vk/heap/imageview/imageview.c
+#     src/vk/shadermodule/shadermodule.c
+#     src/lwjgl/lwjgl.c
+#     src/lwjgl/gl/11/GL11.c
+#     src/lwjgl/gl/GL13.c
+#     src/lwjgl/gl/GL14.c
+#     src/lwjgl/gl/GL15.c
+#     src/lwjgl/gl/GL20.c
+#     src/lwjgl/gl/GL30.c
+#     src/lwjgl/gl/GLContext.c
+#     src/lwjgl/linux/LinuxContextImplementation.c
+#     src/lwjgl/linux/LinuxDisplay.c
+#     src/lwjgl/linux/LinuxDisplayPeerInfo.c
+#     src/lwjgl/linux/LinuxEvent.c
+#     src/lwjgl/linux/LinuxKeyboard.c
+#     src/lwjgl/linux/LinuxMouse.c
+#     src/lwjgl/linux/LinuxPeerInfo.c
+#     src/lwjgl/al/AL.c
+#     src/lwjgl/al/AL10.c
+#     src/lwjgl/al/AL11.c
+#     src/lwjgl/al/ALC10.c
+#     src/lwjgl/al/ALC11.c
+#     src/lwjgl/al/EFX10.c
+#   )
 
-  set(JAVA_HOME lib/jdk8u412-b08/)
-  # set(JAVA_HOME "lib/jdk-21.0.4+7/")
+#   target_include_directories(${P_NAME} PRIVATE
+#     ${JAVA_HOME}include
+#     ${JAVA_HOME}include/${OS_NAME}
+#   )
 
-  find_package(Qt6 REQUIRED COMPONENTS Widgets WaylandClient)
-  find_package(X11 REQUIRED)
+#   target_link_libraries(${P_NAME}
+#     vulkan
+#     openal
+#     wayland-client
+#   )
 
-  add_library(${P_NAME} SHARED
-    src/surface/surface.c
-    src/al/al.c
-    src/vk/vk.c
-    src/vk/instance/instance.c
-    src/vk/instance/debug/debug.c
-    src/vk/instance/physical_device/physical_device.c
-    src/vk/instance/physical_device/queue/queue.c
-    src/vk/instance/device/device.c
-    src/vk/surface/surface.c
-    src/vk/swapchain/swapchain.c
-    src/vk/fence/fence.c
-    src/vk/semaphore/semaphore.c
-    src/vk/commandbuffer/commandpool/commandpool.c
-    src/vk/commandbuffer/commandbuffer.c
-    src/vk/heap/imageview/image/image.c
-    src/vk/heap/imageview/imageview.c
-    src/vk/shadermodule/shadermodule.c
-    src/lwjgl/lwjgl.c
-    src/lwjgl/gl/11/GL11.c
-    src/lwjgl/gl/GL13.c
-    src/lwjgl/gl/GL14.c
-    src/lwjgl/gl/GL15.c
-    src/lwjgl/gl/GL20.c
-    src/lwjgl/gl/GL30.c
-    src/lwjgl/gl/GLContext.c
-    src/lwjgl/linux/LinuxContextImplementation.c
-    src/lwjgl/linux/LinuxDisplay.c
-    src/lwjgl/linux/LinuxDisplayPeerInfo.c
-    src/lwjgl/linux/LinuxEvent.c
-    src/lwjgl/linux/LinuxKeyboard.c
-    src/lwjgl/linux/LinuxMouse.c
-    src/lwjgl/linux/LinuxPeerInfo.c
-    src/lwjgl/al/AL.c
-    src/lwjgl/al/AL10.c
-    src/lwjgl/al/AL11.c
-    src/lwjgl/al/ALC10.c
-    src/lwjgl/al/ALC11.c
-    src/lwjgl/al/EFX10.c
-  )
+#   target_compile_definitions(${P_NAME} PRIVATE PCH_LWJGL64)
+# elseif(NALIGL)
+#   set(JAVA_HOME lib/jdk8u412-b08/)
 
-  target_include_directories(${P_NAME} PRIVATE
-    ${JAVA_HOME}include
-    ${JAVA_HOME}include/${OS_NAME}
-  )
+#   add_library(${P_NAME} SHARED src/gl/nali/glnali.c)
 
-  target_link_libraries(${P_NAME}
-    vulkan
-    openal
-    wayland-client
-  )
+#   target_include_directories(${P_NAME} PRIVATE
+#     ${JAVA_HOME}include
+#     ${JAVA_HOME}include/${OS_NAME}
+#   )
 
-  target_compile_definitions(${P_NAME} PRIVATE PCH_LWJGL64)
+#   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL)
+# elseif(NALIAL)
+#   set(JAVA_HOME lib/jdk8u412-b08/)
 
-elseif(NALIGL)
+#   add_library(${P_NAME} SHARED src/al/nali/alnali.c)
 
-  set(JAVA_HOME lib/jdk8u412-b08/)
+#   target_include_directories(${P_NAME} PRIVATE
+#     ${JAVA_HOME}include
+#     ${JAVA_HOME}include/${OS_NAME}
+#     AL
+#   )
 
-  add_library(${P_NAME} SHARED src/gl/nali/glnali.c)
+#   target_link_libraries(${P_NAME}
+#     openal
+#   )
 
-  target_include_directories(${P_NAME} PRIVATE
-    ${JAVA_HOME}include
-    ${JAVA_HOME}include/${OS_NAME}
-  )
-
-  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL)
-
-elseif(NALIAL)
-
-  set(JAVA_HOME lib/jdk8u412-b08/)
-
-  add_library(${P_NAME} SHARED src/al/nali/alnali.c)
-
-  target_include_directories(${P_NAME} PRIVATE
-    ${JAVA_HOME}include
-    ${JAVA_HOME}include/${OS_NAME}
-    AL
-  )
-
-  target_link_libraries(${P_NAME}
-    openal
-  )
-
-  target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL)
-
+#   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL)
 endif()
 
 target_precompile_headers(${P_NAME} PRIVATE src/pch.h)

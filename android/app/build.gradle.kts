@@ -5,6 +5,7 @@ plugins {
 android {
     namespace = "com.nali.scene"
     compileSdk = 35
+    ndkVersion = "29.0.13113456"
 
     defaultConfig {
         applicationId = "com.nali.scene"
@@ -12,22 +13,28 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
+//    buildTypes {
+//        debug {
+//            isTestCoverageEnabled = false
+//            isMinifyEnabled = false
+//        }
+//        release {
+//
+//        }
+//    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    buildFeatures {
+        prefab = true
+    }
     externalNativeBuild {
         cmake {
             path = file("../../CMakeLists.txt")
+            version = "3.31.6"
         }
     }
 }

@@ -3,7 +3,11 @@ VkInstance m_vkinstance = VK_NULL_HANDLE;
 const char *ppEnabledExtensionNames[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
-	VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
+	#ifdef NALI_OS_ANDROID
+		VK_KHR_ANDROID_SURFACE_EXTENSION_NAME,
+	#else
+		VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
+	#endif
 
 	// VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME,
 	// VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
@@ -43,10 +47,10 @@ void vk_makeInstance()
 				},
 				.enabledExtensionCount = sizeof(ppEnabledExtensionNames) / sizeof(ppEnabledExtensionNames[0]),
 				.ppEnabledExtensionNames = ppEnabledExtensionNames,
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE,
-		
+
 				#ifdef NALI_VK_DEBUG
 					.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
 					.ppEnabledLayerNames = ppEnabledLayerNames

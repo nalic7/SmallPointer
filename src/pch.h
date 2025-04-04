@@ -11,45 +11,67 @@
 	#include <time.h>
 	#include <threads.h>
 
+	#if NALI_OS_ANDROID
+		#include <math.h>
+		#include <string.h>
+
+		#include <jni.h>
+		#include <android/log.h>
+
+		#include "scene/scene.h"
+
+		#ifdef NALI_CLIENT
+			#define VK_USE_PLATFORM_ANDROID_KHR
+			#include <vulkan/vulkan.h>
+
+			#include <android/native_activity.h>
+			#include <android/native_window.h>
+		#endif
+	#else
+		#ifdef NALI_CLIENT
+			// #include <math.h>
+
+			#include <linux/input.h>
+
+			// #include <wayland-client.h>
+			#include <wayland-cursor.h>
+			#include <xdg-shell.h>
+			#include <pointer-constraints-unstable-v1.h>
+			#include <relative-pointer-unstable-v1.h>
+			// #include <wayland-server.h>
+			// #include <wayland-util.h>
+
+			#define VK_USE_PLATFORM_WAYLAND_KHR
+			#include <vulkan/vulkan.h>
+
+			#include "surface/wayland/client/client.h"
+			#include "surface/wayland/client/register/register.h"
+			#include "surface/wayland/client/seat/seat.h"
+			#include "surface/wayland/client/seat/keyboard/keyboard.h"
+			#include "surface/wayland/client/seat/pointer/pointer.h"
+			#include "surface/wayland/client/xdg/surface/surface.h"
+			#include "surface/wayland/client/xdg/toplevel/toplevel.h"
+			#include "surface/wayland/client/xdg/wm_base/wm_base.h"
+			#include "surface/wayland/client/zwp/zwp.h"
+			#include "surface/wayland/client/zwp/locked/locked.h"
+			#include "surface/wayland/client/zwp/relative/relative.h"
+		#endif
+	#endif
+
+	#include "file/file.h"
+
+	#include "math/math.h"
+	#include "math/m4x4/m4x4.h"
+	#include "math/v4/v4.h"
+
 	#ifdef NALI_CLIENT
-		// #include <math.h>
-
-		#include <linux/input.h>
-
-		// #include <wayland-client.h>
-		#include <wayland-cursor.h>
-		#include <xdg-shell.h>
-		#include <pointer-constraints-unstable-v1.h>
-		#include <relative-pointer-unstable-v1.h>
-		// #include <wayland-server.h>
-		// #include <wayland-util.h>
-
-		#include <AL/al.h>
-		#include <AL/alc.h>
-
-		#define VK_USE_PLATFORM_WAYLAND_KHR
-		#include <vulkan/vulkan.h>
-
-		#include "file/file.h"
-
-		#include "math/math.h"
-		#include "math/m4x4/m4x4.h"
-		#include "math/v4/v4.h"
-
-		#include "al/al.h"
-
 		#include "surface/surface.h"
-		#include "surface/wayland/client/client.h"
-		#include "surface/wayland/client/register/register.h"
-		#include "surface/wayland/client/seat/seat.h"
-		#include "surface/wayland/client/seat/keyboard/keyboard.h"
-		#include "surface/wayland/client/seat/pointer/pointer.h"
-		#include "surface/wayland/client/xdg/surface/surface.h"
-		#include "surface/wayland/client/xdg/toplevel/toplevel.h"
-		#include "surface/wayland/client/xdg/wm_base/wm_base.h"
-		#include "surface/wayland/client/zwp/zwp.h"
-		#include "surface/wayland/client/zwp/locked/locked.h"
-		#include "surface/wayland/client/zwp/relative/relative.h"
+		#include "surface/android/android.h"
+
+		// #include <AL/al.h>
+		// #include <AL/alc.h>
+
+		// #include "al/al.h"
 
 		#include "vk/release/vk/vk.h"
 		#include "vk/release/queue/device/physical_device/instance/instance.h"
@@ -93,19 +115,20 @@
 		#include "vk/release/cmd/image/image.h"
 		#include "vk/release/cmd/draw/draw.h"
 
-		#include <libavformat/avformat.h>
-		#include <libavcodec/avcodec.h>
-		// // #include <libavutil/avutil.h>
+		// #include <libavformat/avformat.h>
+		// #include <libavcodec/avcodec.h>
+		// // // #include <libavutil/avutil.h>
 	
-		#include <libavutil/imgutils.h>
-		// #include <libavutil/avassert.h>
+		// #include <libavutil/imgutils.h>
+		// // #include <libavutil/avassert.h>
 	
-		// #include <libswscale/swscale.h>
-		#include "ffmpeg/ffmpeg.h"
+		// // #include <libswscale/swscale.h>
+		// #include "ffmpeg/ffmpeg.h"
 
 		#include "loader/client/client.h"
 		#include "network/linux/client/nw_client.h"
 	#endif
+
 	#ifdef NALI_SERVER
 		#ifndef NALI_CLIENT
 			#include <stdio.h>
@@ -158,103 +181,103 @@
 	#include "collada/graphic_reader/graphic_reader.h"
 
 #endif
-#ifdef PCH_LWJGL64
+// #ifdef PCH_LWJGL64
 
-	// #include <stdio.h>
-	// #include <dlfcn.h>
-	// #include <stdint.h>
-	#include <stdlib.h>
-	#include <jni.h>
-	#include <threads.h>
-	#include <string.h>
-	// #include <math.h>
+// 	// #include <stdio.h>
+// 	// #include <dlfcn.h>
+// 	// #include <stdint.h>
+// 	#include <stdlib.h>
+// 	#include <jni.h>
+// 	#include <threads.h>
+// 	#include <string.h>
+// 	// #include <math.h>
 
-	#include <png.h>
+// 	#include <png.h>
 
-	#include <wayland-client.h>
-	#include <wayland-xdg-shell-client-protocol.h>
+// 	#include <wayland-client.h>
+// 	#include <wayland-xdg-shell-client-protocol.h>
 
-	#include <GL/gl.h>
-	#include <GL/glx.h>
-	#include <X11/Xlib.h>
+// 	#include <GL/gl.h>
+// 	#include <GL/glx.h>
+// 	#include <X11/Xlib.h>
 
-	#include "lwjgl/gl/11/GL11.h"
+// 	#include "lwjgl/gl/11/GL11.h"
 
-	#include <al.h>
-	#include <alc.h>
+// 	#include <al.h>
+// 	#include <alc.h>
 
-	#include <vulkan/vulkan.h>
-	#include <vulkan/vulkan_wayland.h>
+// 	#include <vulkan/vulkan.h>
+// 	#include <vulkan/vulkan_wayland.h>
 
-	#include "al/al.h"
+// 	#include "al/al.h"
 
-	#include "lwjgl/lwjgl.h"
-	#include "surface/surface.h"
-	#include "vk/vk.h"
-	#include "vk/instance/instance.h"
-	#include "vk/instance/debug/debug.h"
-	#include "vk/instance/physical_device/physical_device.h"
-	#include "vk/instance/physical_device/queue/queue.h"
-	#include "vk/surface/surface.h"
-	#include "vk/instance/device/device.h"
-	#include "vk/swapchain/swapchain.h"
-	#include "vk/fence/fence.h"
-	#include "vk/semaphore/semaphore.h"
-	#include "vk/commandbuffer/commandpool/commandpool.h"
-	#include "vk/commandbuffer/commandbuffer.h"
-	#include "vk/heap/imageview/image/image.h"
-	#include "vk/heap/imageview/imageview.h"
-	#include "vk/shadermodule/shadermodule.h"
+// 	#include "lwjgl/lwjgl.h"
+// 	#include "surface/surface.h"
+// 	#include "vk/vk.h"
+// 	#include "vk/instance/instance.h"
+// 	#include "vk/instance/debug/debug.h"
+// 	#include "vk/instance/physical_device/physical_device.h"
+// 	#include "vk/instance/physical_device/queue/queue.h"
+// 	#include "vk/surface/surface.h"
+// 	#include "vk/instance/device/device.h"
+// 	#include "vk/swapchain/swapchain.h"
+// 	#include "vk/fence/fence.h"
+// 	#include "vk/semaphore/semaphore.h"
+// 	#include "vk/commandbuffer/commandpool/commandpool.h"
+// 	#include "vk/commandbuffer/commandbuffer.h"
+// 	#include "vk/heap/imageview/image/image.h"
+// 	#include "vk/heap/imageview/imageview.h"
+// 	#include "vk/shadermodule/shadermodule.h"
 
-	#include <sys/stat.h>
-	#include <dirent.h>
-	// #include <ctype.h>
+// 	#include <sys/stat.h>
+// 	#include <dirent.h>
+// 	// #include <ctype.h>
 
-#endif
-#ifdef PCH_NALIGL
+// #endif
+// #ifdef PCH_NALIGL
 
-	// #include <stdio.h>
-	// #include <stdlib.h>
+// 	// #include <stdio.h>
+// 	// #include <stdlib.h>
 
-	#define NALI_LWJGL2
-	#define NALI_X11
-	// #define NALI_EGL
+// 	#define NALI_LWJGL2
+// 	#define NALI_X11
+// 	// #define NALI_EGL
 
-	// #define NALI_LWJGL3
+// 	// #define NALI_LWJGL3
 
-	#include <jni.h>
+// 	#include <jni.h>
 
-	#ifdef NALI_LWJGL3
-		#include <GL/gl.h>
-		#define tlsGetFunction(index) (uintptr_t)((void**)(*__env)->reserved3)[index]
-		typedef void (APIENTRY* glGenVertexArraysPROC) (jint, uintptr_t);
-	#endif
+// 	#ifdef NALI_LWJGL3
+// 		#include <GL/gl.h>
+// 		#define tlsGetFunction(index) (uintptr_t)((void**)(*__env)->reserved3)[index]
+// 		typedef void (APIENTRY* glGenVertexArraysPROC) (jint, uintptr_t);
+// 	#endif
 
-	#ifdef NALI_EGL
-		#include <EGL/egl.h>
-		#define GETPROCADDRESS(proc) eglGetProcAddress((const GLubyte*)proc)
-		#define NALI_LWJGL2
-	#endif
+// 	#ifdef NALI_EGL
+// 		#include <EGL/egl.h>
+// 		#define GETPROCADDRESS(proc) eglGetProcAddress((const GLubyte*)proc)
+// 		#define NALI_LWJGL2
+// 	#endif
 
-	#ifdef NALI_X11
-		#include <GL/glx.h>
-		#define GETPROCADDRESS(proc) glXGetProcAddress((const GLubyte*)proc)
-		#define NALI_LWJGL2
-	#endif
+// 	#ifdef NALI_X11
+// 		#include <GL/glx.h>
+// 		#define GETPROCADDRESS(proc) glXGetProcAddress((const GLubyte*)proc)
+// 		#define NALI_LWJGL2
+// 	#endif
 
-#endif
-#ifdef PCH_NALIAL
+// #endif
+// #ifdef PCH_NALIAL
 
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <stdint.h>
+// 	#include <stdio.h>
+// 	#include <stdlib.h>
+// 	#include <stdint.h>
 
-	#include <jni.h>
+// 	#include <jni.h>
 
-	#include <al.h>
-	#include <alc.h>
+// 	#include <al.h>
+// 	#include <alc.h>
 
-#endif
+// #endif
 
 #include "debug/debug.h"
 

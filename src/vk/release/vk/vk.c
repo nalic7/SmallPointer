@@ -76,24 +76,24 @@ static void vkinfo(uint32_t device)
 
 static void dginfo()
 {
-	uint32_t device_group;
-	nali_info("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, 0))
-	VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
-	nali_info("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, vkphysicaldevicegroupproperties_p))
-	nali_log("device_group %d", device_group)
-	for (uint32_t u = 0; u < device_group; ++u)
-	{
-		nali_log("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
-	}
-	free(vkphysicaldevicegroupproperties_p);
+	// uint32_t device_group;
+	// nali_info("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, 0))
+	// VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
+	// nali_info("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(m_vkinstance, &device_group, vkphysicaldevicegroupproperties_p))
+	// nali_log("device_group %d", device_group)
+	// for (uint32_t u = 0; u < device_group; ++u)
+	// {
+	// 	nali_log("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
+	// }
+	// free(vkphysicaldevicegroupproperties_p);
 }
 
 static void pminfo(uint32_t device)
 {
-	VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
-	vkGetDeviceGroupPeerMemoryFeatures(m_vkdevice_p[device], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
-	//VkPeerMemoryFeatureFlagBits
-	nali_log("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
+	// VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
+	// vkGetDeviceGroupPeerMemoryFeatures(m_vkdevice_p[device], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
+	// //VkPeerMemoryFeatureFlagBits
+	// nali_log("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
 }
 
 #endif
