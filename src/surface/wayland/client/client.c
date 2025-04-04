@@ -109,16 +109,23 @@ static int loop(void* arg)
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 
-	int r;
-	while (!(m_surface_state & NALI_SURFACE_C_S_CLEAN) && (r = wl_display_dispatch(m_wl_display_client_p)) > -1)
+	int r = wl_display_dispatch(m_wl_display_client_p);
+	while (r > -1 && r != INT_MAX)
 	{
-		wlcp_change_cursor(1);
-		r = wl_display_dispatch(m_wl_display_client_p);
+		if (m_surface_state & NALI_SURFACE_C_S_CLEAN)
+		{
+			r = INT_MAX;
+		}
+		else
+		{
+			wlcp_change_cursor(1);
+			r = wl_display_dispatch(m_wl_display_client_p);
+		}
 	}
 
 	if (r < 0)
 	{
-		info("wl_display_dispatch %d", r);
+		nali_log("wl_display_dispatch %d", r);
 		wlc_clean();
 		wlc_init();
 		//if surface fail on vk need re vksurface
@@ -127,22 +134,13 @@ static int loop(void* arg)
 }
 void wlc_init()
 {
-	m_wl_display_client_p = wl_display_connect(getenv("WAYLAND_DISPLAY"));
-	if (!m_wl_display_client_p)
-	{
-		error("wl_display_connect")
-	}
+	nali_info("wl_display_connect %p", m_wl_display_client_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
 	// info("wl_display_get_fd %d", wl_display_get_fd(m_wl_display_client))
 
-	m_wl_registry_p = wl_display_get_registry(m_wl_display_client_p);
-	if (!m_wl_registry_p)
-	{
-		error("wl_display_get_registry")
-	}
+	nali_info("wl_display_get_registry %p", m_wl_registry_p = wl_display_get_registry(m_wl_display_client_p))
 
-	wl_registry_add_listener(m_wl_registry_p, &m_wl_registry_listener, NULL);
-	int roundtrip = wl_display_roundtrip(m_wl_display_client_p);
-	info("wl_display_roundtrip %d", roundtrip)
+	nali_info("wl_registry_add_listener %d", wl_registry_add_listener(m_wl_registry_p, &m_wl_registry_listener, NULL))
+	nali_info("wl_display_roundtrip %d", wl_display_roundtrip(m_wl_display_client_p))
 	wlcp_init_cursor();
 
 	// if (!m_wl_compositor)
@@ -150,22 +148,15 @@ void wlc_init()
 	// 	error("m_wl_compositor")
 	// }
 
-	m_wl_surface_p = wl_compositor_create_surface(m_wl_compositor_p);
-	if (!m_wl_surface_p)
-	{
-		error("wl_compositor_create_surface")
-	}
+	nali_info("wl_compositor_create_surface %p", m_wl_surface_p = wl_compositor_create_surface(m_wl_compositor_p))
 
-	m_xdg_surface_p = xdg_wm_base_get_xdg_surface(m_xdg_wm_base_p, m_wl_surface_p);
-	m_xdg_toplevel_p = xdg_surface_get_toplevel(m_xdg_surface_p);
+	nali_info("xdg_wm_base_get_xdg_surface %p", m_xdg_surface_p = xdg_wm_base_get_xdg_surface(m_xdg_wm_base_p, m_wl_surface_p))
+	nali_info("xdg_surface_get_toplevel %p", m_xdg_toplevel_p = xdg_surface_get_toplevel(m_xdg_surface_p))
 
-	xdg_surface_add_listener(m_xdg_surface_p, &m_xdg_surface_listener, NULL);
-	xdg_toplevel_add_listener(m_xdg_toplevel_p, &m_xdg_toplevel_listener, NULL);
+	nali_info("xdg_surface_add_listener %d", xdg_surface_add_listener(m_xdg_surface_p, &m_xdg_surface_listener, NULL))
+	nali_info("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(m_xdg_toplevel_p, &m_xdg_toplevel_listener, NULL))
 
 	wl_surface_commit(m_wl_surface_p);
 
-	if (thrd_create(&(thrd_t){}, loop, NULL) != thrd_success)
-	{
-		error("thrd_create")
-	}
+	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, loop, NULL))
 }

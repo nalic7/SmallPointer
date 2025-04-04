@@ -36,21 +36,30 @@ static void clean()
 	close(epfd);
 	close(server_fd);
 	free(epoll_event_p);
-	info("clean_nw_server")
+	nali_log("clean_nw_server")
 }
 
+#ifdef NALI_DEBUG
 static int errno_temp = 0;
 static void out()
 {
 	if (errno != errno_temp)
 	{
-		info("s %d %s", errno, strerror(errno))
+		nali_log("s %d %s", errno, strerror(errno))
+	}
+	else
+	{
+		m_net_server_state &= 255 - NALI_NET_SERVER_INIT;
 	}
 	errno_temp = errno;
 }
+#endif
 
+static int r;
 static int init(void *arg)
 {
+	m_net_server_state &= 255 - NALI_NET_SERVER_FAIL;
+
 	epoll_event_p = malloc(sizeof(struct epoll_event) * NALI_MAX_EPOLL_EVENT);
 	client_fd_p = malloc(sizeof(int) * NALI_MAX_CLIENT);
 	memset(client_fd_p, -1, sizeof(int) * NALI_MAX_CLIENT);
@@ -58,28 +67,52 @@ static int init(void *arg)
 	struct sockaddr_in server_sockaddr_in, client_sockaddr_in;
 	socklen_t addrlen = sizeof(server_sockaddr_in);
 
-	info("socket %d", server_fd = socket(AF_INET, SOCK_STREAM, 0))
-	info("%s", strerror(errno))
+	nali_info("socket %d", r = server_fd = socket(AF_INET, SOCK_STREAM, 0))
+	nali_log("%s", strerror(errno))
+	if (r < 0)
+	{
+		m_net_server_state |= NALI_NET_SERVER_FAIL;
+	}
 
-	info("setsockopt %d", setsockopt(server_fd, SOL_SOCKET, SO_RCVTIMEO, &(struct timeval){.tv_sec = 5, .tv_usec = 0}, sizeof(struct timeval)))
-	info("%s", strerror(errno))
+	nali_info("setsockopt %d", r = setsockopt(server_fd, SOL_SOCKET, SO_RCVTIMEO, &(struct timeval){.tv_sec = 5, .tv_usec = 0}, sizeof(struct timeval)))
+	nali_log("%s", strerror(errno))
+	if (r < 0)
+	{
+		m_net_server_state |= NALI_NET_SERVER_FAIL;
+	}
 
 	memset(&server_sockaddr_in, 0, sizeof(struct sockaddr_in));
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_addr.s_addr = INADDR_ANY;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
 
-	info("bind %d", bind(server_fd, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)))
-	info("%s", strerror(errno))
+	nali_info("bind %d", r = bind(server_fd, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)))
+	nali_log("%s", strerror(errno))
+	if (r < 0)
+	{
+		m_net_server_state |= NALI_NET_SERVER_FAIL;
+	}
 
-	info("listen %d", listen(server_fd, 3))
-	info("%s", strerror(errno))
+	nali_info("listen %d", r = listen(server_fd, 3))
+	nali_log("%s", strerror(errno))
+	if (r < 0)
+	{
+		m_net_server_state |= NALI_NET_SERVER_FAIL;
+	}
 
-	info("epoll_create1 %d", epfd = epoll_create1(0))
-	info("%s", strerror(errno))
+	nali_info("epoll_create1 %d", r = epfd = epoll_create1(0))
+	nali_log("%s", strerror(errno))
+	if (r < 0)
+	{
+		m_net_server_state |= NALI_NET_SERVER_FAIL;
+	}
 
-	info("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_ADD, server_fd, &(struct epoll_event){.events = EPOLLIN, .data.fd = server_fd}))
-	info("%s", strerror(errno))
+	nali_info("epoll_ctl %d", r = epoll_ctl(epfd, EPOLL_CTL_ADD, server_fd, &(struct epoll_event){.events = EPOLLIN, .data.fd = server_fd}))
+	nali_log("%s", strerror(errno))
+	if (r < 0)
+	{
+		m_net_server_state |= NALI_NET_SERVER_FAIL;
+	}
 
 	uint8_t size;
 	uint8_t *uint8_t_p;
@@ -94,10 +127,10 @@ static int init(void *arg)
 
 			if (fd == server_fd)
 			{
-				info("accept %d", client_fd_p[client_fd_select] = accept(server_fd, (struct sockaddr*)&client_sockaddr_in, &addrlen))
-				info("%s", strerror(errno))
+				nali_info("accept %d", client_fd_p[client_fd_select] = accept(server_fd, (struct sockaddr*)&client_sockaddr_in, &addrlen))
+				nali_log("%s", strerror(errno))
 
-				epoll_ctl(epfd, EPOLL_CTL_ADD, client_fd_p[client_fd_select], &(struct epoll_event){.events = EPOLLIN, .data.fd = client_fd_p[client_fd_select]});
+				nali_info("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_ADD, client_fd_p[client_fd_select], &(struct epoll_event){.events = EPOLLIN, .data.fd = client_fd_p[client_fd_select]}))
 
 				++client_fd_select;
 			}
@@ -105,10 +138,10 @@ static int init(void *arg)
 			{
 				// ssize_t r = recv(fd, &size, sizeof(uint8_t), MSG_DONTWAIT);
 				r = recv(fd, &size, sizeof(uint8_t), 0);
-				info("recv %ld", r)
+				nali_log("recv %ld", r)
 				if (r == 0)
 				{
-					epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL);
+					nali_info("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL))
 					close(fd);
 
 					client_fd_p[--client_fd_select] = -1;
@@ -117,21 +150,34 @@ static int init(void *arg)
 				{
 					uint8_t_p = malloc(size);
 					r = recv(fd, &uint8_t_p, size, 0);
+
 					free(uint8_t_p);
 				}
 			}
 		}
 
-		out();
+		#ifdef NALI_DEBUG
+			out();
+		#else
+			m_net_server_state &= 255 - NALI_NET_SERVER_INIT;
+		#endif
 	}
 
 	clean();
+	m_net_server_state &= 255 - NALI_NET_SERVER_INIT;
 	return 0;
 }
 void nws_init()
 {
-	if (thrd_create(&(thrd_t){}, init, NULL) != thrd_success)
+	m_net_server_state |= NALI_NET_SERVER_FAIL;
+	while (m_net_server_state & NALI_NET_SERVER_FAIL)
 	{
-		error("thrd_create")
+		m_net_server_state |= NALI_NET_SERVER_INIT;
+		nali_info("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
+
+		while (m_net_server_state & NALI_NET_SERVER_INIT)
+		{
+			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
+		}
 	}
 }

@@ -1,26 +1,35 @@
 void vk_cmd(VkCommandBuffer vkcommandbuffer, VkCommandBufferBeginInfo *vkcommandbufferbegininfo_p, VkQueue vkqueue_graphic)
 {
-	VkSubmitInfo cmd_vksubmitinfo =
-	{
-		.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-
-		.commandBufferCount = 1,
-		.pCommandBuffers = &vkcommandbuffer,
-
-		.waitSemaphoreCount = 0,
-		.pWaitSemaphores = VK_NULL_HANDLE,
-		.pWaitDstStageMask = VK_NULL_HANDLE,
-
-		.signalSemaphoreCount = 0,
-		.pSignalSemaphores = VK_NULL_HANDLE,
-
-		.pNext = VK_NULL_HANDLE
-	};
-	vkBeginCommandBuffer(vkcommandbuffer, vkcommandbufferbegininfo_p);
+	nali_info("vkBeginCommandBuffer %d", vkBeginCommandBuffer(vkcommandbuffer, vkcommandbufferbegininfo_p))
 	vk_cmdImage(vkcommandbuffer, vkqueue_graphic);
-	vkEndCommandBuffer(vkcommandbuffer);
-	vkQueueSubmit(vkqueue_graphic, 1, &cmd_vksubmitinfo, VK_NULL_HANDLE);
-	vkQueueWaitIdle(vkqueue_graphic);
+	nali_info("vkEndCommandBuffer %d", vkEndCommandBuffer(vkcommandbuffer))
+	nali_info
+	(
+		"vkQueueSubmit %d",
+		vkQueueSubmit
+		(
+			vkqueue_graphic,
+			1,
+			&(VkSubmitInfo)
+			{
+				.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+
+				.commandBufferCount = 1,
+				.pCommandBuffers = &vkcommandbuffer,
+
+				.waitSemaphoreCount = 0,
+				.pWaitSemaphores = VK_NULL_HANDLE,
+				.pWaitDstStageMask = VK_NULL_HANDLE,
+		
+				.signalSemaphoreCount = 0,
+				.pSignalSemaphores = VK_NULL_HANDLE,
+
+				.pNext = VK_NULL_HANDLE
+			},
+			VK_NULL_HANDLE
+		)
+	)
+	nali_info("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
 	//s0-freeImage
 	VkDevice vkdevice = m_vkdevice_p[m_device];

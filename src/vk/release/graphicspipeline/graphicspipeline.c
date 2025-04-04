@@ -1,4 +1,4 @@
-void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass *vkrenderpass_p, VkPipelineLayout *vkpipelinelayout_p, VkPipeline *vkpipeline_p)
+void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
 {
 	VkDevice vkdevice = m_vkdevice_p[device];
 
@@ -46,30 +46,40 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *v
 	VkPipelineDepthStencilStateCreateInfo vkpipelinedepthstencilstatecreateinfo;
 	vk_setPipelineDepthStencilStateCreateInfo(&vkpipelinedepthstencilstatecreateinfo);
 
-	VkGraphicsPipelineCreateInfo vkgraphicspipelinecreateinfo =
-	{
-		.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
-		.stageCount = 2,
-		.pStages = vkpipelineshaderstagecreateinfo_p,
-		.pVertexInputState = &vkpipelinevertexinputstatecreateinfo,
-		.pInputAssemblyState = &vkpipelineinputassemblystatecreateinfo,
-		.pTessellationState = VK_NULL_HANDLE,
-		.pViewportState = &vkpipelineviewportstatecreateinfo,
-		.pRasterizationState = &vkpipelinerasterizationstatecreateinfo,
-		.pMultisampleState = &vkpipelinemultisamplestatecreateinfo,
-		.pDepthStencilState = &vkpipelinedepthstencilstatecreateinfo,
-		.pColorBlendState = &vkpipelinecolorblendstatecreateinfo,
-		.pDynamicState = &vkpipelinedynamicstatecreateinfo,
-		.layout = *vkpipelinelayout_p,
-		.renderPass = *vkrenderpass_p,
-		.subpass = 0,
-		.basePipelineHandle = VK_NULL_HANDLE,
-
-		.basePipelineIndex = 0,
-
-		.flags = 0,
-		.pNext = VK_NULL_HANDLE
-	};
-
-	vkCreateGraphicsPipelines(vkdevice, VK_NULL_HANDLE, 1, &vkgraphicspipelinecreateinfo, VK_NULL_HANDLE, vkpipeline_p);
+	nali_info
+	(
+		"vkCreateGraphicsPipelines %d",
+		vkCreateGraphicsPipelines
+		(
+			vkdevice,
+			VK_NULL_HANDLE,
+			1,
+			&(VkGraphicsPipelineCreateInfo)
+			{
+				.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
+				.stageCount = 2,
+				.pStages = vkpipelineshaderstagecreateinfo_p,
+				.pVertexInputState = &vkpipelinevertexinputstatecreateinfo,
+				.pInputAssemblyState = &vkpipelineinputassemblystatecreateinfo,
+				.pTessellationState = VK_NULL_HANDLE,
+				.pViewportState = &vkpipelineviewportstatecreateinfo,
+				.pRasterizationState = &vkpipelinerasterizationstatecreateinfo,
+				.pMultisampleState = &vkpipelinemultisamplestatecreateinfo,
+				.pDepthStencilState = &vkpipelinedepthstencilstatecreateinfo,
+				.pColorBlendState = &vkpipelinecolorblendstatecreateinfo,
+				.pDynamicState = &vkpipelinedynamicstatecreateinfo,
+				.layout = vkpipelinelayout,
+				.renderPass = vkrenderpass,
+				.subpass = 0,
+				.basePipelineHandle = VK_NULL_HANDLE,
+		
+				.basePipelineIndex = 0,
+		
+				.flags = 0,
+				.pNext = VK_NULL_HANDLE
+			},
+			VK_NULL_HANDLE,
+			vkpipeline_p
+		)
+	)
 }

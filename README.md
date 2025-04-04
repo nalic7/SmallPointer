@@ -31,6 +31,7 @@
 >CMakeLists.txt
 
 	#...
+	set(DEBUG 1)
 	set(GEN 1) // for first time
 	set(CLIENT 1)
 	set(SERVER 1)
@@ -72,7 +73,7 @@
 
 </span>
 
-### LWJGL64
+<!-- ### LWJGL64
 <span style="font-size: large;">
 
 >JVM arguments
@@ -83,4 +84,4 @@
 </span>
 
 ### NALIGL
-### NALIAL
+### NALIAL -->

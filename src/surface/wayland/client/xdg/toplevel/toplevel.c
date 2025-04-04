@@ -25,7 +25,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 
 static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_toplevel)
 {
-	info("xdg_toplevel_listener_close 0")
+	nali_log("xdg_toplevel_listener_close 0")
 	m_surface_state |= NALI_SURFACE_C_S_CLEAN;
 	al_clean();
 	// while (m_vkinstance != VK_NULL_HANDLE || m_client_socket != -1)
@@ -34,11 +34,8 @@ static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_top
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 	wlc_clean();
-	info("xdg_toplevel_listener_close 1")
-	#ifdef NALI_DEBUG
-		debug_free();
-	#endif
-	exit(EXIT_SUCCESS);
+	nali_log("xdg_toplevel_listener_close 1")
+	// exit(EXIT_SUCCESS);
 }
 
 static void xdg_toplevel_listener_configure_bounds(void* data, struct xdg_toplevel* xdg_toplevel, int32_t width, int32_t height)

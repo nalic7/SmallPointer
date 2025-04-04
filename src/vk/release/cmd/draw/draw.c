@@ -146,7 +146,7 @@ void vk_initCmdDraw()
 
 	//s1-s
 	vk_makePipelineLayout(m_device, &vkdescriptorsetlayout, 1, &vkpipelinelayout);
-	vk_makeGraphicsPipeline(m_device, vkpipelineshaderstagecreateinfo_array, &m_vkrenderpass, &vkpipelinelayout, &vkpipeline);
+	vk_makeGraphicsPipeline(m_device, vkpipelineshaderstagecreateinfo_array, m_vkrenderpass, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -188,7 +188,7 @@ void vk_initCmdDraw()
 	//e0-draw
 
 	//s0-mtx
-	mtx_init(m_mtx_t_draw_p, mtx_plain);
+	nali_info("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
 	//e0-mtx
 
 	frame_start = time(0);
@@ -196,7 +196,7 @@ void vk_initCmdDraw()
 
 void freeCmdDraw()
 {
-	vkQueueWaitIdle(vkqueue_graphic);
+	nali_info("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
 	vkFreeCommandBuffers(vkdevice, m_vkcommandpool_p[m_device][m_queue_g], 1, &vkcommandbuffer);
 	vkDestroyPipeline(vkdevice, vkpipeline, VK_NULL_HANDLE);
@@ -241,7 +241,7 @@ int vk_cmdDraw(void *arg)
 		if (vkresult != VK_SUCCESS)
 		{
 			//support recreate vkswapchainkhr if need
-			error("vkAcquireNextImageKHR %d", vkresult)
+			nali_log("vkAcquireNextImageKHR %d", vkresult)
 		}
 
 		vkrenderpassbegininfo.framebuffer = m_vkswapchainkhr_vkframebuffer_p[image_index];
@@ -284,8 +284,8 @@ int vk_cmdDraw(void *arg)
 			// end = clock();
 			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 			frame_start = frame_end;
-			info("time %ld", frame_time)
-			info("frame %d", frame)
+			nali_log("time %ld", frame_time)
+			nali_log("frame %d", frame)
 			frame = 0;
 		}
 	}

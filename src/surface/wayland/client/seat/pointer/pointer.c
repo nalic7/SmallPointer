@@ -2,26 +2,25 @@ static struct wl_cursor_theme *wl_cursor_theme;
 static struct wl_cursor **wl_cursor_p;
 static struct wl_surface *wl_surface_cursor;
 static struct wl_buffer *wl_buffer_cursor;
-static uint32_t pointer_serial = -1;
-static uint32_t cursor_i = 0;
-static clock_t cursor_start = 0;
 
 void wlcp_init_cursor()
 {
-	wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), m_wl_shm_p);
-
-	if (!wl_cursor_theme)
-	{
-		error("wl_cursor_theme");
-	}
+	nali_info("wl_cursor_theme_load %p", wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), m_wl_shm_p))
 
 	wl_cursor_p = malloc(sizeof(struct wl_cursor) * 2);
-	wl_cursor_p[0] = wl_cursor_theme_get_cursor(wl_cursor_theme, "left_ptr");//wait watch
-	wl_cursor_p[1] = wl_cursor_theme_get_cursor(wl_cursor_theme, "progress");
+	nali_info("wl_cursor_theme_get_cursor %p", wl_cursor_p[0] = wl_cursor_theme_get_cursor(wl_cursor_theme, "left_ptr"))//wait watch
+	nali_info("wl_cursor_theme_get_cursor %p", wl_cursor_p[1] = wl_cursor_theme_get_cursor(wl_cursor_theme, "progress"))
 
-	wl_surface_cursor = wl_compositor_create_surface(m_wl_compositor_p);
+	nali_info("wl_compositor_create_surface %p", wl_surface_cursor = wl_compositor_create_surface(m_wl_compositor_p))
 }
 
+static uint32_t
+	pointer_serial = -1,
+	cursor_i = 0;
+static struct wl_cursor *wl_cursor;
+static clock_t
+	cursor_start = 0,
+	cursor_end;
 void wlcp_change_cursor()
 {
 	if (pointer_serial != -1)
@@ -32,7 +31,7 @@ void wlcp_change_cursor()
 		}
 		else
 		{
-			struct wl_cursor *wl_cursor = wl_cursor_p[m_pointer_id];
+			wl_cursor = wl_cursor_p[m_pointer_id];
 
 			if (wl_cursor && wl_cursor->image_count > 0)
 			{
@@ -45,7 +44,7 @@ void wlcp_change_cursor()
 				wl_surface_attach(wl_surface_cursor, wl_buffer_cursor, 0, 0);
 				wl_surface_commit(wl_surface_cursor);
 
-				clock_t cursor_end = clock();
+				cursor_end = clock();
 				if (cursor_end - cursor_start > 200000)
 				{
 					cursor_start = cursor_end;
@@ -68,8 +67,8 @@ static void wl_pointer_listener_leave(void *data, struct wl_pointer *wl_pointer,
 
 static void wl_pointer_listener_motion(void *data, struct wl_pointer *wl_pointer, uint32_t time, wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
-	info("surface_x %f", wl_fixed_to_double(surface_x))
-	info("surface_y %f", wl_fixed_to_double(surface_y))
+	nali_log("surface_x %f", wl_fixed_to_double(surface_x))
+	nali_log("surface_y %f", wl_fixed_to_double(surface_y))
 }
 
 static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state)

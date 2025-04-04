@@ -38,7 +38,7 @@ char file_reader_match(FILE *file_p, const char *mchar_p[], const uint32_t size)
 		}
 	}
 
-	error("file_reader_match")
+	nali_log("file_reader_match -1")
 	return -1;
 }
 
@@ -123,7 +123,7 @@ char **file_reader_char_p(FILE *file_p, const char *f_char_p, const char *e_char
 		}
 	}
 
-	error("file_reader_char_p")
+	nali_log("file_reader_char_p -1")
 	return char_p;
 }
 
@@ -186,7 +186,7 @@ float *file_reader_float(FILE *file_p, const char *e_char_p, float *float_p, uin
 		}
 	}
 
-	error("file_reader_float")
+	nali_log("file_reader_float -1")
 	return float_p;
 }
 
@@ -260,7 +260,7 @@ int32_t *file_reader_int(FILE *file_p, const char *e_char_p, int32_t *int_p, uin
 		}
 	}
 
-	error("file_reader_int")
+	nali_log("file_reader_int -1")
 	return int_p;
 }
 

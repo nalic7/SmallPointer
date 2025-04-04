@@ -158,7 +158,7 @@ void lc_init()
 
 	float qv4_float_p[4];
 	v4_q(0, MATH_D2R(35.0F), 0, qv4_float_p);
-	v4_mx(qv4_float_p, nali_v_uniform_float_array + 16);
+	v4_qm(qv4_float_p, nali_v_uniform_float_array + 16);
 	m4x4_p(90.0F, 16.0F / 9.0F, 0.1F, 100.0F, nali_v_uniform_float_array + 16 + 16);
 	m_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
 }
@@ -308,10 +308,8 @@ void lc_initVK()
 	//e0-ubo
 
 	vk_initCmdDraw();
-	if (thrd_create(&(thrd_t){}, vk_cmdDraw, NULL) != thrd_success)
-	{
-		error("thrd_create")
-	}
+	//thrd_success
+	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmdDraw, NULL))
 }
 
 void lc_clearVK(uint32_t device)
@@ -416,26 +414,31 @@ void lc_setVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *
 
 void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
-	VkDescriptorSetLayoutBinding vkdescriptorsetlayoutbinding_array[2];
-	vkdescriptorsetlayoutbinding_array[0] = (VkDescriptorSetLayoutBinding)
-	{
-		.binding = 0,
-		.descriptorCount = 1,
-		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,//VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC
-		.pImmutableSamplers = VK_NULL_HANDLE,
-		.stageFlags = VK_SHADER_STAGE_VERTEX_BIT//VK_SHADER_STAGE_VERTEX_BIT VK_SHADER_STAGE_FRAGMENT_BIT
-	};
-	vkdescriptorsetlayoutbinding_array[1] = (VkDescriptorSetLayoutBinding)
-	{
-		.binding = 1,
-		.descriptorCount = 1,
-		//sampler VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-		//image2d VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-		.pImmutableSamplers = VK_NULL_HANDLE,
-		.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-	};
-	vk_makeDescriptorSetLayout(m_device, vkdescriptorsetlayoutbinding_array, 2, vkdescriptorsetlayout_p);
+	vk_makeDescriptorSetLayout
+	(
+		m_device,
+		(VkDescriptorSetLayoutBinding[])
+		{
+			{
+				.binding = 0,
+				.descriptorCount = 1,
+				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,//VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC
+				.pImmutableSamplers = VK_NULL_HANDLE,
+				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT//VK_SHADER_STAGE_VERTEX_BIT VK_SHADER_STAGE_FRAGMENT_BIT
+			},
+			{
+				.binding = 1,
+				.descriptorCount = 1,
+				//sampler VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				//image2d VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+				.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				.pImmutableSamplers = VK_NULL_HANDLE,
+				.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+			}
+		},
+		2,
+		vkdescriptorsetlayout_p
+	);
 }
 
 void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)

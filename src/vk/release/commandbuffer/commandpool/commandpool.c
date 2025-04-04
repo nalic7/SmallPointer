@@ -12,14 +12,23 @@ void vk_makeCommandPool(uint32_t device)
 
 	for (uint32_t q = 0; q < max_queue; ++q)
 	{
-		VkCommandPoolCreateInfo vkcommandpoolcreateinfo =
-		{
-			.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-			.queueFamilyIndex = q,
-			.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
-			.pNext = VK_NULL_HANDLE
-		};
-		vkCreateCommandPool(m_vkdevice_p[device], &vkcommandpoolcreateinfo, VK_NULL_HANDLE, &m_vkcommandpool_p[device][q]);
+		nali_info
+		(
+			"vkCreateCommandPool %d",
+			vkCreateCommandPool
+			(
+				m_vkdevice_p[device],
+				&(VkCommandPoolCreateInfo)
+				{
+					.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+					.queueFamilyIndex = q,
+					.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+					.pNext = VK_NULL_HANDLE
+				},
+				VK_NULL_HANDLE,
+				&m_vkcommandpool_p[device][q]
+			)
+		)
 	}
 }
 

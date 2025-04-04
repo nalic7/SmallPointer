@@ -10,6 +10,7 @@ set(VK_DEBUG 1)
 
 set(SCENE 1)
 # set(COLLADA 1)
+
 # set(LWJGL64 1)
 # set(NALIGL 1)
 # set(NALIAL 1)

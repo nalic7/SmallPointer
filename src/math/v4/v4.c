@@ -13,7 +13,7 @@ void v4_q(float x, float y, float z, float *w_qv4_float_p)
 	w_qv4_float_p[3] = c1 * c2 * c3 - s1 * s2 * s3;
 }
 
-void v4_mx(float *r_qv4_float_p, float *w_m4x4_float_p)
+void v4_qm(float *r_qv4_float_p, float *w_m4x4_float_p)
 {
 	float xy = r_qv4_float_p[0] * r_qv4_float_p[1];
 	float xz = r_qv4_float_p[0] * r_qv4_float_p[2];

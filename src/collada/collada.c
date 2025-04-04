@@ -23,11 +23,8 @@ static int skin(void *arg)
 	strcat(out_char_p, d_name_char_p);
 
 	FILE *file_p = fopen(file_char_p, "r");
+	nali_log("fopen %p", file_p);
 	free(file_char_p);
-	if (!file_p)
-	{
-		error("fopen");
-	}
 
 	collada_Source collada_source =
 	{
@@ -451,14 +448,11 @@ int main()
 	mkdir(C_IN, 0700);
 	mkdir(C_OUT, 0700);
 
-	DIR *dir = opendir(C_IN);
-	if (!dir)
-	{
-		error("opendir")
-	}
+	DIR *dir_p = opendir(C_IN);
+	nali_log("opendir %p", dir_p);
 
 	struct dirent *dirent_p;
-	while ((dirent_p = readdir(dir)) != NULL)
+	while ((dirent_p = readdir(dir_p)) != NULL)
 	{
 		char *d_name_char_p = strdup(dirent_p->d_name);
 		// // size_t size = strlen(d_name_p) + 1;
@@ -482,10 +476,7 @@ int main()
 			void **arg = malloc(sizeof(void *) * 2);
 			arg[0] = d_name_char_p;
 			arg[1] = file_char_p;
-			if (thrd_create(&(thrd_t){}, skin, arg) != thrd_success)
-			{
-				error("thrd_create")
-			}
+			nali_info("thrd_create %d", thrd_create(&(thrd_t){}, skin, arg))
 
 			++thrd;
 		}
@@ -495,7 +486,7 @@ int main()
 		}
 	}
 
-	closedir(dir);
+	closedir(dir_p);
 
 	while (thrd){}
 }
