@@ -22,7 +22,7 @@
 		CMake Tools -> cmake
 		CodeLLDB -> debug
 2. Blender 3.x 4.x
-3. dev-util/android-studio 2024.2.2.14
+3. dev-util/android-studio-2024.3.1.14
 </span>
 
 ### Scene
@@ -30,9 +30,11 @@
 
 >CMakeLists.txt
 
+	set(OS_NAME linux) // select build for
 	#...
+
 	set(DEBUG 1)
-	set(GEN 1) // for first time
+	set(GEN 1) // build asset
 	set(CLIENT 1)
 	set(SERVER 1)
 	set(VK_DEBUG 1)

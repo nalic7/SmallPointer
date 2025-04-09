@@ -40,7 +40,8 @@ if(SCENE)
     src/scene/scene.c
   )
 
-  list(APPEND SOURCES src/file/file.c)
+  file(GLOB_RECURSE G_SOURCES src/file/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
 
   set(TLL m)
   file(GLOB_RECURSE G_SOURCES src/math/*.c)
@@ -59,16 +60,6 @@ if(SCENE)
   if(CLIENT)
     list(APPEND TCD NALI_CLIENT)
 
-    # list(APPEND TLL openal)
-    # list(APPEND SOURCES src/al/al.c)
-
-    # list(APPEND TLL
-    #   avcodec
-    #   avformat
-    #   avutil
-    # )
-    # list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
-
     list(APPEND TLL vulkan)
     file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
     list(APPEND SOURCES ${G_SOURCES})
@@ -81,6 +72,9 @@ if(SCENE)
 
     list(APPEND SOURCES src/loader/client/client.c)
     list(APPEND SOURCES src/network/linux/client/nw_client.c)
+
+    list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
+    list(APPEND SOURCES src/al/al.c)
   endif()
 
   if(SERVER)
@@ -96,20 +90,37 @@ if(SCENE)
     list(APPEND TLL
       log
       android
+      # OpenSLES
     )
 
     if(CLIENT)
+      list(APPEND TID ../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/include)
+      list(APPEND TLL
+        ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libavcodec.so
+        ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libavformat.so
+        ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libavutil.so
+
+        ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libswresample.so
+      )
+
+      list(APPEND TID ../openal-soft/include)
+      list(APPEND TLL ${CMAKE_SOURCE_DIR}/../openal-soft/build/libopenal.so)
+
       file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
       list(APPEND SOURCES ${G_SOURCES})
-
-      # file(GLOB_RECURSE G_SOURCES ../FFmpeg/*.c)
-      # list(APPEND SOURCES ${G_SOURCES})
-      # list(APPEND TID ../FFmpeg)
     endif()
 
     add_library(${P_NAME} SHARED ${SOURCES})
   else()
     if(CLIENT)
+      list(APPEND TLL
+        avcodec
+        avformat
+        avutil
+      )
+
+      list(APPEND TLL openal)
+
       list(APPEND TLL
         wayland-client
         wayland-cursor

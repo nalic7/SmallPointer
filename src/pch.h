@@ -11,10 +11,9 @@
 	#include <time.h>
 	#include <threads.h>
 
-	#if NALI_OS_ANDROID
-		#include <math.h>
-		#include <string.h>
+	#include <string.h>
 
+	#ifdef NALI_OS_ANDROID
 		#include <jni.h>
 		#include <android/log.h>
 
@@ -26,10 +25,19 @@
 
 			#include <android/native_activity.h>
 			#include <android/native_window.h>
+//			#include <aaudio/AAudio.h>
+
+			#include <SLES/OpenSLES.h>
+
+			#include "surface/android/android.h"
 		#endif
 	#else
+		#include <stdio.h>
+		#include <stdlib.h>
+
 		#ifdef NALI_CLIENT
 			// #include <math.h>
+			#include <limits.h>
 
 			#include <linux/input.h>
 
@@ -58,20 +66,25 @@
 		#endif
 	#endif
 
-	#include "file/file.h"
+	#ifdef NALI_GEN
+		#include "libavformat/avformat.h"
+		#include <libavcodec/avcodec.h>
+		// // #include <libavutil/avutil.h>
 
-	#include "math/math.h"
-	#include "math/m4x4/m4x4.h"
-	#include "math/v4/v4.h"
+		#include <libavutil/imgutils.h>
+		// #include <libavutil/avassert.h>
+
+		// #include <libswscale/swscale.h>
+		#include "ffmpeg/ffmpeg.h"
+	#endif
 
 	#ifdef NALI_CLIENT
 		#include "surface/surface.h"
-		#include "surface/android/android.h"
 
-		// #include <AL/al.h>
-		// #include <AL/alc.h>
-
-		// #include "al/al.h"
+		#include <AL/al.h>
+		#include <AL/alc.h>
+	
+		#include "al/al.h"
 
 		#include "vk/release/vk/vk.h"
 		#include "vk/release/queue/device/physical_device/instance/instance.h"
@@ -115,41 +128,41 @@
 		#include "vk/release/cmd/image/image.h"
 		#include "vk/release/cmd/draw/draw.h"
 
-		// #include <libavformat/avformat.h>
-		// #include <libavcodec/avcodec.h>
-		// // // #include <libavutil/avutil.h>
-	
-		// #include <libavutil/imgutils.h>
-		// // #include <libavutil/avassert.h>
-	
-		// // #include <libswscale/swscale.h>
-		// #include "ffmpeg/ffmpeg.h"
-
 		#include "loader/client/client.h"
 		#include "network/linux/client/nw_client.h"
 	#endif
 
 	#ifdef NALI_SERVER
-		#ifndef NALI_CLIENT
-			#include <stdio.h>
-			#include <stdlib.h>
-			#include <string.h>
-			#include <errno.h>
-		#endif
+		#include <math.h>
+		// #include <stdint.h>
 		#include <sys/epoll.h>
 
 		#include "loader/server/server.h"
 		#include "network/linux/server/nw_server.h"
 	#endif
 
+	#include "file/file.h"
+
+	#include "math/math.h"
+	#include "math/m4x4/m4x4.h"
+	#include "math/v4/v4.h"
+
 	// #include "loader/both/l_both.h"
 	// #include "network/linux/both/nw_both.h"
 
-	#include <unistd.h>
-	#include <arpa/inet.h>
-	#include <fcntl.h>
-	#define NALI_SC_PORT 11111
-	#define NALI_HOME "../asset/"
+	#if NALI_CLIENT || NALI_SERVER
+		#include <errno.h>
+		#include <unistd.h>
+		#include <arpa/inet.h>
+		// #include <fcntl.h>
+		#define NALI_SC_PORT 11111
+	#endif
+
+	#ifdef NALI_OS_ANDROID
+		#define NALI_HOME "/storage/emulated/0/Android/data/com.nali.scene/"
+	#else
+		#define NALI_HOME "../asset/"
+	#endif
 	#define NALI_HOME_IMAGE "image"
 	#define NALI_HOME_SHADER "shader/"
 	#define NALI_HOME_SHADER_VERT "vert"

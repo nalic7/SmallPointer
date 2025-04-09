@@ -147,19 +147,19 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 	for (uint32_t i = 0; i < swapchain_image; ++i)
 	{
 		vk_makeImageView(m_device, m_vkswapchainkhr_vkimage_p[i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &m_vkswapchainkhr_vkimageview_p[i]);
-		vk_makeFrameBuffer
+		VK_MAKEFRAMEBUFFER
 		(
 			m_device,
-			(VkImageView[])
+			((VkImageView[])
 			{
 				vkimageview_color,
 				vkimageview_depth,
 				m_vkswapchainkhr_vkimageview_p[i]
-			},
+			}),
 			3,
 			m_vkrenderpass,
 			&m_vkswapchainkhr_vkframebuffer_p[i]
-		);
+		)
 	}
 }
 

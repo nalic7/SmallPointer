@@ -17,7 +17,7 @@ void vk_makeSurface()
 			m_vkinstance,
 			&(VkAndroidSurfaceCreateInfoKHR)
 			{
-				.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
+				.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
 				.window = m_anativewindow_p,
 
 				.flags = 0,

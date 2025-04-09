@@ -108,7 +108,7 @@ void lc_init()
 
 	//s0-image
 
-	m_nali_g_image_state_uint8_t_p = file_read(NALI_HOME "image.bin", &m_nali_g_max_image_state);
+	m_nali_g_image_state_uint8_t_p = f_read(NALI_HOME "image.bin", &m_nali_g_max_image_state);
 	m_nali_g_image_uint8_t_p = malloc(0);
 	m_nali_g_image_wh_uint32_t_p = malloc(0);
 
@@ -123,6 +123,9 @@ void lc_init()
 	char *image_file = malloc(name_index);
 	strcpy(image_file, image_path);
 	strcat(image_file, "/");
+
+	// png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	// png_infop info = png_create_info_struct(png);
 
 	int16_t index;
 	int16_t size = -1;
@@ -146,21 +149,39 @@ void lc_init()
 			sprintf(image_file + name_index - 1, "%u", index);
 			image_file[name_index_size - 1] = '\0';
 			strcat(image_file, image_type);
-			#ifndef NALI_OS_ANDROID
-				ffmpeg_read(image_file);
 
-				wh_index = index * 2;
-				m_nali_g_image_uint8_t_p[index] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[wh_index], &m_nali_g_image_wh_uint32_t_p[wh_index + 1]);
-				ffmpeg_clean();
-			#endif
+			wh_index = index * 2;
+
+			// FILE *file_p = fopen(image_file, "rb");
+			// nali_log("file_p %p", file_p)
+			// png_init_io(png, file_p);
+			// png_read_info(png, info);
+
+			// m_nali_g_image_wh_uint32_t_p[wh_index] = png_get_image_width(png, info);
+			// png_uint_32 height = m_nali_g_image_wh_uint32_t_p[wh_index + 1] = png_get_image_height(png, info);
+			// // png_byte color_type = png_get_color_type(png, info);
+			// // png_byte bit_depth = png_get_bit_depth(png, info);
+
+			// png_read_update_info(png, info);
+			// png_bytep *row_pointers = malloc(sizeof(png_bytep) * height);
+			// for (int y = 0; y < height; y++)
+			// {
+			// 	row_pointers[y] = malloc(png_get_rowbytes(png, info));
+			// }
+
+			// png_read_image(png, row_pointers);
+
+			ffmpeg_read(image_file);
+			m_nali_g_image_uint8_t_p[index] = ffmpeg_png(&m_nali_g_image_wh_uint32_t_p[wh_index], &m_nali_g_image_wh_uint32_t_p[wh_index + 1]);
+			ffmpeg_clean();
 		}
 	}
 	free(image_file);
 	//e0-image
 
-	float qv4_float_p[4];
-	v4_q(0, MATH_D2R(35.0F), 0, qv4_float_p);
-	v4_qm(qv4_float_p, nali_v_uniform_float_array + 16);
+	// float qv4_float_p[4];
+	// v4_q(0, MATH_D2R(35.0F), 0, qv4_float_p);
+	// v4_qm(qv4_float_p, nali_v_uniform_float_array + 16);
 	m4x4_p(90.0F, 16.0F / 9.0F, 0.1F, 100.0F, nali_v_uniform_float_array + 16 + 16);
 	m_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
 }

@@ -13,6 +13,8 @@ void al_init()
 
 	nali_info("alcMakeContextCurrent %d", alcMakeContextCurrent(alccontext_p))
 
+	nali_info_t("alcGetError %d", alcGetError(m_alcdevice_p))
+
 	// ALuint buffer;
 	// ALuint source;
 	// alGenBuffers(1, &buffer);

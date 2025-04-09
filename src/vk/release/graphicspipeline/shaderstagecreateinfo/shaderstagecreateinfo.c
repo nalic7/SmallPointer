@@ -16,7 +16,7 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 
 	long size = 0;
 	// uint32_t *uint32_t_p = file_uint32_t(c2, &size);
-	void *p = file_read(vert, &size);
+	void *p = f_read(vert, &size);
 	// free(c2);
 
 	vk_makeShaderModule(device, p, size, vkshadermodule_vert_p);
@@ -29,7 +29,7 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 	// free(c1);
 
 	// uint32_t_p = file_uint32_t(c2, &size);
-	p = file_read(frag, &size);
+	p = f_read(frag, &size);
 	// free(c2);
 
 	vk_makeShaderModule(device, p, size, vkshadermodule_frag_p);
