@@ -31,7 +31,7 @@ int main()
 	// #endif
 
 	#if NALI_SERVER
-		// nws_init();
+		nws_init();
 	#endif
 	#ifdef NALI_CLIENT
 		lc_init();
@@ -39,7 +39,7 @@ int main()
 		vk_init();
 		al_init();
 		lc_initVK();
-		// nwc_init();
+		nwc_init();
 		m_pointer_id = 0;
 	#endif
 
@@ -48,7 +48,6 @@ int main()
 		size_t size = 0;
 		while (1)
 		{
-			getline(&char_p, &size, stdin);
 			nali_info_t("getline %ld", getline(&char_p, &size, stdin))
 
 			#ifdef NALI_CLIENT

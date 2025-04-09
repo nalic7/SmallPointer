@@ -246,7 +246,7 @@ void file_writer_collada(const collada_Source *collada_source_p, const char *pat
 		uint32_t bone_name_number_size;
 		for (uint8_t mb = 0; mb < max_bone; ++mb)
 		{
-			bone_name_number_size = bone_name_size + math_length(mb);
+			bone_name_number_size = bone_name_size + MATH_LENGTH(mb);
 			n0_p = realloc(n0_p, bone_name_number_size + sizeof(C_BIN_FILE)-1);
 			sprintf(n0_p + bone_name_size - 1, "%u", mb);
 			n0_p[bone_name_number_size - 1] = '\0';

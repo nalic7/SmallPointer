@@ -6,10 +6,7 @@
 
 #define MATH_4E2S(dst, data, offset) dst = ((data)[offset] << 24) | ((data)[offset + 1] << 16) | ((data)[offset + 2] << 8) | (data)[offset + 3];
 
-// char *math_combine(const char *str1, const char *str2);
-uint32_t math_length(uint32_t number);
-uint32_t math_mipmap(uint32_t width, uint32_t height);
-// char *math_get(uint32_t number);
-// void math_set(uint32_t number, char *c_p);
+#define MATH_LENGTH(number) ((number) == 0 ? 1 : log10(number) + 1)
+#define MATH_MIPMAP(width, height) (uint32_t)(log2(((width) > (height)) ? (width) : (height))) + 1
 
 #endif

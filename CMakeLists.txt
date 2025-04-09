@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.31)
 
-# set(OS_NAME linux)
-set(OS_NAME android)
+set(OS_NAME linux)
+# set(OS_NAME android)
 
 set(DEBUG 1)
 set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-# set(VK_DEBUG 1)
+set(VK_DEBUG 1)
 
 set(SCENE 1)
 # set(COLLADA 1)
@@ -31,8 +31,9 @@ endif()
 project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
 
 # ISO C11
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED On)
+# set(CMAKE_C_STANDARD 11)
+# set(CMAKE_C_STANDARD_REQUIRED On)
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
 
 if(SCENE)
   set(TCD PCH_SCENE)

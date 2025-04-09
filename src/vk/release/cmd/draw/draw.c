@@ -127,7 +127,7 @@ void vk_initCmdDraw()
 	const char vert_shader_path[] = NALI_HOME NALI_HOME_SHADER NALI_HOME_SHADER_VERT "/";
 	uint32_t vert_index = 0;
 	uint8_t vert_name_index = sizeof(vert_shader_path)-1;
-	char *vert_file = malloc(vert_name_index + math_length(vert_index) + sizeof(shader_type)-1 + 1);
+	char *vert_file = malloc(vert_name_index + MATH_LENGTH(vert_index) + sizeof(shader_type)-1 + 1);
 	strcpy(vert_file, vert_shader_path);
 	sprintf(vert_file + vert_name_index, "%u", vert_index);
 	strcat(vert_file, shader_type);
@@ -135,7 +135,7 @@ void vk_initCmdDraw()
 	const char frag_shader_path[] = NALI_HOME NALI_HOME_SHADER NALI_HOME_SHADER_FRAG "/";
 	uint32_t frag_index = 0;
 	uint8_t frag_name_index = sizeof(frag_shader_path)-1;
-	char *frag_file = malloc(frag_name_index + math_length(frag_index) + sizeof(shader_type)-1 + 1);
+	char *frag_file = malloc(frag_name_index + MATH_LENGTH(frag_index) + sizeof(shader_type)-1 + 1);
 	strcpy(frag_file, frag_shader_path);
 	sprintf(frag_file + frag_name_index, "%u", frag_index);
 	strcat(frag_file, shader_type);

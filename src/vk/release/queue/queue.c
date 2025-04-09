@@ -1,7 +1,7 @@
 uint32_t *m_max_queue_p;
 uint32_t *m_max_queue_surface_p;
 
-uint32_t **m_queue_surface_p;
+uint32_t **m_queue_surface_p = NULL;
 VkQueue **m_vkqueue_p;
 
 void vk_initQueue()
@@ -10,6 +10,10 @@ void vk_initQueue()
 	m_max_queue_surface_p = malloc(sizeof(uint32_t) * m_physical_device);
 
 	m_queue_surface_p = malloc(sizeof(uint32_t*) * m_physical_device);
+	for (uint32_t d = 0; d < m_physical_device; ++d)
+	{
+		m_queue_surface_p[d] = malloc(0);
+	}
 	m_vkqueue_p = malloc(sizeof(VkQueue*) * m_physical_device);
 }
 
@@ -26,8 +30,6 @@ void vk_setQueue(uint32_t device)
 	nali_log("max_queue %d", m_max_queue_p[device])
 
 	m_max_queue_surface_p[device] = 0;
-
-	m_queue_surface_p[device] = malloc(0);
 
 	VkBool32 surface_support;
 	for (uint32_t i = 0; i < m_max_queue_p[device]; i++)

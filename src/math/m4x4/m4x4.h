@@ -3,8 +3,21 @@
 
 extern float m_m4x4_mat[16];
 
-void m4x4_inverse(float* m4x4_p);
-void m4x4_p(float fov, float aspect, float z_near, float z_far, float* m4x4_p);
+void m4x4_inverse(float *m4x4_p);
+
+// float z_range = z_near - z_far;
+// float tan_fov = tanf(fov);
+// m4x4_p[0] = 1.0F / (tan_fov * aspect);
+// m4x4_p[5] = 1.0F / tan_fov;
+// m4x4_p[10] = (-z_near - z_far) / z_range;
+// m4x4_p[11] = 1.0F;
+// m4x4_p[14] = 2.0F * z_far * z_near / z_range;
+#define M4X4_P(fov, aspect, z_near, z_far, m4x4_p) \
+	(m4x4_p)[0] = 1.0F / (fov * aspect); \
+	(m4x4_p)[5] = 1.0F / fov; \
+	(m4x4_p)[10] = -(z_far + z_near) / (z_far - z_near); \
+	(m4x4_p)[11] = -1.0F; \
+	(m4x4_p)[14] = -(2.0F * z_far * z_near) / (z_far - z_near);
 
 // struct M4x4
 // {

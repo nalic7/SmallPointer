@@ -110,8 +110,6 @@ void vk_init()
 		dginfo();
 	#endif
 
-	vk_makeSurface();
-
 	#ifdef NALI_VK_DEBUG
 		vk_makeDebug();
 	#endif
@@ -120,8 +118,9 @@ void vk_init()
 
 	vk_initQueue();
 	vk_initDevice();
-
 	vk_initCommandPool();
+
+	vk_makeSurface();
 
 	for (uint32_t d = 0; d < m_physical_device; ++d)
 	{

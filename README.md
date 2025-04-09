@@ -18,9 +18,9 @@
 
 	Extensions
 
-		clangd -> c
-		CMake Tools -> cmake
-		CodeLLDB -> debug
+		clangd / c
+		CMake Tools / cmake
+		CodeLLDB / debug
 2. Blender 3.x 4.x
 3. dev-util/android-studio-2024.3.1.14
 </span>
@@ -30,17 +30,29 @@
 
 >CMakeLists.txt
 
-	set(OS_NAME linux) // select build for
-	#...
+```c#
+#select build for
+set(OS_NAME linux)
+#...
 
-	set(DEBUG 1)
-	set(GEN 1) // build asset
-	set(CLIENT 1)
-	set(SERVER 1)
-	set(VK_DEBUG 1)
+set(DEBUG 1)
+#build asset
+set(GEN 1)
+set(CLIENT 1)
+set(SERVER 1)
+set(VK_DEBUG 1)
 
-	set(SCENE 1)
-	#...
+set(SCENE 1)
+#...
+```
+>src/pch.h
+
+```c
+//package path
+#ifdef NALI_OS_ANDROID
+	#define NALI_HOME "/.../com.nali.scene/"
+//...
+```
 </span>
 
 ### Collada Parser

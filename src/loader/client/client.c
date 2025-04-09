@@ -144,7 +144,7 @@ void lc_init()
 				m_nali_g_image_uint8_t_p = realloc(m_nali_g_image_uint8_t_p, sizeof(uint8_t *) * m_nali_g_max_image);
 				m_nali_g_image_wh_uint32_t_p = realloc(m_nali_g_image_wh_uint32_t_p, sizeof(uint32_t) * m_nali_g_max_image * 2);
 			}
-			name_index_size = name_index + math_length(index);
+			name_index_size = name_index + MATH_LENGTH(index);
 			image_file = realloc(image_file, name_index_size + sizeof(image_type)-1);
 			sprintf(image_file + name_index - 1, "%u", index);
 			image_file[name_index_size - 1] = '\0';
@@ -179,10 +179,10 @@ void lc_init()
 	free(image_file);
 	//e0-image
 
-	// float qv4_float_p[4];
-	// v4_q(0, MATH_D2R(35.0F), 0, qv4_float_p);
-	// v4_qm(qv4_float_p, nali_v_uniform_float_array + 16);
-	m4x4_p(90.0F, 16.0F / 9.0F, 0.1F, 100.0F, nali_v_uniform_float_array + 16 + 16);
+	float qv4_float_p[4];
+	v4_q(0, MATH_D2R(35.0F), 0, qv4_float_p);
+	v4_qm(qv4_float_p, nali_v_uniform_float_array + 16);
+	M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), 16.0F / 9.0F, 0.1F, 100.0F, nali_v_uniform_float_array + 16 + 16)
 	m_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
 }
 
@@ -281,7 +281,7 @@ void lc_initVK()
 		uint8_t mipmap = 1;
 		if (m_nali_g_image_state_uint8_t_p[u / (8/2)] & 1 << (u % (8/2)) * 2)
 		{
-			mipmap = math_mipmap(m_nali_g_image_wh_uint32_t_p[u2], m_nali_g_image_wh_uint32_t_p[u2_1]);
+			mipmap = MATH_MIPMAP(m_nali_g_image_wh_uint32_t_p[u2], m_nali_g_image_wh_uint32_t_p[u2_1]);
 			vkimageusageflagbits = VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 		}
 		line = m_nali_g_image_state_uint8_t_p[u / (8/2)] & 2 << (u % (8/2)) * 2;
