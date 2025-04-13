@@ -1,7 +1,7 @@
 #ifndef NALI_VK_FRAMEBUFFER_H
 #define NALI_VK_FRAMEBUFFER_H
 
-#define VK_MAKEFRAMEBUFFER(device, vkimageview_p, vkimageview_size, vkrenderpass, vkframebuffer_p) \
+#define VK_makeFramebuffer(device, vkimageview_p, vkimageview_size, vkrenderpass, vkframebuffer_p) \
 	nali_info \
 	( \
 		"vkCreateFramebuffer %d", \

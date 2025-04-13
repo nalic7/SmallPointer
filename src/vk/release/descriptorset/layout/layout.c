@@ -11,7 +11,7 @@ void vk_makeDescriptorSetLayout(uint32_t device, VkDescriptorSetLayoutBinding *v
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
 				.bindingCount = vkdescriptorsetlayoutbinding_size,
 				.pBindings = vkdescriptorsetlayoutbinding_p,
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			},

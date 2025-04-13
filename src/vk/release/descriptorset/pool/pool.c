@@ -12,7 +12,7 @@ void vk_makeDescriptorSetPool(uint32_t device, VkDescriptorPoolSize *vkdescripto
 				.poolSizeCount = vkdescriptorpoolsize_size,
 				.pPoolSizes = vkdescriptorpoolsize_p,
 				.maxSets = 1,
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			},

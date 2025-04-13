@@ -22,7 +22,7 @@ void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 						.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
 						.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
 						.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-			
+
 						.flags = 0
 					},
 					{
@@ -35,7 +35,7 @@ void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 						.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
 						.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
 						.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			
+
 						.flags = 0
 					},
 					{
@@ -48,7 +48,7 @@ void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 						.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
 						.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
 						.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-			
+
 						.flags = 0
 					},
 				},
@@ -62,7 +62,7 @@ void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 						.attachment = 0,
 						.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
 					},
-			
+
 					.inputAttachmentCount = 0,
 					.pInputAttachments = VK_NULL_HANDLE,
 					.pResolveAttachments = &(VkAttachmentReference)
@@ -79,7 +79,7 @@ void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 					.pPreserveAttachments = VK_NULL_HANDLE,
 					.flags = 0,
 				},
-		
+
 				.dependencyCount = 1,
 				.pDependencies = &(VkSubpassDependency)
 				{
@@ -91,7 +91,7 @@ void vk_makeRenderPass(uint32_t device, VkRenderPass *vkrenderpass_p)
 					.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
 					.dependencyFlags = 0
 				},
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			},

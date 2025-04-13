@@ -3,7 +3,7 @@
 
 >Linux / Android
 
-1. VSCodium
+1. app-editors/vscodium-1.99.12392
 
 	settings.json
 	```json

@@ -42,7 +42,7 @@ void vk_makeInstance()
 					.pEngineName = "vk",
 					.engineVersion = VK_MAKE_VERSION(1, 0, 0),
 					.apiVersion = NALI_VK_VERSION,
-			
+
 					.pNext = VK_NULL_HANDLE
 				},
 				.enabledExtensionCount = sizeof(ppEnabledExtensionNames) / sizeof(ppEnabledExtensionNames[0]),

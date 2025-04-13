@@ -50,7 +50,7 @@ if(SCENE)
 
   if(DEBUG)
     list(APPEND TCD NALI_DEBUG)
-    list(APPEND SOURCES src/debug/debug.c)
+    # list(APPEND SOURCES src/debug/debug.c)
   endif()
 
   if(GEN)
@@ -129,7 +129,7 @@ if(SCENE)
 
       file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
       list(APPEND SOURCES ${G_SOURCES})
-    
+
       file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
       list(APPEND SOURCES ${G_SOURCES})
 

@@ -83,7 +83,7 @@
 
 		#include <AL/al.h>
 		#include <AL/alc.h>
-	
+
 		#include "al/al.h"
 
 		#include "vk/release/vk/vk.h"

@@ -51,7 +51,7 @@ void vk_makeDevice(uint32_t device)
 				.pEnabledFeatures = &vkphysicaldevicefeatures,
 				.enabledExtensionCount = sizeof(deviceextensions) / sizeof(deviceextensions[0]),
 				.ppEnabledExtensionNames = deviceextensions,
-		
+
 				#ifdef NALI_VK_DEBUG
 					.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
 					.ppEnabledLayerNames = ppEnabledLayerNames,
@@ -59,7 +59,7 @@ void vk_makeDevice(uint32_t device)
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE,
 				#endif
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			},

@@ -6,7 +6,7 @@ void wlczwp_setPointer()
 
 		zwp_locked_pointer_v1_destroy(m_zwp_locked_pointer_v1_p);
 		m_zwp_locked_pointer_v1_p = NULL;
-	
+
 		zwp_relative_pointer_v1_destroy(m_zwp_relative_pointer_v1_p);
 		m_zwp_relative_pointer_v1_p = NULL;
 	}

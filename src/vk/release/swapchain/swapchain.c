@@ -69,19 +69,19 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 				.imageExtent = m_vkextent2d,
 				.imageArrayLayers = 1,
 				.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-		
+
 				.preTransform = vksurfacecapabilitieskhr.currentTransform,
 				.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
 				.presentMode = NALI_VK_PRESENT,
 				.clipped = VK_TRUE,
-		
+
 				.queueFamilyIndexCount = m_max_queue_surface_p[m_device],
 				.pQueueFamilyIndices = m_queue_surface_p[m_device],
-		
+
 				.oldSwapchain = VK_NULL_HANDLE,
-		
+
 				.imageSharingMode = vksharingmode,
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			},
@@ -104,50 +104,51 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 
 	vk_makeRenderPass(m_device, &m_vkrenderpass);
 
-	vk_makeImage
+	VK_makeImage
 	(
 		m_device,
 		NALI_VK_DEPTH_FORMAT,
-		(VkExtent3D)
+		((VkExtent3D)
 		{
 			.width = m_vkextent2d.width,
 			.height = m_vkextent2d.height,
 			.depth = 1
-		},
+		}),
 		1,
 		VK_IMAGE_TILING_OPTIMAL,
 		VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		NALI_VK_SAMPLE_C,
 		&vkimage_depth
-	);
-	vk_genImage(m_device, vkimage_depth, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_depth);
-	vk_makeImageView(m_device, vkimage_depth, NALI_VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &vkimageview_depth);
+	)
+	VkMemoryRequirements vkmemoryrequirements;
+	VK_genImage(m_device, vkimage_depth, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_depth, vkmemoryrequirements)
+	VK_makeImageView(m_device, vkimage_depth, NALI_VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &vkimageview_depth)
 
-	vk_makeImage
+	VK_makeImage
 	(
 		m_device,
 		NALI_VK_COLOR_FORMAT,
-		(VkExtent3D)
+		((VkExtent3D)
 		{
 			.width = m_vkextent2d.width,
 			.height = m_vkextent2d.height,
 			.depth = 1
-		},
+		}),
 		1,
 		VK_IMAGE_TILING_OPTIMAL,
 		VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		NALI_VK_SAMPLE_C,
 		&vkimage_color
-	);
-	vk_genImage(m_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color);
-	vk_makeImageView(m_device, vkimage_color, NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color);
+	)
+	VK_genImage(m_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color, vkmemoryrequirements)
+	VK_makeImageView(m_device, vkimage_color, NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color)
 
 	for (uint32_t i = 0; i < swapchain_image; ++i)
 	{
-		vk_makeImageView(m_device, m_vkswapchainkhr_vkimage_p[i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &m_vkswapchainkhr_vkimageview_p[i]);
-		VK_MAKEFRAMEBUFFER
+		VK_makeImageView(m_device, m_vkswapchainkhr_vkimage_p[i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &m_vkswapchainkhr_vkimageview_p[i])
+		VK_makeFramebuffer
 		(
 			m_device,
 			((VkImageView[])

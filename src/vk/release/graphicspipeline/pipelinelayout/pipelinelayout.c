@@ -12,10 +12,10 @@ void vk_makePipelineLayout(uint32_t device, VkDescriptorSetLayout *vkdescriptors
 
 				.setLayoutCount = vkdescriptorsetlayout_size,
 				.pSetLayouts = vkdescriptorsetlayout_p,
-		
+
 				.pushConstantRangeCount = 0,
 				.pPushConstantRanges = VK_NULL_HANDLE,
-		
+
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			},

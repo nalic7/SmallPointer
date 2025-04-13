@@ -208,10 +208,12 @@ void lc_initVK()
 
 	// VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT -> VkMemoryPropertyFlagBits
 	VkDeviceSize vkdevicesize = sizeof(nali_g_index_uint16_t_array);
+	VkMemoryRequirements vkmemoryrequirements;
 	// vk_makeBuffer(m_device, m_nali_g_index_vkdevicesize_p[0][0], 0, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
 	// vk_mapBuffer(m_device, m_nali_g_index_vkdevicesize_p[0][0], 0, (void *)nali_g_index_uint16_t_array, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
-	vk_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_index_vkbuffer_p[0], m_nali_g_index_vkdevicememory_p[0]);
-	vk_mapBuffer(m_device, vkdevicesize, (void *)nali_g_index_uint16_t_array, m_nali_g_index_vkdevicememory_p[0]);
+	VK_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_index_vkbuffer_p[0][0], m_nali_g_index_vkdevicememory_p[0][0], vkmemoryrequirements)
+	void *data_p;
+	VK_mapBuffer(m_device, vkdevicesize, (void *)nali_g_index_uint16_t_array, m_nali_g_index_vkdevicememory_p[0], data_p)
 	//e0-index
 
 	//s0-data
@@ -255,9 +257,9 @@ void lc_initVK()
 	// }
 	// // vk_makeBuffer(m_device, m_nali_g_data_vkdevicesize_p[0][0], 0, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
 	// // vk_mapBuffer(m_device, m_nali_g_data_vkdevicesize_p[0][0], 0, (void *)nali_g_data_float_array, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
-	vk_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_data_vkbuffer_p[0], m_nali_g_data_vkdevicememory_p[0]);
+	VK_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_data_vkbuffer_p[0][0], m_nali_g_data_vkdevicememory_p[0][0], vkmemoryrequirements)
 	// vk_mapBuffer(m_device, vkdevicesize, 0, (void *)nali_g_data_void_p, m_nali_g_data_vkdevicememory_p[0]);
-	vk_mapBuffer(m_device, vkdevicesize, (void *)nali_g_data_float_array, m_nali_g_data_vkdevicememory_p[0]);
+	VK_mapBuffer(m_device, vkdevicesize, (void *)nali_g_data_float_array, m_nali_g_data_vkdevicememory_p[0], data_p)
 	//e0-data
 
 	//s0-image
@@ -286,16 +288,16 @@ void lc_initVK()
 		}
 		line = m_nali_g_image_state_uint8_t_p[u / (8/2)] & 2 << (u % (8/2)) * 2;
 
-		vk_makeImage
+		VK_makeImage
 		(
 			m_device,
 			NALI_VK_COLOR_FORMAT,
-			(VkExtent3D)
+			((VkExtent3D)
 			{
 				.width = m_nali_g_image_wh_uint32_t_p[u2],
 				.height = m_nali_g_image_wh_uint32_t_p[u2_1],
 				.depth = 1
-			},
+			}),
 			mipmap,
 			line ? VK_IMAGE_TILING_LINEAR : VK_IMAGE_TILING_OPTIMAL,
 			//sampler
@@ -305,16 +307,16 @@ void lc_initVK()
 			VK_IMAGE_LAYOUT_UNDEFINED,
 			VK_SAMPLE_COUNT_1_BIT,
 			&m_nali_g_image_vkimage_p[u]
-		);
-		vk_genImage(m_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u]);
+		)
+		VK_genImage(m_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
 		vkdevicesize = m_nali_g_image_wh_uint32_t_p[u2] * m_nali_g_image_wh_uint32_t_p[u2_1] * NALI_VK_COLOR_FORMAT_BYTE;
 		// vk_mapBuffer(m_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
 
-		vk_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkbuffer_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u]);
-		vk_mapBuffer(m_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u]);
+		VK_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
+		VK_mapBuffer(m_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
 
-		vk_makeImageView(m_device, m_nali_g_image_vkimage_p[u], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u]);
-		vk_makeSampler(m_device, mipmap, line, &m_nali_g_image_vksampler_p[u]);
+		VK_makeImageView(m_device, m_nali_g_image_vkimage_p[u], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
+		VK_makeSampler(m_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
 
 		// info("&m_nali_g_image_vkbuffer_p[0] %p", &m_nali_g_image_vkbuffer_p[0]);
 		// info("&m_nali_g_image_vkbuffer_vkdevicememory_p[0] %p", &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
@@ -326,8 +328,8 @@ void lc_initVK()
 	m_nali_g_ubo_vkdevicememory_p = malloc(sizeof(VkDeviceMemory) * 1);
 
 	vkdevicesize = sizeof(nali_v_uniform_float_array);
-	vk_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_ubo_vkbuffer_p[0], &m_nali_g_ubo_vkdevicememory_p[0]);
-	vk_mapBuffer(m_device, vkdevicesize, (void *)nali_v_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0]);
+	VK_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_ubo_vkbuffer_p[0], m_nali_g_ubo_vkdevicememory_p[0], vkmemoryrequirements)
+	VK_mapBuffer(m_device, vkdevicesize, (void *)nali_v_uniform_float_array, &m_nali_g_ubo_vkdevicememory_p[0], data_p)
 	//e0-ubo
 
 	vk_initCmdDraw();
@@ -345,7 +347,7 @@ void lc_clearVK(uint32_t device)
 	{
 		vkDestroyBuffer(vkdevice, *m_nali_g_index_vkbuffer_p[i], VK_NULL_HANDLE);
 		vkFreeMemory(vkdevice, *m_nali_g_index_vkdevicememory_p[i], VK_NULL_HANDLE);
-	
+
 		vkDestroyBuffer(vkdevice, *m_nali_g_data_vkbuffer_p[i], VK_NULL_HANDLE);
 		vkFreeMemory(vkdevice, *m_nali_g_data_vkdevicememory_p[i], VK_NULL_HANDLE);
 

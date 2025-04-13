@@ -166,7 +166,7 @@ void vk_initCmdDraw()
 	//e0-ubo
 
 	//s0-draw
-	vk_makeFence(m_device, &vkfence);
+	VK_makeFence(m_device, &vkfence)
 
 	for (uint8_t i = 0; i < 2; ++i)
 	{
@@ -253,9 +253,14 @@ int vk_cmdDraw(void *arg)
 
 				vkCmdBindPipeline(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
 
+				//s0-VkDynamicState
+				// if (update)
+				// {
 				vkCmdSetViewport(vkcommandbuffer, 0, 1, &vkviewport);
-
 				vkCmdSetScissor(vkcommandbuffer, 0, 1, &vkrect2d);
+				// 	update = 0;
+				// }
+				//e0-VkDynamicState
 
 				mtx_lock(m_mtx_t_draw_p);
 				for (uint16_t u = 0; u < 1; ++u)

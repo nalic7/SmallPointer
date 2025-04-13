@@ -62,7 +62,7 @@ static void vkinfo(uint32_t device)
 	nali_log("Name %s", vkphysicaldeviceproperties.deviceName)
 	nali_log
 	(
-		"Vulkan MAJOR MINOR PATCH %d.%d.%d", 
+		"Vulkan MAJOR MINOR PATCH %d.%d.%d",
 		VK_VERSION_MAJOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
@@ -120,7 +120,7 @@ void vk_init()
 	vk_initDevice();
 	vk_initCommandPool();
 
-	vk_makeSurface();
+	VK_makeSurface
 
 	for (uint32_t d = 0; d < m_physical_device; ++d)
 	{
@@ -161,6 +161,6 @@ void vk_clean()
 		vk_freeDebug();
 	#endif
 
-	vk_freeSurface();
+	VK_freeSurface
 	vk_freeInstance();
 }
