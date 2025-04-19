@@ -1,6 +1,0 @@
-#ifndef NALI_VK_GRAPHICSPIPELINE_MULTISAMPLESTATECREATEINFO_H
-#define NALI_VK_GRAPHICSPIPELINE_MULTISAMPLESTATECREATEINFO_H
-
-void vk_setPipelineMultisampleStateCreateInfo(VkPipelineMultisampleStateCreateInfo *vkpipelinemultisamplestatecreateinfo_p);
-
-#endif

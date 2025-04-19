@@ -12,7 +12,7 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 		vkCreateImage \
 		( \
 			m_vkdevice_p[device], \
-			(&(VkImageCreateInfo) \
+			&(VkImageCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, \
 				.imageType = VK_IMAGE_TYPE_2D, \
@@ -29,7 +29,7 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 				.pQueueFamilyIndices = VK_NULL_HANDLE, \
 				.flags = 0, \
 				.pNext = VK_NULL_HANDLE \
-			}), \
+			}, \
 			VK_NULL_HANDLE, \
 			vkimage_p \
 		) \
@@ -44,13 +44,13 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 		vkAllocateMemory \
 		( \
 			m_vkdevice_p[device], \
-			(&(VkMemoryAllocateInfo) \
+			&(VkMemoryAllocateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, \
 				.allocationSize = vkmemoryrequirements.size, \
 				.memoryTypeIndex = vk_findMemoryType(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags), \
 				.pNext = VK_NULL_HANDLE \
-			}), \
+			}, \
 			VK_NULL_HANDLE, \
 			vkdevicememory_p \
 		) \

@@ -16,13 +16,13 @@ extern VkSurfaceKHR m_vksurfacekhr;
 			vkCreateAndroidSurfaceKHR \
 			( \
 				m_vkinstance, \
-				(&(VkAndroidSurfaceCreateInfoKHR) \
+				&(VkAndroidSurfaceCreateInfoKHR) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR, \
 					.window = m_anativewindow_p, \
 					.flags = 0, \
 					.pNext = VK_NULL_HANDLE \
-				}), \
+				}, \
 				VK_NULL_HANDLE, \
 				&m_vksurfacekhr \
 			) \
@@ -35,14 +35,14 @@ extern VkSurfaceKHR m_vksurfacekhr;
 			vkCreateWaylandSurfaceKHR \
 			( \
 				m_vkinstance, \
-				(&(VkWaylandSurfaceCreateInfoKHR) \
+				&(VkWaylandSurfaceCreateInfoKHR) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR, \
 					.display = m_wl_display_client_p, \
 					.surface = m_wl_surface_p, \
 					.flags = 0, \
 					.pNext = VK_NULL_HANDLE \
-				}), \
+				}, \
 				VK_NULL_HANDLE, \
 				&m_vksurfacekhr \
 			) \

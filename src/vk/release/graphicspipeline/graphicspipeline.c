@@ -1,25 +1,17 @@
 void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
 {
-	VkDevice vkdevice = m_vkdevice_p[device];
-
 	VkVertexInputBindingDescription vkvertexinputbindingdescription_array;
 	VkVertexInputAttributeDescription vkvertexinputattributedescription_array[2];
 	lc_setVkVertexInputBindingDescription(&vkvertexinputbindingdescription_array);
 	lc_setVkVertexInputAttributeDescription(vkvertexinputattributedescription_array);
-	VkPipelineVertexInputStateCreateInfo vkpipelinevertexinputstatecreateinfo;
-	vk_setPipelineVertexInputStateCreateInfo(&vkvertexinputbindingdescription_array, vkvertexinputattributedescription_array, 2, &vkpipelinevertexinputstatecreateinfo);
+	VK_setPipelineVertexInputStateCreateInfo(&vkvertexinputbindingdescription_array, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
 
-	VkPipelineInputAssemblyStateCreateInfo vkpipelineinputassemblystatecreateinfo;
-	vk_setPipelineInputAssemblyStateCreateInfo(&vkpipelineinputassemblystatecreateinfo);
+	VK_setPipelineInputAssemblyStateCreateInfo(vkpipelineinputassemblystatecreateinfo)
 
-	VkPipelineViewportStateCreateInfo vkpipelineviewportstatecreateinfo;
-	vk_setPipelineViewportStateCreateInfo(device, &vkpipelineviewportstatecreateinfo);
+	VK_setPipelineViewportStateCreateInfo(vkpipelineviewportstatecreateinfo)
 
-	VkPipelineRasterizationStateCreateInfo vkpipelinerasterizationstatecreateinfo;
-	vk_setPipelineRasterizationStateCreateInfo(&vkpipelinerasterizationstatecreateinfo);
-
-	VkPipelineMultisampleStateCreateInfo vkpipelinemultisamplestatecreateinfo;
-	vk_setPipelineMultisampleStateCreateInfo(&vkpipelinemultisamplestatecreateinfo);
+	VK_setPipelineRasterizationStateCreateInfo(vkpipelinerasterizationstatecreateinfo)
+	VK_setPipelineMultisampleStateCreateInfo(vkpipelinemultisamplestatecreateinfo)
 
 	VK_setVkPipelineColorBlendAttachmentState(vkpipelinecolorblendattachmentstate)
 	VK_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
@@ -27,15 +19,14 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *v
 	VK_setVkDynamicState(vkdynamicstate_array)
 	VK_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
 
-	VkPipelineDepthStencilStateCreateInfo vkpipelinedepthstencilstatecreateinfo;
-	vk_setPipelineDepthStencilStateCreateInfo(&vkpipelinedepthstencilstatecreateinfo);
+	VK_setPipelineDepthStencilStateCreateInfo(vkpipelinedepthstencilstatecreateinfo)
 
 	nali_info
 	(
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines
 		(
-			vkdevice,
+			m_vkdevice_p[device],
 			VK_NULL_HANDLE,
 			1,
 			&(VkGraphicsPipelineCreateInfo)

@@ -1,6 +1,0 @@
-#ifndef NALI_VK_GRAPHICSPIPELINE_DEPTHSTENCILSTATECREATEINFO_H
-#define NALI_VK_GRAPHICSPIPELINE_DEPTHSTENCILSTATECREATEINFO_H
-
-void vk_setPipelineDepthStencilStateCreateInfo(VkPipelineDepthStencilStateCreateInfo *vkpipelinedepthstencilstatecreateinfo_p);
-
-#endif

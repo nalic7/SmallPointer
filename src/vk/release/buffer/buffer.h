@@ -11,7 +11,7 @@ uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropert
 		vkCreateBuffer \
 		( \
 			m_vkdevice_p[device], \
-			&((VkBufferCreateInfo) \
+			&(VkBufferCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, \
 				.size = vkdevicesize, \
@@ -21,7 +21,7 @@ uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropert
 				.pQueueFamilyIndices = VK_NULL_HANDLE, \
 				.flags = 0, \
 				.pNext = VK_NULL_HANDLE \
-			}), \
+			}, \
 			VK_NULL_HANDLE, \
 			&vkbuffer \
 		) \
@@ -33,13 +33,13 @@ uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropert
 		vkAllocateMemory \
 		( \
 			m_vkdevice_p[device], \
-			&((VkMemoryAllocateInfo) \
+			&(VkMemoryAllocateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, \
 				.memoryTypeIndex = vk_findMemoryType(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags), \
 				.allocationSize = vkmemoryrequirements.size, \
 				.pNext = VK_NULL_HANDLE \
-			}), \
+			}, \
 			VK_NULL_HANDLE, \
 			&vkdevicememory \
 		) \

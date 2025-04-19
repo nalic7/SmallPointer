@@ -25,6 +25,16 @@ void scene_init()
 #else
 int main()
 {
+	// {
+	// 	cgltf_options *cgltf_options_p = &(cgltf_options){};
+	// 	cgltf_data *cgltf_data_p = NULL;
+	// 	const char *path_p = NALI_HOME "test.gltf";
+	// 	nali_info("cgltf_parse_file %d", cgltf_parse_file(cgltf_options_p, path_p, &cgltf_data_p))
+	// 	nali_info("cgltf_load_buffers %d", cgltf_load_buffers(cgltf_options_p, cgltf_data_p, path_p))
+	// 	nali_info("cgltf_validate %d", cgltf_validate(cgltf_data_p))
+	// 	cgltf_free(cgltf_data_p);
+	// }
+
 	// fp_read(NALI_HOME NALI_HOME_IMAGE "/0.png", &(long){});
 	// #ifdef NALI_DEBUG
 	// 	debug_init();

@@ -56,6 +56,8 @@ if(SCENE)
   if(GEN)
     list(APPEND TCD NALI_GEN)
     list(APPEND SOURCES src/gen/gen.c)
+
+    list(APPEND TID ../cgltf)
   endif()
 
   if(CLIENT)

@@ -9,7 +9,7 @@
 		vkCreateImageView \
 		( \
 			m_vkdevice_p[device], \
-			(&(VkImageViewCreateInfo) \
+			&(VkImageViewCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, \
 				.image = vkimage, \
@@ -26,7 +26,7 @@
 				.components.a = VK_COMPONENT_SWIZZLE_IDENTITY, \
 				.flags = 0, \
 				.pNext = VK_NULL_HANDLE \
-			}), \
+			}, \
 			VK_NULL_HANDLE, \
 			vkimageview_p \
 		) \

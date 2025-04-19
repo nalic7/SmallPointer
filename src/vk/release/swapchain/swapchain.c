@@ -102,7 +102,7 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 
 	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, m_vkswapchainkhr, &swapchain_image, m_vkswapchainkhr_vkimage_p))
 
-	vk_makeRenderPass(m_device, &m_vkrenderpass);
+	VK_makeRenderPass(m_device, &m_vkrenderpass)
 
 	VK_makeImage
 	(
