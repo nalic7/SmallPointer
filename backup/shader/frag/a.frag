@@ -7,8 +7,8 @@ layout(location = 0) in vec2 f_t;
 //line
 layout(set = 0, binding = 1) uniform sampler2D ubo_s;
 //near
-layout(set = 0, binding = 1, rgba8) uniform readonly image2D ubo_i;
-/*layout(set = 0, binding = 2) uniform UBO
+/*layout(set = 0, binding = 1, rgba8) uniform readonly image2D ubo_i;
+layout(set = 0, binding = 2) uniform UBO
 {
 	vec2 wh;
 } ubo;*/

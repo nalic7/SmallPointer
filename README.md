@@ -3,7 +3,7 @@
 
 >Linux / Android
 
-1. app-editors/vscodium-1.99.12392
+1. app-editors/vscodium-1.99.32846
 
 	settings.json
 	```json
@@ -36,7 +36,7 @@ glslc
 
 >Build Library
 ```bash
-# /SmallRender
+# /SmallPointer
 
 #wayland (Linux only)
 mkdir lib
@@ -104,7 +104,7 @@ set(SCENE 1)
 ```
 </span>
 
-### Collada Parser
+<!-- ### Collada Parser
 <span style="font-size: large;">
 
 >CMakeLists.txt
@@ -125,16 +125,13 @@ set(SCENE 1)
 	[/] Export to SL/OpenSim
 	Anim
 	[/] All Keyed Curves
-<!-- Anim -->
-<!-- 	Key Type [Curves] -->
-<!-- 	Transform [Decomposed] -->
 >Run
 1. \>CMake: Debug / create ```C_I``` in ```build```
 2. Put ```model.dae``` to ```C_I```
 3. \>CMake: Debug
 4. Get Raw Data in ```C_O``` without error
 
-</span>
+</span> -->
 
 <!-- ### LWJGL64
 <span style="font-size: large;">

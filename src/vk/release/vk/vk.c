@@ -67,6 +67,15 @@ static void vkinfo(uint32_t device)
 		VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 		VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
 	)
+	nali_log("maxUniformBufferRange %d", vkphysicaldeviceproperties.limits.maxUniformBufferRange)
+	nali_log("maxPerStageDescriptorUniformBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorUniformBuffers)
+	nali_log("maxDescriptorSetUniformBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetUniformBuffers)
+	nali_log("maxStorageBufferRange %d", vkphysicaldeviceproperties.limits.maxStorageBufferRange)
+	nali_log("maxPerStageDescriptorStorageBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorStorageBuffers)
+	nali_log("maxDescriptorSetStorageBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetStorageBuffers)
+
+	nali_log("maxPerStageResources %d", vkphysicaldeviceproperties.limits.maxPerStageResources)
+
 	nali_log("maxSamplerAnisotropy %f", vkphysicaldeviceproperties.limits.maxSamplerAnisotropy)
 
 	//VkSampleCountFlagBits

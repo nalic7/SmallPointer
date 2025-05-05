@@ -1,79 +1,26 @@
 #ifndef NALI_LOADER_CLIENT_H
 #define NALI_LOADER_CLIENT_H
 
-// typedef struct
-// {
-// 	//1-4
-// 	uint8_t *i_p;
-// 	uint32_t *i_size_p;
-// 	uint8_t *i_byte_p;
+#define NALI_MAX_BONE 40
+#define NALI_MAX_JOINT 20
+#define NALI_MAX_RGBA 8
 
-// 	//3
-// 	uint8_t *v_p;
-// 	uint32_t *v_size_p;
+#define NALI_LC_V0 sizeof(float) * 16
+#define NALI_LC_V1 sizeof(float) * (4 + 3 + 3) * NALI_MAX_JOINT + sizeof(uint32_t) * (1 + 1) * NALI_MAX_JOINT + sizeof(uint32_t) * NALI_MAX_BONE
+#define NALI_LC_V2 sizeof(float) * 3 * NALI_MAX_JOINT
+#define NALI_LC_V3 sizeof(float) * 4 * NALI_MAX_JOINT
+#define NALI_LC_V4 sizeof(float) * 3 * NALI_MAX_JOINT
+#define NALI_LC_V5 sizeof(float) * 4 * NALI_MAX_RGBA
 
-// 	//4
-// 	uint8_t *c_p;
-// 	uint32_t *c_size_p;
+#define NALI_LC_V NALI_LC_V0 + NALI_LC_V1 + NALI_LC_V2 + NALI_LC_V3 + NALI_LC_V4 + NALI_LC_V5
 
-// 	//2
-// 	uint8_t *t_p;
-// 	uint32_t *t_size_p;
-
-// 	//3
-// 	uint8_t *n_p;
-// 	uint32_t *n_size_p;
-
-// 	//1
-// 	uint8_t *j_p;
-// 	uint32_t *j_size_p;
-
-// 	//4
-// 	uint8_t *w_p;
-// 	uint32_t *w_size_p;
-// } nali_model;
-
-// typedef struct
-// {
-// 	//2
-// 	uint8_t *s_p;
-// 	uint32_t *s_size_p;
-// } nali_sound;
-
-// typedef struct
-// {
-// 	uint32_t *width, *height;
-// 	uint8_t
-// 		*p_p,
-// 		*state_p;//mipmap
-
-// 	//width * height
-// 	// uint32_t *p_size_p;
-// } nali_texture;
-
-extern VkBuffer **m_nali_g_index_vkbuffer_p;
-extern VkBuffer **m_nali_g_data_vkbuffer_p;
-
-extern uint16_t m_nali_g_max_image;
-extern uint8_t *m_nali_g_image_state_uint8_t_p;
-
-extern uint32_t *m_nali_g_image_wh_uint32_t_p;
-extern VkImage *m_nali_g_image_vkimage_p;
-
-extern uint8_t **m_nali_g_image_uint8_t_p;
-extern VkBuffer *m_nali_g_image_vkbuffer_p;
-extern VkDeviceMemory *m_nali_g_image_vkbuffer_vkdevicememory_p;
+extern VkBuffer m_vkbuffer;
+extern VkDeviceMemory m_vkdevicememory;
+extern void *m_vkbuffer_p;
 
 void lc_init();
 
 void lc_initVK();
 void lc_clearVK(uint32_t device);
-
-void lc_setVkVertexInputBindingDescription(VkVertexInputBindingDescription *vkvertexinputbindingdescription_p);
-void lc_setVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *vkvertexinputattributedescription_p);
-
-void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p);
-void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p);
-void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p);
 
 #endif

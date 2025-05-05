@@ -23,34 +23,28 @@ void scene_init()
 	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
 }
 #else
+
 int main()
 {
-	// {
-	// 	cgltf_options *cgltf_options_p = &(cgltf_options){};
-	// 	cgltf_data *cgltf_data_p = NULL;
-	// 	const char *path_p = NALI_HOME "test.gltf";
-	// 	nali_info("cgltf_parse_file %d", cgltf_parse_file(cgltf_options_p, path_p, &cgltf_data_p))
-	// 	nali_info("cgltf_load_buffers %d", cgltf_load_buffers(cgltf_options_p, cgltf_data_p, path_p))
-	// 	nali_info("cgltf_validate %d", cgltf_validate(cgltf_data_p))
-	// 	cgltf_free(cgltf_data_p);
-	// }
-
 	// fp_read(NALI_HOME NALI_HOME_IMAGE "/0.png", &(long){});
 	// #ifdef NALI_DEBUG
 	// 	debug_init();
 	// #endif
 
-	#if NALI_SERVER
-		nws_init();
+	#ifdef NALI_GEN
+		gen_file();
 	#endif
+	// #if NALI_SERVER
+	// 	nws_init();
+	// #endif
 	#ifdef NALI_CLIENT
 		lc_init();
-		wlc_init();
-		vk_init();
-		al_init();
-		lc_initVK();
-		nwc_init();
-		m_pointer_id = 0;
+		// wlc_init();
+		// vk_init();
+		// al_init();
+		// lc_initVK();
+		// nwc_init();
+		// m_pointer_id = 0;
 	#endif
 
 	#if NALI_SERVER || NALI_CLIENT

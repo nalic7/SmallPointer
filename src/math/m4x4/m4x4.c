@@ -6,7 +6,7 @@ float m_m4x4_mat[] =
 	0.0F, 0.0F, 0.0F, 1.0F
 };
 
-void m4x4_inverse(float *m4x4_p)
+void m4x4_i(float *m4x4_p)
 {
 	float identity[] =
 	{
@@ -118,4 +118,19 @@ void m4x4_inverse(float *m4x4_p)
 	}
 
 	memcpy(m4x4_p, s, sizeof(float) * 16);
+}
+
+void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p)
+{
+	float float_array[16];
+
+	for (uint8_t i = 0; i < 4; i++)
+	{
+		for (uint8_t j = 0; j < 4; j++)
+		{
+			float_array[i * 4 + j] = r_m4x4_float_p[i * 4] * w_m4x4_float_p[j] + r_m4x4_float_p[i * 4 + 1] * w_m4x4_float_p[4 + j] + r_m4x4_float_p[i * 4 + 2] * w_m4x4_float_p[8 + j] + r_m4x4_float_p[i * 4 + 3] * w_m4x4_float_p[12 + j];
+		}
+	}
+
+	memcpy(w_m4x4_float_p, r_m4x4_float_p, 16 * sizeof(float));
 }

@@ -3,7 +3,8 @@
 
 extern float m_m4x4_mat[16];
 
-void m4x4_inverse(float *m4x4_p);
+void m4x4_i(float *m4x4_p);
+void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p);
 
 // float z_range = z_near - z_far;
 // float tan_fov = tanf(fov);
@@ -18,7 +19,6 @@ void m4x4_inverse(float *m4x4_p);
 	(m4x4_p)[10] = -(z_far + z_near) / (z_far - z_near); \
 	(m4x4_p)[11] = -1.0F; \
 	(m4x4_p)[14] = -(2.0F * z_far * z_near) / (z_far - z_near);
-
 // struct M4x4
 // {
 //	 float mat[16];

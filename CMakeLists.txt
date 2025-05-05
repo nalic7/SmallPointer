@@ -18,14 +18,14 @@ set(SCENE 1)
 
 if (SCENE)
   set(P_NAME scene)
-elseif(COLLADA)
-  set(P_NAME collada)
-elseif(LWJGL64)
-  set(P_NAME lwjgl64)
-elseif(NALIGL)
-  set(P_NAME NaliGL)
-elseif(NALIAL)
-  set(P_NAME NaliAL)
+# elseif(COLLADA)
+#   set(P_NAME collada)
+# elseif(LWJGL64)
+#   set(P_NAME lwjgl64)
+# elseif(NALIGL)
+#   set(P_NAME NaliGL)
+# elseif(NALIAL)
+#   set(P_NAME NaliAL)
 endif()
 
 project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
@@ -55,7 +55,8 @@ if(SCENE)
 
   if(GEN)
     list(APPEND TCD NALI_GEN)
-    list(APPEND SOURCES src/gen/gen.c)
+    file(GLOB_RECURSE G_SOURCES src/gen/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
 
     list(APPEND TID ../cgltf)
   endif()
@@ -73,7 +74,9 @@ if(SCENE)
 
     list(APPEND SOURCES src/surface/surface.c)
 
-    list(APPEND SOURCES src/loader/client/client.c)
+    file(GLOB_RECURSE G_SOURCES src/loader/client/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+
     list(APPEND SOURCES src/network/linux/client/nw_client.c)
 
     list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
@@ -146,21 +149,21 @@ if(SCENE)
   endif()
   target_link_libraries(${P_NAME} ${TLL})
   target_compile_definitions(${P_NAME} PRIVATE ${TCD})
-elseif(COLLADA)
-  add_executable(${P_NAME}
-    src/math/math.c
-    src/math/m4x4/m4x4.c
-    src/collada/collada.c
-    src/collada/graphic_reader/graphic_reader.c
-    src/collada/file_reader/file_reader.c
-    src/collada/file_writer/file_writer.c
-  )
+# elseif(COLLADA)
+#   add_executable(${P_NAME}
+#     src/math/math.c
+#     src/math/m4x4/m4x4.c
+#     src/collada/collada.c
+#     src/collada/graphic_reader/graphic_reader.c
+#     src/collada/file_reader/file_reader.c
+#     src/collada/file_writer/file_writer.c
+#   )
 
-  target_link_libraries(${P_NAME}
-    m
-  )
+#   target_link_libraries(${P_NAME}
+#     m
+#   )
 
-  target_compile_definitions(${P_NAME} PRIVATE PCH_COLLADA)
+#   target_compile_definitions(${P_NAME} PRIVATE PCH_COLLADA)
 # elseif(LWJGL64)
 #   set(JAVA_HOME lib/jdk8u412-b08/)
 
