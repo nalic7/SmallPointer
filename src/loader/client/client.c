@@ -1,6 +1,7 @@
 VkBuffer m_vkbuffer;
 VkDeviceMemory m_vkdevicememory;
 void *m_vkbuffer_p;
+VkDeviceSize m_vkdevicesize;
 
 void lc_init()
 {
@@ -15,10 +16,9 @@ void lc_initVK()
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 
-	VkDeviceSize vkdevicesize = NALI_LC_V;
 	VkMemoryRequirements vkmemoryrequirements;
-	VK_makeBuffer(m_device, vkdevicesize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_vkbuffer, m_vkdevicememory, vkmemoryrequirements)
-	nali_info("vkMapMemory %d", vkMapMemory(m_vkdevice_p[m_device], m_vkdevicememory, 0, vkdevicesize, 0, &m_vkbuffer_p))
+	VK_makeBuffer(m_device, m_vkdevicesize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_vkbuffer, m_vkdevicememory, vkmemoryrequirements)
+	nali_info("vkMapMemory %d", vkMapMemory(m_vkdevice_p[m_device], m_vkdevicememory, 0, m_vkdevicesize, 0, &m_vkbuffer_p))
 	lcm_vk();
 
 	vk_initCmdDraw();

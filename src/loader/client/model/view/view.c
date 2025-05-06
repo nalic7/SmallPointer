@@ -40,5 +40,5 @@ void lcmv_init()
 
 void lcmv_vk()
 {
-	memcpy(m_vkbuffer_p, vp_float_array + 16 * 2, NALI_LC_V0);
+	memcpy(m_vkbuffer_p, vp_float_array + 16 * 2, NALI_LC_MVP_SIZE);
 }

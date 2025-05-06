@@ -22,9 +22,9 @@ layout(std430, set = 0, binding = 1) readonly buffer SSBOB
 	uint ssbob_b[NALI_BONE_SIZE];
 	uint ssbob_be[NALI_JOINT_SIZE];
 
+	vec3 ssbob_s[NALI_JOINT_SIZE];
 	vec4 ssbob_r[NALI_JOINT_SIZE];
 	vec3 ssbob_t[NALI_JOINT_SIZE];
-	vec3 ssbob_s[NALI_JOINT_SIZE];
 };
 
 layout(std430, set = 0, binding = 2) readonly buffer SSBOAS
