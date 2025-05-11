@@ -34,17 +34,17 @@ int main()
 	#ifdef NALI_GEN
 		gen_file();
 	#endif
-	// #if NALI_SERVER
-	// 	nws_init();
-	// #endif
 	#ifdef NALI_CLIENT
 		lc_init();
-		// wlc_init();
-		// vk_init();
-		// al_init();
-		// lc_initVK();
+		wlc_init();
+		vk_init();
+		al_init();
+		lc_vk();
 		// nwc_init();
-		// m_pointer_id = 0;
+		m_pointer_id = 0;
+	#endif
+	#if NALI_SERVER
+		// nws_init();
 	#endif
 
 	#if NALI_SERVER || NALI_CLIENT
@@ -70,7 +70,6 @@ int main()
 			}
 			#endif
 			#if NALI_SERVER
-
 				#ifdef NALI_CLIENT
 			else if
 				#else

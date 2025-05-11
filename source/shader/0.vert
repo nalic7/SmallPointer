@@ -4,6 +4,7 @@
 #define NALI_JOINT_SIZE 20
 
 layout(location = 0) in vec3 a_v;
+//use j1w1c1t1 t1->uv1 4+4 bit 15|15 1 c1->t1
 #ifdef NALI_TEXTURE
 	layout(location = 1) in float a_t;
 	layout(location = 2) in uint a_j1w1;

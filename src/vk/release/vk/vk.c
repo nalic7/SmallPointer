@@ -156,7 +156,7 @@ void vk_init()
 
 void vk_clean()
 {
-	lc_clearVK(m_device);
+	lc_freeVk(m_device);
 
 	vk_freeCommandPool();
 

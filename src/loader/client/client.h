@@ -23,7 +23,7 @@ extern VkDeviceSize m_vkdevicesize;
 
 void lc_init();
 
-void lc_initVK();
-void lc_clearVK(uint32_t device);
+void lc_vk();
+void lc_freeVk(uint32_t device);
 
 #endif

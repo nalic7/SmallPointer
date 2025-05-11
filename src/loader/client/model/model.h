@@ -3,10 +3,14 @@
 
 extern uint32_t
 	*m_ji_p,
-	*m_ai_p,
+	*m_ai_index_count_p,
 	
 	m_max_joint,
 	m_rgba_size;
+
+extern VkDeviceSize *m_ai_vkdevicesize_p;
+
+extern uint8_t m_joint_count_size;
 
 void lcm_init();
 void lcm_vk();

@@ -18,7 +18,7 @@ const char* file_array[] =
 	memcpy(w_p + size, r_p, byte); \
 	size += byte;
 
-// static uint8_t max_joint_size = 0;
+static uint8_t max_joint_size = 0;
 
 static uint32_t bone_size = 0;
 
@@ -219,10 +219,10 @@ static void gen_model()
 					}
 				}
 
-				// if (max_joint_size < cgltf_node_joints_p->children_count)
-				// {
-				// 	max_joint_size = cgltf_node_joints_p->children_count;
-				// }
+				if (max_joint_size < cgltf_node_joints_p->children_count)
+				{
+					max_joint_size = cgltf_node_joints_p->children_count;
+				}
 				joint_size += cgltf_node_joints_p->children_count;
 			}
 
@@ -388,8 +388,30 @@ static void gen_model()
 	}
 
 	nali_info("material_size %d", material_size)
-	// nali_info("max_joint_size %d", max_joint_size)
+	nali_info("max_joint_size %d", max_joint_size)
 	nali_info("bone_size %d", bone_size)
+
+	uint32_t l_step = 0;
+	for (uint8_t l_0 = 0; l_0 < joint_count_size; ++l_0)
+	{
+		nali_info("start %d", l_step)
+
+		uint8_t l_joint_size = joint_count_p[l_0];
+		nali_info("%d joint %d", l_0, l_joint_size)
+
+		for (uint8_t l_1 = 0; l_1 < l_joint_size; ++l_1)
+		{
+			uint8_t l_size = joint_p[l_step];
+			l_step += l_size;
+		}
+
+		nali_info("end %d", l_step)
+
+		if (l_joint_size == max_joint_size)
+		{
+			break;
+		}
+	}
 
 	FILE *file = fopen(NALI_HOME "asset.bin", "ab");
 	nali_log("fopen %p", file)

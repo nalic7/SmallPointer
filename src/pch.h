@@ -131,6 +131,7 @@
 		#include "loader/client/client.h"
 		#include "loader/client/model/model.h"
 		#include "loader/client/model/view/view.h"
+		#include "loader/client/shader/shader.h"
 		#include "network/linux/client/nw_client.h"
 	#endif
 

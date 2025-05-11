@@ -21,7 +21,7 @@
 		clangd / c
 		CMake Tools / cmake
 		CodeLLDB / debug
-2. dev-util/android-studio-2024.3.1.14
+2. dev-util/android-studio-2024.3.1.15
 3. blender 4.4.0
 </span>
 

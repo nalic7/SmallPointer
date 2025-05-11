@@ -1,6 +1,7 @@
 uint32_t
 	*m_ji_p,
-	*m_ai_p;
+	*m_ai_index_count_p;
+VkDeviceSize *m_ai_vkdevicesize_p;
 
 typedef struct
 {
@@ -30,8 +31,8 @@ static srt_bone *srt_bone_p;
 
 uint32_t m_max_joint = 0;
 static uint8_t
-	*joint_count_p,
-	joint_count_size;
+	*joint_count_p;
+uint8_t m_joint_count_size;
 
 //8->32
 static uint8_t
@@ -53,22 +54,22 @@ void lcm_init()
 	long data_size;
 	void *data_p = f_read(NALI_HOME "asset.bin", &data_size);
 
-	joint_count_size = *(uint8_t *)data_p;
+	m_joint_count_size = *(uint8_t *)data_p;
 	step += sizeof(uint8_t);
 
-	m_ji_p = malloc(sizeof(uint32_t) * joint_count_size);
+	m_ji_p = malloc(sizeof(uint32_t) * m_joint_count_size);
 
-	bs_p = malloc(sizeof(uint8_t *) * joint_count_size);
-	be_p = malloc(sizeof(uint8_t *) * joint_count_size);
+	bs_p = malloc(sizeof(uint8_t *) * m_joint_count_size);
+	be_p = malloc(sizeof(uint8_t *) * m_joint_count_size);
 
-	joint_count_p = malloc(joint_count_size);
-	memcpy(joint_count_p, data_p + step, joint_count_size);
-	step += joint_count_size;
+	joint_count_p = malloc(m_joint_count_size);
+	memcpy(joint_count_p, data_p + step, m_joint_count_size);
+	step += m_joint_count_size;
 
 	uint16_t bone_size = 0;
 	srt_bone_p = malloc(0);
 	uint16_t l = 0;
-	for (uint8_t l_0 = 0; l_0 < joint_count_size; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < m_joint_count_size; ++l_0)
 	{
 		if (m_max_joint < joint_count_p[l_0])
 		{
@@ -211,6 +212,10 @@ void lcm_init()
 	uint32_t ia_size = *(uint32_t *)(data_p + step);
 	step += sizeof(uint32_t);
 	model_size = ia_size / 2 / sizeof(float);
+
+	m_ai_index_count_p = malloc(sizeof(uint32_t) * model_size);
+	m_ai_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * model_size);
+
 	index_size_p = malloc(sizeof(uint32_t) * model_size);
 	attribute_size_p = malloc(sizeof(uint32_t) * model_size);
 	l_step = 0;
@@ -233,9 +238,11 @@ void lcm_init()
 		index_p[l_0] = malloc(index_size_p[l_0]);
 		memcpy(index_p[l_0], data_p + step, index_size_p[l_0]);
 		step += index_size_p[l_0];
+		m_ai_index_count_p[l_0] = index_size_p[l_0] / 3 / sizeof(uint32_t);
 	}
 	for (uint32_t l_0 = 0; l_0 < model_size; ++l_0)
 	{
+		m_ai_vkdevicesize_p[l_0] = step;
 		attribute_p[l_0] = malloc(attribute_size_p[l_0]);
 		memcpy(attribute_p[l_0], data_p + step, attribute_size_p[l_0]);
 		step += attribute_size_p[l_0];
@@ -255,7 +262,7 @@ void lcm_init()
 
 	//b
 	l = 0;
-	for (uint32_t l_0 = 0; l_0 < joint_count_size; ++l_0)
+	for (uint32_t l_0 = 0; l_0 < m_joint_count_size; ++l_0)
 	{
 		m_vkdevicesize += joint_count_p[l_0] * sizeof(uint32_t) * 2;//s e
 
@@ -295,7 +302,7 @@ void lcm_vk()
 	step += m_max_joint * sizeof(float) * 3;
 
 	//ssbob
-	for (uint32_t l_0 = 0; l_0 < joint_count_size; ++l_0)
+	for (uint32_t l_0 = 0; l_0 < m_joint_count_size; ++l_0)
 	{
 		for (uint8_t l_1 = 0; l_1 < joint_count_p[l_0]; ++l_1)
 		{
@@ -383,4 +390,9 @@ void lcm_vk()
 		memcpy(m_vkbuffer_p + step, attribute_p + attribute_size_p[l_0], attribute_size_p[l_0]);
 		step += attribute_size_p[l_0];
 	}
+}
+
+void lcm_free()
+{
+
 }
