@@ -121,7 +121,8 @@ void vk_initCmdDraw()
 	// strcat(frag_file, shader_type);
 
 	// vk_setVkPipelineShaderStageCreateInfo(m_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	vk_setVkPipelineShaderStageCreateInfo(m_device, NALI_HOME NALI_HOME_SHADER "vert.spv", NALI_HOME NALI_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// vk_setVkPipelineShaderStageCreateInfo(m_device, NALI_HOME NALI_HOME_SHADER "vert.spv", NALI_HOME NALI_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	vk_setVkPipelineShaderStageCreateInfo(m_device, NALI_HOME "vert.spv", NALI_HOME "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 	// free(vert_file);
 	// free(frag_file);
 
@@ -246,9 +247,9 @@ int vk_cmdDraw(void *arg)
 				{
 					//vkUpdateDescriptorSets
 					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &m_vkbuffer, &m_ai_vkdevicesize_p[l_0]);
-					vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, 0, VK_INDEX_TYPE_UINT16);
+					vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, m_ai_index_count_p[l_0], VK_INDEX_TYPE_UINT32);
 					vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &m_vkdescriptorset, 0, VK_NULL_HANDLE);
-					vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0], 1, 0, 0, 0);
+					vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
 				}
 				mtx_unlock(m_mtx_t_draw_p);
 

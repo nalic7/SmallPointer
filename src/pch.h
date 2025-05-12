@@ -168,7 +168,7 @@
 	#endif
 	#define NALI_HOME_MODEL "model"
 	#define NALI_HOME_IMAGE "image"
-	#define NALI_HOME_SHADER "shader/"
+	// #define NALI_HOME_SHADER "shader/"
 	// #define NALI_HOME_SHADER_VERT "vert"
 	// #define NALI_HOME_SHADER_FRAG "frag"
 

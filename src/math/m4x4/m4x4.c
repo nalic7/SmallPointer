@@ -132,5 +132,5 @@ void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p)
 		}
 	}
 
-	memcpy(w_m4x4_float_p, r_m4x4_float_p, 16 * sizeof(float));
+	memcpy(w_m4x4_float_p, float_array, 16 * sizeof(float));
 }

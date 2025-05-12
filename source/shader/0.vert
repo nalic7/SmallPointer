@@ -1,7 +1,7 @@
 #version 450
 
-#define NALI_BONE_SIZE 40
-#define NALI_JOINT_SIZE 20
+#define NALI_BONE_SIZE 43
+#define NALI_JOINT_SIZE 22
 
 layout(location = 0) in vec3 a_v;
 //use j1w1c1t1 t1->uv1 4+4 bit 15|15 1 c1->t1
@@ -67,7 +67,8 @@ void main()
 	}
 	l_v *= float((a_j1w1c1 >> 16) & 0xFF);
 
-	gl_Position = ubo.mvp * l_v;
+	//gl_Position = ubo.mvp * l_v;
+	gl_Position = ubo.mvp * vec4(a_v, 1);
 
 	#ifdef NALI_TEXTURE
 		f_t = a_t;

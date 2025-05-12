@@ -31,7 +31,10 @@
 >Compile Shader
 ```bash
 #vulkan SPIR-V
-glslc
+cd asset
+
+glslc ../source/shader/0.vert -o vert.spv
+glslc ../source/shader/0.frag -o frag.spv
 ```
 
 >Build Library

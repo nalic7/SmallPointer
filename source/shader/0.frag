@@ -21,5 +21,6 @@ void main()
 		o_c = texture(ubo_s, f_t);
 	#else
 		o_c = ssboc_c[f_c];
+		//o_c = ssboc_c[0];
 	#endif
 }
