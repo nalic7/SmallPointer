@@ -24,25 +24,25 @@ static uint32_t bone_bl = 0;
 
 static uint8_t *joint_count_p;
 static uint8_t joint_count_bl = 0;
-static void *joint_srt_p;//float
+static uint8_t *joint_srt_p;//float
 static uint32_t joint_srt_bl = 0;
 static uint32_t joint_srt_step = 0;
 static uint8_t *joint_head_p;
 static uint8_t *joint_p;
 static uint32_t joint_bl = 0;
 
-static void *animation_p;//float
+static uint8_t *animation_p;//float
 static uint32_t animation_bl = 0;
 
 static float *rgba_p = 0;
 static char **material_p;
 static uint8_t material_fl = 0;
 
-static void *ia_p;//uint32_t
+static uint8_t *ia_p;//uint32_t
 static uint32_t ia_bl = 0;
-static void *attribute_p;
+static uint8_t *attribute_p;
 static uint32_t attribute_bl = 0;
-static void *index_p;
+static uint8_t *index_p;
 static uint32_t index_bl = 0;
 
 static void gen_model()
@@ -95,7 +95,7 @@ static void gen_model()
 				animation_bl += sizeof(uint8_t);
 
 				cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_input_p->buffer_view;
-				void *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+				uint8_t *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 				// /b\ 1
 				for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
@@ -240,10 +240,10 @@ static void gen_model()
 						}
 
 						cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
-						void *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+						uint8_t *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 						uint32_t c = sizeof(uint32_t) * count;
-						uint16_t *ui16_p = p;
+						uint16_t *ui16_p = (uint16_t *)p;
 
 						index_p = realloc(index_p, index_bl + c);
 
@@ -251,7 +251,9 @@ static void gen_model()
 
 						for (uint32_t c_0 = 0; c_0 < count; ++c_0)
 						{
-							((uint32_t *)index_p)[i + c_0] = i + ui16_p[c_0];
+							//mix index later
+							// ((uint32_t *)index_p)[i + c_0] = i + ui16_p[c_0];
+							((uint32_t *)index_p)[i + c_0] = ui16_p[c_0];
 						}
 						index_bl += c;
 						l_i += c;
@@ -282,7 +284,7 @@ static void gen_model()
 					}
 
 					++material_fl;
-					material_p = realloc(material_p, sizeof(void *) * material_fl);
+					material_p = realloc(material_p, sizeof(char *) * material_fl);
 					material_p[i] = cgltf_material_p->name;
 					rgba_p = realloc(rgba_p, sizeof(float) * 4 * material_fl);
 					uint16_t i4 = i * 4;
@@ -293,6 +295,7 @@ static void gen_model()
 				}
 				//e0-m
 
+				//need check l
 				for (uint32_t l_3 = 0; l_3 < cgltf_primitive_p->attributes[0].data->count; ++l_3)
 				{
 					for (uint32_t l_4 = 0; l_4 < cgltf_primitive_p->attributes_count; ++l_4)
@@ -302,7 +305,7 @@ static void gen_model()
 
 						cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
 						uint8_t type_bl = cgltf_component_size(cgltf_accessor_p->component_type);
-						void *v_p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+						uint8_t *v_p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 						uint8_t a_bl = cgltf_accessor_p->stride / type_bl;
 						uint32_t d = l_3 * a_bl;
@@ -331,7 +334,7 @@ static void gen_model()
 								{
 									if (cgltf_accessor_p->component_type == cgltf_component_type_r_32f)
 									{
-										float *p = v_p;
+										float *p = (float *)v_p;
 										if (p[d])
 										{
 											nali_info_t("w2 %f", p[d])
@@ -350,13 +353,15 @@ static void gen_model()
 							}
 							++d;
 						}
-
-						// /b\ 1
-						attribute_p = realloc(attribute_p, attribute_bl + sizeof(uint8_t));
-						memset(attribute_p + attribute_bl, i, sizeof(uint8_t));
-						attribute_bl += sizeof(uint8_t);
-						l_a += sizeof(uint8_t);
 					}
+
+					// /b\ 1
+					attribute_p = realloc(attribute_p, attribute_bl + sizeof(uint8_t));
+					memset(attribute_p + attribute_bl, i, sizeof(uint8_t));
+					attribute_bl += sizeof(uint8_t);
+					l_a += sizeof(uint8_t);
+
+					//add extra byte later
 				}
 			}
 		}
