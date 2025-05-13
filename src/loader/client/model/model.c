@@ -243,16 +243,14 @@ void lcm_init()
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
 		//add extra byte
-		uint32_t l_size = attribute_bl_p[l_0] / (sizeof(float) * 3 + 3);
-		attribute_bl_p[l_0] += l_size;
+		uint32_t l_size = attribute_bl_p[l_0] / (sizeof(float) * 3 + 2);
+		attribute_bl_p[l_0] += l_size * 2;
 		attribute_p[l_0] = malloc(attribute_bl_p[l_0]);
-		// memcpy(attribute_p[l_0], data_p + step, attribute_bl_p[l_0]);
-		// step += attribute_bl_p[l_0];
 		for (uint32_t l_1 = 0; l_1 < l_size; ++l_1)
 		{
-			memcpy(attribute_p[l_0] + l_1 * (sizeof(float) * 3 + 3) + l_1, data_p + step, sizeof(float) * 3 + 3);
-			*(attribute_p[l_0] + l_1 * (sizeof(float) * 3 + 3) + l_1 + (sizeof(float) * 3 + 3)) = 0;
-			step += sizeof(float) * 3 + 3;
+			memcpy(attribute_p[l_0] + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)), data_p + step, sizeof(float) * 3 + 2);
+			memset((attribute_p[l_0] + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 2);
+			step += sizeof(float) * 3 + 2;
 		}
 	}
 

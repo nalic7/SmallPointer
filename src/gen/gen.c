@@ -40,8 +40,10 @@ static uint8_t material_fl = 0;
 
 static uint8_t *ia_p;//uint32_t
 static uint32_t ia_bl = 0;
+
 static uint8_t *attribute_p;
 static uint32_t attribute_bl = 0;
+
 static uint8_t *index_p;
 static uint32_t index_bl = 0;
 
@@ -217,67 +219,76 @@ static void gen_model()
 			bone_bl += cgltf_skin_p->joints_count;
 		}
 
+		//need reindex
+		uint8_t mix_array[sizeof(float) * 3 + 2];
 		uint32_t l_i = 0, l_a = 0;
 		for (uint32_t l_1 = 0; l_1 < cgltf_data_p->meshes_count; ++l_1)
+		// for (uint32_t l_1 = 0; l_1 < 1; ++l_1)
 		{
 			cgltf_mesh *cgltf_mesh_p = &cgltf_data_p->meshes[l_1];
 			nali_log("cgltf_mesh %s", cgltf_mesh_p->name)
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_mesh_p->primitives_count; ++l_2)
+			// for (uint32_t l_2 = 0; l_2 < 1; ++l_2)
 			{
 				cgltf_primitive *cgltf_primitive_p = &cgltf_mesh_p->primitives[l_2];
-				cgltf_accessor *cgltf_accessor_p = cgltf_primitive_p->indices;
-				{
-					if (cgltf_accessor_p->component_type == cgltf_component_type_r_16u)
-					{
-						uint8_t type_bl = cgltf_component_size(cgltf_accessor_p->component_type);
-						uint32_t count = cgltf_accessor_p->count;
 
-						uint8_t a_bl = cgltf_accessor_p->stride / type_bl;
-						if (a_bl != 1)
-						{
-							nali_info_t("a_bl>1")
-						}
+				// l_i += sizeof(uint32_t) * cgltf_primitive_p->indices->count;
 
-						cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
-						uint8_t *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+				// cgltf_accessor *cgltf_accessor_p = cgltf_primitive_p->indices;
+				// {
+				// 	if (cgltf_accessor_p->component_type == cgltf_component_type_r_16u)
+				// 	{
+				// 		uint8_t type_bl = cgltf_component_size(cgltf_accessor_p->component_type);
+				// 		uint32_t count = cgltf_accessor_p->count;
 
-						uint32_t c = sizeof(uint32_t) * count;
-						uint16_t *ui16_p = (uint16_t *)p;
+				// 		uint8_t a_bl = cgltf_accessor_p->stride / type_bl;
+				// 		if (a_bl != 1)
+				// 		{
+				// 			nali_info_t("a_bl>1")
+				// 		}
 
-						index_p = realloc(index_p, index_bl + c);
+				// 		cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
+				// 		uint8_t *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
-						uint32_t i = index_bl / sizeof(uint32_t);
+				// 		uint32_t c = sizeof(uint32_t) * count;
+				// 		uint16_t *ui16_p = (uint16_t *)p;
 
-						for (uint32_t c_0 = 0; c_0 < count; ++c_0)
-						{
-							//mix index later
-							// ((uint32_t *)index_p)[i + c_0] = i + ui16_p[c_0];
-							((uint32_t *)index_p)[i + c_0] = ui16_p[c_0];
-						}
-						index_bl += c;
-						l_i += c;
-					}
-					else
-					{
-						nali_info_t("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
-					}
-				}
+				// 		// index_p = realloc(index_p, index_bl + c);
+
+				// 		uint32_t i = index_bl / sizeof(uint32_t);
+
+				// 		for (uint32_t c_0 = 0; c_0 < count; ++c_0)
+				// 		{
+				// 			// // ((uint32_t *)index_p)[i + c_0] = i + ui16_p[c_0];
+				// 			// ((uint32_t *)index_p)[i + c_0] = ui16_p[c_0];
+
+				// 			ui16_p[c_0];
+				// 		}
+				// 		// index_bl += c;
+				// 		// l_i += c;
+				// 	}
+				// 	else
+				// 	{
+				// 		nali_info_t("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+				// 	}
+				// }
 
 				//s0-m
-				uint8_t i = 0;
-				while (i < material_fl)
+				mix_array[sizeof(float) * 3 + 1] = 0;
+				while (mix_array[sizeof(float) * 3 + 1] < material_fl)
 				{
-					if (!strcmp(material_p[i], cgltf_primitive_p->material->name))
+					if (!strcmp(material_p[mix_array[sizeof(float) * 3 + 1]], cgltf_primitive_p->material->name))
 					{
 						break;
 					}
-					++i;
+					++mix_array[sizeof(float) * 3 + 1];
 				}
-				if (i == material_fl)
+				if (mix_array[sizeof(float) * 3 + 1] == material_fl)
 				{
 					cgltf_material *cgltf_material_p = cgltf_primitive_p->material;
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
+					cgltf_float *emissive_factor = cgltf_material_p->emissive_factor;
 					if (strstr(cgltf_material_p->name, ".C0."))
 					{
 						nali_info_t(".C0.")
@@ -285,59 +296,71 @@ static void gen_model()
 
 					++material_fl;
 					material_p = realloc(material_p, sizeof(char *) * material_fl);
-					material_p[i] = cgltf_material_p->name;
+					material_p[mix_array[sizeof(float) * 3 + 1]] = cgltf_material_p->name;
 					rgba_p = realloc(rgba_p, sizeof(float) * 4 * material_fl);
-					uint16_t i4 = i * 4;
-					rgba_p[i4] = cgltf_float_array[0];
-					rgba_p[i4 + 1] = cgltf_float_array[1];
-					rgba_p[i4 + 2] = cgltf_float_array[2];
+					uint16_t i4 = mix_array[sizeof(float) * 3 + 1] * 4;
+					rgba_p[i4] = emissive_factor[0];
+					rgba_p[i4 + 1] = emissive_factor[1];
+					rgba_p[i4 + 2] = emissive_factor[2];
 					rgba_p[i4 + 3] = cgltf_float_array[3];
 				}
 				//e0-m
 
-				//need check l
-				for (uint32_t l_3 = 0; l_3 < cgltf_primitive_p->attributes[0].data->count; ++l_3)
+				uint8_t l_set = 0;
+				for (uint32_t l_3 = 0; l_3 < cgltf_primitive_p->indices->count; ++l_3)
 				{
+					uint16_t l_3_0 = *(uint16_t *)(cgltf_primitive_p->indices->buffer_view->buffer->data + cgltf_primitive_p->indices->buffer_view->offset + l_3 * sizeof(uint16_t));
+
 					for (uint32_t l_4 = 0; l_4 < cgltf_primitive_p->attributes_count; ++l_4)
 					{
 						cgltf_attribute *cgltf_attribute_p = &cgltf_primitive_p->attributes[l_4];
-						cgltf_accessor_p = cgltf_attribute_p->data;
+						cgltf_accessor *cgltf_accessor_p = cgltf_attribute_p->data;
 
 						cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
 						uint8_t type_bl = cgltf_component_size(cgltf_accessor_p->component_type);
 						uint8_t *v_p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 						uint8_t a_bl = cgltf_accessor_p->stride / type_bl;
-						uint32_t d = l_3 * a_bl;
 						for (uint32_t l_5 = 0; l_5 < a_bl; ++l_5)
 						{
 							if (cgltf_attribute_p->type == cgltf_attribute_type_joints)
 							{
 								if (l_5 == 0)
 								{
-									// /b\ 1
-									NALI_MEMORY_RECOPY(attribute_p, v_p + d * type_bl, attribute_bl, sizeof(uint8_t))
-									l_a += sizeof(uint8_t);
+									// // /b\ 1
+									mix_array[sizeof(float) * 3] = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 								}
 							}
 							else if (cgltf_attribute_p->type == cgltf_attribute_type_weights)
 							{
 								if (l_5 == 0)
 								{
-									// /b\ 1
-									attribute_p = realloc(attribute_p, attribute_bl + sizeof(uint8_t));
-									*(uint8_t *)(attribute_p + attribute_bl) = (uint8_t)*(float *)(v_p + d * type_bl);
-									attribute_bl += sizeof(uint8_t);
-									l_a += sizeof(uint8_t);
+									if (cgltf_accessor_p->component_type == cgltf_component_type_r_32f)
+									{
+										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+										if (!*p)
+										{
+											nali_info_t("w2 %f", *p)
+										}
+									}
+									else
+									{
+										nali_info_t("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+									}
+
+									// // // /b\ 1
+									// mix_array[sizeof(float) * 3 + 1] = (uint8_t)*(float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+
+									l_set = 1;
 								}
 								else if (l_5 == 1)
 								{
 									if (cgltf_accessor_p->component_type == cgltf_component_type_r_32f)
 									{
-										float *p = (float *)v_p;
-										if (p[d])
+										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+										if (*p)
 										{
-											nali_info_t("w2 %f", p[d])
+											nali_info_t("w2 %f", *p)
 										}
 									}
 									else
@@ -346,22 +369,58 @@ static void gen_model()
 									}
 								}
 							}
+							else if (cgltf_attribute_p->type == cgltf_attribute_type_position)
+							{
+								memcpy(mix_array + l_5 * type_bl, v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl, type_bl);
+							}
 							else
 							{
-								NALI_MEMORY_RECOPY(attribute_p, v_p + d * type_bl, attribute_bl, type_bl)
-								l_a += type_bl;
+								nali_info_t("cgltf_attribute_p->type %d", cgltf_attribute_p->type)
 							}
-							++d;
+						}
+
+						if (l_set == 1)
+						{
+							// // /b\ 1
+							// attribute_p = realloc(attribute_p, attribute_bl + sizeof(uint8_t));
+							// memset(attribute_p + attribute_bl, i, sizeof(uint8_t));
+							// attribute_bl += sizeof(uint8_t);
+							// l_a += sizeof(uint8_t);
+
+							// jwcn |= i << 16;
+							// ui_array[2] = i;
+
+							for (uint32_t l_5 = 0; l_5 < attribute_bl; l_5 += sizeof(float) * 3 + 2)
+							{
+								if (!memcmp(attribute_p + l_5, mix_array, sizeof(float) * 3 + 2))
+								{
+									index_p = realloc(index_p, index_bl + sizeof(uint32_t));
+									*(uint32_t *)(index_p + index_bl) = l_5 / (sizeof(float) * 3 + 2);
+									index_bl += sizeof(uint32_t);
+									l_i += sizeof(uint32_t);
+
+									l_set = 0;
+									break;
+								}
+							}
+							if (l_set == 1)
+							{
+								attribute_p = realloc(attribute_p, attribute_bl + sizeof(float) * 3 + 2);
+								memcpy(attribute_p + attribute_bl, mix_array, sizeof(float) * 3 + 2);
+
+								index_p = realloc(index_p, index_bl + sizeof(uint32_t));
+								*(uint32_t *)(index_p + index_bl) = attribute_bl / (sizeof(float) * 3 + 2);
+								index_bl += sizeof(uint32_t);
+								l_i += sizeof(uint32_t);
+
+								attribute_bl += sizeof(float) * 3 + 2;
+								l_a += sizeof(float) * 3 + 2;
+
+								l_set = 0;
+							}
+							//add extra byte later
 						}
 					}
-
-					// /b\ 1
-					attribute_p = realloc(attribute_p, attribute_bl + sizeof(uint8_t));
-					memset(attribute_p + attribute_bl, i, sizeof(uint8_t));
-					attribute_bl += sizeof(uint8_t);
-					l_a += sizeof(uint8_t);
-
-					//add extra byte later
 				}
 			}
 		}
@@ -416,7 +475,7 @@ static void gen_model()
 	fwrite(index_p, sizeof(uint8_t), index_bl, file);
 	fwrite(attribute_p, sizeof(uint8_t), attribute_bl, file);
 
-	fwrite(rgba_p, sizeof(float), material_fl, file);
+	fwrite(rgba_p, sizeof(float), material_fl * 4, file);
 	//color
 
 	fclose(file);
