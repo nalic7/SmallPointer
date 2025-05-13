@@ -14,7 +14,7 @@ void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p);
 // m4x4_p[11] = 1.0F;
 // m4x4_p[14] = 2.0F * z_far * z_near / z_range;
 #define M4X4_P(fov, aspect, z_near, z_far, m4x4_p) \
-	(m4x4_p)[0] = 1.0F / (fov * aspect); \
+	(m4x4_p)[0] = -1.0F / (fov * aspect); \
 	(m4x4_p)[5] = 1.0F / fov; \
 	(m4x4_p)[10] = -(z_far + z_near) / (z_far - z_near); \
 	(m4x4_p)[11] = -1.0F; \

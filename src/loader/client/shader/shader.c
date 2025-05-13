@@ -111,7 +111,7 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
 		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 3 + m_max_joint * sizeof(float) * 4 + m_max_joint * sizeof(float) * 3 + offset,
+		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4 * 3 + offset,
 		.range = m_ji_p[step]
 	};
 	vk_setVkWriteDescriptorSet(m_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
@@ -121,7 +121,7 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	{
 		.buffer = m_vkbuffer,
 		.offset = NALI_LC_MVP_BL + m_rgba_bl,
-		.range = m_max_joint * sizeof(float) * 3
+		.range = m_max_joint * sizeof(float) * 4
 	};
 	vk_setVkWriteDescriptorSet(m_device, 2, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[2], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 
@@ -129,7 +129,7 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	vkdescriptorbufferinfo_p[3] = (VkDescriptorBufferInfo)
 	{
 		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 3,
+		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4,
 		.range = m_max_joint * sizeof(float) * 4
 	};
 	vk_setVkWriteDescriptorSet(m_device, 3, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[3], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 3);
@@ -138,8 +138,8 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	vkdescriptorbufferinfo_p[4] = (VkDescriptorBufferInfo)
 	{
 		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 3 + m_max_joint * sizeof(float) * 4,
-		.range = m_max_joint * sizeof(float) * 3
+		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4 * 2,
+		.range = m_max_joint * sizeof(float) * 4
 	};
 	vk_setVkWriteDescriptorSet(m_device, 4, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[4], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 4);
 
