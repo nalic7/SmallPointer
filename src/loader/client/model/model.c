@@ -1,5 +1,5 @@
 uint32_t
-	*m_ji_p,
+	// *m_ji_p,
 	*m_ai_index_count_p;
 VkDeviceSize *m_ai_vkdevicesize_p;
 
@@ -30,9 +30,9 @@ typedef struct
 static srt_bone *srt_bone_p;
 
 uint32_t m_max_joint = 0;
-static uint8_t
-	*joint_count_p;
-uint8_t m_joint_count_bl;
+uint8_t
+	*m_joint_count_p,
+	m_joint_count_bl;
 
 //8->32
 static uint8_t
@@ -57,13 +57,13 @@ void lcm_init()
 	m_joint_count_bl = *(uint8_t *)data_p;
 	step += sizeof(uint8_t);
 
-	m_ji_p = malloc(sizeof(uint32_t) * m_joint_count_bl);
+	// m_ji_p = malloc(sizeof(uint32_t) * m_joint_count_bl);
 
 	bs_p = malloc(sizeof(uint8_t *) * m_joint_count_bl);
 	be_p = malloc(sizeof(uint8_t *) * m_joint_count_bl);
 
-	joint_count_p = malloc(m_joint_count_bl);
-	memcpy(joint_count_p, data_p + step, m_joint_count_bl);
+	m_joint_count_p = malloc(m_joint_count_bl);
+	memcpy(m_joint_count_p, data_p + step, m_joint_count_bl);
 	step += m_joint_count_bl;
 
 	uint16_t bone_bl = 0;
@@ -71,20 +71,20 @@ void lcm_init()
 	uint16_t l = 0;
 	for (uint8_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
 	{
-		if (m_max_joint < joint_count_p[l_0])
+		if (m_max_joint < m_joint_count_p[l_0])
 		{
-			m_max_joint = joint_count_p[l_0];
+			m_max_joint = m_joint_count_p[l_0];
 		}
 
-		m_ji_p[l_0] = joint_count_p[l_0] * 2 * sizeof(uint32_t);
+		// m_ji_p[l_0] = joint_count_p[l_0] * 2 * sizeof(uint32_t);
 
-		bs_p[l_0] = malloc(joint_count_p[l_0]);
-		be_p[l_0] = malloc(joint_count_p[l_0]);
+		bs_p[l_0] = malloc(m_joint_count_p[l_0]);
+		be_p[l_0] = malloc(m_joint_count_p[l_0]);
 		bs_p[l_0][0] = 0;
 
-		srt_bone_p = realloc(srt_bone_p, sizeof(srt_bone) * (bone_bl + joint_count_p[l_0]));
+		srt_bone_p = realloc(srt_bone_p, sizeof(srt_bone) * (bone_bl + m_joint_count_p[l_0]));
 
-		for (uint8_t l_1 = 0; l_1 < joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
 			uint8_t size = *(uint8_t *)(data_p + step);
 			step += sizeof(uint8_t);
@@ -102,10 +102,10 @@ void lcm_init()
 			be_p[l_0][l_1] = bs_p[l_0][l_1] + size;
 			++l;
 
-			m_ji_p[l_0] += size * sizeof(uint32_t);
+			// m_ji_p[l_0] += size * sizeof(uint32_t);
 		}
 
-		bone_bl += joint_count_p[l_0];
+		bone_bl += m_joint_count_p[l_0];
 	}
 
 	uint8_t joint_head_bl = ceil(bone_bl * 3.0F / 8);
@@ -146,8 +146,8 @@ void lcm_init()
 						srt_bone_p[l].joint_t_p = malloc(sizeof(float) * 3);
 						memcpy(srt_bone_p[l].joint_t_p, data_p + step, sizeof(float) * 3);
 						step += sizeof(float) * 3;
-						++l;
 					}
+					++l;
 					bit_step = 0;
 			}
 		}
@@ -274,7 +274,7 @@ void lcm_init()
 	l = 0;
 	for (uint32_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
 	{
-		m_vkdevicesize += joint_count_p[l_0] * 4 * 3 * sizeof(float);
+		m_vkdevicesize += m_joint_count_p[l_0] * 4 * 3 * sizeof(float);
 	}
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
@@ -306,7 +306,14 @@ void lcm_vk()
 	//ssboa
 	for (uint32_t l_0 = 0; l_0 < m_max_joint * 4; ++l_0)
 	{
-		*(float *)(m_vkbuffer_p + step) = 1.0F;
+		if (l_0 == 0+4*19 || l_0 == 1+4*19 || l_0 == 2+4*19)
+		{
+			*(float *)(m_vkbuffer_p + step) = 1.5F;
+		}
+		else
+		{
+			*(float *)(m_vkbuffer_p + step) = 1.0F;
+		}
 		step += sizeof(float);
 	}
 
@@ -325,11 +332,10 @@ void lcm_vk()
 		uint32_t l_step_0 = step;
 
 		l = 0;
-		for (uint8_t l_1 = 0; l_1 < joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
 			if (srt_bone_p[l].joint_s_p == NULL)
 			{
-				// memset(m_vkbuffer_p + step, 1, sizeof(float) * 3);
 				for (uint32_t l_2 = 0; l_2 < 3; ++l_2)
 				{
 					*(float *)(m_vkbuffer_p + step + l_2 * sizeof(float)) = 1.0F;
@@ -338,30 +344,34 @@ void lcm_vk()
 			else
 			{
 				memcpy(m_vkbuffer_p + step, srt_bone_p[l].joint_s_p, sizeof(float) * 3);
-				*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = 0;
 			}
 
+			*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = 0;
 			step += sizeof(float) * 4;
 			++l;
 		}
 
 		l = 0;
 		uint8_t l_0_0 = 0;
-		for (uint8_t l_1 = 0; l_1 < joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
 			for (uint8_t l_2 = 0; l_2 < srt_bone_p[l].joint_bl; ++l_2)
+			// for (int16_t l_2 = srt_bone_p[l].joint_bl - 1; l_2 > -1; --l_2)
 			{
 				*(uint32_t *)(m_vkbuffer_p + l_step_0 + sizeof(float) * 3) |= srt_bone_p[l].joint_p[l_2] << l_0_0 * 8;
-				l_step_0 += sizeof(float) * 4;
 
 				++l_0_0;
-				l_0_0 %= 4;
+				if (l_0_0 == 4)
+				{
+					l_0_0 = 0;
+					l_step_0 += sizeof(float) * 4;
+				}
 			}
 			++l;
 		}
 
 		l = 0;
-		for (uint8_t l_1 = 0; l_1 < joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
 			if (srt_bone_p[l].joint_r_p == NULL)
 			{
@@ -376,18 +386,18 @@ void lcm_vk()
 		}
 
 		l = 0;
-		for (uint8_t l_1 = 0; l_1 < joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
 			if (srt_bone_p[l].joint_t_p == NULL)
 			{
-				memset(m_vkbuffer_p + step, 0, sizeof(float) * 4);
+				memset(m_vkbuffer_p + step, 0, sizeof(float) * 3);
 			}
 			else
 			{
 				memcpy(m_vkbuffer_p + step, srt_bone_p[l].joint_t_p, sizeof(float) * 3);
-				//start end
-				*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = bs_p[l_0][l_1] | be_p[l_0][l_1] << 8;
 			}
+			//start end
+			*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = bs_p[l_0][l_1] | be_p[l_0][l_1] << 8;
 			step += sizeof(float) * 4;
 			++l;
 		}

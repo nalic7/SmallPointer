@@ -63,10 +63,10 @@ void save_png(const char* filename/* , intptr_t image */, uint32_t* img, int wid
 				uint32_t pixel = img[y * width + x];
 
 				// Extract components in ABGR order
-				uint8_t a = (pixel >> 24) & 0xFF;
-				uint8_t b = (pixel >> 16) & 0xFF;
-				uint8_t g = (pixel >> 8) & 0xFF;
-				uint8_t r = pixel & 0xFF;
+				uint8_t a = (pixel >> 24) & 0xFFu;
+				uint8_t b = (pixel >> 16) & 0xFFu;
+				uint8_t g = (pixel >> 8) & 0xFFu;
+				uint8_t r = pixel & 0xFFu;
 
 				// // Store in RGBA order
 				// rows[y][x * 4 + 0] = r;

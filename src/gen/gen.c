@@ -18,7 +18,7 @@ const char* file_array[] =
 	memcpy(w_p + size, r_p, byte); \
 	size += byte;
 
-static uint8_t max_joint_bl = 0;
+// static uint8_t max_joint_bl = 0;
 
 static uint32_t bone_bl = 0;
 
@@ -51,7 +51,7 @@ static void gen_model()
 {
 	joint_count_p = malloc(0);
 	joint_srt_p = malloc(0);
-	joint_p = malloc(0);
+	joint_p = malloc(1024);//fix size
 
 	joint_head_p = malloc(1024);//fix size
 	memset(joint_head_p, 0, 1024);
@@ -185,35 +185,41 @@ static void gen_model()
 			joint_count_p[joint_count_bl] = cgltf_skin_p->joints_count;
 			joint_count_bl += sizeof(uint8_t);
 
+			cgltf_node *parent_cgltf_node_p = cgltf_skin_p->joints[0]->parent;
+
 			for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
 			{
 				cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
 
-				joint_p = realloc(joint_p, joint_bl + sizeof(uint8_t) + sizeof(uint8_t) + cgltf_node_joints_p->children_count);
+				// joint_p = realloc(joint_p, joint_bl + sizeof(uint8_t) + sizeof(uint8_t) + cgltf_node_joints_p->children_count);
 
-				joint_p[joint_bl] = sizeof(uint8_t) + cgltf_node_joints_p->children_count;
+				// joint_p[joint_bl] = sizeof(uint8_t) + cgltf_node_joints_p->children_count;
 				joint_p[joint_bl + 1] = l_2;
 				joint_bl += 2;
 
-				for (uint32_t c_0 = 0; c_0 < cgltf_node_joints_p->children_count; ++c_0)
+				// for (uint32_t c_0 = 0; c_0 < cgltf_node_joints_p->children_count; ++c_0)
+				uint32_t c_0 = 0;
+				while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != parent_cgltf_node_p)
 				{
-					cgltf_node *cgltf_node_children_p = cgltf_node_joints_p->children[c_0];
-
 					for (uint32_t j_1 = 0; j_1 < cgltf_skin_p->joints_count; ++j_1)
 					{
-						if (cgltf_node_children_p == cgltf_skin_p->joints[j_1])
+						if (cgltf_node_joints_p == cgltf_skin_p->joints[j_1])
 						{
 							joint_p[joint_bl + c_0] = j_1;
 							break;
 						}
 					}
-				}
 
-				if (max_joint_bl < cgltf_node_joints_p->children_count)
-				{
-					max_joint_bl = cgltf_node_joints_p->children_count;
+					++c_0;
 				}
-				joint_bl += cgltf_node_joints_p->children_count;
+				joint_p[joint_bl - 2] = sizeof(uint8_t) + c_0;
+				joint_bl += c_0;
+
+				// if (max_joint_bl < cgltf_node_joints_p->children_count)
+				// {
+				// 	max_joint_bl = cgltf_node_joints_p->children_count;
+				// }
+				// joint_bl += cgltf_node_joints_p->children_count;
 			}
 
 			bone_bl += cgltf_skin_p->joints_count;
@@ -433,30 +439,30 @@ static void gen_model()
 	}
 
 	nali_info("material_fl %d", material_fl)
-	nali_info("max_joint_bl %d", max_joint_bl)
+	// nali_info("max_joint_bl %d", max_joint_bl)
 	nali_info("bone_bl %d", bone_bl)
 
-	uint32_t l_step = 0;
-	for (uint8_t l_0 = 0; l_0 < joint_count_bl; ++l_0)
-	{
-		nali_info("start %d", l_step)
+	// uint32_t l_step = 0;
+	// for (uint8_t l_0 = 0; l_0 < joint_count_bl; ++l_0)
+	// {
+	// 	nali_info("start %d", l_step)
 
-		uint8_t l_joint_bl = joint_count_p[l_0];
-		nali_info("%d joint %d", l_0, l_joint_bl)
+	// 	uint8_t l_joint_bl = joint_count_p[l_0];
+	// 	nali_info("%d joint %d", l_0, l_joint_bl)
 
-		for (uint8_t l_1 = 0; l_1 < l_joint_bl; ++l_1)
-		{
-			uint8_t l_bl = joint_p[l_step];
-			l_step += sizeof(uint8_t) + l_bl;
-		}
+	// 	for (uint8_t l_1 = 0; l_1 < l_joint_bl; ++l_1)
+	// 	{
+	// 		uint8_t l_bl = joint_p[l_step];
+	// 		l_step += sizeof(uint8_t) + l_bl;
+	// 	}
 
-		nali_info("end %d", l_step)
+	// 	nali_info("end %d", l_step)
 
-		if (l_joint_bl == max_joint_bl)
-		{
-			break;
-		}
-	}
+	// 	if (l_joint_bl == max_joint_bl)
+	// 	{
+	// 		break;
+	// 	}
+	// }
 
 	FILE *file = fopen(NALI_HOME "asset.bin", "ab");
 	nali_log("fopen %p", file)

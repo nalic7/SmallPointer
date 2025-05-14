@@ -105,14 +105,14 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	}
 	else
 	{
-		offset = m_ji_p[step - 1];
+		offset = m_joint_count_p[step - 1] * sizeof(float) * 4 * 3;
 	}
 
 	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
 		.buffer = m_vkbuffer,
 		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4 * 3 + offset,
-		.range = m_ji_p[step]
+		.range = m_joint_count_p[step] * sizeof(float) * 4 * 3
 	};
 	vk_setVkWriteDescriptorSet(m_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
 
