@@ -207,7 +207,21 @@ int vk_cmdDraw(void *arg)
 
 		if (m_surface_state & NALI_SURFACE_C_S_RE)
 		{
-			m_surface_state &= 255 - NALI_SURFACE_C_S_RE;
+			vkQueueWaitIdle(vkqueue_graphic);
+			M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), m_width / m_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16 * 2)
+			vkFlushMappedMemoryRanges(m_vkdevice_p[m_device], 1, &(VkMappedMemoryRange)
+			{
+				.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+				.memory = m_vkdevicememory,
+				.offset = 16 * 2 * sizeof(float),
+				.size = 16 * sizeof(float),
+				.pNext = VK_NULL_HANDLE
+			});
+
+//			#ifdef NALI_OS_ANDROID
+//				a_wait();
+//			#endif
+
 			vk_freeSwapchain();
 			vk_makeSwapchain(m_max_queue_surface_p[m_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 
@@ -216,6 +230,8 @@ int vk_cmdDraw(void *arg)
 			vkviewport.height = m_vkextent2d.height;
 			vkrenderpassbegininfo.renderArea.extent = m_vkextent2d;
 			vkrect2d.extent = m_vkextent2d;
+
+			m_surface_state &= 0xFFu - NALI_SURFACE_C_S_RE;
 		}
 
 		uint32_t image_index;
@@ -255,6 +271,9 @@ int vk_cmdDraw(void *arg)
 				}
 
 				vkQueueWaitIdle(vkqueue_graphic);
+
+				M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), 16.0F / 9.0F, 0.1F, 100.0F, m_mvp_float_array + 16 * 2)
+
 				ry += 0.005F;
 				float q[4];
 				memcpy(m_vkbuffer_p + 16 * sizeof(float), m_mvp_float_array + 16, 16 * sizeof(float));

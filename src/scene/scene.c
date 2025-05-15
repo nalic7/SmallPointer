@@ -5,7 +5,7 @@ static int init(void *arg)
 		lc_init();
 		vk_init();
 		al_init();
-		lc_initVK();
+		lc_vk();
 	#endif
 
 	// while (1)

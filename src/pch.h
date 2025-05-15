@@ -162,7 +162,7 @@
 	#endif
 
 	#ifdef NALI_OS_ANDROID
-		#define NALI_HOME "/storage/emulated/0/Android/data/com.nali.scene/"
+		#define NALI_HOME
 	#else
 		#define NALI_HOME "../asset/"
 	#endif

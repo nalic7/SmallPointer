@@ -147,6 +147,7 @@ static void gen_model()
 						{
 							// V4_qi(p, l_4 * 4)
 							v4_m(l_q, p + l_4 * 4, q + l_4 * 4);
+							V4_qi(q, l_4 * 4)
 						}
 						// for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
 						// {

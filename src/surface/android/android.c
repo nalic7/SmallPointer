@@ -1,15 +1,27 @@
 ANativeWindow *m_anativewindow_p = NULL;
+ANativeActivity *m_anativeactivity_p;
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
-	nali_log("window %p", window);
+	nali_log("window %p", window)
+	m_width = ANativeWindow_getWidth(window);
+	m_height = ANativeWindow_getHeight(window);
 	m_anativewindow_p = window;
+}
+
+static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
+{
+	nali_log("window resize")
+	m_width = ANativeWindow_getWidth(window);
+	m_height = ANativeWindow_getHeight(window);
+	m_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
-	nali_log("window 0");
+	nali_log("window 0")
 	m_anativewindow_p = NULL;
+	m_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
@@ -17,11 +29,42 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	nali_log("ANativeActivity_onCreate")
 	scene_init();
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
+	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
 	activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
+
+	m_anativeactivity_p = activity;
 
 //	SLObjectItf slobjectitf;
 //	nali_info("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
 }
+
+//static uint8_t a_state = 0;
+//#define A_STATE_WAIT 1
+
+//void a_wait()
+//{
+//	while (!m_anativewindow_p)
+//	{
+//		a_state |= A_STATE_WAIT;
+//		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
+//	}
+//
+//	if (a_state & A_STATE_WAIT)
+//	{
+////		vk_freeDevice();
+////		vk_freeQueue();
+////		VK_freeSurface
+//		VK_makeSurface
+////		vk_initQueue();
+////		vk_initDevice();
+////		vk_setQueue(m_device);
+////		vk_makeDevice(m_device);
+////		vk_getQueue(m_device);
+//
+//		m_surface_state |= NALI_SURFACE_C_S_RE;
+//		a_state &= 0xFFu - A_STATE_WAIT;
+//	}
+//}
 
 //AAudioStreamDataCallbackResult data_callback(AAudioStream *stream, void *userData, void *audioData, int32_t numFrames) {
 //	// Fill audioData with the samples to be played

@@ -98,14 +98,7 @@ set(VK_DEBUG 1)
 set(SCENE 1)
 #...
 ```
->src/pch.h
 
-```c
-//package path
-#ifdef NALI_OS_ANDROID
-	#define NALI_HOME "/.../com.nali.scene/"
-//...
-```
 </span>
 
 <!-- ### Collada Parser

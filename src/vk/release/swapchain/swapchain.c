@@ -4,7 +4,7 @@ VkRenderPass m_vkrenderpass;
 
 VkImage *m_vkswapchainkhr_vkimage_p;
 VkImageView *m_vkswapchainkhr_vkimageview_p;
-VkFramebuffer *m_vkswapchainkhr_vkframebuffer_p;
+VkFramebuffer *m_vkswapchainkhr_vkframebuffer_p = NULL;
 
 static uint32_t swapchain_image;
 
@@ -166,7 +166,11 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 
 void vk_freeSwapchain()
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[m_device];
+	if (m_vkswapchainkhr_vkframebuffer_p == NULL)
+	{
+		return;
+	}
+//	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[m_device];
 	VkDevice vkdevice = m_vkdevice_p[m_device];
 
 	vkDestroyImageView(vkdevice, vkimageview_depth, VK_NULL_HANDLE);
@@ -189,4 +193,5 @@ void vk_freeSwapchain()
 	free(m_vkswapchainkhr_vkimage_p);
 	free(m_vkswapchainkhr_vkimageview_p);
 	free(m_vkswapchainkhr_vkframebuffer_p);
+	m_vkswapchainkhr_vkframebuffer_p = NULL;
 }

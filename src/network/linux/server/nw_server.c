@@ -49,7 +49,7 @@ static void out()
 	}
 	else
 	{
-		m_net_server_state &= 255 - NALI_NET_SERVER_INIT;
+		m_net_server_state &= 0xFFu - NALI_NET_SERVER_INIT;
 	}
 	errno_temp = errno;
 }
@@ -58,7 +58,7 @@ static void out()
 static int r;
 static int init(void *arg)
 {
-	m_net_server_state &= 255 - NALI_NET_SERVER_FAIL;
+	m_net_server_state &= 0xFFu - NALI_NET_SERVER_FAIL;
 
 	epoll_event_p = malloc(sizeof(struct epoll_event) * NALI_MAX_EPOLL_EVENT);
 	client_fd_p = malloc(sizeof(int) * NALI_MAX_CLIENT);
@@ -159,12 +159,12 @@ static int init(void *arg)
 		#ifdef NALI_DEBUG
 			out();
 		#else
-			m_net_server_state &= 255 - NALI_NET_SERVER_INIT;
+			m_net_server_state &= 0xFFu - NALI_NET_SERVER_INIT;
 		#endif
 	}
 
 	clean();
-	m_net_server_state &= 255 - NALI_NET_SERVER_INIT;
+	m_net_server_state &= 0xFFu - NALI_NET_SERVER_INIT;
 	return 0;
 }
 void nws_init()

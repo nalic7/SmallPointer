@@ -43,7 +43,7 @@ static void out()
 	}
 	else
 	{
-		m_net_client_state &= 255 - NALI_NET_CLIENT_INIT;
+		m_net_client_state &= 0xFFu - NALI_NET_CLIENT_INIT;
 	}
 	errno_temp = errno;
 }
@@ -53,7 +53,7 @@ static int r;
 static int init(void *arg)
 {
 	nali_log("sinit")
-	m_net_client_state &= 255 - NALI_NET_CLIENT_FAIL;
+	m_net_client_state &= 0xFFu - NALI_NET_CLIENT_FAIL;
 
 	nali_info("socket %d", r = m_client_socket = socket(AF_INET, SOCK_STREAM, 0))
 	//errno.h ECONNREFUSED ETIMEDOUT
@@ -97,12 +97,12 @@ static int init(void *arg)
 		#ifdef NALI_DEBUG
 			out();
 		#else
-			m_net_client_state &= 255 - NALI_NET_CLIENT_INIT;
+			m_net_client_state &= 0xFFu - NALI_NET_CLIENT_INIT;
 		#endif
 	}
 
 	clean();
-	m_net_client_state &= 255 - NALI_NET_CLIENT_INIT;
+	m_net_client_state &= 0xFFu - NALI_NET_CLIENT_INIT;
 	nali_log("einit")
 	return 0;
 }
