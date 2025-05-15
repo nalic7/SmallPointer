@@ -30,6 +30,7 @@
 			#include <SLES/OpenSLES.h>
 
 			#include "surface/android/android.h"
+			#include <android/configuration.h>
 		#endif
 	#else
 		#include <stdio.h>

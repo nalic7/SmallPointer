@@ -6,6 +6,8 @@ VkImage *m_vkswapchainkhr_vkimage_p;
 VkImageView *m_vkswapchainkhr_vkimageview_p;
 VkFramebuffer *m_vkswapchainkhr_vkframebuffer_p = NULL;
 
+//VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
+
 static uint32_t swapchain_image;
 
 static VkImage vkimage_depth;
@@ -47,11 +49,43 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 		free(vkpresentmodekhr_p);
 	#endif
 
-	m_vkextent2d.height = m_height;
-	m_vkextent2d.width = m_width;
-
 	VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr;
 	nali_info("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, m_vksurfacekhr, &vksurfacecapabilitieskhr))
+
+//	m_vksurfacetransformflagbitskhr = vksurfacecapabilitieskhr.currentTransform;
+//	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
+	if (vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
+	{
+		m_vkextent2d.width = m_height;
+		m_vkextent2d.height = m_width;
+//		m_width = m_vkextent2d.width;
+//		m_height = m_vkextent2d.height;
+	}
+	else
+	{
+		m_vkextent2d.height = m_height;
+		m_vkextent2d.width = m_width;
+	}
+
+////	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR)
+////	{
+////		m_vkextent2d.height = 1;
+////		m_vkextent2d.width = 1;
+////		m_width = m_vkextent2d.width;
+////		m_height = m_vkextent2d.height;
+////	}
+////	else if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR)
+////	{
+////		m_vkextent2d.height = 1;
+////		m_vkextent2d.width = 1;
+////		m_width = m_vkextent2d.width;
+////		m_height = m_vkextent2d.height;
+////	}
+//	else
+//	{
+//		m_vkextent2d.height = m_height;
+//		m_vkextent2d.width = m_width;
+//	}
 
 	nali_info
 	(
@@ -70,7 +104,7 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 				.imageArrayLayers = 1,
 				.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 
-				.preTransform = vksurfacecapabilitieskhr.currentTransform,
+				.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR,
 				.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
 				.presentMode = NALI_VK_PRESENT,
 				.clipped = VK_TRUE,

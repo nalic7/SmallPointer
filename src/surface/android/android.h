@@ -4,6 +4,6 @@
 extern ANativeWindow *m_anativewindow_p;
 extern ANativeActivity *m_anativeactivity_p;
 
-//void a_wait();
+void a_wait();
 
 #endif

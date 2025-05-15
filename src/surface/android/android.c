@@ -1,5 +1,9 @@
 ANativeWindow *m_anativewindow_p = NULL;
 ANativeActivity *m_anativeactivity_p;
+//static int32_t orientation;
+
+static uint8_t a_state = 0;
+#define A_STATE_WAIT 1
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
@@ -24,47 +28,76 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
 	m_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
+//static void onConfigurationChanged(ANativeActivity* activity)
+//{
+//	nali_log("onConfigurationChanged")
+//
+//	AConfiguration *aconfiguration_p = AConfiguration_new();
+//	AConfiguration_fromAssetManager(aconfiguration_p, activity->assetManager);
+//
+//	orientation = AConfiguration_getOrientation(aconfiguration_p);
+//
+//	nali_log("orientation %d", orientation)
+////	if (orientation == ACONFIGURATION_ORIENTATION_PORT)
+////	{
+////	}
+////	else if (orientation == ACONFIGURATION_ORIENTATION_LAND)
+////	{
+////	}
+////	else
+////	{
+////	}
+//
+//	AConfiguration_delete(aconfiguration_p);
+//}
+
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
 	nali_log("ANativeActivity_onCreate")
-	scene_init();
+	if (!(a_state & A_STATE_WAIT))
+	{
+		scene_init();
+	}
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
 	activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
-
+//	activity->callbacks->onConfigurationChanged = onConfigurationChanged;
 	m_anativeactivity_p = activity;
 
 //	SLObjectItf slobjectitf;
 //	nali_info("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
 }
 
-//static uint8_t a_state = 0;
-//#define A_STATE_WAIT 1
+void a_wait()
+{
+	while (!m_anativewindow_p)
+	{
+		a_state |= A_STATE_WAIT;
+		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
+	}
 
-//void a_wait()
-//{
-//	while (!m_anativewindow_p)
-//	{
-//		a_state |= A_STATE_WAIT;
-//		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
-//	}
-//
-//	if (a_state & A_STATE_WAIT)
-//	{
-////		vk_freeDevice();
-////		vk_freeQueue();
-////		VK_freeSurface
-//		VK_makeSurface
-////		vk_initQueue();
-////		vk_initDevice();
-////		vk_setQueue(m_device);
-////		vk_makeDevice(m_device);
-////		vk_getQueue(m_device);
-//
-//		m_surface_state |= NALI_SURFACE_C_S_RE;
-//		a_state &= 0xFFu - A_STATE_WAIT;
-//	}
-//}
+	if (a_state & A_STATE_WAIT)
+	{
+//		lc_init();
+//		vk_init();
+////		al_init();
+//		lc_vk();
+
+//		vk_freeDevice();
+//		vk_freeQueue();
+		VK_freeSurface
+		VK_makeSurface
+//		vk_initQueue();
+//		vk_initDevice();
+//		vk_setQueue(m_device);
+//		vk_makeDevice(m_device);
+//		vk_getQueue(m_device);
+
+//		m_surface_state |= NALI_SURFACE_C_S_CLEAN;
+		m_surface_state |= NALI_SURFACE_C_S_RE;
+		a_state &= 0xFFu - A_STATE_WAIT;
+	}
+}
 
 //AAudioStreamDataCallbackResult data_callback(AAudioStream *stream, void *userData, void *audioData, int32_t numFrames) {
 //	// Fill audioData with the samples to be played
