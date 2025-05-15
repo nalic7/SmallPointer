@@ -14,7 +14,7 @@
 //av s_d-s_s-s_e
 //? d_d-d_s-d_e
 
-#define NALI_LC_MVP_BL sizeof(float) * 16
+#define NALI_LC_MVP_BL sizeof(float) * 16 * 3
 
 extern VkBuffer m_vkbuffer;
 extern VkDeviceMemory m_vkdevicememory;

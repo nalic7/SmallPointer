@@ -6,32 +6,27 @@ layout(location = 0) in vec3 a_v;
 //use j1c1->j1t1u1v1
 layout(location = 1) in uint a_j1c1;
 
-layout(set = 0, binding = 0) uniform UBO
+layout(std140, set = 0, binding = 0) uniform UBOS
 {
-	mat4 mvp;
-} ubo;
+	mat4 m;
+	mat4 v;
+	mat4 p;
+} ubos;
 
-layout(std430, set = 0, binding = 1) readonly buffer SSBOB
+layout(std140, set = 0, binding = 1) uniform UBOB
 {
-	vec4 ssbob_s[NALI_BONE_SIZE];//w4 b
-	vec4 ssbob_r[NALI_BONE_SIZE];
-	vec4 ssbob_t[NALI_BONE_SIZE];//w4 start end
-};
+	mat4 i_bindpose[NALI_BONE_SIZE];
+	mat4 bindpose[NALI_BONE_SIZE];
+	vec4 s[NALI_BONE_SIZE];//w1_start w2_end
+	vec4 r[NALI_BONE_SIZE];
+	vec4 t[NALI_BONE_SIZE];//w1-4_b
+} ubob;
 
-layout(std430, set = 0, binding = 2) readonly buffer SSBOAS
+/*layout(std430, set = 0, binding = 2) readonly buffer SSBOAS
 {
 	//vec4
 	vec3 ssboas_s[NALI_BONE_SIZE];
-};
-layout(std430, set = 0, binding = 3) readonly buffer SSBOAR
-{
-	vec4 ssboar_r[NALI_BONE_SIZE];
-};
-layout(std430, set = 0, binding = 4) readonly buffer SSBOAT
-{
-	//vec4
-	vec3 ssboat_t[NALI_BONE_SIZE];
-};
+};*/
 
 layout(location = 0) out uint f_c;
 
@@ -111,29 +106,47 @@ void main()
 //		l_v *= 0;
 //	}
 
-	for (uint l_0 = floatBitsToUint(ssbob_t[l_j].w) & 0xFFu; l_0 < ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu); ++l_0)
-	//for (uint l_0 = ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu) - 1; l_0 > (floatBitsToUint(ssbob_t[l_j].w) & 0xFFu) - 1; --l_0)
+	// for (uint l_0 = floatBitsToUint(ssbob_t[l_j].w) & 0xFFu; l_0 < ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu); ++l_0)
+	// //for (uint l_0 = ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu) - 1; l_0 > (floatBitsToUint(ssbob_t[l_j].w) & 0xFFu) - 1; --l_0)
+	// {
+	// 	mat4 l_bp_mat4 = mat4(1);
+	// 	for (uint l_1 = l_0; l_1 < ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu); ++l_1)
+	// 	//for (uint l_1 = ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu); l_1 > l_0 - 1; --l_1)
+	// 	{
+	// 		uint l_1_0 = (floatBitsToUint(ssbob_s[l_1 / 4].w) >> l_1 % 4 * 8) & 0xFFu;
+	// 		l_bp_mat4 *= s2mat4(ssbob_s[l_1_0].xyz);
+	// 		l_bp_mat4 *= r2mat4(ssbob_r[l_1_0]);
+	// 		l_bp_mat4 *= t2mat4(ssbob_t[l_1_0].xyz);
+	// 	}
+	// 	uint l_0_0 = (floatBitsToUint(ssbob_s[l_0 / 4].w) >> l_0 % 4 * 8) & 0xFFu;
+
+	// 	//l_v = inverse(l_bp_mat4) * l_v;
+	// 	//l_v = l_bp_mat4 * t2mat4(ssboat_t[l_0_0]) * r2mat4(ssboar_r[l_0_0]) * s2mat4(ssboas_s[l_0_0]) * inverse(l_bp_mat4) * l_v;
+	// 	//l_v = inverse(l_bp_mat4 * s2mat4(ssboas_s[l_0_0]) * r2mat4(ssboar_r[l_0_0]) * t2mat4(ssboat_t[l_0_0])) * l_bp_mat4 * l_v;
+	// 	l_v = l_bp_mat4 * s2mat4(ssboas_s[l_0_0]) * r2mat4(ssboar_r[l_0_0]) * t2mat4(ssboat_t[l_0_0]) * inverse(l_bp_mat4) * l_v;
+	// 	//l_v = l_bp_mat4 * s2mat4(ssboas_s[l_0_0]) * t2mat4(ssboat_t[l_0_0]) * inverse(l_bp_mat4) * l_v;
+	// 	//l_v = inverse(l_bp_mat4) * t2mat4(ssboat_t[l_0_0]) * r2mat4(ssboar_r[l_0_0]) * s2mat4(ssboas_s[l_0_0]) * l_bp_mat4 * l_v;
+	// 	//l_v = l_bp_mat4 * l_v;
+	// }
+	// //weight 1
+	// //l_v *= float((a_j1c1 >> ?) & 0xFFu);
+
+	// mat4 l_m = mat4(1);
+
+	for (uint l_0 = floatBitsToUint(ubob.s[l_j].w) & 0xFFu; l_0 < ((floatBitsToUint(ubob.s[l_j].w) >> 8) & 0xFFu); ++l_0)
 	{
-		mat4 l_bp_mat4 = mat4(1);
-		for (uint l_1 = l_0; l_1 < ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu); ++l_1)
-		//for (uint l_1 = ((floatBitsToUint(ssbob_t[l_j].w) >> 8) & 0xFFu); l_1 > l_0 - 1; --l_1)
-		{
-			uint l_1_0 = (floatBitsToUint(ssbob_s[l_1 / 4].w) >> l_1 % 4 * 8) & 0xFFu;
-			l_bp_mat4 *= s2mat4(ssbob_s[l_1_0].xyz);
-			l_bp_mat4 *= t2mat4(ssbob_t[l_1_0].xyz);
-			l_bp_mat4 *= r2mat4(ssbob_r[l_1_0]);
-		}
-		uint l_0_0 = (floatBitsToUint(ssbob_s[l_0 / 4].w) >> l_0 % 4 * 8) & 0xFFu;
-
-		//l_v = inverse(l_bp_mat4) * l_v;
-		l_v = l_bp_mat4 * t2mat4(ssboat_t[l_0_0]) * r2mat4(ssboar_r[l_0_0]) * s2mat4(ssboas_s[l_0_0]) * inverse(l_bp_mat4) * l_v;
-		//l_v = inverse(l_bp_mat4) * t2mat4(ssboat_t[l_0_0]) * r2mat4(ssboar_r[l_0_0]) * s2mat4(ssboas_s[l_0_0]) * l_bp_mat4 * l_v;
-		//l_v = l_bp_mat4 * l_v;
+		uint l_0_0 = (floatBitsToUint(ubob.t[l_0 / 4].w) >> l_0 % 4 * 8) & 0xFFu;
+		// l_m = ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.i_bindpose[l_0_0] * l_m;
+		// l_m = ubob.i_bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.bindpose[l_0_0] * l_m;
+		// l_v = l_m * l_v;
+		// l_v = inverse(l_m) * l_v;
+		// l_v = ubob.bindpose[l_0_0] * ubob.i_bindpose[l_0_0] * l_v;
+		l_v = ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * inverse(r2mat4(ubob.r[l_0_0])) * t2mat4(ubob.t[l_0_0].xyz) * ubob.i_bindpose[l_0_0] * l_v;
+		// l_v = ubob.i_bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.bindpose[l_0_0] * l_v;
+		// l_v = inverse(ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz)) * ubob.bindpose[l_0_0] * l_v;
 	}
-	//weight 1
-	//l_v *= float((a_j1c1 >> ?) & 0xFFu);
 
-	gl_Position = ubo.mvp * l_v;
+	gl_Position = ubos.p * ubos.v * ubos.m * l_v;
 
 	f_c = (a_j1c1 >> 8) & 0xFFu;
 }

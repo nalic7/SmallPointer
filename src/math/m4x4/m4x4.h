@@ -4,7 +4,7 @@
 extern float m_m4x4_mat[16];
 
 void m4x4_i(float *m4x4_p);
-void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p);
+void m4x4_m(float *a_m4x4_float_p, float *b_m4x4_float_p, float *w_m4x4_float_p);
 
 // float z_range = z_near - z_far;
 // float tan_fov = tanf(fov);

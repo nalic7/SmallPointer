@@ -24,11 +24,11 @@ static uint32_t bone_bl = 0;
 
 static uint8_t *joint_count_p;
 static uint8_t joint_count_bl = 0;
-static uint8_t *joint_srt_p;//float
-static uint32_t joint_srt_bl = 0;
-static uint32_t joint_srt_step = 0;
-static uint8_t *joint_head_p;
-static uint8_t *joint_p;
+// static uint8_t *joint_srt_p;//float
+// static uint32_t joint_srt_bl = 0;
+// static uint32_t joint_srt_step = 0;
+// static uint8_t joint_head_array[1024];
+static uint8_t joint_array[1024];
 static uint32_t joint_bl = 0;
 
 static uint8_t *animation_p;//float
@@ -47,14 +47,37 @@ static uint32_t attribute_bl = 0;
 static uint8_t *index_p;
 static uint32_t index_bl = 0;
 
+//test
+static float i_bindpose_array[1024*2];
+static float global_bindpose_array[1024*2];
+
 static void gen_model()
 {
+	// // float a[16] =
+	// // {
+	// // 	1,	4,	6,	3,
+	// // 	4,	1,	2,	3,
+	// // 	9,	7,	1,	3,
+	// // 	8,	4,	1,	1
+	// // },
+	// // b[16] =
+	// // {
+	// // 	1,	5,	7,	5,
+	// // 	2,	1,	1,	4,
+	// // 	4,	1,	1,	3,
+	// // 	4,	1,	8,	1
+	// // }, c[16];
+	// // m4x4_m(a, b, c);
+	// // m4x4_m(b, a, c);
+	// // m4x4_i(c);
+	// float q[4];
+	// v4_q(0.229, -0.927, 0.458, q);
+	// float r[16];
+	// v4_qm(q, r);
 	joint_count_p = malloc(0);
-	joint_srt_p = malloc(0);
-	joint_p = malloc(1024);//fix size
+	// joint_srt_p = malloc(0);
 
-	joint_head_p = malloc(1024);//fix size
-	memset(joint_head_p, 0, 1024);
+	// memset(joint_head_array, 0, 1024);
 
 	animation_p = malloc(0);
 
@@ -85,8 +108,9 @@ static void gen_model()
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_animation_p->channels_count; ++l_2)
 			{
-				cgltf_animation_sampler *cgltf_animation_sampler_p = &cgltf_animation_p->samplers[l_2];
+				// cgltf_animation_sampler *cgltf_animation_sampler_p = &cgltf_animation_p->samplers[l_2];
 				cgltf_animation_channel *cgltf_animation_channel_p = &cgltf_animation_p->channels[l_2];
+				cgltf_animation_sampler *cgltf_animation_sampler_p = cgltf_animation_channel_p->sampler;
 
 				cgltf_accessor *cgltf_accessor_input_p = cgltf_animation_sampler_p->input;
 				cgltf_accessor *cgltf_accessor_output_p = cgltf_animation_sampler_p->output;
@@ -97,25 +121,41 @@ static void gen_model()
 				animation_bl += sizeof(uint8_t);
 
 				cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_input_p->buffer_view;
-				uint8_t *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+				float *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 				// /b\ 1
 				for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
 				{
-					*(uint8_t*)(animation_p + animation_bl + l_3) = ((float *)p)[l_3] * NALI_FPS;
+					*(uint8_t*)(animation_p + animation_bl + l_3) = p[l_3] * NALI_FPS;
 				}
 				animation_bl += cgltf_accessor_input_p->count;
 
 				cgltf_buffer_view_p = cgltf_accessor_output_p->buffer_view;
 				p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
+				float l_q[4];
+				float q[4*10];
 				switch (cgltf_animation_channel_p->target_path)
 				{
 					case cgltf_animation_path_type_scale:
 						NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
 						break;
 					case cgltf_animation_path_type_rotation:
-						NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 4)
+						memcpy(l_q, cgltf_animation_channel_p->target_node->rotation, sizeof(float) * 4);
+						V4_qi(l_q, 0)
+						for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
+						{
+							// V4_qi(p, l_4 * 4)
+							v4_m(l_q, p + l_4 * 4, q + l_4 * 4);
+						}
+						// for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
+						// {
+						// 	if (q[3+l_4*4] == 0)
+						// 	{
+						// 		q[3+l_4*4] = 1;
+						// 	}
+						// }
+						NALI_MEMORY_RECOPY(animation_p, q, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 4)
 						break;
 					case cgltf_animation_path_type_translation:
 						NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
@@ -130,62 +170,159 @@ static void gen_model()
 		{
 			cgltf_skin *cgltf_skin_p = &cgltf_data_p->skins[l_1];
 
-			for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
-			{
-				cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
-				uint32_t j = (bone_bl + l_2) * 3;
-				uint8_t j_step = j % 8;
-				if (cgltf_node_joints_p->has_scale)
-				{
-					joint_head_p[j / 8] |= 1 << j_step;
-					joint_srt_bl += sizeof(float) * 3;
-				}
+			// for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
+			// {
+			// 	cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
+			// 	uint32_t j = (bone_bl + l_2) * 3;
+			// 	uint8_t j_step = j % 8;
+			// 	if (cgltf_node_joints_p->has_scale)
+			// 	{
+			// 		joint_head_array[j / 8] |= 1 << j_step;
+			// 		joint_srt_bl += sizeof(float) * 3;
+			// 	}
 
-				if (cgltf_node_joints_p->has_rotation)
-				{
-					uint8_t j_next = j_step + 1;
-					joint_head_p[j / 8 + j_next / 8] |= 1 << (j_next % 8);
-					joint_srt_bl += sizeof(float) * 4;
-				}
+			// 	if (cgltf_node_joints_p->has_rotation)
+			// 	{
+			// 		uint8_t j_next = j_step + 1;
+			// 		joint_head_array[j / 8 + j_next / 8] |= 1 << (j_next % 8);
+			// 		joint_srt_bl += sizeof(float) * 4;
+			// 	}
 
-				if (cgltf_node_joints_p->has_translation)
-				{
-					uint8_t j_next = j_step + 2;
-					joint_head_p[j / 8 + j_next / 8] |= 1 << (j_next % 8);
-					joint_srt_bl += sizeof(float) * 3;
-				}
+			// 	if (cgltf_node_joints_p->has_translation)
+			// 	{
+			// 		uint8_t j_next = j_step + 2;
+			// 		joint_head_array[j / 8 + j_next / 8] |= 1 << (j_next % 8);
+			// 		joint_srt_bl += sizeof(float) * 3;
+			// 	}
 
-				if (cgltf_node_joints_p->has_matrix)
-				{
-					nali_info_t("%s has_matrix", cgltf_node_joints_p->name);
-					// cgltf_node_p->matrix;
-				}
-			}
+			// 	if (cgltf_node_joints_p->has_matrix)
+			// 	{
+			// 		nali_info_t("%s has_matrix", cgltf_node_joints_p->name);
+			// 		// cgltf_node_p->matrix;
+			// 	}
+			// }
 
-			joint_srt_p = realloc(joint_srt_p, joint_srt_bl);
+			// joint_srt_p = realloc(joint_srt_p, joint_srt_bl);
 
-			for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
-			{
-				cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
-				if (cgltf_node_joints_p->has_scale)
-				{
-					NALI_MEMORY_COPY(joint_srt_p, cgltf_node_joints_p->scale, joint_srt_step, sizeof(float) * 3)
-				}
-				if (cgltf_node_joints_p->has_rotation)
-				{
-					NALI_MEMORY_COPY(joint_srt_p, cgltf_node_joints_p->rotation, joint_srt_step, sizeof(float) * 4)
-				}
-				if (cgltf_node_joints_p->has_translation)
-				{
-					NALI_MEMORY_COPY(joint_srt_p, cgltf_node_joints_p->translation, joint_srt_step, sizeof(float) * 3)
-				}
-			}
+			//s0-test
+			memcpy(i_bindpose_array + bone_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset, sizeof(float) * 16 * cgltf_skin_p->joints_count);
+
+			cgltf_node *parent_cgltf_node_p = cgltf_skin_p->joints[0]->parent;
+
+			// for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
+			// {
+			// 	cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
+
+			// 	memcpy(global_bindpose_array + (bone_bl + l_2) * 16, m_m4x4_mat, sizeof(float) * 16);
+			// 	do
+			// 	{
+			// 		//trs
+			// 		if (cgltf_node_joints_p->has_scale)
+			// 		{
+			// 			float s_array[16] =
+			// 			{
+			// 				cgltf_node_joints_p->scale[0], 0, 0, 0,
+			// 				0, cgltf_node_joints_p->scale[1], 0, 0,
+			// 				0, 0, cgltf_node_joints_p->scale[2], 0,
+			// 				0, 0, 0, 1,
+			// 			};
+			// 			m4x4_m(s_array, global_bindpose_array + (bone_bl + l_2) * 16, global_bindpose_array + (bone_bl + l_2) * 16);
+			// 		}
+			// 		if (cgltf_node_joints_p->has_rotation)
+			// 		{
+			// 			float r_array[16];
+			// 			memcpy(r_array, m_m4x4_mat, sizeof(float) * 16);
+			// 			v4_qm(cgltf_node_joints_p->rotation, r_array);
+			// 			m4x4_m(r_array, global_bindpose_array + (bone_bl + l_2) * 16, global_bindpose_array + (bone_bl + l_2) * 16);
+			// 		}
+			// 		if (cgltf_node_joints_p->has_translation)
+			// 		{
+			// 			float t_array[16] =
+			// 			{
+			// 				1, 0, 0, 0,
+			// 				0, 1, 0, 0,
+			// 				0, 0, 1, 0,
+			// 				cgltf_node_joints_p->translation[0], cgltf_node_joints_p->translation[1], cgltf_node_joints_p->translation[2], 1,
+			// 			};
+			// 			m4x4_m(t_array, global_bindpose_array + (bone_bl + l_2) * 16, global_bindpose_array + (bone_bl + l_2) * 16);
+			// 		}
+			// 		if (cgltf_node_joints_p->has_matrix)
+			// 		{
+			// 			nali_info_t("cgltf_node_joints_p->has_matrix");
+			// 		}
+			// 	}
+			// 	while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != parent_cgltf_node_p);
+
+			// 	m4x4_i(global_bindpose_array + (bone_bl + l_2) * 16);
+			// 	m4x4_m(i_bindpose_array + (bone_bl + l_2) * 16, global_bindpose_array + (bone_bl + l_2) * 16, i_bindpose_array + (bone_bl + l_2) * 16);
+			// // 	// for (uint8_t l_3 = 0; l_3 < 16; ++l_3)
+			// // 	// {
+			// // 	// 	nali_log("%d [%d] %f", bone_bl + l_2, l_3, fabsf((local_bindpose_array + (bone_bl + l_2) * 16)[l_3] - (global_bindpose_array + (bone_bl + l_2) * 16)[l_3]));
+			// // 	// }
+
+			// // 	// nali_log("---");
+			// }
+			// memcpy(i_bindpose_array + bone_bl * 16, global_bindpose_array + bone_bl * 16, sizeof(float) * 16 * cgltf_skin_p->joints_count);
+
+			// // // for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
+			// // // {
+			// // // 	cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
+
+			// // // 	int8_t l_2_0 = 0;
+			// // // 	float bindpose[22][16];
+			// // // 	do
+			// // // 	{
+			// // // 		memcpy(bindpose[l_2_0], m_m4x4_mat, sizeof(float) * 16);
+			// // // 		for (uint32_t l_3 = 0; l_3 < cgltf_skin_p->joints_count; ++l_3)
+			// // // 		{
+			// // // 			if (cgltf_skin_p->joints[l_3] == cgltf_node_joints_p)
+			// // // 			{
+			// // // 				m4x4_m(global_bindpose_array + (bone_bl + l_3) * 16, bindpose[l_2_0]);
+			// // // 				break;
+			// // // 			}
+			// // // 		}
+			// // // 		++l_2_0;
+			// // // 	}
+			// // // 	while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != parent_cgltf_node_p);
+
+			// // // 	memcpy(bindpose[l_2_0 + 1], m_m4x4_mat, sizeof(float) * 16);
+			// // // 	for (int8_t l_3 = l_2_0 - 1; l_3 > -1; --l_3)
+			// // // 	{
+			// // // 		m4x4_m(bindpose[l_3], bindpose[l_2_0 + 1]);
+			// // // 	}
+
+			// // // 	m4x4_i(bindpose[l_2_0 + 1]);
+			// // // 	for (uint8_t l_3 = 0; l_3 < 16; ++l_3)
+			// // // 	{
+			// // // 		nali_log("%d [%d] %f", bone_bl + l_2, l_3, fabsf((local_bindpose_array + (bone_bl + l_2) * 16)[l_3] - bindpose[l_2_0 + 1][l_3]));
+			// // // 	}
+
+			// // // 	nali_log("---");
+			// // // }
+			// //e0-test
+
+			// for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
+			// {
+			// 	cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
+			// 	if (cgltf_node_joints_p->has_scale)
+			// 	{
+			// 		NALI_MEMORY_COPY(joint_srt_p, cgltf_node_joints_p->scale, joint_srt_step, sizeof(float) * 3)
+			// 	}
+			// 	if (cgltf_node_joints_p->has_rotation)
+			// 	{
+			// 		NALI_MEMORY_COPY(joint_srt_p, cgltf_node_joints_p->rotation, joint_srt_step, sizeof(float) * 4)
+			// 	}
+			// 	if (cgltf_node_joints_p->has_translation)
+			// 	{
+			// 		NALI_MEMORY_COPY(joint_srt_p, cgltf_node_joints_p->translation, joint_srt_step, sizeof(float) * 3)
+			// 	}
+			// }
 
 			joint_count_p = realloc(joint_count_p, joint_count_bl + sizeof(uint8_t));
 			joint_count_p[joint_count_bl] = cgltf_skin_p->joints_count;
 			joint_count_bl += sizeof(uint8_t);
 
-			cgltf_node *parent_cgltf_node_p = cgltf_skin_p->joints[0]->parent;
+			// cgltf_node *parent_cgltf_node_p = cgltf_skin_p->joints[0]->parent;
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
 			{
@@ -194,7 +331,7 @@ static void gen_model()
 				// joint_p = realloc(joint_p, joint_bl + sizeof(uint8_t) + sizeof(uint8_t) + cgltf_node_joints_p->children_count);
 
 				// joint_p[joint_bl] = sizeof(uint8_t) + cgltf_node_joints_p->children_count;
-				joint_p[joint_bl + 1] = l_2;
+				joint_array[joint_bl + 1] = l_2;
 				joint_bl += 2;
 
 				// for (uint32_t c_0 = 0; c_0 < cgltf_node_joints_p->children_count; ++c_0)
@@ -205,14 +342,14 @@ static void gen_model()
 					{
 						if (cgltf_node_joints_p == cgltf_skin_p->joints[j_1])
 						{
-							joint_p[joint_bl + c_0] = j_1;
+							joint_array[joint_bl + c_0] = j_1;
 							break;
 						}
 					}
 
 					++c_0;
 				}
-				joint_p[joint_bl - 2] = sizeof(uint8_t) + c_0;
+				joint_array[joint_bl - 2] = sizeof(uint8_t) + c_0;
 				joint_bl += c_0;
 
 				// if (max_joint_bl < cgltf_node_joints_p->children_count)
@@ -469,9 +606,10 @@ static void gen_model()
 
 	fwrite(&joint_count_bl, sizeof(uint8_t), 1, file);
 	fwrite(joint_count_p, sizeof(uint8_t), joint_count_bl, file);
-	fwrite(joint_p, sizeof(uint8_t), joint_bl, file);
-	fwrite(joint_head_p, sizeof(uint8_t), ceil(bone_bl * 3.0F / 8), file);
-	fwrite(joint_srt_p, sizeof(uint8_t), joint_srt_bl, file);
+	fwrite(joint_array, sizeof(uint8_t), joint_bl, file);
+	fwrite(i_bindpose_array, sizeof(float), bone_bl * 16, file);
+	// fwrite(joint_head_array, sizeof(uint8_t), ceil(bone_bl * 3.0F / 8), file);
+	// fwrite(joint_srt_p, sizeof(uint8_t), joint_srt_bl, file);
 
 	fwrite(&animation_bl, sizeof(uint32_t), 1, file);
 	fwrite(animation_p, sizeof(uint8_t), animation_bl, file);

@@ -196,6 +196,8 @@ void freeCmdDraw()
 	mtx_destroy(m_mtx_t_draw_p);
 }
 
+static float ry = 0.0F;
+
 int vk_cmdDraw(void *arg)
 {
 	while (!(m_surface_state & NALI_SURFACE_C_S_CLEAN))
@@ -251,6 +253,22 @@ int vk_cmdDraw(void *arg)
 					vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &m_vkdescriptorset, 0, VK_NULL_HANDLE);
 					vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
 				}
+
+				vkQueueWaitIdle(vkqueue_graphic);
+				ry += 0.005F;
+				float q[4];
+				memcpy(m_vkbuffer_p + 16 * sizeof(float), m_mvp_float_array + 16, 16 * sizeof(float));
+				v4_q(0, ry, MATH_D2R(180.0F), q);
+				v4_qm(q, m_vkbuffer_p + 16 * sizeof(float));
+				vkFlushMappedMemoryRanges(m_vkdevice_p[m_device], 1, &(VkMappedMemoryRange)
+				{
+					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+					.memory = m_vkdevicememory,
+					.offset = 16 * sizeof(float),
+					.size = 16 * sizeof(float),
+					.pNext = VK_NULL_HANDLE
+				});
+
 				mtx_unlock(m_mtx_t_draw_p);
 
 			vkCmdEndRenderPass(vkcommandbuffer);

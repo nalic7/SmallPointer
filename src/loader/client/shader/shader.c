@@ -1,4 +1,4 @@
-#define NALI_D_SIZE 6
+#define NALI_D_SIZE 3
 
 //s0-d
 static VkDescriptorPoolSize vkdescriptorpoolsize_array[NALI_D_SIZE];
@@ -20,6 +20,7 @@ void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 		m_device,
 		(VkDescriptorSetLayoutBinding[])
 		{
+			//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			{
 				.binding = 0,
 				.descriptorCount = 1,
@@ -30,35 +31,14 @@ void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 			{
 				.binding = 1,
 				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 				.pImmutableSamplers = VK_NULL_HANDLE,
 				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
 			},
 			{
 				.binding = 2,
 				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
-			},
-			{
-				.binding = 3,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
-			},
-			{
-				.binding = 4,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
-			},
-			{
-				.binding = 5,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 				.pImmutableSamplers = VK_NULL_HANDLE,
 				.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
 			}
@@ -74,19 +54,13 @@ void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
 		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 		.descriptorCount = 1
 	};
-	vkdescriptorpoolsize_p[1] = (VkDescriptorPoolSize)
-	{
-		.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-		.descriptorCount = 1
-	};
-	vkdescriptorpoolsize_p[2] = vkdescriptorpoolsize_p[1];
-	vkdescriptorpoolsize_p[3] = vkdescriptorpoolsize_p[1];
-	vkdescriptorpoolsize_p[4] = vkdescriptorpoolsize_p[1];
-	vkdescriptorpoolsize_p[5] = vkdescriptorpoolsize_p[1];
+	vkdescriptorpoolsize_p[1] = vkdescriptorpoolsize_p[0];
+	vkdescriptorpoolsize_p[2] = vkdescriptorpoolsize_p[0];
 }
 
 void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, uint8_t step)
 {
+	//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 	//r-bind
 	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
 	{
@@ -105,52 +79,24 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	}
 	else
 	{
-		offset = m_joint_count_p[step - 1] * sizeof(float) * 4 * 3;
+		offset = m_joint_count_p[step - 1] * sizeof(float) * 16 * 2 + m_joint_count_p[step - 1] * sizeof(float) * 4 * 3;
 	}
-
 	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
 		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4 * 3 + offset,
-		.range = m_joint_count_p[step] * sizeof(float) * 4 * 3
+		.offset = NALI_LC_MVP_BL + m_rgba_bl + offset,
+		.range = m_joint_count_p[step] * sizeof(float) * 16 * 2 + m_joint_count_p[step] * sizeof(float) * 4 * 3
 	};
-	vk_setVkWriteDescriptorSet(m_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
+	vk_setVkWriteDescriptorSet(m_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
 
 	//n-bind
 	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
 	{
 		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl,
-		.range = m_max_joint * sizeof(float) * 4
-	};
-	vk_setVkWriteDescriptorSet(m_device, 2, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[2], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
-
-	//n-bind
-	vkdescriptorbufferinfo_p[3] = (VkDescriptorBufferInfo)
-	{
-		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4,
-		.range = m_max_joint * sizeof(float) * 4
-	};
-	vk_setVkWriteDescriptorSet(m_device, 3, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[3], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 3);
-
-	//n-bind
-	vkdescriptorbufferinfo_p[4] = (VkDescriptorBufferInfo)
-	{
-		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + m_max_joint * sizeof(float) * 4 * 2,
-		.range = m_max_joint * sizeof(float) * 4
-	};
-	vk_setVkWriteDescriptorSet(m_device, 4, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[4], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 4);
-
-	//n-bind
-	vkdescriptorbufferinfo_p[5] = (VkDescriptorBufferInfo)
-	{
-		.buffer = m_vkbuffer,
 		.offset = NALI_LC_MVP_BL,
 		.range = m_rgba_bl
 	};
-	vk_setVkWriteDescriptorSet(m_device, 5, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[5], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 5);
+	vk_setVkWriteDescriptorSet(m_device, 2, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[2], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 }
 
 void lcs_vk()
@@ -165,14 +111,14 @@ void lcs_vk()
 	VkDevice vkdevice = m_vkdevice_p[m_device];
 
 	//s0-ubo
-	vkdescriptorbufferinfo_p = malloc(sizeof(VkDescriptorBufferInfo) * m_joint_count_bl * 6);
-	vkwritedescriptorset_p = malloc(sizeof(VkWriteDescriptorSet) * m_joint_count_bl * 6);
+	vkdescriptorbufferinfo_p = malloc(sizeof(VkDescriptorBufferInfo) * m_joint_count_bl * NALI_D_SIZE);
+	vkwritedescriptorset_p = malloc(sizeof(VkWriteDescriptorSet) * m_joint_count_bl * NALI_D_SIZE);
 	for (uint32_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
 	{
-		lc_setVkWriteDescriptorSet(m_vkdescriptorset, vkdescriptorbufferinfo_p + l_0 * 6, vkwritedescriptorset_p, l_0);
+		lc_setVkWriteDescriptorSet(m_vkdescriptorset, vkdescriptorbufferinfo_p + l_0 * NALI_D_SIZE, vkwritedescriptorset_p, l_0);
 	}
 	//s1-update
-	vkUpdateDescriptorSets(vkdevice, m_joint_count_bl * 6, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
+	vkUpdateDescriptorSets(vkdevice, m_joint_count_bl * NALI_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	//e1-update
 	//e0-ubo
 }

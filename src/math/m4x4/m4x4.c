@@ -120,7 +120,7 @@ void m4x4_i(float *m4x4_p)
 	memcpy(m4x4_p, s, sizeof(float) * 16);
 }
 
-void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p)
+void m4x4_m(float *a_m4x4_float_p, float *b_m4x4_float_p, float *w_m4x4_float_p)
 {
 	float float_array[16];
 
@@ -128,7 +128,7 @@ void m4x4_m(float *r_m4x4_float_p, float *w_m4x4_float_p)
 	{
 		for (uint8_t j = 0; j < 4; j++)
 		{
-			float_array[i * 4 + j] = r_m4x4_float_p[i * 4] * w_m4x4_float_p[j] + r_m4x4_float_p[i * 4 + 1] * w_m4x4_float_p[4 + j] + r_m4x4_float_p[i * 4 + 2] * w_m4x4_float_p[8 + j] + r_m4x4_float_p[i * 4 + 3] * w_m4x4_float_p[12 + j];
+			float_array[i * 4 + j] = a_m4x4_float_p[i * 4] * b_m4x4_float_p[j] + a_m4x4_float_p[i * 4 + 1] * b_m4x4_float_p[4 + j] + a_m4x4_float_p[i * 4 + 2] * b_m4x4_float_p[8 + j] + a_m4x4_float_p[i * 4 + 3] * b_m4x4_float_p[12 + j];
 		}
 	}
 

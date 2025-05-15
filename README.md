@@ -18,9 +18,10 @@
 
 	Extensions
 
-		clangd / c
-		CMake Tools / cmake
-		CodeLLDB / debug
+	[clangd](https://github.com/clangd/vscode-clangd)_c
+	[CMake Tools](https://github.com/microsoft/vscode-cmake-tools)_cmake
+	[CodeLLDB](https://github.com/vadimcn/codelldb)_debug
+	[shader-validator](https://github.com/antaalt/shader-validator)_glsl
 2. dev-util/android-studio-2024.3.1.15
 3. blender 4.4.0
 </span>
