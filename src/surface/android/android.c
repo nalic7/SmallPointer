@@ -4,6 +4,7 @@ ANativeActivity *m_anativeactivity_p;
 
 static uint8_t a_state = 0;
 #define A_STATE_WAIT 1
+#define A_STATE_READY 2
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
@@ -54,8 +55,9 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
 	nali_log("ANativeActivity_onCreate")
-	if (!(a_state & A_STATE_WAIT))
+	if (!(a_state & A_STATE_READY))
 	{
+		a_state |= A_STATE_READY;
 		scene_init();
 	}
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
