@@ -1,4 +1,4 @@
-mtx_t *m_mtx_t_draw_p = &(mtx_t){};
+// mtx_t *m_mtx_t_draw_p = &(mtx_t){};
 
 // static clock_t frame_start, frame_end;
 static struct timespec frame_start = {0}, frame_end;
@@ -173,9 +173,9 @@ void vk_initCmdDraw()
 	vkpresentinfokhr.pWaitSemaphores = &vksemaphore_array[1];
 	//e0-draw
 
-	//s0-mtx
-	nali_info("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
-	//e0-mtx
+	// //s0-mtx
+	// nali_info("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
+	// //e0-mtx
 
 	// // frame_start = time(0);
 	// clock_gettime(CLOCK_MONOTONIC, &frame_start);
@@ -197,7 +197,7 @@ void freeCmdDraw()
 
 	vk_clean();
 
-	mtx_destroy(m_mtx_t_draw_p);
+	// mtx_destroy(m_mtx_t_draw_p);
 }
 
 static float ry = 0.0F;
@@ -273,7 +273,7 @@ int vk_cmdDraw(void *arg)
 				// }
 				//e0-VkDynamicState
 
-				mtx_lock(m_mtx_t_draw_p);
+				// mtx_lock(m_mtx_t_draw_p);
 				for (uint8_t l_0 = 0; l_0 < 1; ++l_0)
 				{
 					//vkUpdateDescriptorSets
@@ -304,7 +304,7 @@ int vk_cmdDraw(void *arg)
 					.pNext = VK_NULL_HANDLE
 				});
 
-				mtx_unlock(m_mtx_t_draw_p);
+				// mtx_unlock(m_mtx_t_draw_p);
 
 			vkCmdEndRenderPass(vkcommandbuffer);
 

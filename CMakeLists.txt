@@ -7,7 +7,7 @@ set(DEBUG 1)
 # set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-set(VK_DEBUG 1)
+# set(VK_DEBUG 1)
 
 set(SCENE 1)
 # set(COLLADA 1)
@@ -123,6 +123,7 @@ if(SCENE)
         avcodec
         avformat
         avutil
+        swresample
       )
 
       list(APPEND TLL openal)

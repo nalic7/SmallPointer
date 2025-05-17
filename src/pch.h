@@ -67,17 +67,18 @@
 		#endif
 	#endif
 
-	#ifdef NALI_GEN
-		#include "libavformat/avformat.h"
-		#include <libavcodec/avcodec.h>
-		// // #include <libavutil/avutil.h>
+	//s0-ffmpeg
+	#include "libavformat/avformat.h"
+	#include <libavcodec/avcodec.h>
+	// // #include <libavutil/avutil.h>
 
-		#include <libavutil/imgutils.h>
-		// #include <libavutil/avassert.h>
+	#include <libavutil/imgutils.h>
+	// #include <libavutil/avassert.h>
 
-		// #include <libswscale/swscale.h>
-		#include "ffmpeg/ffmpeg.h"
-	#endif
+	// #include <libswscale/swscale.h>
+	#include <libswresample/swresample.h>
+	#include "ffmpeg/ffmpeg.h"
+	//e0-ffmpeg
 
 	#ifdef NALI_CLIENT
 		#include "surface/surface.h"
@@ -164,10 +165,12 @@
 
 	#ifdef NALI_OS_ANDROID
 		#define NALI_HOME
+		#define NALI_READ_CACHE "/storage/emulated/0/Android/data/com.nali.scene/c"
 	#else
 		#define NALI_HOME "../asset/"
 	#endif
 	#define NALI_HOME_MODEL "model"
+	#define NALI_HOME_SOUND "sound"
 	#define NALI_HOME_IMAGE "image"
 	// #define NALI_HOME_SHADER "shader/"
 	// #define NALI_HOME_SHADER_VERT "vert"
