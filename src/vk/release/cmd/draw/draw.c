@@ -1,8 +1,11 @@
 mtx_t *m_mtx_t_draw_p = &(mtx_t){};
 
-static clock_t frame_start, frame_end;
+// static clock_t frame_start, frame_end;
+static struct timespec frame_start = {0}, frame_end;
+static struct timespec delta_start = {0}, delta_end;
 static uint32_t frame;
-static clock_t frame_time;
+// static clock_t frame_time;
+static float frame_time = 0;
 
 //s0-share
 static VkDevice vkdevice;
@@ -174,7 +177,8 @@ void vk_initCmdDraw()
 	nali_info("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
 	//e0-mtx
 
-	frame_start = time(0);
+	// // frame_start = time(0);
+	// clock_gettime(CLOCK_MONOTONIC, &frame_start);
 }
 
 void freeCmdDraw()
@@ -197,7 +201,7 @@ void freeCmdDraw()
 }
 
 static float ry = 0.0F;
-static float rz = 180.0F;
+static float rz = MATH_D2R(180.0F);
 
 int vk_cmdDraw(void *arg)
 {
@@ -283,10 +287,13 @@ int vk_cmdDraw(void *arg)
 
 				M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), 16.0F / 9.0F, 0.1F, 100.0F, m_mvp_float_array + 16 * 2)
 
-				ry += 0.005F;
+				clock_gettime(CLOCK_MONOTONIC, &delta_end);
+				ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
+				delta_start = delta_end;
+				ry = fmodf(ry, 360.0F);
 				float q[4];
 				memcpy(m_vkbuffer_p + 16 * sizeof(float), m_mvp_float_array + 16, 16 * sizeof(float));
-				v4_q(0, ry, MATH_D2R(rz), q);
+				v4_q(0, ry, rz, q);
 				v4_qm(q, m_vkbuffer_p + 16 * sizeof(float));
 				vkFlushMappedMemoryRanges(m_vkdevice_p[m_device], 1, &(VkMappedMemoryRange)
 				{
@@ -307,15 +314,19 @@ int vk_cmdDraw(void *arg)
 		vkQueuePresentKHR(vkqueue_graphic, &vkpresentinfokhr);
 
 		++frame;
-		frame_end = time(0);
-		frame_time = frame_end - frame_start;
-		if (frame_time > 0)
+		// frame_end = time(0);
+		// frame_time = frame_end - frame_start;
+		clock_gettime(CLOCK_MONOTONIC, &frame_end);
+		frame_time = frame_end.tv_sec + frame_end.tv_nsec / 1e9 - frame_start.tv_sec - frame_start.tv_nsec / 1e9;
+		// if (frame_time > 0)
 		// if (frame == 144)
+		if (frame_time >= 1.0F)
 		{
 			// end = clock();
 			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 			frame_start = frame_end;
-			nali_log("time %ld", frame_time)
+			// nali_log("time %ld", frame_time)
+			nali_log("time %f", frame_time)
 			nali_log("frame %d", frame)
 			frame = 0;
 		}

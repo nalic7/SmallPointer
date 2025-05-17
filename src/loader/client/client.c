@@ -18,7 +18,8 @@ void lc_vk()
 
 	VkMemoryRequirements vkmemoryrequirements;
 	//VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-	VK_makeBuffer(m_device, m_vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, m_vkbuffer, m_vkdevicememory, vkmemoryrequirements)
+	//VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+	VK_makeBuffer(m_device, m_vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, m_vkbuffer, m_vkdevicememory, vkmemoryrequirements)
 	nali_info("vkMapMemory %d", vkMapMemory(m_vkdevice_p[m_device], m_vkdevicememory, 0, m_vkdevicesize, 0, &m_vkbuffer_p))
 	lcm_vk();
 

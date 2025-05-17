@@ -18,9 +18,10 @@ static uint32_t
 	pointer_serial = -1,
 	cursor_i = 0;
 static struct wl_cursor *wl_cursor;
-static clock_t
-	cursor_start = 0,
-	cursor_end;
+static struct timespec cursor_start = {0}, cursor_end;
+// static clock_t
+// 	cursor_start = 0,
+// 	cursor_end;
 void wlcp_change_cursor()
 {
 	if (pointer_serial != -1)
@@ -44,8 +45,9 @@ void wlcp_change_cursor()
 				wl_surface_attach(wl_surface_cursor, wl_buffer_cursor, 0, 0);
 				wl_surface_commit(wl_surface_cursor);
 
-				cursor_end = clock();
-				if (cursor_end - cursor_start > 200000)
+				// cursor_end = clock();
+				clock_gettime(CLOCK_MONOTONIC, &cursor_end);
+				if (cursor_end.tv_sec + cursor_end.tv_nsec / 1e9 - cursor_start.tv_sec - cursor_start.tv_nsec / 1e9 >= 0.125F)
 				{
 					cursor_start = cursor_end;
 					++cursor_i;

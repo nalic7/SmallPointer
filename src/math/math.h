@@ -1,6 +1,9 @@
 #ifndef NALI_MATH_H
 #define NALI_MATH_H
 
+#define MATH_MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MATH_MAX(a, b) ((a) > (b) ? (a) : (b))
+
 #define MATH_D2R(v) ((v) * M_PI / 180.0)
 #define MATH_R2D(v) ((v) * 180.0 / M_PI)
 
