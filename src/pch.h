@@ -16,6 +16,7 @@
 	#ifdef NALI_OS_ANDROID
 		#include <jni.h>
 		#include <android/log.h>
+//		#include <android/looper.h>
 
 		#include "scene/scene.h"
 

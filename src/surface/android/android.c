@@ -1,5 +1,6 @@
 ANativeWindow *m_anativewindow_p = NULL;
 ANativeActivity *m_anativeactivity_p;
+AInputQueue *m_ainputqueue_p = NULL;
 //static int32_t orientation;
 
 static uint8_t a_state = 0;
@@ -52,6 +53,16 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
 //	AConfiguration_delete(aconfiguration_p);
 //}
 
+static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue)
+{
+	m_ainputqueue_p = queue;
+}
+
+static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
+{
+	m_ainputqueue_p = NULL;
+}
+
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
 	nali_log("ANativeActivity_onCreate")
@@ -63,6 +74,8 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
 	activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
+	activity->callbacks->onInputQueueCreated = onInputQueueCreated;
+	activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
 //	activity->callbacks->onConfigurationChanged = onConfigurationChanged;
 	m_anativeactivity_p = activity;
 

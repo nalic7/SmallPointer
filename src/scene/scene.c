@@ -8,11 +8,22 @@ static int init(void *arg)
 		lc_vk();
 	#endif
 
-	// while (1)
-	// {
-	// 	nali_log("loop")
-	// 	thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
-	// }
+	while (1)
+	{
+		AInputEvent *ainputevent_p = NULL;
+		while (m_ainputqueue_p != NULL && AInputQueue_getEvent(m_ainputqueue_p, &ainputevent_p) >= 0)
+		{
+			if (AInputQueue_preDispatchEvent(m_ainputqueue_p, ainputevent_p))
+			{
+				continue;
+			}
+			if (AInputEvent_getType(ainputevent_p) == AINPUT_EVENT_TYPE_MOTION)
+			{
+				//touch/motion
+			}
+			AInputQueue_finishEvent(m_ainputqueue_p, ainputevent_p, 1);
+		}
+	}
 	return 0;
 }
 
