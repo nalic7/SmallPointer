@@ -3,7 +3,7 @@ VkInstance m_vkinstance = VK_NULL_HANDLE;
 const char *ppEnabledExtensionNames[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
-	#ifdef NALI_OS_ANDROID
+	#ifdef NALI_S_ANDROID
 		VK_KHR_ANDROID_SURFACE_EXTENSION_NAME,
 	#else
 		VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,

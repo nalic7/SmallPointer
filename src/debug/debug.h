@@ -2,7 +2,7 @@
 #define NALI_DEBUG_H
 
 #ifdef NALI_DEBUG
-	#ifdef NALI_OS_ANDROID
+	#ifdef NALI_S_ANDROID
 		#define nali_info(format, ...) \
 			__android_log_print(ANDROID_LOG_DEBUG, "nali_info", format, ##__VA_ARGS__);
 	#else

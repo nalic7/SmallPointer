@@ -10,16 +10,16 @@ static uint8_t a_state = 0;
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
 	nali_log("window %p", window)
-	m_width = ANativeWindow_getWidth(window);
-	m_height = ANativeWindow_getHeight(window);
+	s_width = ANativeWindow_getWidth(window);
+	s_height = ANativeWindow_getHeight(window);
 	m_anativewindow_p = window;
 }
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
 {
 	nali_log("window resize")
-	m_width = ANativeWindow_getWidth(window);
-	m_height = ANativeWindow_getHeight(window);
+	s_width = ANativeWindow_getWidth(window);
+	s_height = ANativeWindow_getHeight(window);
 	m_surface_state |= NALI_SURFACE_C_S_RE;
 }
 

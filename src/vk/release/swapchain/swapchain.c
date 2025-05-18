@@ -56,15 +56,15 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 //	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	if (vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	{
-		m_vkextent2d.width = m_height;
-		m_vkextent2d.height = m_width;
+		m_vkextent2d.width = s_height;
+		m_vkextent2d.height = s_width;
 //		m_width = m_vkextent2d.width;
 //		m_height = m_vkextent2d.height;
 	}
 	else
 	{
-		m_vkextent2d.height = m_height;
-		m_vkextent2d.width = m_width;
+		m_vkextent2d.height = s_height;
+		m_vkextent2d.width = s_width;
 	}
 
 ////	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR)

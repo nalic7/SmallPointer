@@ -85,7 +85,7 @@ git clone https://github.com/jkuhlmann/cgltf
 
 ```c#
 #select build for
-set(OS_NAME linux)
+set(S_NAME linux)
 #...
 
 set(DEBUG 1)

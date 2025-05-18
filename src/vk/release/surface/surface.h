@@ -3,7 +3,7 @@
 
 extern VkSurfaceKHR m_vksurfacekhr;
 
-#ifdef NALI_OS_ANDROID
+#ifdef NALI_S_ANDROID
 	#define VK_makeSurface \
 		while (m_anativewindow_p == NULL) \
 		{ \

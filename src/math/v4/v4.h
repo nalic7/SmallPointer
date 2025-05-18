@@ -6,8 +6,9 @@
 	p[n + 1] = -p[n + 1]; \
 	p[n + 2] = -p[n + 2];
 
-void v4_q(float x, float y, float z, float *w_qv4_float_p);
-void v4_qm(float *r_qv4_float_p, float *m4x4_float_p);
-void v4_m(float *a, float *b, float *w);
+void v4_q(float x, float y, float z, float w[4]);
+void v4_q2m(const float q[4], float w[16]);
+void v4_m(const float a[4], const float b[4], float w[4]);
+void v4_m4(const float a[16], const float b[4], float w[4]);
 
 #endif

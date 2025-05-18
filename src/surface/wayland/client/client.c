@@ -11,6 +11,7 @@ struct wl_seat *m_wl_seat_p = NULL;
 struct wl_keyboard *m_wl_keyboard_p = NULL;
 struct wl_shm *m_wl_shm_p = NULL;
 struct wl_pointer *m_wl_pointer_p = NULL;
+// struct wl_touch *m_wl_touch_p = NULL;
 
 struct zwp_pointer_constraints_v1 *m_zwp_pointer_constraints_v1_p = NULL;
 struct zwp_locked_pointer_v1 *m_zwp_locked_pointer_v1_p = NULL;

@@ -1,11 +1,34 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
-const char* file_array[] =
+const char *file_array[] =
 {
 	NALI_FACTORY NALI_HOME_MODEL "/SuperCutePomi0.glb",
 	// NALI_FACTORY "Font.glb"
 };
+
+const char *mesh_out[] =
+{
+	//s0-0
+	//E
+	"F0Face.003",
+	"F0Face.005",
+	"F0Face.008",
+	"F0Face.007",
+	"F0Face.001",
+	"F0Face.006",
+
+	//M
+	"F0Face.002",
+	"F0Face.004",
+
+	//I
+	"IShovel"
+	//e0-0
+};
+
+uint8_t *mesh_p_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
+uint8_t *mesh_bl_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
 
 #define NALI_FPS 24
 
@@ -371,6 +394,14 @@ static void gen_model()
 		{
 			cgltf_mesh *cgltf_mesh_p = &cgltf_data_p->meshes[l_1];
 			nali_log("cgltf_mesh %s", cgltf_mesh_p->name)
+
+			for (uint32_t l_2 = 0; l_2 < sizeof(mesh_out) / sizeof(mesh_out[0]); ++l_2)
+			{
+				if (!strcmp(mesh_out[l_2], cgltf_mesh_p->name))
+				{
+
+				}
+			}
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_mesh_p->primitives_count; ++l_2)
 			// for (uint32_t l_2 = 0; l_2 < 1; ++l_2)

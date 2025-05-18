@@ -13,7 +13,7 @@
 
 	#include <string.h>
 
-	#ifdef NALI_OS_ANDROID
+	#ifdef NALI_S_ANDROID
 		#include <jni.h>
 		#include <android/log.h>
 //		#include <android/looper.h>
@@ -164,7 +164,7 @@
 		#define NALI_SC_PORT 11111
 	#endif
 
-	#ifdef NALI_OS_ANDROID
+	#ifdef NALI_S_ANDROID
 		#define NALI_HOME
 		#define NALI_READ_CACHE "/storage/emulated/0/Android/data/com.nali.scene/c"
 	#else
@@ -178,7 +178,7 @@
 	// #define NALI_HOME_SHADER_FRAG "frag"
 
 	#ifdef NALI_GEN
-		#ifdef NALI_OS_ANDROID
+		#ifdef NALI_S_ANDROID
 			#define NALI_FACTORY NALI_HOME
 		#else
 			#define NALI_FACTORY "../source/"

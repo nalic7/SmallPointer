@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.31)
 
-# set(OS_NAME linux)
-set(OS_NAME android)
+set(S_NAME linux)
+# set(S_NAME android)
 
 set(DEBUG 1)
-# set(GEN 1)
+set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-# set(VK_DEBUG 1)
+set(VK_DEBUG 1)
 
 set(SCENE 1)
 # set(COLLADA 1)
@@ -90,8 +90,8 @@ if(SCENE)
     list(APPEND SOURCES src/network/linux/server/nw_server.c)
   endif()
 
-  if(OS_NAME STREQUAL "android")
-    list(APPEND TCD NALI_OS_ANDROID)
+  if(S_NAME STREQUAL "android")
+    list(APPEND TCD NALI_S_ANDROID)
 
     list(APPEND TLL
       log
@@ -211,7 +211,7 @@ if(SCENE)
 
 #   target_include_directories(${P_NAME} PRIVATE
 #     ${JAVA_HOME}include
-#     ${JAVA_HOME}include/${OS_NAME}
+#     ${JAVA_HOME}include/${S_NAME}
 #   )
 
 #   target_link_libraries(${P_NAME}
@@ -228,7 +228,7 @@ if(SCENE)
 
 #   target_include_directories(${P_NAME} PRIVATE
 #     ${JAVA_HOME}include
-#     ${JAVA_HOME}include/${OS_NAME}
+#     ${JAVA_HOME}include/${S_NAME}
 #   )
 
 #   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL)
@@ -239,7 +239,7 @@ if(SCENE)
 
 #   target_include_directories(${P_NAME} PRIVATE
 #     ${JAVA_HOME}include
-#     ${JAVA_HOME}include/${OS_NAME}
+#     ${JAVA_HOME}include/${S_NAME}
 #     AL
 #   )
 

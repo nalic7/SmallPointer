@@ -1,4 +1,6 @@
-#ifdef NALI_OS_ANDROID
+#ifdef NALI_S_ANDROID
+static float x = 0, y = 0;
+
 static int init(void *arg)
 {
 	#ifdef NALI_CLIENT
@@ -19,7 +21,28 @@ static int init(void *arg)
 			}
 			if (AInputEvent_getType(ainputevent_p) == AINPUT_EVENT_TYPE_MOTION)
 			{
-				//touch/motion
+				size_t pointer_count = AMotionEvent_getPointerCount(ainputevent_p);
+				if (pointer_count == 1)
+				{
+//					nali_log("AINPUT_EVENT_TYPE_MOTION")
+					int32_t action = AMotionEvent_getAction(ainputevent_p);
+					int32_t actionType = action & AMOTION_EVENT_ACTION_MASK;
+
+					float l_x = AMotionEvent_getX(ainputevent_p, 0);
+					float l_y = AMotionEvent_getY(ainputevent_p, 0);
+
+					if (actionType == AMOTION_EVENT_ACTION_MOVE)
+					{
+						s_pointer_x = l_x - x;
+						s_pointer_y = l_y - y;
+					}
+//					else if (/*actionType == AMOTION_EVENT_ACTION_DOWN || */actionType == AMOTION_EVENT_ACTION_UP)
+//					{
+//
+//					}
+					x = l_x;
+					y = l_y;
+				}
 			}
 			AInputQueue_finishEvent(m_ainputqueue_p, ainputevent_p, 1);
 		}
@@ -52,7 +75,7 @@ int main()
 		al_init();
 		lc_vk();
 		// nwc_init();
-		m_pointer_id = 0;
+		s_pointer_id = 0;
 	#endif
 	#if NALI_SERVER
 		// nws_init();

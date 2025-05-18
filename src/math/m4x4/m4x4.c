@@ -6,7 +6,7 @@ float m_m4x4_mat[] =
 	0.0F, 0.0F, 0.0F, 1.0F
 };
 
-void m4x4_i(float *m4x4_p)
+void m4x4_i(float m[16])
 {
 	float identity[] =
 	{
@@ -16,49 +16,49 @@ void m4x4_i(float *m4x4_p)
 		0.0F, 0.0F, 0.0F, 1.0F
 	};
 
-	int32_t i, j, k;
+	int32_t l_0, l_1, l_2;
 	float s[16];
 	float t[16];
 	memcpy(s, m_m4x4_mat, sizeof(float) * 16);
-	memcpy(t, m4x4_p, sizeof(float) * 16);
+	memcpy(t, m, sizeof(float) * 16);
 
-	for (i = 0; i < 3; i++)
+	for (l_0 = 0; l_0 < 3; l_0++)
 	{
-		int32_t pivot = i;
+		int32_t pivot = l_0;
 
-		float pivotsize = t[i * 4 + i];
+		float pivotsize = t[l_0 * 4 + l_0];
 
 		if (pivotsize < 0)
 		{
 			pivotsize = -pivotsize;
 		}
 
-		for (j = i + 1; j < 4; j++)
+		for (l_1 = l_0 + 1; l_1 < 4; l_1++)
 		{
-			float tmp = t[j * 4 + i];
+			float l_f = t[l_1 * 4 + l_0];
 
-			if (tmp < 0)
-				tmp = -tmp;
+			if (l_f < 0)
+				l_f = -l_f;
 
-			if (tmp > pivotsize)
+			if (l_f > pivotsize)
 			{
-				pivot = j;
-				pivotsize = tmp;
+				pivot = l_1;
+				pivotsize = l_f;
 			}
 		}
 
 		if (pivotsize == 0)
 		{
-			memcpy(m4x4_p, identity, sizeof(float) * 16);
+			memcpy(m, identity, sizeof(float) * 16);
 			return;
 		}
 
-		if (pivot != i)
+		if (pivot != l_0)
 		{
-			for (j = 0; j < 4; j++)
+			for (l_1 = 0; l_1 < 4; l_1++)
 			{
-				int32_t i4j = i * 4 + j;
-				int32_t p4j = pivot * 4 + j;
+				int32_t i4j = l_0 * 4 + l_1;
+				int32_t p4j = pivot * 4 + l_1;
 				float tmp;
 
 				tmp = t[i4j];
@@ -71,66 +71,65 @@ void m4x4_i(float *m4x4_p)
 			}
 		}
 
-		for (j = i + 1; j < 4; j++)
+		for (l_1 = l_0 + 1; l_1 < 4; l_1++)
 		{
-			float f = t[j * 4 + i] / t[i * 4 + i];
+			float l_f = t[l_1 * 4 + l_0] / t[l_0 * 4 + l_0];
 
-			for (k = 0; k < 4; k++)
+			for (l_2 = 0; l_2 < 4; l_2++)
 			{
-				int32_t j4k = j * 4 + k;
-				int32_t i4k = i * 4 + k;
-				t[j4k] -= f * t[i4k];
-				s[j4k] -= f * s[i4k];
+				int32_t j4k = l_1 * 4 + l_2;
+				int32_t i4k = l_0 * 4 + l_2;
+				t[j4k] -= l_f * t[i4k];
+				s[j4k] -= l_f * s[i4k];
 			}
 		}
 	}
 
-	for (i = 3; i >= 0; --i)
+	for (l_0 = 3; l_0 >= 0; --l_0)
 	{
-		float f;
+		float l_f;
 
-		if (!(f = t[i * 4 + i]))
+		if (!(l_f = t[l_0 * 4 + l_0]))
 		{
-			memcpy(m4x4_p, identity, sizeof(float) * 16);
+			memcpy(m, identity, sizeof(float) * 16);
 			return;
 		}
 
-		for (j = 0; j < 4; j++)
+		for (l_1 = 0; l_1 < 4; l_1++)
 		{
-			int32_t i4j = i * 4 + j;
+			int32_t i4j = l_0 * 4 + l_1;
 
-			t[i4j] /= f;
-			s[i4j] /= f;
+			t[i4j] /= l_f;
+			s[i4j] /= l_f;
 		}
 
-		for (j = 0; j < i; j++)
+		for (l_1 = 0; l_1 < l_0; l_1++)
 		{
-			f = t[j * 4 + i];
+			l_f = t[l_1 * 4 + l_0];
 
-			for (k = 0; k < 4; k++)
+			for (l_2 = 0; l_2 < 4; l_2++)
 			{
-				int32_t j4k = j * 4 + k;
-				int32_t i4k = i * 4 + k;
-				t[j4k] -= f * t[i4k];
-				s[j4k] -= f * s[i4k];
+				int32_t j4k = l_1 * 4 + l_2;
+				int32_t i4k = l_0 * 4 + l_2;
+				t[j4k] -= l_f * t[i4k];
+				s[j4k] -= l_f * s[i4k];
 			}
 		}
 	}
 
-	memcpy(m4x4_p, s, sizeof(float) * 16);
+	memcpy(m, s, sizeof(float) * 16);
 }
 
-void m4x4_m(float *a_m4x4_float_p, float *b_m4x4_float_p, float *w_m4x4_float_p)
+void m4x4_m(const float a[16], const float b[16], float w[16])
 {
-	float float_array[16];
-
-	for (uint8_t i = 0; i < 4; i++)
+	// float float_array[16];
+	for (uint8_t l_0 = 0; l_0 < 4; l_0++)
 	{
-		for (uint8_t j = 0; j < 4; j++)
+		for (uint8_t l_1 = 0; l_1 < 4; l_1++)
 		{
-			float_array[i * 4 + j] = a_m4x4_float_p[i * 4] * b_m4x4_float_p[j] + a_m4x4_float_p[i * 4 + 1] * b_m4x4_float_p[4 + j] + a_m4x4_float_p[i * 4 + 2] * b_m4x4_float_p[8 + j] + a_m4x4_float_p[i * 4 + 3] * b_m4x4_float_p[12 + j];
+			// float_array[i * 4 + j] = a[i * 4] * b[j] + a[i * 4 + 1] * b[4 + j] + a[i * 4 + 2] * b[8 + j] + a[i * 4 + 3] * b[12 + j];
+			w[l_0 * 4 + l_1] = a[l_0 * 4] * b[l_1] + a[l_0 * 4 + 1] * b[4 + l_1] + a[l_0 * 4 + 2] * b[8 + l_1] + a[l_0 * 4 + 3] * b[12 + l_1];
 		}
 	}
-
-	memcpy(w_m4x4_float_p, float_array, 16 * sizeof(float));
+	// memcpy(w, float_array, 16 * sizeof(float));
 }

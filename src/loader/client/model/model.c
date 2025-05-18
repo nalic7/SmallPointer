@@ -5,7 +5,6 @@ VkDeviceSize *m_ai_vkdevicesize_p;
 typedef struct
 {
 	uint8_t
-		//8->32
 		*joint_p,
 		joint_bl,
 
@@ -15,12 +14,7 @@ typedef struct
 		time_r_bl,
 		*time_t_p,
 		time_t_bl;
-
 	float
-		// *joint_s_p,
-		// *joint_r_p,
-		// *joint_t_p,
-		
 		*animation_s_p,
 		*animation_r_p,
 		*animation_t_p;
@@ -31,15 +25,9 @@ static float
 	*i_bindpose_p,
 	*bindpose_p;
 
-// uint32_t m_max_joint = 0;
 uint8_t
 	*m_joint_count_p,
 	m_joint_count_bl;
-
-//8->32
-static uint8_t
-	**bs_p,
-	**be_p;
 
 static uint32_t **index_p;
 static uint32_t *index_bl_p;
@@ -50,6 +38,16 @@ static uint8_t model_il;
 static float *rgba_p;
 uint32_t m_rgba_bl;
 
+#define NALI_CACHE_P_BL sizeof(void *) * 2
+#define NALI_CACHE_P_BS_P ((uint8_t ***)cache_p)[0]
+#define NALI_CACHE_P_BE_P ((uint8_t ***)cache_p)[1]
+//need use in future for pre data
+static void *cache_p;
+
+// static uint8_t
+// 	**bs_p,
+// 	**be_p;
+
 void lcm_init()
 {
 	long step = 0;
@@ -59,8 +57,9 @@ void lcm_init()
 	m_joint_count_bl = *(uint8_t *)data_p;
 	step += sizeof(uint8_t);
 
-	bs_p = malloc(sizeof(uint8_t *) * m_joint_count_bl);
-	be_p = malloc(sizeof(uint8_t *) * m_joint_count_bl);
+	cache_p = malloc(NALI_CACHE_P_BL);
+	NALI_CACHE_P_BS_P = malloc(sizeof(uint8_t *) * m_joint_count_bl);
+	NALI_CACHE_P_BE_P = malloc(sizeof(uint8_t *) * m_joint_count_bl);
 
 	m_joint_count_p = malloc(m_joint_count_bl);
 	memcpy(m_joint_count_p, data_p + step, m_joint_count_bl);
@@ -77,9 +76,9 @@ void lcm_init()
 		// 	m_max_joint = m_joint_count_p[l_0];
 		// }
 
-		bs_p[l_0] = malloc(m_joint_count_p[l_0]);
-		be_p[l_0] = malloc(m_joint_count_p[l_0]);
-		bs_p[l_0][0] = 0;
+		NALI_CACHE_P_BS_P[l_0] = malloc(m_joint_count_p[l_0]);
+		NALI_CACHE_P_BE_P[l_0] = malloc(m_joint_count_p[l_0]);
+		NALI_CACHE_P_BS_P[l_0][0] = 0;
 
 		srt_bone_p = realloc(srt_bone_p, sizeof(srt_bone) * (l_bone_bl + m_joint_count_p[l_0]));
 		i_bindpose_p = realloc(i_bindpose_p, sizeof(float) * 16 * (l_bone_bl + m_joint_count_p[l_0]));
@@ -98,9 +97,9 @@ void lcm_init()
 
 			if (l_1 != 0)
 			{
-				bs_p[l_0][l_1] = be_p[l_0][l_1 - 1];
+				NALI_CACHE_P_BS_P[l_0][l_1] = NALI_CACHE_P_BE_P[l_0][l_1 - 1];
 			}
-			be_p[l_0][l_1] = bs_p[l_0][l_1] + size;
+			NALI_CACHE_P_BE_P[l_0][l_1] = NALI_CACHE_P_BS_P[l_0][l_1] + size;
 		}
 
 		l_bone_bl += m_joint_count_p[l_0];
@@ -218,6 +217,11 @@ void lcm_init()
 		step += sizeof(float) * 3 * time_bl;
 		l_step += sizeof(float) * 3 * time_bl;
 		++l_bone_bl;
+
+		// if (== animations_count_p[])
+		// {
+		// 	l_bone_bl = 0;
+		// }
 	}
 
 	uint32_t ia_bl = *(uint32_t *)(data_p + step);
@@ -271,13 +275,11 @@ void lcm_init()
 	//apply color
 	for (uint32_t l_0 = 0; l_0 < m_rgba_bl / sizeof(float); ++l_0)
 	{
-		rgba_p[l_0] = pow(rgba_p[l_0], 1.0F / 3.2F);
+		rgba_p[l_0] = pow(rgba_p[l_0], 1.0F / 5.0F);
 	}
 
 	lcmv_init();
-	m_vkdevicesize =
-		NALI_LC_MVP_BL +
-		m_rgba_bl;
+	m_vkdevicesize = NALI_LC_MVP_BL + m_rgba_bl;
 
 	//b
 	for (uint32_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
@@ -335,7 +337,7 @@ void lcm_vk()
 			}
 
 			//start end
-			*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = bs_p[l_0][l_1] | be_p[l_0][l_1] << 8;
+			*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = NALI_CACHE_P_BS_P[l_0][l_1] | NALI_CACHE_P_BE_P[l_0][l_1] << 8;
 			step += sizeof(float) * 4;
 		}
 
@@ -395,7 +397,7 @@ void lcm_vk()
 				*(uint32_t *)(m_vkbuffer_p + l_step_0 + sizeof(float) * 3) |= srt_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
 
 				++l_0_0;
-				if (l_0_0 == 4)
+				if (l_0_0 == 0)
 				{
 					l_0_0 = 0;
 					l_step_0 += sizeof(float) * 4;
@@ -406,12 +408,13 @@ void lcm_vk()
 
 		l_bone_bl += m_joint_count_p[l_0];
 
-		free(bs_p[l_0]);
-		free(be_p[l_0]);
+		free(NALI_CACHE_P_BS_P[l_0]);
+		free(NALI_CACHE_P_BE_P[l_0]);
 	}
 
-	free(bs_p);
-	free(be_p);
+	free(NALI_CACHE_P_BS_P);
+	free(NALI_CACHE_P_BE_P);
+	free(cache_p);
 	//e0-ssboa default
 
 	// //s0-ssboa file
@@ -589,13 +592,13 @@ void lcm_vk()
 	// 			memcpy(m_vkbuffer_p + step, srt_bone_p[l].joint_t_p, sizeof(float) * 3);
 	// 		}
 	// 		//start end
-	// 		*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = bs_p[l_0][l_1] | be_p[l_0][l_1] << 8;
+	// 		*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = NALI_CACHE_P_BS_P[l_0][l_1] | NALI_CACHE_P_BE_P[l_0][l_1] << 8;
 	// 		step += sizeof(float) * 4;
 	// 		++l;
 	// 	}
 
-	// 	free(bs_p[l_0]);
-	// 	free(be_p[l_0]);
+	// 	free(NALI_CACHE_P_BS_P[l_0]);
+	// 	free(NALI_CACHE_P_BE_P[l_0]);
 	// }
 
 	// free(bs_p);

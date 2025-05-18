@@ -200,9 +200,6 @@ void freeCmdDraw()
 	// mtx_destroy(m_mtx_t_draw_p);
 }
 
-static float ry = 0.0F;
-static float rz = MATH_D2R(180.0F);
-
 int vk_cmdDraw(void *arg)
 {
 	while (!(m_surface_state & NALI_SURFACE_C_S_CLEAN))
@@ -214,7 +211,7 @@ int vk_cmdDraw(void *arg)
 		{
 			vk_freeSwapchain();
 
-			#ifdef NALI_OS_ANDROID
+			#ifdef NALI_S_ANDROID
 				a_wait();
 			#endif
 
@@ -227,7 +224,7 @@ int vk_cmdDraw(void *arg)
 			vkrect2d.extent = m_vkextent2d;
 
 			vkQueueWaitIdle(vkqueue_graphic);
-			M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), m_width / m_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16 * 2)
+			M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16 * 2)
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
 //				rz = 0.0F;
@@ -285,16 +282,45 @@ int vk_cmdDraw(void *arg)
 
 				vkQueueWaitIdle(vkqueue_graphic);
 
-				M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), 16.0F / 9.0F, 0.1F, 100.0F, m_mvp_float_array + 16 * 2)
-
 				clock_gettime(CLOCK_MONOTONIC, &delta_end);
-				ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
+				s_deltra = delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9;
+				// ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
-				ry = fmodf(ry, 360.0F);
-				float q[4];
-				memcpy(m_vkbuffer_p + 16 * sizeof(float), m_mvp_float_array + 16, 16 * sizeof(float));
-				v4_q(0, ry, rz, q);
-				v4_qm(q, m_vkbuffer_p + 16 * sizeof(float));
+
+				s_loopPointer();
+
+				// // float q[4];
+				// float q[4], m[16];
+				// memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				// // memcpy(m_vkbuffer_p + 16 * sizeof(float), m_mvp_float_array + 16, 16 * sizeof(float));
+				// v4_q(s_rx, s_ry, 0, q);
+				// // v4_q2m(q, m_vkbuffer_p + 16 * sizeof(float));
+				// v4_q2m(q, m);
+				// // v4_m4(m, m_mvp_float_array + 16, m_vkbuffer_p + 16 * sizeof(float));
+				// v4_m4(m_mvp_float_array + 16, m, m_vkbuffer_p + 16 * sizeof(float));
+				// memcpy(m_mvp_float_array + 16, m_vkbuffer_p + 16 * sizeof(float), sizeof(float) * 16);
+
+				float q[4], m[16], m1[16];
+				//2D
+				// v4_q(0, s_ry, 0, q);
+				// memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				// v4_q2m(q, m);
+				// memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// v4_m4(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+
+				//a low mid
+				v4_q(s_rx, 0, 0, q);
+				memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				v4_q2m(q, m);
+				memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+				m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
+
+				v4_q(0, s_ry, 0, q);
+				memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				v4_q2m(q, m);
+				memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
 				vkFlushMappedMemoryRanges(m_vkdevice_p[m_device], 1, &(VkMappedMemoryRange)
 				{
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
@@ -331,12 +357,12 @@ int vk_cmdDraw(void *arg)
 			frame = 0;
 		}
 
-//		#ifdef NALI_OS_ANDROID
+//		#ifdef NALI_S_ANDROID
 //			a_wait();
 //		#endif
 	}
 
-//	#ifdef NALI_OS_ANDROID
+//	#ifdef NALI_S_ANDROID
 //		m_surface_state &= 0xFFu - NALI_SURFACE_C_S_CLEAN;
 //	#else
 	freeCmdDraw();

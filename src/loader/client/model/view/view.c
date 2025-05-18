@@ -45,13 +45,19 @@ float m_mvp_float_array[] =
 
 void lcmv_init()
 {
-	// float qv4_float_p[4];
-	// v4_q(0, MATH_D2R(0.0F), MATH_D2R(180.0F), qv4_float_p);
-	// v4_qm(qv4_float_p, vp_float_array + 16);
-	// M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), 16.0F / 9.0F, 0.1F, 100.0F, m_mvp_float_array + 16 * 2)
+	float q[4];
+	v4_q(0, 0, s_rz, q);
+	v4_q2m(q, m_mvp_float_array + 16);
 
-	// memcpy(vp_float_array + 16 * 2, vp_float_array + 16, 16 * sizeof(float));
-	// m4x4_m(vp_float_array, vp_float_array + 16 * 2);
+	// float qv4_float_p[4], m[16], m1[16];
+	// v4_q(0, 0, MATH_D2R(180.0F), qv4_float_p);
+	// v4_q2m(qv4_float_p, m);
+	// memcpy(m1, m_mvp_float_array + 16, sizeof(float) * 16);
+	// v4_m4(m, m1, m_mvp_float_array + 16);
+	// // M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), 16.0F / 9.0F, 0.1F, 100.0F, m_mvp_float_array + 16 * 2)
+
+	// // memcpy(vp_float_array + 16 * 2, vp_float_array + 16, 16 * sizeof(float));
+	// // m4x4_m(vp_float_array, vp_float_array + 16 * 2);
 }
 
 void lcmv_vk()

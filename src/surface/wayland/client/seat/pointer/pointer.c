@@ -26,13 +26,13 @@ void wlcp_change_cursor()
 {
 	if (pointer_serial != -1)
 	{
-		if (m_pointer_id == 255)
+		if (s_pointer_id == 255)
 		{
 			wl_pointer_set_cursor(m_wl_pointer_p, pointer_serial, NULL, 0, 0);
 		}
 		else
 		{
-			wl_cursor = wl_cursor_p[m_pointer_id];
+			wl_cursor = wl_cursor_p[s_pointer_id];
 
 			if (wl_cursor && wl_cursor->image_count > 0)
 			{
@@ -67,14 +67,39 @@ static void wl_pointer_listener_leave(void *data, struct wl_pointer *wl_pointer,
 	pointer_serial = -1;
 }
 
+static float x = 0, y = 0;
 static void wl_pointer_listener_motion(void *data, struct wl_pointer *wl_pointer, uint32_t time, wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
-	nali_log("surface_x %f", wl_fixed_to_double(surface_x))
-	nali_log("surface_y %f", wl_fixed_to_double(surface_y))
+	float
+		l_x = wl_fixed_to_double(surface_x),
+		l_y = wl_fixed_to_double(surface_y);
+	if (s_pointer_state & NALI_P_STATE_HOLD)
+	{
+		s_pointer_x = l_x - x;
+		s_pointer_y = l_y - y;
+		// nali_log("x %f", s_pointer_x)
+		// nali_log("y %f", s_pointer_y)
+	}
+	x = l_x;
+	y = l_y;
+	// nali_log("surface_x %f", wl_fixed_to_double(surface_x))
+	// nali_log("surface_y %f", wl_fixed_to_double(surface_y))
 }
 
 static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state)
 {
+	if (button == BTN_LEFT)
+	{
+		if (state == WL_POINTER_BUTTON_STATE_PRESSED)
+		{
+			s_pointer_state |= NALI_P_STATE_HOLD;
+		}
+		else
+		{
+			s_pointer_state &= 0xFFu - NALI_P_STATE_HOLD;
+		}
+	}
+	// nali_log("surface_button %d", button)
 }
 
 static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time, uint32_t axis, wl_fixed_t value)
