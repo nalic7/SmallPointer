@@ -7,7 +7,8 @@ extern uint32_t
 	// m_max_joint,
 	m_rgba_bl;
 
-extern VkDeviceSize *m_ai_vkdevicesize_p;
+// extern VkDeviceSize *m_ai_vkdevicesize_p;
+extern VkDeviceSize m_a_vkdevicesize;
 
 extern uint8_t
 	*m_joint_count_p,

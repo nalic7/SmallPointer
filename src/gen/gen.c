@@ -1,6 +1,14 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
+#define NALI_GEN_READ_SKIN_ANIM 1
+const uint8_t setting_array[] =
+{
+	//read_skin+read_anim
+	NALI_GEN_READ_SKIN_ANIM,
+	// 0
+};
+
 const char *file_array[] =
 {
 	NALI_FACTORY NALI_HOME_MODEL "/SuperCutePomi0.glb",
@@ -11,20 +19,33 @@ const char *mesh_out[] =
 {
 	//s0-0
 	//E
-	"F0Face.003",
-	"F0Face.005",
-	"F0Face.008",
-	"F0Face.007",
-	"F0Face.001",
-	"F0Face.006",
+	"F0Face.003",//2
+	"F0Face.005",//4
+	"F0Face.008",//7
+	"F0Face.007",//6
+	"F0Face.001",//0
+	"F0Face.006",//5
 
 	//M
-	"F0Face.002",
-	"F0Face.004",
+	"F0Face.002",//1
+	"F0Face.004",//3
 
 	//I
-	"IShovel"
+	"IShovel"//8
 	//e0-0
+};
+uint8_t mesh_id_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
+uint8_t mesh_index = 0;
+
+// s r t
+uint8_t supercutepomi0_keyframe_array[] = {0, 10, 15, 20, 30, 35, 40, 50, 60, 70, 72, 75, 80, 90, 95};
+uint8_t *keyframe_p_array[] =
+{
+	supercutepomi0_keyframe_array
+};
+uint8_t keyframe_bl_array[] =
+{
+	sizeof(supercutepomi0_keyframe_array)
 };
 
 uint8_t *mesh_p_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
@@ -32,14 +53,14 @@ uint8_t *mesh_bl_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
 
 #define NALI_FPS 24
 
-#define NALI_MEMORY_RECOPY(w_p, r_p, size, byte) \
-	w_p = realloc(w_p, size + byte); \
-	memcpy(w_p + size, r_p, byte); \
-	size += byte;
+// #define NALI_MEMORY_RECOPY(w_p, r_p, size, byte) \
+// 	w_p = realloc(w_p, size + byte); \
+// 	memcpy(w_p + size, r_p, byte); \
+// 	size += byte;
 
-#define NALI_MEMORY_COPY(w_p, r_p, size, byte) \
-	memcpy(w_p + size, r_p, byte); \
-	size += byte;
+// #define NALI_MEMORY_COPY(w_p, r_p, size, byte) \
+// 	memcpy(w_p + size, r_p, byte); \
+// 	size += byte;
 
 // static uint8_t max_joint_bl = 0;
 
@@ -50,27 +71,45 @@ static uint8_t joint_count_bl = 0;
 // static uint8_t *joint_srt_p;//float
 // static uint32_t joint_srt_bl = 0;
 // static uint32_t joint_srt_step = 0;
-// static uint8_t joint_head_array[1024];
+static uint8_t joint_head_array[1024];
 static uint8_t joint_array[1024];
 static uint32_t joint_bl = 0;
 
-static uint8_t *animation_p;//float
-static uint32_t animation_bl = 0;
+typedef struct
+{
+	uint8_t
+		*time_s_p,
+		time_s_bl,
+		*time_r_p,
+		time_r_bl,
+		*time_t_p,
+		time_t_bl;
+	float
+		*animation_s_p,
+		*animation_r_p,
+		*animation_t_p;
+} srt_bone;
+
+static srt_bone *anim_bone_p;
+
+// static uint8_t *animation_array[1024 * sizeof(float)];//float
+// static uint32_t animation_bl = 0;
 
 static float *rgba_p = 0;
 static char **material_p;
 static uint8_t material_fl = 0;
 
-static uint8_t *ia_p;//uint32_t
-static uint32_t ia_bl = 0;
+static uint8_t *ai_p;//uint32_t
+static uint32_t ai_bl = 0;
 
-static uint8_t *attribute_p;
-static uint32_t attribute_bl = 0;
+static uint8_t *attribute_j1c1_p;
+static uint32_t attribute_j1c1_bl = 0;
 
-static uint8_t *index_p;
-static uint32_t index_bl = 0;
+static uint8_t *i_p;
+static uint32_t i_bl = 0;
+static uint8_t *cut_i_p;
+static uint32_t cut_i_bl = 0;
 
-//test
 static float i_bindpose_array[1024*2];
 static float global_bindpose_array[1024*2];
 
@@ -100,15 +139,18 @@ static void gen_model()
 	joint_count_p = malloc(0);
 	// joint_srt_p = malloc(0);
 
-	// memset(joint_head_array, 0, 1024);
+	memset(joint_head_array, 0, 1024);
 
-	animation_p = malloc(0);
+	// memset(animation_array, 0, 1024 * sizeof(float));
+	// animation_p = malloc(0);
+	anim_bone_p = malloc(0);
 
 	material_p = malloc(0);
 
-	ia_p = malloc(0);
-	attribute_p = malloc(0);
-	index_p = malloc(0);
+	ai_p = malloc(0);
+	attribute_j1c1_p = malloc(0);
+	i_p = malloc(0);
+	cut_i_p = malloc(0);
 
 	cgltf_options *cgltf_options_p = &(cgltf_options){};
 	cgltf_data *cgltf_data_p = NULL;
@@ -118,9 +160,11 @@ static void gen_model()
 		nali_info("cgltf_load_buffers %d", cgltf_load_buffers(cgltf_options_p, cgltf_data_p, file_array[l_0]))
 		nali_info("cgltf_validate %d", cgltf_validate(cgltf_data_p))
 
-		for (uint32_t l_1 = 0; l_1 < cgltf_data_p->animations_count; ++l_1)
+		// for (uint32_t l_1 = 0; l_1 < cgltf_data_p->animations_count; ++l_1)
+		if (setting_array[l_0] & NALI_GEN_READ_SKIN_ANIM)
 		{
-			cgltf_animation *cgltf_animation_p = &cgltf_data_p->animations[l_1];
+			// cgltf_animation *cgltf_animation_p = &cgltf_data_p->animations[l_1];
+			cgltf_animation *cgltf_animation_p = &cgltf_data_p->animations[0];
 
 			//input frame f 0 0.5 1.0
 			//output s/r/t vec3/vec4 v v v
@@ -128,6 +172,9 @@ static void gen_model()
 			// {
 			// 	cgltf_animation_p->samplers;
 			// }
+
+			anim_bone_p = realloc(anim_bone_p, (bone_bl + cgltf_data_p->skins[0].joints_count) * sizeof(srt_bone));
+			memset(anim_bone_p + bone_bl, 0, cgltf_data_p->skins[0].joints_count * sizeof(srt_bone));
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_animation_p->channels_count; ++l_2)
 			{
@@ -138,32 +185,95 @@ static void gen_model()
 				cgltf_accessor *cgltf_accessor_input_p = cgltf_animation_sampler_p->input;
 				cgltf_accessor *cgltf_accessor_output_p = cgltf_animation_sampler_p->output;
 
+				uint8_t bone_index;
+				// for (uint32_t l_3 = 0; l_3 < cgltf_data_p->skins_count; ++l_3)
+					// for (uint32_t l_4 = 0; l_4 < cgltf_data_p->skins[l_3].joints_count; ++l_4)
+				for (uint32_t l_3 = 0; l_3 < cgltf_data_p->skins[0].joints_count; ++l_3)
+						// if (cgltf_animation_channel_p->target_node == cgltf_data_p->skins[l_3].joints[l_4])
+					if (cgltf_animation_channel_p->target_node == cgltf_data_p->skins[0].joints[l_3])
+					{
+						bone_index = l_3;
+						break;
+					}
+
 				// /b\ 1
-				animation_p = realloc(animation_p, animation_bl + sizeof(uint8_t) + cgltf_accessor_input_p->count);
-				*(uint8_t *)(animation_p + animation_bl) = cgltf_accessor_input_p->count;
-				animation_bl += sizeof(uint8_t);
+				// animation_p = realloc(animation_p, animation_bl + sizeof(uint8_t) + cgltf_accessor_input_p->count);
+				// *(uint8_t *)(animation_p + animation_bl) = cgltf_accessor_input_p->count;
+				// animation_bl += sizeof(uint8_t);
 
 				cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_input_p->buffer_view;
-				float *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+				float *tp = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 				// /b\ 1
-				for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
-				{
-					*(uint8_t*)(animation_p + animation_bl + l_3) = p[l_3] * NALI_FPS;
-				}
-				animation_bl += cgltf_accessor_input_p->count;
+				// for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+				// 	*(uint8_t*)(animation_p + animation_bl + l_3) = p[l_3] * NALI_FPS;
+				// animation_bl += cgltf_accessor_input_p->count;
 
 				cgltf_buffer_view_p = cgltf_accessor_output_p->buffer_view;
-				p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+				float *p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
+
+				uint32_t j = (bone_bl + bone_index) * 3;
+				uint8_t
+					j_step = j % 8,
+					j_next,
+
+					time_bl = 0;
 
 				float l_q[4];
-				float q[4*10];
+				// /b\ keyframe
+				float q[4*255];
 				switch (cgltf_animation_channel_p->target_path)
 				{
 					case cgltf_animation_path_type_scale:
-						NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
+						joint_head_array[j / 8] |= 1 << j_step;
+
+						// for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
+						// {
+						// 	q[l_4 * 3] = p[l_4 * 3] - cgltf_animation_channel_p->target_node->scale[0];
+						// 	q[l_4 * 3 + 1] = p[l_4 * 3 + 1] - cgltf_animation_channel_p->target_node->scale[1];
+						// 	q[l_4 * 3 + 2] = p[l_4 * 3 + 2] - cgltf_animation_channel_p->target_node->scale[2];
+
+						// 	q[l_4 * 3] = 0;
+						// 	q[l_4 * 3 + 1] = 0;
+						// 	q[l_4 * 3 + 2] = 0;
+						// }
+
+						anim_bone_p[bone_bl + bone_index].time_s_bl = cgltf_accessor_input_p->count;
+						anim_bone_p[bone_bl + bone_index].time_s_p = malloc(cgltf_accessor_input_p->count);
+						for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+							anim_bone_p[bone_bl + bone_index].time_s_p[l_3] = tp[l_3] * NALI_FPS;
+						anim_bone_p[bone_bl + bone_index].animation_s_p = malloc(cgltf_accessor_input_p->count * sizeof(float) * 3);
+						memcpy(anim_bone_p[bone_bl + bone_index].animation_s_p, p, cgltf_accessor_input_p->count * sizeof(float) * 3);
+
+						// anim_bone_p[bone_bl + bone_index].time_s_p = malloc(0);
+						// anim_bone_p[bone_bl + bone_index].animation_s_p = malloc(0);
+						// for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+						// {
+						// 	uint8_t time = tp[l_3] * NALI_FPS;
+						// 	for (uint32_t l_4 = 0; l_4 < keyframe_bl_array[l_0]; ++l_4)
+						// 		if (keyframe_p_array[l_0][l_4] == time)
+						// 		{
+						// 			++time_bl;
+						// 			break;
+						// 		}
+						// 	if (time_bl > 0)
+						// 	{
+						// 		anim_bone_p[bone_bl + bone_index].time_s_p = realloc(anim_bone_p[bone_bl + bone_index].time_s_p, time_bl);
+						// 		anim_bone_p[bone_bl + bone_index].time_s_p[time_bl - 1] = time;
+						// 		anim_bone_p[bone_bl + bone_index].animation_s_p = realloc(anim_bone_p[bone_bl + bone_index].animation_s_p, time_bl * 3 * sizeof(float));
+						// 		memcpy(anim_bone_p[bone_bl + bone_index].animation_s_p + (time_bl - 1) * 3, p + l_3 * 3, sizeof(float) * 3);
+						// 	}
+						// }
+						// anim_bone_p[bone_bl + bone_index].time_s_bl = time_bl;
+
+						// NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
 						break;
 					case cgltf_animation_path_type_rotation:
+						// if (bone_index != 1)
+						// 	continue;
+						j_next = j_step + 1;
+						joint_head_array[j / 8 + j_next / 8] |= 1 << (j_next % 8);
+
 						memcpy(l_q, cgltf_animation_channel_p->target_node->rotation, sizeof(float) * 4);
 						V4_qi(l_q, 0)
 						for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
@@ -179,10 +289,97 @@ static void gen_model()
 						// 		q[3+l_4*4] = 1;
 						// 	}
 						// }
-						NALI_MEMORY_RECOPY(animation_p, q, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 4)
+
+						anim_bone_p[bone_bl + bone_index].time_r_bl = cgltf_accessor_input_p->count;
+						anim_bone_p[bone_bl + bone_index].time_r_p = malloc(cgltf_accessor_input_p->count);
+						for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+							anim_bone_p[bone_bl + bone_index].time_r_p[l_3] = tp[l_3] * NALI_FPS;
+						anim_bone_p[bone_bl + bone_index].animation_r_p = malloc(cgltf_accessor_input_p->count * sizeof(float) * 4);
+						memcpy(anim_bone_p[bone_bl + bone_index].animation_r_p, q, cgltf_accessor_input_p->count * sizeof(float) * 4);
+
+						// anim_bone_p[bone_bl + bone_index].time_r_p = malloc(0);
+						// anim_bone_p[bone_bl + bone_index].animation_r_p = malloc(0);
+						// for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+						// {
+						// 	uint8_t time = tp[l_3] * NALI_FPS;
+						// 	for (uint32_t l_4 = 0; l_4 < keyframe_bl_array[l_0]; ++l_4)
+						// 		if (keyframe_p_array[l_0][l_4] == time)
+						// 		{
+						// 			++time_bl;
+						// 			break;
+						// 		}
+						// 	if (time_bl > 0)
+						// 	{
+						// 		anim_bone_p[bone_bl + bone_index].time_r_p = realloc(anim_bone_p[bone_bl + bone_index].time_r_p, time_bl);
+						// 		anim_bone_p[bone_bl + bone_index].time_r_p[time_bl - 1] = time;
+						// 		anim_bone_p[bone_bl + bone_index].animation_r_p = realloc(anim_bone_p[bone_bl + bone_index].animation_r_p, time_bl * 4 * sizeof(float));
+						// 		memcpy(anim_bone_p[bone_bl + bone_index].animation_r_p + (time_bl - 1) * 4, q + l_3 * 4, sizeof(float) * 4);
+						// 	}
+						// }
+						// anim_bone_p[bone_bl + bone_index].time_r_bl = time_bl;
+
+						// NALI_MEMORY_RECOPY(animation_p, q, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 4)
 						break;
 					case cgltf_animation_path_type_translation:
-						NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
+						j_next = j_step + 2;
+						joint_head_array[j / 8 + j_next / 8] |= 1 << (j_next % 8);
+
+						for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
+						{
+							q[l_4 * 3] = p[l_4 * 3];
+							q[l_4 * 3 + 1] = p[l_4 * 3 + 1];
+							q[l_4 * 3 + 2] = p[l_4 * 3 + 2];
+
+							if (tp[0] == 0)
+							{
+								if (p[l_4 * 3] > 0)
+								{
+									q[l_4 * 3] = p[l_4 * 3] - cgltf_animation_channel_p->target_node->translation[0];
+								}
+								if (p[l_4 * 3 + 1] > 0)
+								{
+									q[l_4 * 3 + 1] = p[l_4 * 3 + 1] - cgltf_animation_channel_p->target_node->translation[1];
+								}
+								if (p[l_4 * 3 + 2] > 0)
+								{
+									q[l_4 * 3 + 2] = p[l_4 * 3 + 2] - cgltf_animation_channel_p->target_node->translation[2];
+								}
+
+								// q[l_4 * 3] = 0;
+								// q[l_4 * 3 + 1] = 0;
+								// q[l_4 * 3 + 2] = 0;
+							}
+						}
+
+						anim_bone_p[bone_bl + bone_index].time_t_bl = cgltf_accessor_input_p->count;
+						anim_bone_p[bone_bl + bone_index].time_t_p = malloc(cgltf_accessor_input_p->count);
+						for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+							anim_bone_p[bone_bl + bone_index].time_t_p[l_3] = tp[l_3] * NALI_FPS;
+						anim_bone_p[bone_bl + bone_index].animation_t_p = malloc(cgltf_accessor_input_p->count * sizeof(float) * 3);
+						memcpy(anim_bone_p[bone_bl + bone_index].animation_t_p, q, cgltf_accessor_input_p->count * sizeof(float) * 3);
+
+						// anim_bone_p[bone_bl + bone_index].time_t_p = malloc(0);
+						// anim_bone_p[bone_bl + bone_index].animation_t_p = malloc(0);
+						// for (uint32_t l_3 = 0; l_3 < cgltf_accessor_input_p->count; ++l_3)
+						// {
+						// 	uint8_t time = tp[l_3] * NALI_FPS;
+						// 	for (uint32_t l_4 = 0; l_4 < keyframe_bl_array[l_0]; ++l_4)
+						// 		if (keyframe_p_array[l_0][l_4] == time)
+						// 		{
+						// 			++time_bl;
+						// 			break;
+						// 		}
+						// 	if (time_bl > 0)
+						// 	{
+						// 		anim_bone_p[bone_bl + bone_index].time_t_p = realloc(anim_bone_p[bone_bl + bone_index].time_t_p, time_bl);
+						// 		anim_bone_p[bone_bl + bone_index].time_t_p[time_bl - 1] = time;
+						// 		anim_bone_p[bone_bl + bone_index].animation_t_p = realloc(anim_bone_p[bone_bl + bone_index].animation_t_p, time_bl * 3 * sizeof(float));
+						// 		memcpy(anim_bone_p[bone_bl + bone_index].animation_t_p + (time_bl - 1) * 3, q + l_3 * 3, sizeof(float) * 3);
+						// 	}
+						// }
+						// anim_bone_p[bone_bl + bone_index].time_t_bl = time_bl;
+
+						// NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
 						break;
 					default:
 						nali_info_t("cgltf_animation_channel_p->target_path %d", cgltf_animation_channel_p->target_path)
@@ -190,9 +387,11 @@ static void gen_model()
 			}
 		}
 
-		for (uint32_t l_1 = 0; l_1 < cgltf_data_p->skins_count; ++l_1)
+		// for (uint32_t l_1 = 0; l_1 < cgltf_data_p->skins_count; ++l_1)
+		if (setting_array[l_0] & NALI_GEN_READ_SKIN_ANIM)
 		{
-			cgltf_skin *cgltf_skin_p = &cgltf_data_p->skins[l_1];
+			// cgltf_skin *cgltf_skin_p = &cgltf_data_p->skins[l_1];
+			cgltf_skin *cgltf_skin_p = &cgltf_data_p->skins[0];
 
 			// for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
 			// {
@@ -363,13 +562,11 @@ static void gen_model()
 				while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != parent_cgltf_node_p)
 				{
 					for (uint32_t j_1 = 0; j_1 < cgltf_skin_p->joints_count; ++j_1)
-					{
 						if (cgltf_node_joints_p == cgltf_skin_p->joints[j_1])
 						{
 							joint_array[joint_bl + c_0] = j_1;
 							break;
 						}
-					}
 
 					++c_0;
 				}
@@ -388,20 +585,25 @@ static void gen_model()
 
 		//need reindex
 		uint8_t mix_array[sizeof(float) * 3 + 2];
-		uint32_t l_i = 0, l_a = 0;
+		uint32_t l_index = 0;
+		uint32_t l_own_index = 0;
+		uint32_t *l_index_p;
 		for (uint32_t l_1 = 0; l_1 < cgltf_data_p->meshes_count; ++l_1)
-		// for (uint32_t l_1 = 0; l_1 < 1; ++l_1)
+		// for (uint32_t l_1 = 0; l_1 < 3; ++l_1)
 		{
 			cgltf_mesh *cgltf_mesh_p = &cgltf_data_p->meshes[l_1];
 			nali_log("cgltf_mesh %s", cgltf_mesh_p->name)
 
-			for (uint32_t l_2 = 0; l_2 < sizeof(mesh_out) / sizeof(mesh_out[0]); ++l_2)
-			{
+			l_index_p = &l_index;
+
+			for (uint8_t l_2 = 0; l_2 < sizeof(mesh_out) / sizeof(mesh_out[0]); ++l_2)
 				if (!strcmp(mesh_out[l_2], cgltf_mesh_p->name))
 				{
-
+					mesh_id_array[l_2] = mesh_index++;
+					l_own_index = 0;
+					l_index_p = &l_own_index;
+					break;
 				}
-			}
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_mesh_p->primitives_count; ++l_2)
 			// for (uint32_t l_2 = 0; l_2 < 1; ++l_2)
@@ -454,9 +656,7 @@ static void gen_model()
 				while (mix_array[sizeof(float) * 3 + 1] < material_fl)
 				{
 					if (!strcmp(material_p[mix_array[sizeof(float) * 3 + 1]], cgltf_primitive_p->material->name))
-					{
 						break;
-					}
 					++mix_array[sizeof(float) * 3 + 1];
 				}
 				if (mix_array[sizeof(float) * 3 + 1] == material_fl)
@@ -465,9 +665,7 @@ static void gen_model()
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
 					cgltf_float *emissive_factor = cgltf_material_p->emissive_factor;
 					if (strstr(cgltf_material_p->name, ".C0."))
-					{
 						nali_info_t(".C0.")
-					}
 
 					++material_fl;
 					material_p = realloc(material_p, sizeof(char *) * material_fl);
@@ -554,6 +752,9 @@ static void gen_model()
 							}
 						}
 
+						//mix_array l_set
+						//need mix index
+						//j1c1
 						if (l_set == 1)
 						{
 							// // /b\ 1
@@ -565,14 +766,23 @@ static void gen_model()
 							// jwcn |= i << 16;
 							// ui_array[2] = i;
 
-							for (uint32_t l_5 = 0; l_5 < attribute_bl; l_5 += sizeof(float) * 3 + 2)
+							for (uint32_t l_5 = 0; l_5 < attribute_j1c1_bl; l_5 += sizeof(float) * 3 + 2)
 							{
-								if (!memcmp(attribute_p + l_5, mix_array, sizeof(float) * 3 + 2))
+								if (!memcmp(attribute_j1c1_p + l_5, mix_array, sizeof(float) * 3 + 2))
 								{
-									index_p = realloc(index_p, index_bl + sizeof(uint32_t));
-									*(uint32_t *)(index_p + index_bl) = l_5 / (sizeof(float) * 3 + 2);
-									index_bl += sizeof(uint32_t);
-									l_i += sizeof(uint32_t);
+									if (l_index_p == &l_own_index)
+									{
+										cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
+										*(uint32_t *)(cut_i_p + cut_i_bl) = l_5 / (sizeof(float) * 3 + 2);
+										cut_i_bl += sizeof(uint32_t);
+									}
+									else
+									{
+										i_p = realloc(i_p, i_bl + sizeof(uint32_t));
+										*(uint32_t *)(i_p + i_bl) = l_5 / (sizeof(float) * 3 + 2);
+										i_bl += sizeof(uint32_t);
+									}
+									*l_index_p += sizeof(uint32_t);
 
 									l_set = 0;
 									break;
@@ -580,16 +790,24 @@ static void gen_model()
 							}
 							if (l_set == 1)
 							{
-								attribute_p = realloc(attribute_p, attribute_bl + sizeof(float) * 3 + 2);
-								memcpy(attribute_p + attribute_bl, mix_array, sizeof(float) * 3 + 2);
+								attribute_j1c1_p = realloc(attribute_j1c1_p, attribute_j1c1_bl + sizeof(float) * 3 + 2);
+								memcpy(attribute_j1c1_p + attribute_j1c1_bl, mix_array, sizeof(float) * 3 + 2);
 
-								index_p = realloc(index_p, index_bl + sizeof(uint32_t));
-								*(uint32_t *)(index_p + index_bl) = attribute_bl / (sizeof(float) * 3 + 2);
-								index_bl += sizeof(uint32_t);
-								l_i += sizeof(uint32_t);
+								if (l_index_p == &l_own_index)
+								{
+									cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
+									*(uint32_t *)(cut_i_p + cut_i_bl) = attribute_j1c1_bl / (sizeof(float) * 3 + 2);
+									cut_i_bl += sizeof(uint32_t);
+								}
+								else
+								{
+									i_p = realloc(i_p, i_bl + sizeof(uint32_t));
+									*(uint32_t *)(i_p + i_bl) = attribute_j1c1_bl / (sizeof(float) * 3 + 2);
+									i_bl += sizeof(uint32_t);
+								}
+								*l_index_p += sizeof(uint32_t);
 
-								attribute_bl += sizeof(float) * 3 + 2;
-								l_a += sizeof(float) * 3 + 2;
+								attribute_j1c1_bl += sizeof(float) * 3 + 2;
 
 								l_set = 0;
 							}
@@ -598,11 +816,17 @@ static void gen_model()
 					}
 				}
 			}
+
+			if (l_index_p == &l_own_index)
+			{
+				ai_p = realloc(ai_p, ai_bl + sizeof(uint32_t));
+				*(uint32_t *)(ai_p + ai_bl) = l_own_index;
+				ai_bl += sizeof(uint32_t);
+			}
 		}
-		ia_p = realloc(ia_p, ia_bl + sizeof(uint32_t) * 2);
-		*(uint32_t *)(ia_p + ia_bl) = l_i;
-		*(uint32_t *)(ia_p + ia_bl + sizeof(uint32_t)) = l_a;
-		ia_bl += sizeof(uint32_t) * 2;
+		ai_p = realloc(ai_p, ai_bl + sizeof(uint32_t));
+		*(uint32_t *)(ai_p + ai_bl) = l_index;
+		ai_bl += sizeof(uint32_t);
 
 		cgltf_free(cgltf_data_p);
 	}
@@ -640,19 +864,79 @@ static void gen_model()
 	fwrite(joint_count_p, sizeof(uint8_t), joint_count_bl, file);
 	fwrite(joint_array, sizeof(uint8_t), joint_bl, file);
 	fwrite(i_bindpose_array, sizeof(float), bone_bl * 16, file);
-	// fwrite(joint_head_array, sizeof(uint8_t), ceil(bone_bl * 3.0F / 8), file);
+
+	//anim
+	fwrite(joint_head_array, sizeof(uint8_t), ceil(bone_bl * 3.0F / 8), file);
 	// fwrite(joint_srt_p, sizeof(uint8_t), joint_srt_bl, file);
 
-	fwrite(&animation_bl, sizeof(uint32_t), 1, file);
-	fwrite(animation_p, sizeof(uint8_t), animation_bl, file);
+	// fwrite(&animation_bl, sizeof(uint32_t), 1, file);
+	// fwrite(animation_array, sizeof(uint8_t), animation_bl, file);
+	for (uint32_t l_0 = 0; l_0 < bone_bl; ++l_0)
+	{
+		if (anim_bone_p[l_0].time_s_bl)
+		{
+			fwrite(&anim_bone_p[l_0].time_s_bl, sizeof(uint8_t), 1, file);
+			fwrite(anim_bone_p[l_0].time_s_p, sizeof(uint8_t), anim_bone_p[l_0].time_s_bl, file);
 
-	fwrite(&ia_bl, sizeof(uint32_t), 1, file);
-	fwrite(ia_p, sizeof(uint8_t), ia_bl, file);
-	fwrite(index_p, sizeof(uint8_t), index_bl, file);
-	fwrite(attribute_p, sizeof(uint8_t), attribute_bl, file);
+			fwrite(anim_bone_p[l_0].animation_s_p, sizeof(float), anim_bone_p[l_0].time_s_bl * 3, file);
+		}
 
+		if (anim_bone_p[l_0].time_r_bl)
+		{
+			fwrite(&anim_bone_p[l_0].time_r_bl, sizeof(uint8_t), 1, file);
+			fwrite(anim_bone_p[l_0].time_r_p, sizeof(uint8_t), anim_bone_p[l_0].time_r_bl, file);
+
+			fwrite(anim_bone_p[l_0].animation_r_p, sizeof(float), anim_bone_p[l_0].time_r_bl * 4, file);
+		}
+
+		if (anim_bone_p[l_0].time_t_bl)
+		{
+			fwrite(&anim_bone_p[l_0].time_t_bl, sizeof(uint8_t), 1, file);
+			fwrite(anim_bone_p[l_0].time_t_p, sizeof(uint8_t), anim_bone_p[l_0].time_t_bl, file);
+
+			fwrite(anim_bone_p[l_0].animation_t_p, sizeof(float), anim_bone_p[l_0].time_t_bl * 3, file);
+		}
+	}
+
+	fwrite(&ai_bl, sizeof(uint32_t), 1, file);
+	// fwrite(ai_p, sizeof(uint8_t), ai_bl, file);
+	for (uint8_t l_0 = 0; l_0 < sizeof(mesh_out) / sizeof(mesh_out[0]); ++l_0)
+	{
+		uint8_t l_0_0 = mesh_id_array[l_0];
+		fwrite(ai_p + l_0_0 * sizeof(uint32_t), sizeof(uint32_t), 1, file);
+	}
+	fwrite(ai_p + sizeof(mesh_out) / sizeof(mesh_out[0]) * sizeof(uint32_t), sizeof(uint32_t), 1, file);
+
+	for (uint8_t l_0 = 0; l_0 < sizeof(mesh_out) / sizeof(mesh_out[0]); ++l_0)
+	{
+		uint8_t l_0_0 = mesh_id_array[l_0];
+
+		uint32_t size = *(uint32_t *)(ai_p + l_0_0 * sizeof(uint32_t));
+		uint32_t index = 0;
+
+		for (uint8_t l_1 = 0; l_1 < l_0_0; ++l_1)
+		{
+			index += *(uint32_t *)(ai_p + l_1 * sizeof(uint32_t));
+		}
+
+		fwrite(cut_i_p + index, sizeof(uint8_t), size, file);
+	}
+	// fwrite(cut_i_p, sizeof(uint8_t), cut_i_bl, file);
+	fwrite(i_p, sizeof(uint8_t), i_bl, file);
+
+	fwrite(&material_fl, sizeof(uint8_t), 1, file);
 	fwrite(rgba_p, sizeof(float), material_fl * 4, file);
-	//color
+
+	//uv
+
+	//a j1c1
+	fwrite(attribute_j1c1_p, sizeof(uint8_t), attribute_j1c1_bl, file);
+
+	//a c1
+
+	//a j1t1u1v1
+
+	//a t1u1v1
 
 	fclose(file);
 }

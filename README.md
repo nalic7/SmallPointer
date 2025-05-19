@@ -23,7 +23,7 @@
 	[CodeLLDB](https://github.com/vadimcn/codelldb)_debug
 	[shader-validator](https://github.com/antaalt/shader-validator)_glsl
 2. dev-util/android-studio-2024.3.1.15
-3. blender 4.4.0
+3. blender 4.4.3
 </span>
 
 ### Scene

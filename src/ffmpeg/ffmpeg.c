@@ -85,9 +85,7 @@ uint8_t *ffmpeg_ogg(int *sample_rate_p, int *nb_channels_p, uint32_t *data_bl)
 	while (av_read_frame(avformatcontext_p, &avpacket) >= 0)
 	{
 		if (avpacket.stream_index == stream_index)
-		{
 			if (avcodec_send_packet(avcodeccontext_p, &avpacket) == 0)
-			{
 				while (avcodec_receive_frame(avcodeccontext_p, avframe_p) == 0)
 				{
 					SwrContext *swrcontext_p = NULL;
@@ -147,8 +145,6 @@ uint8_t *ffmpeg_ogg(int *sample_rate_p, int *nb_channels_p, uint32_t *data_bl)
 					swr_free(&swrcontext_p);
 					break;
 				}
-			}
-		}
 		av_packet_unref(&avpacket);
 	}
 	return data_p;

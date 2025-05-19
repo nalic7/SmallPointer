@@ -271,14 +271,28 @@ int vk_cmdDraw(void *arg)
 				//e0-VkDynamicState
 
 				// mtx_lock(m_mtx_t_draw_p);
-				for (uint8_t l_0 = 0; l_0 < 1; ++l_0)
-				{
-					//vkUpdateDescriptorSets
-					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &m_vkbuffer, &m_ai_vkdevicesize_p[l_0]);
-					vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, m_ai_index_count_p[l_0], VK_INDEX_TYPE_UINT32);
-					vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &m_vkdescriptorset, 0, VK_NULL_HANDLE);
-					vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
-				}
+				uint8_t l_0 = 9 * 2;
+				// for (uint8_t l_0 = 0; l_0 < 20; l_0 += 2)
+				// {
+				//vkUpdateDescriptorSets
+				// vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &m_vkbuffer, &m_ai_vkdevicesize_p[l_0]);
+				vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &m_vkbuffer, &m_a_vkdevicesize);
+				vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, m_ai_index_count_p[l_0], VK_INDEX_TYPE_UINT32);
+				vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &m_vkdescriptorset, 0, VK_NULL_HANDLE);
+				vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
+				// }
+
+				l_0 = 4 * 2;
+				vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, m_ai_index_count_p[l_0], VK_INDEX_TYPE_UINT32);
+				vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
+
+				l_0 = 6 * 2;
+				vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, m_ai_index_count_p[l_0], VK_INDEX_TYPE_UINT32);
+				vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
+
+				l_0 = 8 * 2;
+				vkCmdBindIndexBuffer(vkcommandbuffer, m_vkbuffer, m_ai_index_count_p[l_0], VK_INDEX_TYPE_UINT32);
+				vkCmdDrawIndexed(vkcommandbuffer, m_ai_index_count_p[l_0 + 1], 1, 0, 0, 0);
 
 				vkQueueWaitIdle(vkqueue_graphic);
 

@@ -27,13 +27,9 @@ void al_init()
 	nali_log("nb_channels %d", nb_channels)
 	ALenum format;
 	if (nb_channels == 1)
-	{
 		format = AL_FORMAT_MONO16;
-	}
 	else if (nb_channels == 2)
-	{
 		format = AL_FORMAT_STEREO16;
-	}
 
 	alGenBuffers(1, &buffer);
 	alGenSources(1, &source);
