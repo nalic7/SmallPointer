@@ -10,7 +10,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 		s_width = width;
 		s_height = height;
 		wl_surface_commit(m_wl_surface_p);
-		m_surface_state |= NALI_SURFACE_C_S_RE;
+		s_surface_state |= NALI_SURFACE_C_S_RE;
 	}
 
 	// if (width > 0 && height > 0)
@@ -26,7 +26,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_toplevel)
 {
 	nali_log("xdg_toplevel_listener_close 0")
-	m_surface_state |= NALI_SURFACE_C_S_CLEAN;
+	s_surface_state |= NALI_SURFACE_C_S_CLEAN;
 	al_clean();
 	// while (m_vkinstance != VK_NULL_HANDLE || m_client_socket != -1)
 	while (m_vkinstance != VK_NULL_HANDLE)

@@ -103,11 +103,12 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 				s_pointer_state &= 0xFFu - NALI_P_STATE_ROTATE;
 			break;
 		case BTN_MIDDLE:
-			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				s_pointer_state |= NALI_P_STATE_MOVE;
-			else
-				s_pointer_state &= 0xFFu - NALI_P_STATE_MOVE;
-			break;
+			s_pointer_state |= NALI_P_STATE_REROTATE;
+			// if (state == WL_POINTER_BUTTON_STATE_PRESSED)
+			// 	s_pointer_state |= NALI_P_STATE_MOVE;
+			// else
+			// 	s_pointer_state &= 0xFFu - NALI_P_STATE_MOVE;
+			// break;
 	}
 
 	// nali_log("surface_button %d", button)

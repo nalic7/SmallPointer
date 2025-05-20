@@ -47,7 +47,7 @@ extern VkSurfaceKHR m_vksurfacekhr;
 				&m_vksurfacekhr \
 			) \
 		) \
-		m_surface_state |= NALI_SURFACE_C_S_CONFIG;
+		s_surface_state |= NALI_SURFACE_C_S_CONFIG;
 #endif
 
 #define VK_freeSurface \

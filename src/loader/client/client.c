@@ -6,12 +6,12 @@ VkDeviceSize m_vkdevicesize;
 void lc_init()
 {
 	lcm_init();
-	m_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
+	s_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
 }
 
 void lc_vk()
 {
-	while (!(m_surface_state & NALI_SURFACE_C_S_RENDER_ABLE))
+	while (!(s_surface_state & NALI_SURFACE_C_S_RENDER_ABLE))
 	{
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}

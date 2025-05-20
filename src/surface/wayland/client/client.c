@@ -105,7 +105,7 @@ void wlc_clean()
 
 static int loop(void* arg)
 {
-	while (!(m_surface_state & NALI_SURFACE_C_S_CONFIG))
+	while (!(s_surface_state & NALI_SURFACE_C_S_CONFIG))
 	{
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
@@ -113,7 +113,7 @@ static int loop(void* arg)
 	int r = wl_display_dispatch(m_wl_display_client_p);
 	while (r > -1 && r != INT_MAX)
 	{
-		if (m_surface_state & NALI_SURFACE_C_S_CLEAN)
+		if (s_surface_state & NALI_SURFACE_C_S_CLEAN)
 		{
 			r = INT_MAX;
 		}
