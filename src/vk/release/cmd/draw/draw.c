@@ -224,7 +224,7 @@ int vk_cmdDraw(void *arg)
 			vkrect2d.extent = m_vkextent2d;
 
 			vkQueueWaitIdle(vkqueue_graphic);
-			M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16 * 2)
+			M_M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16 * 2)
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
 //				rz = 0.0F;
@@ -323,18 +323,18 @@ int vk_cmdDraw(void *arg)
 				// v4_m4(m, m1, m_vkbuffer_p + 16 * sizeof(float));
 
 				//a low mid
-				v4_q(s_rx, 0, 0, q);
+				m_v4_q(s_rx, 0, 0, q);
 				memcpy(m, m_m4x4_mat, sizeof(float) * 16);
-				v4_q2m(q, m);
+				m_v4_q2m(q, m);
 				memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
 				// m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
-				m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
+				m_m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
 
-				v4_q(0, s_ry, 0, q);
+				m_v4_q(0, s_ry, 0, q);
 				memcpy(m, m_m4x4_mat, sizeof(float) * 16);
-				v4_q2m(q, m);
+				m_v4_q2m(q, m);
 				memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
-				m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+				m_m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
 				vkFlushMappedMemoryRanges(m_vkdevice_p[m_device], 1, &(VkMappedMemoryRange)
 				{
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,

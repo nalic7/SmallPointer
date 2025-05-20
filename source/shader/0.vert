@@ -141,7 +141,7 @@ void main()
 		// l_v = l_m * l_v;
 		// l_v = inverse(l_m) * l_v;
 		// l_v = ubob.bindpose[l_0_0] * ubob.i_bindpose[l_0_0] * l_v;
-		l_v = ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.i_bindpose[l_0_0] * l_v;
+		l_v = ubob.bindpose[l_0_0] * t2mat4(ubob.t[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * s2mat4(ubob.s[l_0_0].xyz) * ubob.i_bindpose[l_0_0] * l_v;
 		// l_v = ubob.i_bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.bindpose[l_0_0] * l_v;
 		// l_v = inverse(ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz)) * ubob.bindpose[l_0_0] * l_v;
 	}

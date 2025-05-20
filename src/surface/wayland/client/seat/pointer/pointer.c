@@ -115,6 +115,16 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 
 static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time, uint32_t axis, wl_fixed_t value)
 {
+	float scroll = wl_fixed_to_double(value);
+
+	if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
+	{
+		s_pointer_y = scroll;
+    }
+	else if (axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL)
+	{
+		s_pointer_x = scroll;
+    }
 }
 
 struct wl_pointer_listener m_wl_pointer_listener =

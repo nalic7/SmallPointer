@@ -66,7 +66,7 @@ int main()
 	// #endif
 
 	#ifdef NALI_GEN
-		gen_file();
+		g_write();
 	#endif
 	#ifdef NALI_CLIENT
 		lc_init();

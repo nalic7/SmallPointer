@@ -152,6 +152,7 @@
 	#include "math/math.h"
 	#include "math/m4x4/m4x4.h"
 	#include "math/v4/v4.h"
+	// #include "math/str/str.h"
 
 	// #include "loader/both/l_both.h"
 	// #include "network/linux/both/nw_both.h"
@@ -171,6 +172,7 @@
 		#define NALI_HOME "../asset/"
 	#endif
 	#define NALI_HOME_MODEL "model"
+	#define NALI_HOME_KEYFRAME "keyframe"
 	#define NALI_HOME_SOUND "sound"
 	#define NALI_HOME_IMAGE "image"
 	// #define NALI_HOME_SHADER "shader/"
@@ -183,6 +185,8 @@
 		#else
 			#define NALI_FACTORY "../source/"
 		#endif
+		#include "gen/model/model.h"
+		#include "gen/keyframe/keyframe.h"
 		#include "gen/gen.h"
 	#endif
 

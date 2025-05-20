@@ -12,4 +12,6 @@
 #define MATH_LENGTH(number) ((number) == 0 ? 1 : log10(number) + 1)
 #define MATH_MIPMAP(width, height) (uint32_t)(log2(((width) > (height)) ? (width) : (height))) + 1
 
+#define MATH_LERP(a, b, t) (a) + ((b) - (a)) * (t)
+
 #endif

@@ -1,6 +1,6 @@
-#ifndef NALI_BIT_H
-#define NALI_BIT_H
+#ifndef NALI_GEN_H
+#define NALI_GEN_H
 
-void gen_file();
+void g_write();
 
 #endif

@@ -39,3 +39,4 @@ out
 
 asset
 source/model/*.glb
+source/keyframe/*.bin
