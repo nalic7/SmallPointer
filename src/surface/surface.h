@@ -21,15 +21,17 @@ extern uint8_t s_pointer_state;
 #define NALI_KEY_S 2
 #define NALI_KEY_A 4
 #define NALI_KEY_D 8
+#define NALI_KEY_SPACE 16
+#define NALI_KEY_LEFTCTRL 32
 extern uint8_t s_key;
 
 extern float
 	s_pointer_x, s_pointer_y,
 	s_rx, s_ry, s_rz,
-	s_move_x, s_move_z,
 	s_tx, s_ty, s_tz,
 	s_deltra;
 
-void s_loopPointer();
+void s_init();
+void s_loop();
 
 #endif

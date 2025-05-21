@@ -8,7 +8,6 @@ layout(location = 1) in uint a_j1c1;
 
 layout(std140, set = 0, binding = 0) uniform UBOS
 {
-	mat4 m;
 	mat4 v;
 	mat4 p;
 } ubos;
@@ -146,7 +145,7 @@ void main()
 		// l_v = inverse(ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz)) * ubob.bindpose[l_0_0] * l_v;
 	}
 
-	gl_Position = ubos.p * ubos.v * ubos.m * l_v;
+	gl_Position = ubos.p * ubos.v * l_v;
 
 	f_c = (a_j1c1 >> 8) & 0xFFu;
 }

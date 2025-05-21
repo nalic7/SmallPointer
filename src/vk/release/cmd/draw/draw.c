@@ -224,7 +224,7 @@ int vk_cmdDraw(void *arg)
 			vkrect2d.extent = m_vkextent2d;
 
 			vkQueueWaitIdle(vkqueue_graphic);
-			M_M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16 * 2)
+			M_M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)m_vkbuffer_p + 16)
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
 //				rz = 0.0F;
@@ -237,7 +237,7 @@ int vk_cmdDraw(void *arg)
 			{
 				.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 				.memory = m_vkdevicememory,
-				.offset = 16 * 2 * sizeof(float),
+				.offset = 16 * sizeof(float),
 				.size = 16 * sizeof(float),
 				.pNext = VK_NULL_HANDLE
 			});
@@ -301,7 +301,7 @@ int vk_cmdDraw(void *arg)
 				// ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
 
-				s_loopPointer();
+				s_loop();
 
 				// // float q[4];
 				// float q[4], m[16];
@@ -314,82 +314,84 @@ int vk_cmdDraw(void *arg)
 				// v4_m4(m_mvp_float_array + 16, m, m_vkbuffer_p + 16 * sizeof(float));
 				// memcpy(m_mvp_float_array + 16, m_vkbuffer_p + 16 * sizeof(float), sizeof(float) * 16);
 
-				float q[4], m[16], m1[16];
-				//2D
-				// v4_q(0, s_ry, 0, q);
-				// memcpy(m, m_m4x4_mat, sizeof(float) * 16);
-				// v4_q2m(q, m);
-				// memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
-				// v4_m4(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+				// float q[4], m[16], m1[16];
+				// //2D
+				// // v4_q(0, s_ry, 0, q);
+				// // memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				// // v4_q2m(q, m);
+				// // memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// // v4_m4(m, m1, m_vkbuffer_p + 16 * sizeof(float));
 
-				// //a low mid
-				// m_v4_q(s_rx, 0, 0, q);
+				// // //a low mid
+				// // m_v4_q(s_rx, 0, 0, q);
 
-				//space
-				m_v4_q(s_rx, s_ry, 0, q);
-				memcpy(m, m_m4x4_mat, sizeof(float) * 16);
-				m_v4_q2m(q, m);
-				memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
-				// m_m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
-				m_m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
-
-				// m_v4_q(0, s_ry, 0, q);
-				// memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				// //space
+				// m_v4_q(s_rx, s_ry, 0, q);
+				// memcpy(m, m_m4x4_array, sizeof(float) * 16);
 				// m_v4_q2m(q, m);
 				// memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
 				// // m_m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
 				// m_m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
 
-				memcpy(m, m_m4x4_mat, 16 * sizeof(float));
-				m[12] = s_tx;
-				m[13] = s_ty;
-				m[14] = s_tz;
-				memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
-				m_m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
+				// // m_v4_q(0, s_ry, 0, q);
+				// // memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				// // m_v4_q2m(q, m);
+				// // memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// // // m_m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+				// // m_m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
 
-				if (s_pointer_state & NALI_P_STATE_REROTATE)
-				{
-					float l_v4[4];
-					// float l_m4[16];
-					// memcpy(l_m4, m_m4x4_mat, sizeof(float) * 16);
-					// l_m4[12] = ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[12];
-					// l_m4[13] = ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[13];
-					// l_m4[14] = ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[14];
-					// memcpy(m_vkbuffer_p + 16 * sizeof(float), m_m4x4_mat, sizeof(float) * 16);
+				// memcpy(m, m_m4x4_array, 16 * sizeof(float));
+				// m[12] = s_tx;
+				// m[13] = s_ty;
+				// m[14] = s_tz;
+				// memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// m_m4x4_m(m1, m, m_vkbuffer_p + 16 * sizeof(float));
 
-					// m_v4_q(0, 0, s_rz, q);
-					// memcpy(m, m_m4x4_mat, sizeof(float) * 16);
-					// m_v4_q2m(q, m);
-					// memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
-					// m_m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+				// m_m4x4_m(s_q_m4x4_array, s_t_m4x4_array, m_vkbuffer_p);
 
-					// memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
-					// m_m4x4_m(m1, l_m4, m_vkbuffer_p + 16 * sizeof(float));
+				// if (s_pointer_state & NALI_P_STATE_REROTATE)
+				// {
+				// 	// float l_v4[4];
+				// 	// // float l_m4[16];
+				// 	// // memcpy(l_m4, m_m4x4_mat, sizeof(float) * 16);
+				// 	// // l_m4[12] = ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[12];
+				// 	// // l_m4[13] = ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[13];
+				// 	// // l_m4[14] = ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[14];
+				// 	// // memcpy(m_vkbuffer_p + 16 * sizeof(float), m_m4x4_mat, sizeof(float) * 16);
+
+				// 	// // m_v4_q(0, 0, s_rz, q);
+				// 	// // memcpy(m, m_m4x4_mat, sizeof(float) * 16);
+				// 	// // m_v4_q2m(q, m);
+				// 	// // memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// 	// // m_m4x4_m(m, m1, m_vkbuffer_p + 16 * sizeof(float));
+
+				// 	// // memcpy(m1, m_vkbuffer_p + 16 * sizeof(float), 16 * sizeof(float));
+				// 	// // m_m4x4_m(m1, l_m4, m_vkbuffer_p + 16 * sizeof(float));
 
 
 
-					m_v4_m4(m_vkbuffer_p + 16 * sizeof(float), (float[]){0, 0, 0, 1}, l_v4);
+				// 	// m_v4_m4(m_vkbuffer_p + 16 * sizeof(float), (float[]){0, 0, 0, 1}, l_v4);
 
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[0] = 1;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[1] = 0;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[2] = 0;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[4] = 0;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[5] = 1;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[6] = 0;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[8] = 0;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[9] = 0;
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[10] = 1;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[0] = 1;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[1] = 0;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[2] = 0;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[4] = 0;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[5] = 1;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[6] = 0;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[8] = 0;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[9] = 0;
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[10] = 1;
 
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[12] = l_v4[0] / l_v4[3];
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[13] = l_v4[1] / l_v4[3];
-					((float *)(m_vkbuffer_p + 16 * sizeof(float)))[14] = l_v4[2] / l_v4[3];
-					s_pointer_state &= 0xFFu - NALI_P_STATE_REROTATE;
-				}
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[12] = l_v4[0] / l_v4[3];
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[13] = l_v4[1] / l_v4[3];
+				// 	// ((float *)(m_vkbuffer_p + 16 * sizeof(float)))[14] = l_v4[2] / l_v4[3];
+				// 	s_pointer_state &= 0xFFu - NALI_P_STATE_REROTATE;
+				// }
 				vkFlushMappedMemoryRanges(m_vkdevice_p[m_device], 1, &(VkMappedMemoryRange)
 				{
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 					.memory = m_vkdevicememory,
-					.offset = 16 * sizeof(float),
+					.offset = 0,
 					.size = 16 * sizeof(float),
 					.pNext = VK_NULL_HANDLE
 				});

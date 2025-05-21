@@ -20,14 +20,14 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 	nali_log("window resize")
 	s_width = ANativeWindow_getWidth(window);
 	s_height = ANativeWindow_getHeight(window);
-	m_surface_state |= NALI_SURFACE_C_S_RE;
+	s_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
 	nali_log("window 0")
 	m_anativewindow_p = NULL;
-	m_surface_state |= NALI_SURFACE_C_S_RE;
+	s_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
@@ -109,7 +109,7 @@ void a_wait()
 //		vk_getQueue(m_device);
 
 //		m_surface_state |= NALI_SURFACE_C_S_CLEAN;
-		m_surface_state |= NALI_SURFACE_C_S_RE;
+		s_surface_state |= NALI_SURFACE_C_S_RE;
 		a_state &= 0xFFu - A_STATE_WAIT;
 	}
 }

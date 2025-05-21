@@ -1,9 +1,12 @@
+# [Blend](source/blend)
+# [Shader](source/shader)
+# [Path](doc/path.md)
 # SETUP
 <span style="font-size: large;">
 
 >Linux / Android
 
-1. app-editors/vscodium-1.99.32846
+1. app-editors/vscodium-1.99.32846-r1
 
 	settings.json
 	```json
@@ -22,7 +25,7 @@
 	[CMake Tools](https://github.com/microsoft/vscode-cmake-tools)_cmake
 	[CodeLLDB](https://github.com/vadimcn/codelldb)_debug
 	[shader-validator](https://github.com/antaalt/shader-validator)_glsl
-2. dev-util/android-studio-2024.3.1.15
+2. dev-util/android-studio-2024.3.2.14
 3. blender 4.4.3
 </span>
 

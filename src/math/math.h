@@ -14,4 +14,7 @@
 
 #define MATH_LERP(a, b, t) (a) + ((b) - (a)) * (t)
 
+//((yaw + 180) % 360 + 360) % 360 - 180
+#define MATH_NORMALIZE(v, f) fmodf(fmodf((v) + (f) / 2, (f)) + (f), (f)) - (f) / 2
+
 #endif

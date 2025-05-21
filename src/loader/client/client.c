@@ -5,6 +5,7 @@ VkDeviceSize m_vkdevicesize;
 
 void lc_init()
 {
+	lckf_init();
 	lcm_init();
 	s_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
 }

@@ -10,7 +10,7 @@ void ffmpeg_read(const char *filename)
 	nali_info("avformat_network_init %d", avformat_network_init())
 
 	#ifdef NALI_S_ANDROID
-		long data_bl;
+		uint32_t data_bl;
 		uint8_t *data_p = f_read(filename, &data_bl);
 		FILE *file_p = fopen(NALI_READ_CACHE, "wb");
 		fwrite(data_p, data_bl, 1, file_p);

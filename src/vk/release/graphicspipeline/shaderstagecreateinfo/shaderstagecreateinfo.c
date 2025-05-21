@@ -14,7 +14,7 @@ void vk_setVkPipelineShaderStageCreateInfo(uint32_t device, char *vert, char *fr
 	// char *c2 = math_combine(c1, spv_file);
 	// free(c1);
 
-	long size = 0;
+	uint32_t size = 0;
 	// uint32_t *uint32_t_p = file_uint32_t(c2, &size);
 	void *p = f_read(vert, &size);
 	// free(c2);

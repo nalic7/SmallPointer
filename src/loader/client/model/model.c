@@ -40,32 +40,17 @@ static uint8_t model_il;
 static float *rgba_p;
 uint32_t m_rgba_bl;
 
-#define NALI_CACHE_P_BL sizeof(void *) * 2
-#define NALI_CACHE_P_BS_P ((uint8_t ***)cache_p)[0]
-#define NALI_CACHE_P_BE_P ((uint8_t ***)cache_p)[1]
-//need use in future for pre data
-static void *cache_p;
-
-// static uint8_t
-// 	**bs_p,
-// 	**be_p;
-
 void lcm_init()
 {
-	long step = 0;
-	long data_bl;
-	uint8_t *data_p = f_read(NALI_HOME "asset.bin", &data_bl);
+	m_joint_count_bl = *(uint8_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
+	NALI_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
 
-	m_joint_count_bl = *(uint8_t *)data_p;
-	step += sizeof(uint8_t);
-
-	cache_p = malloc(NALI_CACHE_P_BL);
 	NALI_CACHE_P_BS_P = malloc(sizeof(uint8_t *) * m_joint_count_bl);
 	NALI_CACHE_P_BE_P = malloc(sizeof(uint8_t *) * m_joint_count_bl);
 
 	m_joint_count_p = malloc(m_joint_count_bl);
-	memcpy(m_joint_count_p, data_p + step, m_joint_count_bl);
-	step += m_joint_count_bl;
+	memcpy(m_joint_count_p, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], m_joint_count_bl);
+	NALI_CACHE_P_D_BL_P[1] += m_joint_count_bl;
 
 	uint16_t l_bone_bl = 0;
 	m_bone_p = malloc(0);
@@ -88,14 +73,14 @@ void lcm_init()
 
 		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
-			uint8_t size = *(uint8_t *)(data_p + step);
-			step += sizeof(uint8_t);
+			uint8_t size = *(uint8_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
+			NALI_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
 
 			m_bone_p[l_bone_bl + l_1] = (m_bone){0};
 			m_bone_p[l_bone_bl + l_1].joint_bl = size;
 			m_bone_p[l_bone_bl + l_1].joint_p = malloc(size);
-			memcpy(m_bone_p[l_bone_bl + l_1].joint_p, data_p + step, size);
-			step += size;
+			memcpy(m_bone_p[l_bone_bl + l_1].joint_p, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], size);
+			NALI_CACHE_P_D_BL_P[1] += size;
 
 			if (l_1 != 0)
 			{
@@ -110,13 +95,13 @@ void lcm_init()
 	l_bone_bl = 0;
 	for (uint8_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
 	{
-		memcpy(i_bindpose_p + l_bone_bl * 16, data_p + step, m_joint_count_p[l_0] * sizeof(float) * 16);
-		memcpy(bindpose_p + l_bone_bl * 16, data_p + step, m_joint_count_p[l_0] * sizeof(float) * 16);
+		memcpy(i_bindpose_p + l_bone_bl * 16, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], m_joint_count_p[l_0] * sizeof(float) * 16);
+		memcpy(bindpose_p + l_bone_bl * 16, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], m_joint_count_p[l_0] * sizeof(float) * 16);
 		for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
 		{
 			m_m4x4_i(bindpose_p + (l_bone_bl + l_1) * 16);
 		}
-		step += sizeof(float) * 16 * m_joint_count_p[l_0];
+		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 16 * m_joint_count_p[l_0];
 		l_bone_bl += m_joint_count_p[l_0];
 	}
 
@@ -260,8 +245,8 @@ void lcm_init()
 
 
 
-	uint32_t ia_bl = *(uint32_t *)(data_p + step);
-	step += sizeof(uint32_t);
+	uint32_t ia_bl = *(uint32_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
+	NALI_CACHE_P_D_BL_P[1] += sizeof(uint32_t);
 	// model_il = ia_bl / 2 / sizeof(uint32_t);
 	model_il = ia_bl / sizeof(uint32_t);
 
@@ -275,8 +260,8 @@ void lcm_init()
 	while (l_step != ia_bl)
 	{
 		// index_bl_p[l_step / (sizeof(uint32_t) * 2)] = *(uint32_t *)(data_p + step);
-		index_bl_p[l_step / sizeof(uint32_t)] = *(uint32_t *)(data_p + step);
-		step += sizeof(uint32_t);
+		index_bl_p[l_step / sizeof(uint32_t)] = *(uint32_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
+		NALI_CACHE_P_D_BL_P[1] += sizeof(uint32_t);
 
 		// attribute_bl_p[l_step / (sizeof(uint32_t) * 2)] = *(uint32_t *)(data_p + step);
 		// step += sizeof(uint32_t);
@@ -291,24 +276,24 @@ void lcm_init()
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
 		index_p[l_0] = malloc(index_bl_p[l_0]);
-		memcpy(index_p[l_0], data_p + step, index_bl_p[l_0]);
-		step += index_bl_p[l_0];
+		memcpy(index_p[l_0], NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], index_bl_p[l_0]);
+		NALI_CACHE_P_D_BL_P[1] += index_bl_p[l_0];
 		m_ai_index_count_p[l_0 * 2 + 1] = index_bl_p[l_0] / sizeof(uint32_t);
 	}
 
-	m_rgba_bl = *(uint8_t *)(data_p + step);
-	step += sizeof(uint8_t);
+	m_rgba_bl = *(uint8_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
+	NALI_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
 	m_rgba_bl *= 4 * sizeof(float);
 	rgba_p = malloc(m_rgba_bl);
-	memcpy(rgba_p, data_p + step, m_rgba_bl);
-	step += m_rgba_bl;
+	memcpy(rgba_p, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], m_rgba_bl);
+	NALI_CACHE_P_D_BL_P[1] += m_rgba_bl;
 	//apply color
 	for (uint32_t l_0 = 0; l_0 < m_rgba_bl / sizeof(float); ++l_0)
 	{
 		rgba_p[l_0] = pow(rgba_p[l_0], 1.0F / 5.0F);
 	}
 
-	a_bl = data_bl - step;
+	a_bl = NALI_CACHE_P_D_BL_P[0] - NALI_CACHE_P_D_BL_P[1];
 
 	//j1c1
 	uint32_t l_size = a_bl / (sizeof(float) * 3 + 2);
@@ -326,9 +311,9 @@ void lcm_init()
 	// }
 	for (uint32_t l_1 = 0; l_1 < l_size; ++l_1)
 	{
-		memcpy(a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)), data_p + step, sizeof(float) * 3 + 2);
+		memcpy(a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)), NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], sizeof(float) * 3 + 2);
 		memset((a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 2);
-		step += sizeof(float) * 3 + 2;
+		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 3 + 2;
 	}
 
 	lcmv_init();
@@ -437,7 +422,7 @@ void lcm_vk()
 
 			// if (l_key == 255)
 			// {
-			memcpy(m_vkbuffer_p + step, m_m4x4_mat + 12, sizeof(float) * 4);
+			memcpy(m_vkbuffer_p + step, m_m4x4_array + 12, sizeof(float) * 4);
 			// }
 			// else
 			// {
@@ -511,12 +496,12 @@ void lcm_vk()
 		// step += sizeof(float) * 4 * m_joint_count_p[l_0];
 
 		//s0-animate
-		uint8_t key = 11;//75
-		for (uint8_t l_1 = 0; l_1 < keyframe_p[0][key].bone_bl; ++l_1)
+		uint8_t key = 11;//80
+		for (uint8_t l_1 = 0; l_1 < lckf_keyframe_p[0][key].bone_bl; ++l_1)
 		{
-			memcpy(m_vkbuffer_p + l_s_step + keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, keyframe_p[0][key].animation_s_p[l_1], sizeof(float) * 3);
-			memcpy(m_vkbuffer_p + l_r_step + keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, keyframe_p[0][key].animation_r_p[l_1], sizeof(float) * 4);
-			memcpy(m_vkbuffer_p + l_t_step + keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, keyframe_p[0][key].animation_t_p[l_1], sizeof(float) * 3);
+			memcpy(m_vkbuffer_p + l_s_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_s_p[l_1], sizeof(float) * 3);
+			memcpy(m_vkbuffer_p + l_r_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_r_p[l_1], sizeof(float) * 4);
+			memcpy(m_vkbuffer_p + l_t_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_t_p[l_1], sizeof(float) * 3);
 		}
 
 		// float q[4];
@@ -533,7 +518,6 @@ void lcm_vk()
 
 	free(NALI_CACHE_P_BS_P);
 	free(NALI_CACHE_P_BE_P);
-	free(cache_p);
 	//e0-ssboa default
 
 	// //s0-ssboa file

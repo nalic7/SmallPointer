@@ -132,6 +132,7 @@
 		#include "vk/release/cmd/draw/draw.h"
 
 		#include "loader/client/client.h"
+		#include "loader/client/keyframe/keyframe.h"
 		#include "loader/client/model/model.h"
 		#include "loader/client/model/view/view.h"
 		#include "loader/client/shader/shader.h"
@@ -154,7 +155,7 @@
 	#include "math/v4/v4.h"
 	// #include "math/str/str.h"
 
-	// #include "loader/both/l_both.h"
+	#include "loader/both/both.h"
 	// #include "network/linux/both/nw_both.h"
 
 	#if NALI_CLIENT || NALI_SERVER

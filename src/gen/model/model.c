@@ -37,17 +37,6 @@ static const char *mesh_out[] =
 static uint8_t mesh_id_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
 static uint8_t mesh_index = 0;
 
-// s r t
-static uint8_t supercutepomi0_keyframe_array[] = {0, 10, 15, 20, 30, 35, 40, 50, 60, 70, 72, 75, 80, 90, 95};
-static uint8_t *keyframe_p_array[] =
-{
-	supercutepomi0_keyframe_array
-};
-static uint8_t keyframe_bl_array[] =
-{
-	sizeof(supercutepomi0_keyframe_array)
-};
-
 static uint8_t *mesh_p_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
 static uint8_t *mesh_bl_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
 

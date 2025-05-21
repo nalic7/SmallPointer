@@ -1,7 +1,7 @@
 #ifndef NALI_MATH_M4X4_H
 #define NALI_MATH_M4X4_H
 
-extern float m_m4x4_mat[16];
+extern float m_m4x4_array[16];
 
 void m_m4x4_i(float m[16]);
 void m_m4x4_m(const float a[16], const float b[16], float w[16]);

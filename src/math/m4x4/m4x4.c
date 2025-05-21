@@ -1,4 +1,4 @@
-float m_m4x4_mat[] =
+float m_m4x4_array[] =
 {
 	1.0F, 0.0F, 0.0F, 0.0F,
 	0.0F, 1.0F, 0.0F, 0.0F,
@@ -19,7 +19,7 @@ void m_m4x4_i(float m[16])
 	int32_t l_0, l_1, l_2;
 	float s[16];
 	float t[16];
-	memcpy(s, m_m4x4_mat, sizeof(float) * 16);
+	memcpy(s, m_m4x4_array, sizeof(float) * 16);
 	memcpy(t, m, sizeof(float) * 16);
 
 	for (l_0 = 0; l_0 < 3; l_0++)

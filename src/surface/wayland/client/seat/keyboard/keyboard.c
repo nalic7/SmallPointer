@@ -19,6 +19,11 @@ static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard
 			s_key |= NALI_KEY_A;
 		if (key == KEY_D)
 			s_key |= NALI_KEY_D;
+		if (key == KEY_SPACE)
+			s_key |= NALI_KEY_SPACE;
+		if (key == KEY_LEFTCTRL)
+			s_key |= NALI_KEY_LEFTCTRL;
+		//KEY_LEFTSHIFT
 	}
 	else
 	{
@@ -30,6 +35,10 @@ static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard
 			s_key &= 0xFFu - NALI_KEY_A;
 		if (key == KEY_D)
 			s_key &= 0xFFu - NALI_KEY_D;
+		if (key == KEY_SPACE)
+			s_key &= 0xFFu - NALI_KEY_SPACE;
+		if (key == KEY_LEFTCTRL)
+			s_key &= 0xFFu - NALI_KEY_LEFTCTRL;
 	}
 }
 
