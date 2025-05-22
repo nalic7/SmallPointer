@@ -1,4 +1,4 @@
-void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
+void vkgpl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
 {
 	LC_setVkVertexInputBindingDescription(vkvertexinputbindingdescription)
 	LC_setVkVertexInputAttributeDescription(vkvertexinputattributedescription_array)
@@ -24,7 +24,7 @@ void vk_makeGraphicsPipeline(uint32_t device, VkPipelineShaderStageCreateInfo *v
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines
 		(
-			m_vkdevice_p[device],
+			vkqd_vkdevice_p[device],
 			VK_NULL_HANDLE,
 			1,
 			&(VkGraphicsPipelineCreateInfo)

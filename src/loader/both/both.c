@@ -1,6 +1,6 @@
 void *lb_cache_p;
 
-void lb_init()
+void lb_set()
 {
 	lb_cache_p = malloc(NALI_CACHE_P_BL);
 	NALI_CACHE_P_D_BL_P = malloc(sizeof(uint32_t) * 2);

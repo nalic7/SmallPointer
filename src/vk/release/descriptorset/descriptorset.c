@@ -1,11 +1,11 @@
-void vk_makeDescriptorSet(uint32_t device, VkDescriptorPool vkdescriptorpool, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkDescriptorSet *vkdescriptorset_p)
+void vkds_make(uint32_t device, VkDescriptorPool vkdescriptorpool, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkDescriptorSet *vkdescriptorset_p)
 {
 	nali_info
 	(
 		"vkAllocateDescriptorSets %d",
 		vkAllocateDescriptorSets
 		(
-			m_vkdevice_p[device],
+			vkqd_vkdevice_p[device],
 			&(VkDescriptorSetAllocateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
@@ -19,7 +19,7 @@ void vk_makeDescriptorSet(uint32_t device, VkDescriptorPool vkdescriptorpool, Vk
 	)
 }
 
-void vk_setVkWriteDescriptorSet(uint32_t device, uint32_t bind, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorType vkdescriptortype, VkDescriptorSet vkdescriptorset, VkWriteDescriptorSet *vkwritedescriptorset_p)
+void vkds_setVkWriteDescriptorSet(uint32_t device, uint32_t bind, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorType vkdescriptortype, VkDescriptorSet vkdescriptorset, VkWriteDescriptorSet *vkwritedescriptorset_p)
 {
 	*vkwritedescriptorset_p = (VkWriteDescriptorSet)
 	{
@@ -36,5 +36,5 @@ void vk_setVkWriteDescriptorSet(uint32_t device, uint32_t bind, VkDescriptorImag
 
 		.pNext = VK_NULL_HANDLE
 	};
-	// vkUpdateDescriptorSets(m_vkdevice_p[device], 1, &vkwritedescriptorset, 0, VK_NULL_HANDLE);
+	// vkUpdateDescriptorSets(vkqd_vkdevice_p[device], 1, &vkwritedescriptorset, 0, VK_NULL_HANDLE);
 }

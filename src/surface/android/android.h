@@ -3,10 +3,10 @@
 
 #define LOOPER_ID_INPUT 1
 
-extern ANativeWindow *m_anativewindow_p;
-extern ANativeActivity *m_anativeactivity_p;
-extern AInputQueue *m_ainputqueue_p;
+extern ANativeWindow *sa_anativewindow_p;
+extern ANativeActivity *sa_anativeactivity_p;
+extern AInputQueue *sa_ainputqueue_p;
 
-void a_wait();
+void sa_wait();
 
 #endif

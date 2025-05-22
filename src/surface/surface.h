@@ -31,7 +31,7 @@ extern float
 	s_tx, s_ty, s_tz,
 	s_deltra;
 
-void s_init();
+void s_set();
 void s_loop();
 
 #endif

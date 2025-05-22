@@ -3,15 +3,15 @@ static struct wl_cursor **wl_cursor_p;
 static struct wl_surface *wl_surface_cursor;
 static struct wl_buffer *wl_buffer_cursor;
 
-void wlcp_init_cursor()
+void wlcsp_init_cursor()
 {
-	nali_info("wl_cursor_theme_load %p", wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), m_wl_shm_p))
+	nali_info("wl_cursor_theme_load %p", wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), wlc_wl_shm_p))
 
 	wl_cursor_p = malloc(sizeof(struct wl_cursor) * 2);
 	nali_info("wl_cursor_theme_get_cursor %p", wl_cursor_p[0] = wl_cursor_theme_get_cursor(wl_cursor_theme, "left_ptr"))//wait watch
 	nali_info("wl_cursor_theme_get_cursor %p", wl_cursor_p[1] = wl_cursor_theme_get_cursor(wl_cursor_theme, "progress"))
 
-	nali_info("wl_compositor_create_surface %p", wl_surface_cursor = wl_compositor_create_surface(m_wl_compositor_p))
+	nali_info("wl_compositor_create_surface %p", wl_surface_cursor = wl_compositor_create_surface(wlc_wl_compositor_p))
 }
 
 static uint32_t
@@ -22,13 +22,13 @@ static struct timespec cursor_start = {0}, cursor_end;
 // static clock_t
 // 	cursor_start = 0,
 // 	cursor_end;
-void wlcp_change_cursor()
+void wlcsp_change_cursor()
 {
 	if (pointer_serial != -1)
 	{
 		if (s_pointer_id == 255)
 		{
-			wl_pointer_set_cursor(m_wl_pointer_p, pointer_serial, NULL, 0, 0);
+			wl_pointer_set_cursor(wlc_wl_pointer_p, pointer_serial, NULL, 0, 0);
 		}
 		else
 		{
@@ -41,7 +41,7 @@ void wlcp_change_cursor()
 					cursor_i = 0;
 				}
 				wl_buffer_cursor = wl_cursor_image_get_buffer(wl_cursor->images[cursor_i]);
-				wl_pointer_set_cursor(m_wl_pointer_p, pointer_serial, wl_surface_cursor, 0, 0);
+				wl_pointer_set_cursor(wlc_wl_pointer_p, pointer_serial, wl_surface_cursor, 0, 0);
 				wl_surface_attach(wl_surface_cursor, wl_buffer_cursor, 0, 0);
 				wl_surface_commit(wl_surface_cursor);
 
@@ -128,7 +128,7 @@ static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, 
     }
 }
 
-struct wl_pointer_listener m_wl_pointer_listener =
+struct wl_pointer_listener wlcsp_wl_pointer_listener =
 {
 	.enter = wl_pointer_listener_enter,
 	.leave = wl_pointer_listener_leave,

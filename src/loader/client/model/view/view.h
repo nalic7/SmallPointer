@@ -3,7 +3,7 @@
 
 // extern float m_vp_float_array[48];
 
-void lcmv_init();
+void lcmv_set();
 void lcmv_vk();
 
 #endif

@@ -4,7 +4,7 @@ static void zwp_relative_pointer_v1_listener_relative_motion(void *data, struct 
 	nali_log("y %f", wl_fixed_to_double(dy))
 }
 
-struct zwp_relative_pointer_v1_listener m_zwp_relative_pointer_v1_listener =
+struct zwp_relative_pointer_v1_listener wlczwp_zwp_relative_pointer_v1_listener =
 {
 	.relative_motion = zwp_relative_pointer_v1_listener_relative_motion
 };

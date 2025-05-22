@@ -2,7 +2,7 @@ keyframe **lckf_keyframe_p;
 uint8_t *lckf_keyframe_bl_p;
 // static uint8_t lckf_keyframe_bl;
 
-void lckf_init()
+void lckf_set()
 {
 	uint8_t l_keyframe_bl = *(uint8_t *)NALI_CACHE_P_D_P;
 	NALI_CACHE_P_D_BL_P[1] += sizeof(uint8_t);

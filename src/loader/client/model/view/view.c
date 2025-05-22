@@ -38,9 +38,9 @@
 // 	// 0, 0, 0, 1,
 // };
 
-void lcmv_init()
+void lcmv_set()
 {
-	s_init();
+	s_set();
 	// float q[4];
 	// m_v4_q(0, 0, s_rz, q);
 	// m_v4_q2m(q, m_mvp_float_array + 16);
@@ -60,6 +60,6 @@ void lcmv_vk()
 {
 	// memcpy(m_vkbuffer_p, m_mvp_float_array, NALI_LC_MVP_BL);
 
-	memcpy(m_vkbuffer_p, m_m4x4_array, sizeof(float) * 16);
-	memcpy(m_vkbuffer_p + sizeof(float) * 16, m_m4x4_array, sizeof(float) * 16);
+	memcpy(lc_vkbuffer_p, m_m4x4_array, sizeof(float) * 16);
+	memcpy(lc_vkbuffer_p + sizeof(float) * 16, m_m4x4_array, sizeof(float) * 16);
 }

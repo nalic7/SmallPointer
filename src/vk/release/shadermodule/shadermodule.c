@@ -1,11 +1,11 @@
-void vk_makeShaderModule(uint32_t device, uint32_t *uint32_t_p, size_t size, VkShaderModule *vkshadermodule_p)
+void vksm_make(uint32_t device, uint32_t *uint32_t_p, size_t size, VkShaderModule *vkshadermodule_p)
 {
 	nali_info
 	(
 		"vkCreateShaderModule %d",
 		vkCreateShaderModule
 		(
-			m_vkdevice_p[device],
+			vkqd_vkdevice_p[device],
 			&(VkShaderModuleCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,

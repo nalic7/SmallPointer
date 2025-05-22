@@ -8,7 +8,7 @@
 #define NALI_CACHE_P_D_BL_P (((uint32_t **)lb_cache_p)[3])
 extern void *lb_cache_p;
 
-void lb_init();
+void lb_set();
 void lb_free();
 
 #endif

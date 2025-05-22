@@ -1,6 +1,6 @@
-VkInstance m_vkinstance = VK_NULL_HANDLE;
+VkInstance vkqdpdi_vkinstance = VK_NULL_HANDLE;
 
-const char *ppEnabledExtensionNames[] =
+static const char *ppEnabledExtensionNames[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
 	#ifdef NALI_S_ANDROID
@@ -18,13 +18,13 @@ const char *ppEnabledExtensionNames[] =
 };
 
 #ifdef NALI_VK_DEBUG
-	const char *ppEnabledLayerNames[] =
+	const char *vkqdpdi_ppEnabledLayerNames[] =
 	{
 		"VK_LAYER_KHRONOS_validation"
 	};
 #endif
 
-void vk_makeInstance()
+void vkqdpdi_make()
 {
 	nali_info
 	(
@@ -52,21 +52,21 @@ void vk_makeInstance()
 				.pNext = VK_NULL_HANDLE,
 
 				#ifdef NALI_VK_DEBUG
-					.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
-					.ppEnabledLayerNames = ppEnabledLayerNames
+					.enabledLayerCount = sizeof(vkqdpdi_ppEnabledLayerNames) / sizeof(vkqdpdi_ppEnabledLayerNames[0]),
+					.ppEnabledLayerNames = vkqdpdi_ppEnabledLayerNames
 				#else
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE
 				#endif
 			},
 			VK_NULL_HANDLE,
-			&m_vkinstance
+			&vkqdpdi_vkinstance
 		)
 	)
 }
 
-void vk_freeInstance()
+void vkqdpdi_free()
 {
-	vkDestroyInstance(m_vkinstance, NULL);
-	m_vkinstance = VK_NULL_HANDLE;
+	vkDestroyInstance(vkqdpdi_vkinstance, NULL);
+	vkqdpdi_vkinstance = VK_NULL_HANDLE;
 }

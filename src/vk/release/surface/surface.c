@@ -1,1 +1,1 @@
-VkSurfaceKHR m_vksurfacekhr = VK_NULL_HANDLE;
+VkSurfaceKHR vks_vksurfacekhr = VK_NULL_HANDLE;

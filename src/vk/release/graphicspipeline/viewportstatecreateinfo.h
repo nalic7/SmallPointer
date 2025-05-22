@@ -5,15 +5,15 @@
 // {
 // 	.x = 0,
 // 	.y = 0,
-// 	.width = m_vkextent2d.width,
-// 	.height = m_vkextent2d.height,
+// 	.width = vksc_vkextent2d.width,
+// 	.height = vksc_vkextent2d.height,
 // 	.minDepth = 0.0F,
 // 	.maxDepth = 1.0F
 // },
 // .pScissors = &(VkRect2D)
 // {
 // 	.offset = {.x = 0, .y = 0},
-// 	.extent = m_vkextent2d
+// 	.extent = vksc_vkextent2d
 // },
 #define VK_setPipelineViewportStateCreateInfo(name) \
 	VkPipelineViewportStateCreateInfo name = \

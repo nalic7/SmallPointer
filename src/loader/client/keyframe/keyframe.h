@@ -16,6 +16,6 @@ typedef struct
 extern keyframe **lckf_keyframe_p;
 extern uint8_t *lckf_keyframe_bl_p;
 
-void lckf_init();
+void lckf_set();
 
 #endif

@@ -16,12 +16,12 @@
 
 #define NALI_LC_MVP_BL sizeof(float) * 16 * 2
 
-extern VkBuffer m_vkbuffer;
-extern VkDeviceMemory m_vkdevicememory;
-extern void *m_vkbuffer_p;
-extern VkDeviceSize m_vkdevicesize;
+extern VkBuffer lc_vkbuffer;
+extern VkDeviceMemory lc_vkdevicememory;
+extern void *lc_vkbuffer_p;
+extern VkDeviceSize lc_vkdevicesize;
 
-void lc_init();
+void lc_set();
 
 void lc_vk();
 void lc_freeVk(uint32_t device);

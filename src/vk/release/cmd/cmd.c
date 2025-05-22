@@ -32,7 +32,7 @@ void vk_cmd(VkCommandBuffer vkcommandbuffer, VkCommandBufferBeginInfo *vkcommand
 	// nali_info("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
 	// //s0-freeImage
-	// VkDevice vkdevice = m_vkdevice_p[m_device];
+	// VkDevice vkdevice = vkqd_vkdevice_p[vk_device];
 	// for (uint32_t i = 0; i < m_nali_g_max_image; ++i)
 	// {
 	// 	vkDestroyBuffer(vkdevice, m_nali_g_image_vkbuffer_p[i], VK_NULL_HANDLE);

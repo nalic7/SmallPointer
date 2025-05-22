@@ -30,7 +30,7 @@ static float
 	lt_v4_array[4],
 	gt_v4_array[4];
 
-void s_init()
+void s_set()
 {
 	memcpy(lt_v4_array, m_m4x4_array + 12, sizeof(float) * 4);
 	memcpy(q0_m4x4_array, m_m4x4_array, sizeof(float) * 16);
@@ -84,24 +84,24 @@ void s_loop()
 	}
 
 
-	memcpy(m_vkbuffer_p, m_m4x4_array, sizeof(float) * 16);
+	memcpy(lc_vkbuffer_p, m_m4x4_array, sizeof(float) * 16);
 
 	m_v4_q(0, 0, s_rz, q_v4_array);
 	m_v4_q2m(q_v4_array, q0_m4x4_array);
-	memcpy(q1_m4x4_array, m_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, m_vkbuffer_p);
+	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
+	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
 	m_v4_q(0, s_ry, 0, q_v4_array);
 	m_v4_q2m(q_v4_array, q0_m4x4_array);
-	memcpy(q1_m4x4_array, m_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, m_vkbuffer_p);
+	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
+	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
-	m_v4_m4(m_vkbuffer_p, lt_v4_array, gt_v4_array);
+	m_v4_m4(lc_vkbuffer_p, lt_v4_array, gt_v4_array);
 
 	m_v4_q(s_rx, 0, 0, q_v4_array);
 	m_v4_q2m(q_v4_array, q0_m4x4_array);
-	memcpy(q1_m4x4_array, m_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, m_vkbuffer_p);
+	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
+	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
 	memcpy(q2_m4x4_array, m_m4x4_array, sizeof(float) * 16);
 
@@ -112,8 +112,8 @@ void s_loop()
 	q2_m4x4_array[12] = s_tx;
 	q2_m4x4_array[13] = s_ty;
 	q2_m4x4_array[14] = s_tz;
-	memcpy(q1_m4x4_array, m_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q2_m4x4_array, q1_m4x4_array, m_vkbuffer_p);
+	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
+	m_m4x4_m(q2_m4x4_array, q1_m4x4_array, lc_vkbuffer_p);
 	// ((float *)m_vkbuffer_p)[12] = s_tx;
 	// ((float *)m_vkbuffer_p)[13] = s_ty;
 	// ((float *)m_vkbuffer_p)[14] = s_tz;

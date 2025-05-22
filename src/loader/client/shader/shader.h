@@ -28,8 +28,8 @@
 		} \
 	};
 
-extern VkDescriptorSetLayout m_vkdescriptorsetlayout;
-extern VkDescriptorSet m_vkdescriptorset;
+extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
+extern VkDescriptorSet *lcs_vkdescriptorset_p;
 
 void lcs_vk();
 void lcs_freeVk();

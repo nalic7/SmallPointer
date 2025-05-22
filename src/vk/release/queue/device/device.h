@@ -1,10 +1,12 @@
 #ifndef NALI_VK_DEVICEQUEUE_H
 #define NALI_VK_DEVICEQUEUE_H
 
-extern VkDevice *m_vkdevice_p;
+extern const char *vkqd_deviceextensions[1];
 
-void vk_initDevice();
-void vk_makeDevice(uint32_t device);
-void vk_freeDevice();
+extern VkDevice *vkqd_vkdevice_p;
+
+void vkqd_set();
+void vkqd_make(uint32_t device);
+void vkqd_free();
 
 #endif

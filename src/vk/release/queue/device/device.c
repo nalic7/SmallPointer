@@ -1,14 +1,19 @@
-VkDevice *m_vkdevice_p;
-
-void vk_initDevice()
+const char *vkqd_deviceextensions[] =
 {
-	m_vkdevice_p = malloc(sizeof(VkDevice) * m_physical_device);
+	VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
+VkDevice *vkqd_vkdevice_p;
+
+void vkqd_set()
+{
+	vkqd_vkdevice_p = malloc(sizeof(VkDevice) * vkqdpd_physical_device);
 }
 
-void vk_makeDevice(uint32_t device)
+void vkqd_make(uint32_t device)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
-	uint32_t max_queue = m_max_queue_p[device];
+	VkPhysicalDevice vkphysicaldevice = vkqdpd_vkphysicaldevice_p[device];
+	uint32_t max_queue = vkq_max_queue_p[device];
 
 	VkDeviceQueueCreateInfo *vkdevicequeuecreateinfo_p = malloc(max_queue * sizeof(VkDeviceQueueCreateInfo));
 
@@ -49,12 +54,12 @@ void vk_makeDevice(uint32_t device)
 				.queueCreateInfoCount = max_queue,
 				.pQueueCreateInfos = vkdevicequeuecreateinfo_p,
 				.pEnabledFeatures = &vkphysicaldevicefeatures,
-				.enabledExtensionCount = sizeof(deviceextensions) / sizeof(deviceextensions[0]),
-				.ppEnabledExtensionNames = deviceextensions,
+				.enabledExtensionCount = sizeof(vkqd_deviceextensions) / sizeof(vkqd_deviceextensions[0]),
+				.ppEnabledExtensionNames = vkqd_deviceextensions,
 
 				#ifdef NALI_VK_DEBUG
-					.enabledLayerCount = sizeof(ppEnabledLayerNames) / sizeof(ppEnabledLayerNames[0]),
-					.ppEnabledLayerNames = ppEnabledLayerNames,
+					.enabledLayerCount = sizeof(vkqdpdi_ppEnabledLayerNames) / sizeof(vkqdpdi_ppEnabledLayerNames[0]),
+					.ppEnabledLayerNames = vkqdpdi_ppEnabledLayerNames,
 				#else
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE,
@@ -64,19 +69,19 @@ void vk_makeDevice(uint32_t device)
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			&m_vkdevice_p[device]
+			&vkqd_vkdevice_p[device]
 		)
 	)
 
 	free(vkdevicequeuecreateinfo_p);
 }
 
-void vk_freeDevice()
+void vkqd_free()
 {
-	for (uint32_t d = 0; d < m_physical_device; ++d)
+	for (uint32_t d = 0; d < vkqdpd_physical_device; ++d)
 	{
-		vkDestroyDevice(m_vkdevice_p[d], VK_NULL_HANDLE);
+		vkDestroyDevice(vkqd_vkdevice_p[d], VK_NULL_HANDLE);
 	}
 
-	free(m_vkdevice_p);
+	free(vkqd_vkdevice_p);
 }

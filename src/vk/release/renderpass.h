@@ -7,7 +7,7 @@
 		"vkCreateRenderPass %d", \
 		vkCreateRenderPass \
 		( \
-			m_vkdevice_p[device], \
+			vkqd_vkdevice_p[device], \
 			&(VkRenderPassCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO, \

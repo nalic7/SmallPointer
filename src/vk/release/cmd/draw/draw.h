@@ -3,7 +3,7 @@
 
 // extern mtx_t *m_mtx_t_draw_p;
 
-void vk_initCmdDraw();
-int vk_cmdDraw(void *arg);
+void vk_cmd_draw_set();
+int vk_cmd_draw_loop(void *arg);
 
 #endif

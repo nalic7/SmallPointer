@@ -6,10 +6,10 @@ static float
 static int init(void *arg)
 {
 	#ifdef NALI_CLIENT
-		lb_init();
-		lc_init();
-		vk_init();
-		al_init();
+		lb_set();
+		lc_set();
+		vk_set();
+		al_set();
 		lc_vk();
 		lb_free();
 	#endif
@@ -17,9 +17,9 @@ static int init(void *arg)
 	while (1)
 	{
 		AInputEvent *ainputevent_p = NULL;
-		while (m_ainputqueue_p != NULL && AInputQueue_getEvent(m_ainputqueue_p, &ainputevent_p) >= 0)
+		while (sa_ainputqueue_p != NULL && AInputQueue_getEvent(sa_ainputqueue_p, &ainputevent_p) >= 0)
 		{
-			if (AInputQueue_preDispatchEvent(m_ainputqueue_p, ainputevent_p))
+			if (AInputQueue_preDispatchEvent(sa_ainputqueue_p, ainputevent_p))
 			{
 				continue;
 			}
@@ -89,14 +89,14 @@ static int init(void *arg)
 					s_key &= 0xFFu - NALI_KEY_W - NALI_KEY_S - NALI_KEY_A - NALI_KEY_D;
 				}
 			}
-			AInputQueue_finishEvent(m_ainputqueue_p, ainputevent_p, 1);
+			AInputQueue_finishEvent(sa_ainputqueue_p, ainputevent_p, 1);
 		}
 	}
 	return 0;
 }
 
 //JNIEXPORT void JNICALL Java_com_nali_scene_Scene_runC(JNIEnv *jnienv_p, jobject jobject)
-void scene_init()
+void scene_set()
 {
 	nali_log("scene")
 	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
@@ -114,11 +114,11 @@ int main()
 		g_write();
 	#endif
 	#ifdef NALI_CLIENT
-		lb_init();
-		lc_init();
-		wlc_init();
-		vk_init();
-		al_init();
+		lb_set();
+		lc_set();
+		wlc_set();
+		vk_set();
+		al_set();
 		lc_vk();
 		lb_free();
 		// nwc_init();

@@ -1,6 +1,6 @@
-uint32_t vk_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags)
+uint32_t vkb_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[device];
+	VkPhysicalDevice vkphysicaldevice = vkqdpd_vkphysicaldevice_p[device];
 	VkPhysicalDeviceMemoryProperties vkphysicaldevicememoryproperties;
 	vkGetPhysicalDeviceMemoryProperties(vkphysicaldevice, &vkphysicaldevicememoryproperties);
 

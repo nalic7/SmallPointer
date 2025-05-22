@@ -1,6 +1,6 @@
 #ifndef NALI_VK_GRAPHICSPIPELINE_PIPELINELAYOUT_H
 #define NALI_VK_GRAPHICSPIPELINE_PIPELINELAYOUT_H
 
-void vk_makePipelineLayout(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p);
+void vkgplpllo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p);
 
 #endif

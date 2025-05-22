@@ -19,11 +19,11 @@
 
 #define NALI_VK_MAX_SAMPLER_ANISOTROPY 16.0F
 
-extern uint32_t m_device;
-extern uint32_t m_queue_g;
-extern uint32_t m_queue_ct;
+extern uint32_t vk_device;
+extern uint32_t vk_queue_g;
+extern uint32_t vk_queue_ct;
 
-void vk_init();
-void vk_clean();
+void vk_set();
+void vk_free();
 
 #endif

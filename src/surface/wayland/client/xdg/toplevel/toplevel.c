@@ -9,7 +9,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 	{
 		s_width = width;
 		s_height = height;
-		wl_surface_commit(m_wl_surface_p);
+		wl_surface_commit(wlc_wl_surface_p);
 		s_surface_state |= NALI_SURFACE_C_S_RE;
 	}
 
@@ -28,8 +28,8 @@ static void xdg_toplevel_listener_close(void* data, struct xdg_toplevel* xdg_top
 	nali_log("xdg_toplevel_listener_close 0")
 	s_surface_state |= NALI_SURFACE_C_S_CLEAN;
 	al_clean();
-	// while (m_vkinstance != VK_NULL_HANDLE || m_client_socket != -1)
-	while (m_vkinstance != VK_NULL_HANDLE)
+	// while (vkqdpdi_vkinstance != VK_NULL_HANDLE || m_client_socket != -1)
+	while (vkqdpdi_vkinstance != VK_NULL_HANDLE)
 	{
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
@@ -48,7 +48,7 @@ static void xdg_toplevel_listener_wm_capabilities(void* data, struct xdg_topleve
 	// info("xdg_toplevel_listener_wm_capabilities")
 }
 
-struct xdg_toplevel_listener m_xdg_toplevel_listener =
+struct xdg_toplevel_listener wlcxdg_xdg_toplevel_listener =
 {
 	.configure = xdg_toplevel_listener_configure,
 	.close = xdg_toplevel_listener_close,

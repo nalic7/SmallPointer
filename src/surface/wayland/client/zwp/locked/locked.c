@@ -8,7 +8,7 @@ static void zwp_locked_pointer_v1_listener_unlocked(void *data, struct zwp_locke
 
 }
 
-struct zwp_locked_pointer_v1_listener m_zwp_locked_pointer_v1_listener =
+struct zwp_locked_pointer_v1_listener wlczwp_zwp_locked_pointer_v1_listener =
 {
 	.locked = zwp_locked_pointer_v1_listener_locked,
 	.unlocked = zwp_locked_pointer_v1_listener_unlocked

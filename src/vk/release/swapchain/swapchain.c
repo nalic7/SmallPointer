@@ -1,10 +1,10 @@
-VkSwapchainKHR m_vkswapchainkhr;
-VkExtent2D m_vkextent2d;
-VkRenderPass m_vkrenderpass;
+VkSwapchainKHR vksc_vkswapchainkhr;
+VkExtent2D vksc_vkextent2d;
+VkRenderPass vksc_vkrenderpass;
 
-VkImage *m_vkswapchainkhr_vkimage_p;
-VkImageView *m_vkswapchainkhr_vkimageview_p;
-VkFramebuffer *m_vkswapchainkhr_vkframebuffer_p = NULL;
+VkImage *vksc_vkswapchainkhr_vkimage_p;
+VkImageView *vksc_vkswapchainkhr_vkimageview_p;
+VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p = NULL;
 
 //VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
 
@@ -18,16 +18,16 @@ static VkImage vkimage_color;
 static VkImageView vkimageview_color;
 static VkDeviceMemory vkdevicememory_color;
 
-void vk_makeSwapchain(VkSharingMode vksharingmode)
+void vksc_make(VkSharingMode vksharingmode)
 {
-	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[m_device];
-	VkDevice vkdevice = m_vkdevice_p[m_device];
+	VkPhysicalDevice vkphysicaldevice = vkqdpd_vkphysicaldevice_p[vk_device];
+	VkDevice vkdevice = vkqd_vkdevice_p[vk_device];
 
 	#ifdef NALI_VK_INFO_SC
 		uint32_t surface_format;
-		nali_info("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &surface_format, VK_NULL_HANDLE))
+		nali_info("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_format, VK_NULL_HANDLE))
 		VkSurfaceFormatKHR *vksurfaceformatkhr_p = malloc(surface_format * sizeof(VkSurfaceFormatKHR));
-		nali_info("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, m_vksurfacekhr, &surface_format, vksurfaceformatkhr_p))
+		nali_info("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_format, vksurfaceformatkhr_p))
 		for (uint32_t i = 0; i < surface_format; ++i)
 		{
 			VkSurfaceFormatKHR vksurfaceformatkhr = vksurfaceformatkhr_p[i];
@@ -39,9 +39,9 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 		free(vksurfaceformatkhr_p);
 
 		uint32_t surface_present;
-		nali_info("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, m_vksurfacekhr, &surface_present, VK_NULL_HANDLE))
+		nali_info("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_present, VK_NULL_HANDLE))
 		VkPresentModeKHR *vkpresentmodekhr_p = malloc(surface_present * sizeof(VkPresentModeKHR));
-		nali_info("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, m_vksurfacekhr, &surface_present, vkpresentmodekhr_p))
+		nali_info("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_present, vkpresentmodekhr_p))
 		for (uint32_t i = 0; i < surface_present; ++i)
 		{
 			nali_log("VkPresentModeKHR %d", vkpresentmodekhr_p[i])
@@ -50,41 +50,41 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 	#endif
 
 	VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr;
-	nali_info("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, m_vksurfacekhr, &vksurfacecapabilitieskhr))
+	nali_info("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, vks_vksurfacekhr, &vksurfacecapabilitieskhr))
 
 //	m_vksurfacetransformflagbitskhr = vksurfacecapabilitieskhr.currentTransform;
 //	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	if (vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	{
-		m_vkextent2d.width = s_height;
-		m_vkextent2d.height = s_width;
-//		m_width = m_vkextent2d.width;
-//		m_height = m_vkextent2d.height;
+		vksc_vkextent2d.width = s_height;
+		vksc_vkextent2d.height = s_width;
+//		m_width = vksc_vkextent2d.width;
+//		m_height = vksc_vkextent2d.height;
 	}
 	else
 	{
-		m_vkextent2d.height = s_height;
-		m_vkextent2d.width = s_width;
+		vksc_vkextent2d.height = s_height;
+		vksc_vkextent2d.width = s_width;
 	}
 
 ////	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR)
 ////	{
-////		m_vkextent2d.height = 1;
-////		m_vkextent2d.width = 1;
-////		m_width = m_vkextent2d.width;
-////		m_height = m_vkextent2d.height;
+////		vksc_vkextent2d.height = 1;
+////		vksc_vkextent2d.width = 1;
+////		m_width = vksc_vkextent2d.width;
+////		m_height = vksc_vkextent2d.height;
 ////	}
 ////	else if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR)
 ////	{
-////		m_vkextent2d.height = 1;
-////		m_vkextent2d.width = 1;
-////		m_width = m_vkextent2d.width;
-////		m_height = m_vkextent2d.height;
+////		vksc_vkextent2d.height = 1;
+////		vksc_vkextent2d.width = 1;
+////		m_width = vksc_vkextent2d.width;
+////		m_height = vksc_vkextent2d.height;
 ////	}
 //	else
 //	{
-//		m_vkextent2d.height = m_height;
-//		m_vkextent2d.width = m_width;
+//		vksc_vkextent2d.height = m_height;
+//		vksc_vkextent2d.width = m_width;
 //	}
 
 	nali_info
@@ -96,11 +96,11 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 			&(VkSwapchainCreateInfoKHR)
 			{
 				.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-				.surface = m_vksurfacekhr,
+				.surface = vks_vksurfacekhr,
 				.minImageCount = vksurfacecapabilitieskhr.minImageCount,
 				.imageFormat = NALI_VK_COLOR_FORMAT,
 				.imageColorSpace = NALI_VK_COLOR_SPACE,
-				.imageExtent = m_vkextent2d,
+				.imageExtent = vksc_vkextent2d,
 				.imageArrayLayers = 1,
 				.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 
@@ -109,8 +109,8 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 				.presentMode = NALI_VK_PRESENT,
 				.clipped = VK_TRUE,
 
-				.queueFamilyIndexCount = m_max_queue_surface_p[m_device],
-				.pQueueFamilyIndices = m_queue_surface_p[m_device],
+				.queueFamilyIndexCount = vkq_max_queue_surface_p[vk_device],
+				.pQueueFamilyIndices = vkq_queue_surface_p[vk_device],
 
 				.oldSwapchain = VK_NULL_HANDLE,
 
@@ -120,32 +120,32 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			&m_vkswapchainkhr
+			&vksc_vkswapchainkhr
 		)
 	)
 
-	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, m_vkswapchainkhr, &swapchain_image, VK_NULL_HANDLE))
+	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, vksc_vkswapchainkhr, &swapchain_image, VK_NULL_HANDLE))
 
 	#ifdef NALI_VK_INFO_SC
 		nali_log("vksurfaceformatkhr_image %d", swapchain_image)
 	#endif
 
-	m_vkswapchainkhr_vkimage_p = malloc(sizeof(VkImage) * swapchain_image);
-	m_vkswapchainkhr_vkimageview_p = malloc(sizeof(VkImageView) * swapchain_image);
-	m_vkswapchainkhr_vkframebuffer_p = malloc(sizeof(VkFramebuffer) * swapchain_image);
+	vksc_vkswapchainkhr_vkimage_p = malloc(sizeof(VkImage) * swapchain_image);
+	vksc_vkswapchainkhr_vkimageview_p = malloc(sizeof(VkImageView) * swapchain_image);
+	vksc_vkswapchainkhr_vkframebuffer_p = malloc(sizeof(VkFramebuffer) * swapchain_image);
 
-	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, m_vkswapchainkhr, &swapchain_image, m_vkswapchainkhr_vkimage_p))
+	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, vksc_vkswapchainkhr, &swapchain_image, vksc_vkswapchainkhr_vkimage_p))
 
-	VK_makeRenderPass(m_device, &m_vkrenderpass)
+	VK_makeRenderPass(vk_device, &vksc_vkrenderpass)
 
 	VK_makeImage
 	(
-		m_device,
+		vk_device,
 		NALI_VK_DEPTH_FORMAT,
 		((VkExtent3D)
 		{
-			.width = m_vkextent2d.width,
-			.height = m_vkextent2d.height,
+			.width = vksc_vkextent2d.width,
+			.height = vksc_vkextent2d.height,
 			.depth = 1
 		}),
 		1,
@@ -156,17 +156,17 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 		&vkimage_depth
 	)
 	VkMemoryRequirements vkmemoryrequirements;
-	VK_genImage(m_device, vkimage_depth, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_depth, vkmemoryrequirements)
-	VK_makeImageView(m_device, vkimage_depth, NALI_VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &vkimageview_depth)
+	VK_genImage(vk_device, vkimage_depth, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_depth, vkmemoryrequirements)
+	VK_makeImageView(vk_device, vkimage_depth, NALI_VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &vkimageview_depth)
 
 	VK_makeImage
 	(
-		m_device,
+		vk_device,
 		NALI_VK_COLOR_FORMAT,
 		((VkExtent3D)
 		{
-			.width = m_vkextent2d.width,
-			.height = m_vkextent2d.height,
+			.width = vksc_vkextent2d.width,
+			.height = vksc_vkextent2d.height,
 			.depth = 1
 		}),
 		1,
@@ -176,36 +176,36 @@ void vk_makeSwapchain(VkSharingMode vksharingmode)
 		NALI_VK_SAMPLE_C,
 		&vkimage_color
 	)
-	VK_genImage(m_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color, vkmemoryrequirements)
-	VK_makeImageView(m_device, vkimage_color, NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color)
+	VK_genImage(vk_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color, vkmemoryrequirements)
+	VK_makeImageView(vk_device, vkimage_color, NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color)
 
 	for (uint32_t i = 0; i < swapchain_image; ++i)
 	{
-		VK_makeImageView(m_device, m_vkswapchainkhr_vkimage_p[i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &m_vkswapchainkhr_vkimageview_p[i])
+		VK_makeImageView(vk_device, vksc_vkswapchainkhr_vkimage_p[i], NALI_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vksc_vkswapchainkhr_vkimageview_p[i])
 		VK_makeFramebuffer
 		(
-			m_device,
+			vk_device,
 			((VkImageView[])
 			{
 				vkimageview_color,
 				vkimageview_depth,
-				m_vkswapchainkhr_vkimageview_p[i]
+				vksc_vkswapchainkhr_vkimageview_p[i]
 			}),
 			3,
-			m_vkrenderpass,
-			&m_vkswapchainkhr_vkframebuffer_p[i]
+			vksc_vkrenderpass,
+			&vksc_vkswapchainkhr_vkframebuffer_p[i]
 		)
 	}
 }
 
-void vk_freeSwapchain()
+void vksc_free()
 {
-	if (m_vkswapchainkhr_vkframebuffer_p == NULL)
+	if (vksc_vkswapchainkhr_vkframebuffer_p == NULL)
 	{
 		return;
 	}
-//	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[m_device];
-	VkDevice vkdevice = m_vkdevice_p[m_device];
+//	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[vk_device];
+	VkDevice vkdevice = vkqd_vkdevice_p[vk_device];
 
 	vkDestroyImageView(vkdevice, vkimageview_depth, VK_NULL_HANDLE);
 	vkDestroyImage(vkdevice, vkimage_depth, VK_NULL_HANDLE);
@@ -217,15 +217,15 @@ void vk_freeSwapchain()
 
 	for (uint32_t i = 0; i < swapchain_image; ++i)
 	{
-		vkDestroyFramebuffer(vkdevice, m_vkswapchainkhr_vkframebuffer_p[i], VK_NULL_HANDLE);
-		vkDestroyImageView(vkdevice, m_vkswapchainkhr_vkimageview_p[i], VK_NULL_HANDLE);
+		vkDestroyFramebuffer(vkdevice, vksc_vkswapchainkhr_vkframebuffer_p[i], VK_NULL_HANDLE);
+		vkDestroyImageView(vkdevice, vksc_vkswapchainkhr_vkimageview_p[i], VK_NULL_HANDLE);
 	}
 
-	vkDestroyRenderPass(vkdevice, m_vkrenderpass, VK_NULL_HANDLE);
-	vkDestroySwapchainKHR(vkdevice, m_vkswapchainkhr, VK_NULL_HANDLE);
+	vkDestroyRenderPass(vkdevice, vksc_vkrenderpass, VK_NULL_HANDLE);
+	vkDestroySwapchainKHR(vkdevice, vksc_vkswapchainkhr, VK_NULL_HANDLE);
 
-	free(m_vkswapchainkhr_vkimage_p);
-	free(m_vkswapchainkhr_vkimageview_p);
-	free(m_vkswapchainkhr_vkframebuffer_p);
-	m_vkswapchainkhr_vkframebuffer_p = NULL;
+	free(vksc_vkswapchainkhr_vkimage_p);
+	free(vksc_vkswapchainkhr_vkimageview_p);
+	free(vksc_vkswapchainkhr_vkframebuffer_p);
+	vksc_vkswapchainkhr_vkframebuffer_p = NULL;
 }

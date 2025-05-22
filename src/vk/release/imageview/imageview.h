@@ -8,7 +8,7 @@
 		"vkCreateImageView %d", \
 		vkCreateImageView \
 		( \
-			m_vkdevice_p[device], \
+			vkqd_vkdevice_p[device], \
 			&(VkImageViewCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, \

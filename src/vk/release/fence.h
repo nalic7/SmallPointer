@@ -7,7 +7,7 @@
 		"vkCreateFence %d", \
 		vkCreateFence \
 		( \
-			m_vkdevice_p[device], \
+			vkqd_vkdevice_p[device], \
 			&(VkFenceCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO, \

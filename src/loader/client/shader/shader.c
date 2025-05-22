@@ -3,8 +3,8 @@
 //s0-d
 static VkDescriptorPoolSize vkdescriptorpoolsize_array[NALI_D_SIZE];
 static VkDescriptorPool vkdescriptorpool;
-VkDescriptorSetLayout m_vkdescriptorsetlayout;
-VkDescriptorSet m_vkdescriptorset;
+VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
+VkDescriptorSet *lcs_vkdescriptorset_p;
 //e0-d
 
 //s0-ubo
@@ -13,11 +13,11 @@ static VkDescriptorBufferInfo *vkdescriptorbufferinfo_p;
 // static VkDescriptorImageInfo vkdescriptorimageinfo;
 //e0-ubo
 
-void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
+static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
-	vk_makeDescriptorSetLayout
+	vkdslo_make
 	(
-		m_device,
+		vk_device,
 		(VkDescriptorSetLayoutBinding[])
 		{
 			//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -47,7 +47,7 @@ void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 		vkdescriptorsetlayout_p
 	);
 }
-void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
+static void setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
 {
 	vkdescriptorpoolsize_p[0] = (VkDescriptorPoolSize)
 	{
@@ -58,17 +58,17 @@ void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
 	vkdescriptorpoolsize_p[2] = vkdescriptorpoolsize_p[0];
 }
 
-void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, uint8_t step)
+static void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, uint8_t step)
 {
 	//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 	//r-bind
 	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
 	{
-		.buffer = m_vkbuffer,
+		.buffer = lc_vkbuffer,
 		.offset = 0,
 		.range = NALI_LC_MVP_BL
 	};
-	vk_setVkWriteDescriptorSet(m_device, 0, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[0], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
+	vkds_setVkWriteDescriptorSet(vk_device, 0, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[0], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 
 	//r-bind
 	// /l\ + step = size[x-1]
@@ -79,57 +79,60 @@ void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBuf
 	}
 	else
 	{
-		offset = m_joint_count_p[step - 1] * sizeof(float) * 16 * 2 + m_joint_count_p[step - 1] * sizeof(float) * 4 * 3;
+		offset = lcm_joint_count_p[step - 1] * sizeof(float) * 16 * 2 + lcm_joint_count_p[step - 1] * sizeof(float) * 4 * 3;
 	}
 	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
-		.buffer = m_vkbuffer,
-		.offset = NALI_LC_MVP_BL + m_rgba_bl + offset,
-		.range = m_joint_count_p[step] * sizeof(float) * 16 * 2 + m_joint_count_p[step] * sizeof(float) * 4 * 3
+		.buffer = lc_vkbuffer,
+		.offset = NALI_LC_MVP_BL + lcm_rgba_bl + offset,
+		.range = lcm_joint_count_p[step] * sizeof(float) * 16 * 2 + lcm_joint_count_p[step] * sizeof(float) * 4 * 3
 	};
-	vk_setVkWriteDescriptorSet(m_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
+	vkds_setVkWriteDescriptorSet(vk_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
 
 	//n-bind
 	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
 	{
-		.buffer = m_vkbuffer,
+		.buffer = lc_vkbuffer,
 		.offset = NALI_LC_MVP_BL,
-		.range = m_rgba_bl
+		.range = lcm_rgba_bl
 	};
-	vk_setVkWriteDescriptorSet(m_device, 2, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[2], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
+	vkds_setVkWriteDescriptorSet(vk_device, 2, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[2], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 }
 
 void lcs_vk()
 {
 	//s0-d
-	lc_setVkDescriptorPoolSize(vkdescriptorpoolsize_array);
-	vk_makeDescriptorSetPool(m_device, vkdescriptorpoolsize_array, NALI_D_SIZE, &vkdescriptorpool);
-	lc_setVkDescriptorSetLayout(&m_vkdescriptorsetlayout);
-	vk_makeDescriptorSet(m_device, vkdescriptorpool, &m_vkdescriptorsetlayout, 1, &m_vkdescriptorset);
+	lcs_vkdescriptorset_p = malloc(sizeof(VkDescriptorSet) * lcm_joint_count_bl);
+	setVkDescriptorPoolSize(vkdescriptorpoolsize_array);
+	vkdsp_make(vk_device, vkdescriptorpoolsize_array, NALI_D_SIZE, &vkdescriptorpool);
+	setVkDescriptorSetLayout(&lcs_vkdescriptorsetlayout);
 	//e0-d
 
-	VkDevice vkdevice = m_vkdevice_p[m_device];
+	VkDevice vkdevice = vkqd_vkdevice_p[vk_device];
 
 	//s0-ubo
-	vkdescriptorbufferinfo_p = malloc(sizeof(VkDescriptorBufferInfo) * m_joint_count_bl * NALI_D_SIZE);
-	vkwritedescriptorset_p = malloc(sizeof(VkWriteDescriptorSet) * m_joint_count_bl * NALI_D_SIZE);
-	for (uint32_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
+	vkdescriptorbufferinfo_p = malloc(sizeof(VkDescriptorBufferInfo) * lcm_joint_count_bl * NALI_D_SIZE);
+	vkwritedescriptorset_p = malloc(sizeof(VkWriteDescriptorSet) * lcm_joint_count_bl * NALI_D_SIZE);
+	for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
 	{
-		lc_setVkWriteDescriptorSet(m_vkdescriptorset, vkdescriptorbufferinfo_p + l_0 * NALI_D_SIZE, vkwritedescriptorset_p, l_0);
+		vkds_make(vk_device, vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, lcs_vkdescriptorset_p + l_0);
+
+		lc_setVkWriteDescriptorSet(lcs_vkdescriptorset_p[l_0], vkdescriptorbufferinfo_p + l_0 * NALI_D_SIZE, vkwritedescriptorset_p, l_0);
 	}
 	//s1-update
-	vkUpdateDescriptorSets(vkdevice, m_joint_count_bl * NALI_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
+	vkUpdateDescriptorSets(vkdevice, lcm_joint_count_bl * NALI_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	//e1-update
 	//e0-ubo
 }
 
 void lcs_freeVk(uint32_t device)
 {
-	VkDevice vkdevice = m_vkdevice_p[device];
+	VkDevice vkdevice = vkqd_vkdevice_p[device];
 
-	vkDestroyDescriptorSetLayout(vkdevice, m_vkdescriptorsetlayout, VK_NULL_HANDLE);
+	vkDestroyDescriptorSetLayout(vkdevice, lcs_vkdescriptorsetlayout, VK_NULL_HANDLE);
 	vkDestroyDescriptorPool(vkdevice, vkdescriptorpool, VK_NULL_HANDLE);
 
 	free(vkdescriptorbufferinfo_p);
 	free(vkwritedescriptorset_p);
+	free(lcs_vkdescriptorset_p);
 }

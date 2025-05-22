@@ -11,7 +11,7 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 		"vkCreateImage %d", \
 		vkCreateImage \
 		( \
-			m_vkdevice_p[device], \
+			vkqd_vkdevice_p[device], \
 			&(VkImageCreateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, \
@@ -37,24 +37,24 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 
 //vkmemoryrequirements f
 #define VK_genImage(device, vkimage, vkmemorypropertyflags, vkdevicememory_p, vkmemoryrequirements) \
-	vkGetImageMemoryRequirements(m_vkdevice_p[device], vkimage, &vkmemoryrequirements); \
+	vkGetImageMemoryRequirements(vkqd_vkdevice_p[device], vkimage, &vkmemoryrequirements); \
 	nali_info \
 	( \
 		"vkAllocateMemory %d", \
 		vkAllocateMemory \
 		( \
-			m_vkdevice_p[device], \
+			vkqd_vkdevice_p[device], \
 			&(VkMemoryAllocateInfo) \
 			{ \
 				.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, \
 				.allocationSize = vkmemoryrequirements.size, \
-				.memoryTypeIndex = vk_findMemoryType(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags), \
+				.memoryTypeIndex = vkb_findMemoryType(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags), \
 				.pNext = VK_NULL_HANDLE \
 			}, \
 			VK_NULL_HANDLE, \
 			vkdevicememory_p \
 		) \
 	) \
-	nali_info("vkBindImageMemory %d", vkBindImageMemory(m_vkdevice_p[device], vkimage, *vkdevicememory_p, 0))
+	nali_info("vkBindImageMemory %d", vkBindImageMemory(vkqd_vkdevice_p[device], vkimage, *vkdevicememory_p, 0))
 
 #endif

@@ -1,4 +1,4 @@
-VkDebugUtilsMessengerEXT m_vkdebugutilsmessengerext;
+VkDebugUtilsMessengerEXT vkd_vkdebugutilsmessengerext;
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT *vkdebugutilsmessengercallbackdataext, void *data)
 {
@@ -20,14 +20,14 @@ static VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebu
 	}
 }
 
-void vk_makeDebug()
+void vkd_make()
 {
 	nali_info
 	(
 		"createDebugUtilsMessengerEXT %d",
 		createDebugUtilsMessengerEXT
 		(
-			m_vkinstance,
+			vkqdpdi_vkinstance,
 			&(VkDebugUtilsMessengerCreateInfoEXT)
 			{
 				.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
@@ -40,16 +40,16 @@ void vk_makeDebug()
 				.pUserData = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			&m_vkdebugutilsmessengerext
+			&vkd_vkdebugutilsmessengerext
 		)
 	)
 }
 
-void vk_freeDebug()
+void vkd_free()
 {
-	PFN_vkDestroyDebugUtilsMessengerEXT pfn_vkdestroydebugutilsmessengerext = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(m_vkinstance, "vkDestroyDebugUtilsMessengerEXT");
+	PFN_vkDestroyDebugUtilsMessengerEXT pfn_vkdestroydebugutilsmessengerext = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(vkqdpdi_vkinstance, "vkDestroyDebugUtilsMessengerEXT");
 	if (pfn_vkdestroydebugutilsmessengerext != NULL)
 	{
-		pfn_vkdestroydebugutilsmessengerext(m_vkinstance, m_vkdebugutilsmessengerext, VK_NULL_HANDLE);
+		pfn_vkdestroydebugutilsmessengerext(vkqdpdi_vkinstance, vkd_vkdebugutilsmessengerext, VK_NULL_HANDLE);
 	}
 }

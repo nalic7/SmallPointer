@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.31)
 
-# set(S_NAME linux)
-set(S_NAME android)
+set(S_NAME linux)
+# set(S_NAME android)
 
 set(DEBUG 1)
 # set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-# set(VK_DEBUG 1)
+set(VK_DEBUG 1)
 
 set(SCENE 1)
 # set(COLLADA 1)
@@ -62,6 +62,10 @@ if(SCENE)
   endif()
 
   file(GLOB_RECURSE G_SOURCES src/loader/both/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
+  #
+  file(GLOB_RECURSE G_SOURCES src/view/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
   if(CLIENT)

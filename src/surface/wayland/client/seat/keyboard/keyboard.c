@@ -62,7 +62,7 @@ static void wl_keyboard_listener_repeat_info(void* data, struct wl_keyboard* wl_
 	// nali_log("wl_keyboard_listener_repeat_info")
 }
 
-struct wl_keyboard_listener m_wl_keyboard_listener =
+struct wl_keyboard_listener wlcsk_wl_keyboard_listener =
 {
 	.keymap = wl_keyboard_listener_keymap,
 	.enter = wl_keyboard_listener_enter,

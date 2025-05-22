@@ -105,7 +105,7 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLContext_nLoadOpenGLLibrary(JNIEnv
 
 	surface_init();
 	vk_init();
-	al_init();
+	al_set();
 }
 
 // void* extgl_GetProcAddress(const char* name)

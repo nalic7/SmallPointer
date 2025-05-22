@@ -1,6 +1,6 @@
-ANativeWindow *m_anativewindow_p = NULL;
-ANativeActivity *m_anativeactivity_p;
-AInputQueue *m_ainputqueue_p = NULL;
+ANativeWindow *sa_anativewindow_p = NULL;
+ANativeActivity *sa_anativeactivity_p;
+AInputQueue *sa_ainputqueue_p = NULL;
 //static int32_t orientation;
 
 static uint8_t a_state = 0;
@@ -12,7 +12,7 @@ static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* wind
 	nali_log("window %p", window)
 	s_width = ANativeWindow_getWidth(window);
 	s_height = ANativeWindow_getHeight(window);
-	m_anativewindow_p = window;
+	sa_anativewindow_p = window;
 }
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
@@ -26,7 +26,7 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
 	nali_log("window 0")
-	m_anativewindow_p = NULL;
+	sa_anativewindow_p = NULL;
 	s_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
@@ -55,12 +55,12 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
 
 static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue)
 {
-	m_ainputqueue_p = queue;
+	sa_ainputqueue_p = queue;
 }
 
 static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 {
-	m_ainputqueue_p = NULL;
+	sa_ainputqueue_p = NULL;
 }
 
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
@@ -69,7 +69,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	if (!(a_state & A_STATE_READY))
 	{
 		a_state |= A_STATE_READY;
-		scene_init();
+		scene_set();
 	}
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
@@ -77,15 +77,15 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	activity->callbacks->onInputQueueCreated = onInputQueueCreated;
 	activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
 //	activity->callbacks->onConfigurationChanged = onConfigurationChanged;
-	m_anativeactivity_p = activity;
+	sa_anativeactivity_p = activity;
 
 //	SLObjectItf slobjectitf;
 //	nali_info("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
 }
 
-void a_wait()
+void sa_wait()
 {
-	while (!m_anativewindow_p)
+	while (!sa_anativewindow_p)
 	{
 		a_state |= A_STATE_WAIT;
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
@@ -93,9 +93,9 @@ void a_wait()
 
 	if (a_state & A_STATE_WAIT)
 	{
-//		lc_init();
+//		lc_set();
 //		vk_init();
-////		al_init();
+////		al_set();
 //		lc_vk();
 
 //		vk_freeDevice();
@@ -104,9 +104,9 @@ void a_wait()
 		VK_makeSurface
 //		vk_initQueue();
 //		vk_initDevice();
-//		vk_setQueue(m_device);
-//		vk_makeDevice(m_device);
-//		vk_getQueue(m_device);
+//		vk_setQueue(vk_device);
+//		vk_makeDevice(vk_device);
+//		vk_getQueue(vk_device);
 
 //		m_surface_state |= NALI_SURFACE_C_S_CLEAN;
 		s_surface_state |= NALI_SURFACE_C_S_RE;

@@ -33,6 +33,6 @@
 		vksamplercreateinfo.minFilter = VK_FILTER_NEAREST; \
 		vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST; \
 	} \
-	nali_info("vkCreateSampler %d", vkCreateSampler(m_vkdevice_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
+	nali_info("vkCreateSampler %d", vkCreateSampler(vkqd_vkdevice_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
 
 #endif

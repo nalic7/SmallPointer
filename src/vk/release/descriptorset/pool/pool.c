@@ -1,11 +1,11 @@
-void vk_makeDescriptorSetPool(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
+void vkdsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
 {
 	nali_info
 	(
 		"vkCreateDescriptorPool %d",
 		vkCreateDescriptorPool
 		(
-			m_vkdevice_p[device],
+			vkqd_vkdevice_p[device],
 			&(VkDescriptorPoolCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,

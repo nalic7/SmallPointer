@@ -2,19 +2,13 @@
 #define NALI_LOADER_CLIENT_MODEL_H
 
 extern uint32_t
-	*m_ai_index_count_p,
-	
-	// m_max_joint,
-	m_rgba_bl;
-
-// extern VkDeviceSize *m_ai_vkdevicesize_p;
-extern VkDeviceSize m_a_vkdevicesize;
+	lcm_rgba_bl;
 
 extern uint8_t
-	*m_joint_count_p,
-	m_joint_count_bl;
+	*lcm_joint_count_p,
+	lcm_joint_count_bl;
 
-void lcm_init();
+void lcm_set();
 void lcm_vk();
 
 #endif

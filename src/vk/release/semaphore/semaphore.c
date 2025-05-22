@@ -1,11 +1,11 @@
-void vk_makeSemaphore(uint32_t device, VkSemaphore *vksemaphore_p)
+void vksp_make(uint32_t device, VkSemaphore *vksemaphore_p)
 {
 	nali_info
 	(
 		"vkCreateSemaphore %d",
 		vkCreateSemaphore
 		(
-			m_vkdevice_p[device],
+			vkqd_vkdevice_p[device],
 			&(VkSemaphoreCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,

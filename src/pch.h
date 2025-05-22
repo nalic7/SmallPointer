@@ -81,6 +81,10 @@
 	#include "ffmpeg/ffmpeg.h"
 	//e0-ffmpeg
 
+	//
+	#include "view/view.h"
+	#include "view/starfield/starfield.h"
+
 	#ifdef NALI_CLIENT
 		#include "surface/surface.h"
 
