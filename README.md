@@ -6,7 +6,7 @@
 
 >Linux / Android
 
-1. app-editors/vscodium-1.99.32846-r1
+1. app-editors/vscodium-1.100.23258
 
 	settings.json
 	```json
@@ -24,7 +24,8 @@
 	[clangd](https://github.com/clangd/vscode-clangd)_c
 	[CMake Tools](https://github.com/microsoft/vscode-cmake-tools)_cmake
 	[CodeLLDB](https://github.com/vadimcn/codelldb)_debug
-	[shader-validator](https://github.com/antaalt/shader-validator)_glsl
+	[Shader validator](https://github.com/antaalt/shader-validator)_glsl
+	[Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)_md
 2. dev-util/android-studio-2024.3.2.14
 3. blender 4.4.3
 </span>

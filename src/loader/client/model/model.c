@@ -288,6 +288,13 @@ void lcm_set()
 		rgba_p[l_0] = pow(rgba_p[l_0], 1.0F / 5.0F);
 	}
 
+	//c1
+	uint32_t l_c1_bl = *(uint32_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
+	NALI_CACHE_P_D_BL_P[1] += sizeof(uint32_t);
+
+	//c1 a
+
+	//j1c1 a
 	a_bl = NALI_CACHE_P_D_BL_P[0] - NALI_CACHE_P_D_BL_P[1];
 
 	//j1c1
@@ -332,6 +339,8 @@ void lcm_set()
 	// 	m_vkdevicesize += attribute_bl_p[l_0];
 	// }
 	v_a_vkdevicesize_array[0] = lc_vkdevicesize;
+
+	v_a_vkdevicesize_array[1] = ;
 	lc_vkdevicesize += a_bl;
 
 	lc_vkdevicesize = (lc_vkdevicesize + 63) & ~63;

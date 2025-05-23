@@ -5,7 +5,7 @@ extern uint8_t
 	**v_a_p,
 	v_a_bl;
 
-extern VkDeviceSize v_a_vkdevicesize_array[1];
+extern VkDeviceSize v_a_vkdevicesize_array[2];
 
 extern uint32_t *v_i_p;
 

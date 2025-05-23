@@ -34,22 +34,9 @@ static const char *mesh_out[] =
 	"IShovel"//8
 	//e0-0
 };
+
 static uint8_t mesh_id_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
 static uint8_t mesh_index = 0;
-
-static uint8_t *mesh_p_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
-static uint8_t *mesh_bl_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
-
-#define NALI_FPS 24
-
-// #define NALI_MEMORY_RECOPY(w_p, r_p, size, byte) \
-// 	w_p = realloc(w_p, size + byte); \
-// 	memcpy(w_p + size, r_p, byte); \
-// 	size += byte;
-
-// #define NALI_MEMORY_COPY(w_p, r_p, size, byte) \
-// 	memcpy(w_p + size, r_p, byte); \
-// 	size += byte;
 
 // static uint8_t max_joint_bl = 0;
 
@@ -93,13 +80,17 @@ static uint32_t ai_bl = 0;
 
 static uint8_t *attribute_j1c1_p;
 static uint32_t attribute_j1c1_bl = 0;
+static uint8_t *attribute_c1_p;
+static uint32_t attribute_c1_bl = 0;
 
 static uint8_t *i_p;
 static uint32_t i_bl = 0;
 static uint8_t *cut_i_p;
 static uint32_t cut_i_bl = 0;
 
-static float i_bindpose_array[1024*2];
+static float *i_bindpose_p;
+
+// static float i_bindpose_array[1024*2];
 // static float global_bindpose_array[1024*2];
 
 void gm_write()
@@ -133,6 +124,8 @@ void gm_write()
 	// // memset(animation_array, 0, 1024 * sizeof(float));
 	// // animation_p = malloc(0);
 	// anim_bone_p = malloc(0);
+
+	i_bindpose_p = malloc(0);
 
 	material_p = malloc(0);
 
@@ -426,7 +419,9 @@ void gm_write()
 			// joint_srt_p = realloc(joint_srt_p, joint_srt_bl);
 
 			//s0-test
-			memcpy(i_bindpose_array + bone_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset, sizeof(float) * 16 * cgltf_skin_p->joints_count);
+			i_bindpose_p = realloc(i_bindpose_p, (bone_bl + cgltf_skin_p->joints_count) * sizeof(float) * 16);
+			// memcpy(i_bindpose_array + bone_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset, sizeof(float) * 16 * cgltf_skin_p->joints_count);
+			memcpy(i_bindpose_p + bone_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset, sizeof(float) * 16 * cgltf_skin_p->joints_count);
 
 			// for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
 			// {
@@ -653,6 +648,7 @@ void gm_write()
 				{
 					if (!strcmp(material_p[mix_array[sizeof(float) * 3 + 1]], cgltf_primitive_p->material->name))
 						break;
+					//j1c1
 					++mix_array[sizeof(float) * 3 + 1];
 				}
 				if (mix_array[sizeof(float) * 3 + 1] == material_fl)
@@ -673,6 +669,8 @@ void gm_write()
 					rgba_p[i4 + 2] = emissive_factor[2];
 					rgba_p[i4 + 3] = cgltf_float_array[3];
 				}
+				//c1
+				mix_array[sizeof(float) * 3] = mix_array[sizeof(float) * 3 + 1];
 				//e0-m
 
 				uint8_t l_set = 0;
@@ -748,10 +746,62 @@ void gm_write()
 							}
 						}
 
-						//mix_array l_set
-						//need mix index
+						//c1
+						if (cgltf_primitive_p->attributes_count == 1)
+						{
+							for (uint32_t l_5 = 0; l_5 < attribute_c1_bl; l_5 += sizeof(float) * 3 + 1)
+							{
+								if (!memcmp(attribute_c1_p + l_5, mix_array, sizeof(float) * 3 + 1))
+								{
+									if (l_index_p == &l_own_index)
+									{
+										cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
+										*(uint32_t *)(cut_i_p + cut_i_bl) = l_5 / (sizeof(float) * 3 + 1);
+										cut_i_bl += sizeof(uint32_t);
+									}
+									else
+									{
+										i_p = realloc(i_p, i_bl + sizeof(uint32_t));
+										*(uint32_t *)(i_p + i_bl) = l_5 / (sizeof(float) * 3 + 1);
+										i_bl += sizeof(uint32_t);
+									}
+									*l_index_p += sizeof(uint32_t);
+
+									l_set = 0;
+									break;
+								}
+							}
+							if (l_set == 1)
+							{
+								attribute_c1_p = realloc(attribute_c1_p, attribute_c1_bl + sizeof(float) * 3 + 1);
+								memcpy(attribute_c1_p + attribute_c1_bl, mix_array, sizeof(float) * 3 + 1);
+
+								if (l_index_p == &l_own_index)
+								{
+									cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
+									*(uint32_t *)(cut_i_p + cut_i_bl) = attribute_c1_bl / (sizeof(float) * 3 + 1);
+									cut_i_bl += sizeof(uint32_t);
+								}
+								else
+								{
+									i_p = realloc(i_p, i_bl + sizeof(uint32_t));
+									*(uint32_t *)(i_p + i_bl) = attribute_c1_bl / (sizeof(float) * 3 + 1);
+									i_bl += sizeof(uint32_t);
+								}
+								*l_index_p += sizeof(uint32_t);
+
+								attribute_c1_bl += sizeof(float) * 3 + 1;
+
+								l_set = 0;
+							}
+						}
+						//j1u1v1t1
+						// if (cgltf_primitive_p->attributes_count == 4 && l_4 == 3)
+						// {
+
+						// }
 						//j1c1
-						if (l_set == 1)
+						else if (l_set == 1)
 						{
 							// // /b\ 1
 							// attribute_p = realloc(attribute_p, attribute_bl + sizeof(uint8_t));
@@ -859,7 +909,8 @@ void gm_write()
 	fwrite(&joint_count_bl, sizeof(uint8_t), 1, file);
 	fwrite(joint_count_p, sizeof(uint8_t), joint_count_bl, file);
 	fwrite(joint_array, sizeof(uint8_t), joint_bl, file);
-	fwrite(i_bindpose_array, sizeof(float), bone_bl * 16, file);
+	// fwrite(i_bindpose_array, sizeof(float), bone_bl * 16, file);
+	fwrite(i_bindpose_p, sizeof(float), bone_bl * 16, file);
 	// fwrite(global_bindpose_array, sizeof(float), bone_bl * 16, file);
 
 	// //anim
@@ -926,10 +977,13 @@ void gm_write()
 
 	//uv
 
-	//a j1c1
-	fwrite(attribute_j1c1_p, sizeof(uint8_t), attribute_j1c1_bl, file);
-
 	//a c1
+	fwrite((uint32_t[]){attribute_c1_bl / (sizeof(float)*3+1)}, sizeof(uint32_t), 1, file);
+	fwrite(attribute_c1_p, sizeof(uint8_t), attribute_c1_bl, file);
+
+	//a j1c1
+	// fwrite((uint32_t[]){attribute_j1c1_bl / (sizeof(float)*3+2)}, sizeof(uint32_t), 1, file);
+	fwrite(attribute_j1c1_p, sizeof(uint8_t), attribute_j1c1_bl, file);
 
 	//a j1t1u1v1
 

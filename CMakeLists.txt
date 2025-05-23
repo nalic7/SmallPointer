@@ -4,7 +4,7 @@ set(S_NAME linux)
 # set(S_NAME android)
 
 set(DEBUG 1)
-# set(GEN 1)
+set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
 set(VK_DEBUG 1)
