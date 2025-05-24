@@ -292,7 +292,15 @@ void lcm_set()
 	uint32_t l_c1_bl = *(uint32_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
 	NALI_CACHE_P_D_BL_P[1] += sizeof(uint32_t);
 
+	//c1<-0 j1<-?
+
 	//c1 a
+	for (uint32_t l_1 = 0; l_1 < l_size; ++l_1)
+	{
+		memcpy(a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)), NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], sizeof(float) * 3 + 2);
+		memset((a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 3);
+		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 3 + 2;
+	}
 
 	//j1c1 a
 	a_bl = NALI_CACHE_P_D_BL_P[0] - NALI_CACHE_P_D_BL_P[1];

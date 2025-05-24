@@ -6,6 +6,8 @@ uint8_t
 	**v_a_p,
 	v_a_bl = 0;
 
+//j1c1
+//c1
 VkDeviceSize v_a_vkdevicesize_array[];
 
 uint32_t *v_i_p;
