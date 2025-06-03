@@ -643,15 +643,15 @@ void gm_write()
 				// }
 
 				//s0-m
-				mix_array[sizeof(float) * 3 + 1] = 0;
-				while (mix_array[sizeof(float) * 3 + 1] < material_fl)
+				mix_array[sizeof(float) * 3] = 0;
+				while (mix_array[sizeof(float) * 3] < material_fl)
 				{
-					if (!strcmp(material_p[mix_array[sizeof(float) * 3 + 1]], cgltf_primitive_p->material->name))
+					if (!strcmp(material_p[mix_array[sizeof(float) * 3]], cgltf_primitive_p->material->name))
 						break;
 					//j1c1
-					++mix_array[sizeof(float) * 3 + 1];
+					++mix_array[sizeof(float) * 3];
 				}
-				if (mix_array[sizeof(float) * 3 + 1] == material_fl)
+				if (mix_array[sizeof(float) * 3] == material_fl)
 				{
 					cgltf_material *cgltf_material_p = cgltf_primitive_p->material;
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
@@ -661,16 +661,14 @@ void gm_write()
 
 					++material_fl;
 					material_p = realloc(material_p, sizeof(char *) * material_fl);
-					material_p[mix_array[sizeof(float) * 3 + 1]] = cgltf_material_p->name;
+					material_p[mix_array[sizeof(float) * 3]] = cgltf_material_p->name;
 					rgba_p = realloc(rgba_p, sizeof(float) * 4 * material_fl);
-					uint16_t i4 = mix_array[sizeof(float) * 3 + 1] * 4;
+					uint16_t i4 = mix_array[sizeof(float) * 3] * 4;
 					rgba_p[i4] = emissive_factor[0];
 					rgba_p[i4 + 1] = emissive_factor[1];
 					rgba_p[i4 + 2] = emissive_factor[2];
 					rgba_p[i4 + 3] = cgltf_float_array[3];
 				}
-				//c1
-				mix_array[sizeof(float) * 3] = mix_array[sizeof(float) * 3 + 1];
 				//e0-m
 
 				uint8_t l_set = 0;
@@ -695,7 +693,7 @@ void gm_write()
 								if (l_5 == 0)
 								{
 									// // /b\ 1
-									mix_array[sizeof(float) * 3] = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+									mix_array[sizeof(float) * 3 + 1] = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 								}
 							}
 							else if (cgltf_attribute_p->type == cgltf_attribute_type_weights)

@@ -1,4 +1,0 @@
-void vsf_loop()
-{
-	
-}

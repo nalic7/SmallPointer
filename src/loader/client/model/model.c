@@ -1,39 +1,36 @@
+uint32_t lcm_rgba_bl;
+
+uint8_t
+	// lcm_max_j = 0,
+
+	*lcm_joint_count_p,
+	lcm_joint_count_bl;
+
+float
+	**lcm_bp_p,
+	**lcm_a_p;
+
+VkDeviceSize *lcm_vkdevicesize_p;
+//cache
+
 typedef struct
 {
 	uint8_t
 		*joint_p,
 		joint_bl;
-	// 	*time_s_p,
-	// 	time_s_bl,
-	// 	*time_r_p,
-	// 	time_r_bl,
-	// 	*time_t_p,
-	// 	time_t_bl;
-	// float
-	// 	*animation_s_p,
-	// 	*animation_r_p,
-	// 	*animation_t_p;
 } m_bone;
 
 static m_bone *m_bone_p;
-static float
-	*i_bindpose_p,
-	*bindpose_p;
-
-uint8_t
-	*lcm_joint_count_p,
-	lcm_joint_count_bl;
 
 static uint32_t **index_p;
 static uint32_t *index_bl_p;
 // static uint8_t **attribute_p;
 // static uint32_t *attribute_bl_p;
-static uint8_t *a_p;
-static uint32_t a_bl;
+static uint8_t *a_p_array[NALI_V_A_BL];
+static uint32_t a_bl_array[NALI_V_A_BL];
 static uint8_t model_il;
 
 static float *rgba_p;
-uint32_t lcm_rgba_bl;
 
 void lcm_set()
 {
@@ -49,13 +46,17 @@ void lcm_set()
 
 	uint16_t l_bone_bl = 0;
 	m_bone_p = malloc(0);
-	i_bindpose_p = malloc(0);
-	bindpose_p = malloc(0);
+
+	lcm_bp_p = malloc(sizeof(float *) * lcm_joint_count_bl);
+	lcm_a_p = malloc(sizeof(float *) * lcm_joint_count_bl);
+
+	lcm_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * (lcm_joint_count_bl + 2));
+
 	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
 	{
-		// if (m_max_joint < m_joint_count_p[l_0])
+		// if (lcm_max_j < lcm_joint_count_p[l_0])
 		// {
-		// 	m_max_joint = m_joint_count_p[l_0];
+		// 	lcm_max_j = lcm_joint_count_p[l_0];
 		// }
 
 		NALI_CACHE_P_BS_P[l_0] = malloc(lcm_joint_count_p[l_0]);
@@ -63,8 +64,7 @@ void lcm_set()
 		NALI_CACHE_P_BS_P[l_0][0] = 0;
 
 		m_bone_p = realloc(m_bone_p, sizeof(m_bone) * (l_bone_bl + lcm_joint_count_p[l_0]));
-		i_bindpose_p = realloc(i_bindpose_p, sizeof(float) * 16 * (l_bone_bl + lcm_joint_count_p[l_0]));
-		bindpose_p = realloc(bindpose_p, sizeof(float) * 16 * (l_bone_bl + lcm_joint_count_p[l_0]));
+		lcm_bp_p[l_0] = malloc(sizeof(float) * 16 * 2 * lcm_joint_count_p[l_0]);
 
 		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
 		{
@@ -90,11 +90,14 @@ void lcm_set()
 	l_bone_bl = 0;
 	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
 	{
-		memcpy(i_bindpose_p + l_bone_bl * 16, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], lcm_joint_count_p[l_0] * sizeof(float) * 16);
-		memcpy(bindpose_p + l_bone_bl * 16, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], lcm_joint_count_p[l_0] * sizeof(float) * 16);
 		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
 		{
-			m_m4x4_i(bindpose_p + (l_bone_bl + l_1) * 16);
+			memcpy(lcm_bp_p[l_0] + l_1 * 16, NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
+			memcpy(lcm_bp_p[l_0] + l_1 * 16 + 16, lcm_bp_p[l_0] + l_1 * 16, sizeof(float) * 16);
+		}
+		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
+		{
+			m_m4x4_i(lcm_bp_p[l_0] + l_1 * 16 + 16);
 		}
 		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 16 * lcm_joint_count_p[l_0];
 		l_bone_bl += lcm_joint_count_p[l_0];
@@ -292,23 +295,23 @@ void lcm_set()
 	uint32_t l_c1_bl = *(uint32_t *)(NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1]);
 	NALI_CACHE_P_D_BL_P[1] += sizeof(uint32_t);
 
-	//c1<-0 j1<-?
-
+	a_bl_array[0] = l_c1_bl * (sizeof(float) * 3 + sizeof(uint32_t));
+	a_p_array[0] = malloc(a_bl_array[0]);
 	//c1 a
-	for (uint32_t l_1 = 0; l_1 < l_size; ++l_1)
+	for (uint32_t l_0 = 0; l_0 < l_c1_bl; ++l_0)
 	{
-		memcpy(a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)), NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], sizeof(float) * 3 + 2);
-		memset((a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 3);
-		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 3 + 2;
+		memcpy(a_p_array[0] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)), NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], sizeof(float) * 3 + 1);
+		memset((a_p_array[0] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 1)), 0, 3);
+		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 3 + 1;
 	}
 
-	//j1c1 a
-	a_bl = NALI_CACHE_P_D_BL_P[0] - NALI_CACHE_P_D_BL_P[1];
+	//c1j1
+	a_bl_array[1] = NALI_CACHE_P_D_BL_P[0] - NALI_CACHE_P_D_BL_P[1];
 
-	//j1c1
-	uint32_t l_size = a_bl / (sizeof(float) * 3 + 2);
-	a_bl += l_size * 2;
-	a_p = malloc(a_bl);
+	//c1j1 a
+	uint32_t l_c1j1_size = a_bl_array[1] / (sizeof(float) * 3 + 2);
+	a_bl_array[1] += l_c1j1_size * 2;
+	a_p_array[1] = malloc(a_bl_array[1]);
 	//add extra byte
 	// uint32_t l_size = attribute_bl_p[l_0] / (sizeof(float) * 3 + 2);
 	// attribute_bl_p[l_0] += l_size * 2;
@@ -319,21 +322,57 @@ void lcm_set()
 	// 	memset((attribute_p[l_0] + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 2);
 	// 	step += sizeof(float) * 3 + 2;
 	// }
-	for (uint32_t l_1 = 0; l_1 < l_size; ++l_1)
+	for (uint32_t l_0 = 0; l_0 < l_c1j1_size; ++l_0)
 	{
-		memcpy(a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)), NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], sizeof(float) * 3 + 2);
-		memset((a_p + l_1 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 2);
+		memcpy(a_p_array[1] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)), NALI_CACHE_P_D_P + NALI_CACHE_P_D_BL_P[1], sizeof(float) * 3 + 2);
+		memset((a_p_array[1] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 2);
 		NALI_CACHE_P_D_BL_P[1] += sizeof(float) * 3 + 2;
 	}
 
-	lcmv_set();
-	lc_vkdevicesize = NALI_LC_MVP_BL + lcm_rgba_bl;
-
-	//b
-	for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	//init data
+	l_step = 0;
+	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
 	{
-		lc_vkdevicesize += lcm_joint_count_p[l_0] * sizeof(float) * 16 * 2 + lcm_joint_count_p[l_0] * sizeof(float) * 4 * 3;
+		uint8_t l_0_0 = 0;
+		lcm_a_p[l_0] = malloc(sizeof(float) * 4 * 3 * lcm_joint_count_p[l_0]);
+
+		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
+		{
+			for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
+			{
+				*(float *)(lcm_a_p[l_0] + l_step + l_2 * sizeof(float)) = 1;
+			}
+
+			//start end
+			*(uint32_t *)(lcm_a_p[l_0] + l_step + 3 * sizeof(float)) = NALI_CACHE_P_BS_P[l_0][l_1] | NALI_CACHE_P_BE_P[l_0][l_1] << 8;
+			l_step += 4 * sizeof(float);
+
+			memcpy(lcm_a_p[l_0] + l_step, m_m4x4_array + 12, 4 * sizeof(float));
+			l_step += 4 * sizeof(float);
+
+			memset(lcm_a_p[l_0] + l_step, 0, 3 * sizeof(float));
+
+			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
+			{
+				*(uint32_t *)(lcm_a_p[l_0] + l_step + 3 * sizeof(float)) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
+
+				++l_0_0;
+				if (l_0_0 == 4)
+				{
+					l_0_0 = 0;
+				}
+			}
+			l_step += 4 * sizeof(float);
+		}
+
+		free(NALI_CACHE_P_BS_P[l_0]);
+		free(NALI_CACHE_P_BE_P[l_0]);
 	}
+	free(NALI_CACHE_P_BS_P);
+	free(NALI_CACHE_P_BE_P);
+
+	//step
+	lc_vkdevicesize = NALI_LCM_VP_BL + lcm_rgba_bl;
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
@@ -341,334 +380,109 @@ void lcm_set()
 		lc_vkdevicesize += index_bl_p[l_0];
 	}
 
-	// for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
-	// {
-	// 	m_ai_vkdevicesize_p[l_0] = m_vkdevicesize;
-	// 	m_vkdevicesize += attribute_bl_p[l_0];
-	// }
-	v_a_vkdevicesize_array[0] = lc_vkdevicesize;
+	for (uint32_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	{
+		v_a_vkdevicesize_array[l_0] = lc_vkdevicesize;
+		lc_vkdevicesize += a_bl_array[l_0];
+	}
 
-	v_a_vkdevicesize_array[1] = ;
-	lc_vkdevicesize += a_bl;
+	// lcm_vkdevicesize = lc_vkdevicesize;
+
+	// //b
+	// for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	// {
+	// 	lc_vkdevicesize += lcm_joint_count_p[l_0] * sizeof(float) * 16 * 2 + lcm_joint_count_p[l_0] * sizeof(float) * 4 * 3;
+	// }
+	lc_vkdevicesize += NALI_LCM_P_BL;
 
 	lc_vkdevicesize = (lc_vkdevicesize + 63) & ~63;
 }
 
 void lcm_vk()
 {
-	lcmv_vk();
+	uint32_t step = 0;
 
-	uint32_t
-		step = NALI_LC_MVP_BL;
+	//UBOS gui world
+	memcpy(lc_vkbuffer_p + step, m_m4x4_array, sizeof(m_m4x4_array));
+	step += sizeof(m_m4x4_array);
+
+	memset(lc_vkbuffer_p + step, 0, sizeof(float) * 16);
+	step += sizeof(float) * 16;
 
 	memcpy(lc_vkbuffer_p + step, rgba_p, lcm_rgba_bl);
 	step += lcm_rgba_bl;
 
-	//s0-ssboa default
-	uint16_t l_bone_bl = 0;
-	// uint8_t keyframe = 75;
-	for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
-		memcpy(lc_vkbuffer_p + step, i_bindpose_p + l_bone_bl * 16, sizeof(float) * 16 * lcm_joint_count_p[l_0]);
-		step += sizeof(float) * 16 * lcm_joint_count_p[l_0];
-
-		memcpy(lc_vkbuffer_p + step, bindpose_p + l_bone_bl * 16, sizeof(float) * 16 * lcm_joint_count_p[l_0]);
-		step += sizeof(float) * 16 * lcm_joint_count_p[l_0];
-
-		uint32_t l_s_step = step;
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
-		{
-			// // for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
-			// // {
-			// // 	// if (l_1 == 19)
-			// // 	// {
-			// // 	// 	*(float *)(m_vkbuffer_p + step + l_2 * sizeof(float)) = 1.5F;
-			// // 	// }
-			// // 	// else
-			// // 	// {
-			// // 		*(float *)(m_vkbuffer_p + step + l_2 * sizeof(float)) = 1.0F;
-			// // 	// }
-			// // }
-
-			// uint8_t l_key = 255;
-
-			// for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].time_s_bl; ++l_2)
-			// {
-			// 	if (m_bone_p[l_bone_bl + l_1].time_s_p[l_2] == keyframe)
-			// 	{
-			// 		l_key = l_2;
-			// 		break;
-			// 	}
-			// }
-
-			// if (l_key == 255)
-			// {
-			for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
-			{
-				*(float *)(lc_vkbuffer_p + step + l_2 * sizeof(float)) = 1;
-			}
-			// }
-			// else
-			// {
-			// 	memcpy(m_vkbuffer_p + step, m_bone_p[l_bone_bl + l_1].animation_s_p + l_key * 3, sizeof(float) * 3);
-			// }
-
-			//start end
-			*(uint32_t *)(lc_vkbuffer_p + step + sizeof(float) * 3) = NALI_CACHE_P_BS_P[l_0][l_1] | NALI_CACHE_P_BE_P[l_0][l_1] << 8;
-			step += sizeof(float) * 4;
-		}
-
-		uint32_t l_r_step = step;
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
-		{
-			// uint8_t l_key = 255;
-
-			// for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].time_r_bl; ++l_2)
-			// {
-			// 	if (m_bone_p[l_bone_bl + l_1].time_r_p[l_2] == keyframe)
-			// 	{
-			// 		l_key = l_2;
-			// 		break;
-			// 	}
-			// }
-
-			// if (l_key == 255)
-			// {
-			memcpy(lc_vkbuffer_p + step, m_m4x4_array + 12, sizeof(float) * 4);
-			// }
-			// else
-			// {
-			// 	memcpy(m_vkbuffer_p + step, m_bone_p[l_bone_bl + l_1].animation_r_p + l_key * 4, sizeof(float) * 4);
-			// }
-
-			// v4_q(0, MATH_D2R(90.0F), 0, m_vkbuffer_p + step);
-
-			// if (l_1 == 12)
-			// {
-			// 	v4_q(0, MATH_D2R(90.0F), 0, m_vkbuffer_p + step);
-			// }
-			// else
-			// {
-			// 	memcpy(m_vkbuffer_p + step, m_m4x4_mat + 12, sizeof(float) * 4);
-			// }
-
-			// memcpy(m_vkbuffer_p + step, m_m4x4_mat + 12, sizeof(float) * 4);
-
-			step += sizeof(float) * 4;
-		}
-
-		// memset(m_vkbuffer_p + step, 0, m_max_joint * sizeof(float) * 4);
-		// *(float *)(m_vkbuffer_p + step + 4 * sizeof(float) * 4) = 0.5F;
-		// step += m_max_joint * sizeof(float) * 4;
-
-		uint8_t l_0_0 = 0;
-		uint32_t l_step_0 = step;
-		// memset(m_vkbuffer_p + step, 0, m_joint_count_p[l_0] * sizeof(float) * 4);
-
-		uint32_t l_t_step = step;
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
-		{
-			// uint8_t l_key = 255;
-
-			// for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].time_t_bl; ++l_2)
-			// {
-			// 	if (m_bone_p[l_bone_bl + l_1].time_t_p[l_2] == keyframe)
-			// 	{
-			// 		l_key = l_2;
-			// 		break;
-			// 	}
-			// }
-
-			// if (l_key == 255)
-			// {
-			memset(lc_vkbuffer_p + step, 0, sizeof(float) * 3);
-			// }
-			// else
-			// {
-			// 	memcpy(m_vkbuffer_p + step, m_bone_p[l_bone_bl + l_1].animation_t_p + l_key * 3, sizeof(float) * 3);
-			// }
-			step += sizeof(float) * 4;
-		}
-
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
-		{
-			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
-			// for (int16_t l_2 = srt_bone_p[l_bone_bl + l_1].joint_bl - 1; l_2 > -1; --l_2)
-			{
-				*(uint32_t *)(lc_vkbuffer_p + l_step_0 + sizeof(float) * 3) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
-
-				++l_0_0;
-				if (l_0_0 == 4)
-				{
-					l_0_0 = 0;
-					l_step_0 += sizeof(float) * 4;
-				}
-			}
-		}
-		// step += sizeof(float) * 4 * m_joint_count_p[l_0];
-
-		//s0-animate
-		uint8_t key = 11;//80
-		for (uint8_t l_1 = 0; l_1 < lckf_keyframe_p[0][key].bone_bl; ++l_1)
-		{
-			memcpy(lc_vkbuffer_p + l_s_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_s_p[l_1], sizeof(float) * 3);
-			memcpy(lc_vkbuffer_p + l_r_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_r_p[l_1], sizeof(float) * 4);
-			memcpy(lc_vkbuffer_p + l_t_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_t_p[l_1], sizeof(float) * 3);
-		}
-
-		// float q[4];
-		// m_v4_q(MATH_D2R(90), 0, 0, q);
-		// m_v4_q(MATH_D2R(90), 0, 0, m_vkbuffer_p + l_r_step + 1 * sizeof(float) * 4);
-
-		//e0-animate
-
-		l_bone_bl += lcm_joint_count_p[l_0];
-
-		free(NALI_CACHE_P_BS_P[l_0]);
-		free(NALI_CACHE_P_BE_P[l_0]);
+		memcpy(lc_vkbuffer_p + step, index_p[l_0], index_bl_p[l_0]);
+		step += index_bl_p[l_0];
 	}
 
-	free(NALI_CACHE_P_BS_P);
-	free(NALI_CACHE_P_BE_P);
-	//e0-ssboa default
+	for (uint32_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	{
+		memcpy(lc_vkbuffer_p + step, a_p_array[l_0], a_bl_array[l_0]);
+		step += a_bl_array[l_0];
+	}
 
-	// //s0-ssboa file
-	// uint8_t l_timeline = 0;
-	// for (uint32_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
+	//UBOB
+	//use index 0 with limit as default
+	lcm_vkdevicesize_p[lcm_joint_count_bl] = step;
+	for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	{
+		lcm_vkdevicesize_p[l_0] = step;
+		memcpy(lc_vkbuffer_p + step, lcm_bp_p[l_0], sizeof(float) * 16 * 2 * lcm_joint_count_p[l_0]);
+		step += sizeof(float) * 16 * 2 * lcm_joint_count_p[l_0];
+	}
+	lcm_vkdevicesize_p[lcm_joint_count_bl + 1] = step;
+
+	vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
+	{
+		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+		.memory = lc_vkdevicememory,
+		.offset = 0,
+		.size = (step + 63) & ~63,
+		.pNext = VK_NULL_HANDLE
+	});
+
+	//s0-ssboa default
+	// uint16_t l_bone_bl = 0;
+	// for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
 	// {
-	// 	l = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
+	// 	uint32_t l_s_step = step;
+	// 	for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
 	// 	{
-	// 		uint8_t l_key = 255;
-
-	// 		// for (uint8_t l_2 = 0; l_2 < srt_bone_p[l].time_s_bl; ++l_2)
-	// 		// {
-	// 		// 	if (srt_bone_p[l].time_s_p[l_2] == l_timeline)
-	// 		// 	{
-	// 		// 		l_key = l_2;
-	// 		// 		break;
-	// 		// 	}
-	// 		// }
-
-	// 		if (l_key == 255)
+	// 		for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
 	// 		{
-	// 			for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
-	// 			{
-	// 				*(float *)(m_vkbuffer_p + step + l_2 * sizeof(float)) = 1.0F;
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			memcpy(m_vkbuffer_p + step, srt_bone_p[l].animation_s_p + l_key * 3, sizeof(float) * 3);
+	// 			*(float *)(lc_vkbuffer_p + step + l_2 * sizeof(float)) = 1;
 	// 		}
 
-	// 		*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = 0;
+	// 		//start end
+	// 		*(uint32_t *)(lc_vkbuffer_p + step + sizeof(float) * 3) = NALI_CACHE_P_BS_P[l_0][l_1] | NALI_CACHE_P_BE_P[l_0][l_1] << 8;
 	// 		step += sizeof(float) * 4;
-	// 		++l;
 	// 	}
 
-	// 	l = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
+	// 	uint32_t l_r_step = step;
+	// 	for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
 	// 	{
-	// 		uint8_t l_key = 255;
-
-	// 		for (uint8_t l_2 = 0; l_2 < srt_bone_p[l].time_r_bl; ++l_2)
-	// 		{
-	// 			if (srt_bone_p[l].time_r_p[l_2] == l_timeline)
-	// 			{
-	// 				l_key = l_2;
-	// 				break;
-	// 			}
-	// 		}
-
-	// 		// if (l_key == 255)
-	// 		// {
-	// 		// 	memcpy(m_vkbuffer_p + step, m_m4x4_mat + 12, sizeof(float) * 4);
-	// 		// }
-	// 		// else
-	// 		// {
-	// 			// memcpy(m_vkbuffer_p + step, srt_bone_p[l].animation_r_p + l_key * 4, sizeof(float) * 4);
-
-	// 			// v4_q(0, MATH_D2R(-15.0F), 0, m_vkbuffer_p + step);
-
-	// 			// *(float *)(m_vkbuffer_p + step) = (srt_bone_p[l].animation_r_p + l_key * 4)[0];
-	// 			// *(float *)(m_vkbuffer_p + step + sizeof(float)) = (srt_bone_p[l].animation_r_p + l_key * 4)[1] ;
-	// 			// *(float *)(m_vkbuffer_p + step + sizeof(float) * 2) = (srt_bone_p[l].animation_r_p + l_key * 4)[2];
-	// 			// *(float *)(m_vkbuffer_p + step + sizeof(float) * 3) = (srt_bone_p[l].animation_r_p + l_key * 4)[3];
-
-	// 			// *(float *)(m_vkbuffer_p + step) = (srt_bone_p[l].animation_r_p + l_key * 4)[3];
-	// 			// *(float *)(m_vkbuffer_p + step + sizeof(float)) = (srt_bone_p[l].animation_r_p + l_key * 4)[0];
-	// 			// *(float *)(m_vkbuffer_p + step + sizeof(float) * 2) = (srt_bone_p[l].animation_r_p + l_key * 4)[1];
-	// 			// *(float *)(m_vkbuffer_p + step + sizeof(float) * 3) = (srt_bone_p[l].animation_r_p + l_key * 4)[2];
-	// 		// }
-
+	// 		memcpy(lc_vkbuffer_p + step, m_m4x4_array + 12, sizeof(float) * 4);
 	// 		step += sizeof(float) * 4;
-	// 		++l;
 	// 	}
 
-	// 	l = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
-	// 	{
-	// 		uint8_t l_key = 255;
-
-	// 		// for (uint8_t l_2 = 0; l_2 < srt_bone_p[l].time_t_bl; ++l_2)
-	// 		// {
-	// 		// 	if (srt_bone_p[l].time_t_p[l_2] == l_timeline)
-	// 		// 	{
-	// 		// 		l_key = l_2;
-	// 		// 		break;
-	// 		// 	}
-	// 		// }
-
-	// 		if (l_key == 255)
-	// 		{
-	// 			memset(m_vkbuffer_p + step, 0, sizeof(float) * 3);
-	// 		}
-	// 		else
-	// 		{
-	// 			memcpy(m_vkbuffer_p + step, srt_bone_p[l].animation_t_p + l_key * 3, sizeof(float) * 3);
-	// 		}
-
-	// 		*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = 0;
-	// 		step += sizeof(float) * 4;
-	// 		++l;
-	// 	}
-	// }
-	// //e0-ssboa file
-
-	// //ssbob
-	// for (uint32_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
-	// {
+	// 	uint8_t l_0_0 = 0;
 	// 	uint32_t l_step_0 = step;
 
-	// 	l = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
+	// 	uint32_t l_t_step = step;
+	// 	for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
 	// 	{
-	// 		if (srt_bone_p[l].joint_s_p == NULL)
-	// 		{
-	// 			for (uint32_t l_2 = 0; l_2 < 3; ++l_2)
-	// 			{
-	// 				*(float *)(m_vkbuffer_p + step + l_2 * sizeof(float)) = 1.0F;
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			memcpy(m_vkbuffer_p + step, srt_bone_p[l].joint_s_p, sizeof(float) * 3);
-	// 		}
-
-	// 		*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = 0;
+	// 		memset(lc_vkbuffer_p + step, 0, sizeof(float) * 3);
 	// 		step += sizeof(float) * 4;
-	// 		++l;
 	// 	}
 
-	// 	l = 0;
-	// 	uint8_t l_0_0 = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
+	// 	for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
 	// 	{
-	// 		for (uint8_t l_2 = 0; l_2 < srt_bone_p[l].joint_bl; ++l_2)
-	// 		// for (int16_t l_2 = srt_bone_p[l].joint_bl - 1; l_2 > -1; --l_2)
+	// 		for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
 	// 		{
-	// 			*(uint32_t *)(m_vkbuffer_p + l_step_0 + sizeof(float) * 3) |= srt_bone_p[l].joint_p[l_2] << l_0_0 * 8;
+	// 			*(uint32_t *)(lc_vkbuffer_p + l_step_0 + sizeof(float) * 3) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
 
 	// 			++l_0_0;
 	// 			if (l_0_0 == 4)
@@ -677,80 +491,40 @@ void lcm_vk()
 	// 				l_step_0 += sizeof(float) * 4;
 	// 			}
 	// 		}
-	// 		++l;
 	// 	}
 
-	// 	l = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
+	// 	//s0-animate
+	// 	uint8_t key = 11;//80
+	// 	for (uint8_t l_1 = 0; l_1 < lckf_keyframe_p[0][key].bone_bl; ++l_1)
 	// 	{
-	// 		if (srt_bone_p[l].joint_r_p == NULL)
-	// 		{
-	// 			memcpy(m_vkbuffer_p + step, m_m4x4_mat + 12, sizeof(float) * 4);
-	// 		}
-	// 		else
-	// 		{
-	// 			memcpy(m_vkbuffer_p + step, srt_bone_p[l].joint_r_p, sizeof(float) * 4);
-	// 		}
-	// 		step += sizeof(float) * 4;
-	// 		++l;
+	// 		memcpy(lc_vkbuffer_p + l_s_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_s_p[l_1], sizeof(float) * 3);
+	// 		memcpy(lc_vkbuffer_p + l_r_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_r_p[l_1], sizeof(float) * 4);
+	// 		memcpy(lc_vkbuffer_p + l_t_step + lckf_keyframe_p[0][key].bone_p[l_1] * sizeof(float) * 4, lckf_keyframe_p[0][key].animation_t_p[l_1], sizeof(float) * 3);
 	// 	}
+	// 	//e0-animate
 
-	// 	l = 0;
-	// 	for (uint8_t l_1 = 0; l_1 < m_joint_count_p[l_0]; ++l_1)
-	// 	{
-	// 		if (srt_bone_p[l].joint_t_p == NULL)
-	// 		{
-	// 			memset(m_vkbuffer_p + step, 0, sizeof(float) * 3);
-	// 		}
-	// 		else
-	// 		{
-	// 			memcpy(m_vkbuffer_p + step, srt_bone_p[l].joint_t_p, sizeof(float) * 3);
-	// 		}
-	// 		//start end
-	// 		*(uint32_t *)(m_vkbuffer_p + step + sizeof(float) * 3) = NALI_CACHE_P_BS_P[l_0][l_1] | NALI_CACHE_P_BE_P[l_0][l_1] << 8;
-	// 		step += sizeof(float) * 4;
-	// 		++l;
-	// 	}
+	// 	l_bone_bl += lcm_joint_count_p[l_0];
 
 	// 	free(NALI_CACHE_P_BS_P[l_0]);
 	// 	free(NALI_CACHE_P_BE_P[l_0]);
 	// }
 
-	// free(bs_p);
-	// free(be_p);
-	// bs_p = NULL;
-	// be_p = NULL;
-
-	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
-	{
-		memcpy(lc_vkbuffer_p + step, index_p[l_0], index_bl_p[l_0]);
-		step += index_bl_p[l_0];
-	}
-
-	// for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
-	// {
-	// 	memcpy(m_vkbuffer_p + step, attribute_p[l_0], attribute_bl_p[l_0]);
-	// 	step += attribute_bl_p[l_0];
-	// }
-	memcpy(lc_vkbuffer_p + step, a_p, a_bl);
-	step += a_bl;
-
-	//update vkbuffer
-	vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
-	{
-		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-		.memory = lc_vkdevicememory,
-		.offset = 0,
-		.size = (step + 63) & ~63,
-		// .size = step,
-		// .size = 64,
-		// .size = VK_WHOLE_SIZE,
-		// .size = m_vkdevicesize
-		.pNext = VK_NULL_HANDLE
-	});
+	// free(NALI_CACHE_P_BS_P);
+	// free(NALI_CACHE_P_BE_P);
+	//e0-ssboa default
 }
 
 void lcm_free()
 {
+	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	{
+		free(lcm_bp_p[l_0]);
+		free(lcm_a_p[l_0]);
+	}
+	free(lcm_bp_p);
+	free(lcm_a_p);
 
+	free(lcm_joint_count_p);
+
+	free(m_bone_p);
 }

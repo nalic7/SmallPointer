@@ -1,3 +1,5 @@
+void (**vk_cmd_d_fp)();
+uint16_t vk_cmd_d_fp_bl = 0;
 // mtx_t *m_mtx_t_draw_p = &(mtx_t){};
 
 // static clock_t frame_start, frame_end;
@@ -95,6 +97,8 @@ static VkPresentInfoKHR vkpresentinfokhr =
 
 void vk_cmd_draw_set()
 {
+	vk_cmd_d_fp = malloc(0);
+
 	//s0-share
 	vkdevice = vkqd_vkdevice_p[vk_device];
 	vkqueue_graphic = vkq_vkqueue_p[vk_device][vk_queue_g];
@@ -179,7 +183,6 @@ void vk_cmd_draw_set()
 
 	// // frame_start = time(0);
 	// clock_gettime(CLOCK_MONOTONIC, &frame_start);
-	v_set();
 }
 
 void freeCmdDraw()
@@ -199,9 +202,19 @@ void freeCmdDraw()
 	vk_free();
 	v_free();
 
+	free(vk_cmd_d_fp);
 	// mtx_destroy(m_mtx_t_draw_p);
 }
 
+// static void c1j1()
+// {
+// }
+
+// static void c1j0()
+// {
+// }
+
+// static void (*a_fp[NALI_V_A_BL])() = {c1j1, c1j0};
 int vk_cmd_draw_loop(void *arg)
 {
 	while (!(s_surface_state & NALI_SURFACE_C_S_CLEAN))
@@ -274,18 +287,21 @@ int vk_cmd_draw_loop(void *arg)
 
 				// // mtx_lock(m_mtx_t_draw_p);
 
-				for (uint8_t l_0 = 0; l_0 < 1; ++l_0)
+				for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 				{
 					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &lc_vkbuffer, v_a_vkdevicesize_array + l_0);
 
-					for (uint8_t l_1 = 0; l_1 < lcm_joint_count_bl; ++l_1)
+					// a_fp[l_0]();
+					// for (uint8_t l_1 = 0; l_1 < lcm_joint_count_bl; ++l_1)
+					for (uint16_t l_1 = 0; l_1 < v_a_bl0_array[l_0]; ++l_1)
 					{
-						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p + l_1, 0, VK_NULL_HANDLE);
+						// vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p + l_1, 0, VK_NULL_HANDLE);
+						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p_array[l_0] + l_1, 0, VK_NULL_HANDLE);
 
-						for (uint8_t l_2 = 0; l_2 < v_a_bl; ++l_2)
+						for (uint8_t l_2 = 0; l_2 < v_a_bl1_p_array[l_0][l_1]; ++l_2)
 						{
-							vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, v_i_p[v_a_p[l_1][l_2] * 2], VK_INDEX_TYPE_UINT32);
-							vkCmdDrawIndexed(vkcommandbuffer, v_i_p[v_a_p[l_1][l_2] * 2 + 1], 1, 0, 0, 0);
+							vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, v_i_p[v_a_p_array[l_0][l_1][l_2] * 2], VK_INDEX_TYPE_UINT32);
+							vkCmdDrawIndexed(vkcommandbuffer, v_i_p[v_a_p_array[l_0][l_1][l_2] * 2 + 1], 1, 0, 0, 0);
 						}
 					}
 				}
@@ -297,8 +313,16 @@ int vk_cmd_draw_loop(void *arg)
 				// ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
 
+				mtx_lock(vd_mtx_t_p);
+				for (uint8_t l_0 = 0; l_0 < vk_cmd_d_fp_bl; ++l_0)
+				{
+					//model add/update
+					vk_cmd_d_fp[l_0]();
+				}
+				mtx_unlock(vd_mtx_t_p);
+				lcs_loop();
 				s_loop();
-				v_loop();
+				//write b
 
 				// // float q[4];
 				// float q[4], m[16];

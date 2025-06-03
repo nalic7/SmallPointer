@@ -1,10 +1,9 @@
 #version 450
 
-#define NALI_BONE_SIZE 22
+#define NALI_LCM_BONE_BL 22
 
 layout(location = 0) in vec3 a_v;
-//use j1c1->j1t1u1v1
-layout(location = 1) in uint a_j1c1;
+layout(location = 1) in uint a_c1j1;
 
 layout(std140, set = 0, binding = 0) uniform UBOS
 {
@@ -12,22 +11,37 @@ layout(std140, set = 0, binding = 0) uniform UBOS
 	mat4 p;
 } ubos;
 
+struct PB
+{
+	mat4 i_bindpose;
+	mat4 bindpose;
+};
 layout(std140, set = 0, binding = 1) uniform UBOB
 {
-	mat4 i_bindpose[NALI_BONE_SIZE];
-	mat4 bindpose[NALI_BONE_SIZE];
-	vec4 s[NALI_BONE_SIZE];//w1_start w2_end
-	vec4 r[NALI_BONE_SIZE];
-	vec4 t[NALI_BONE_SIZE];//w1-4_b
+	PB pb[NALI_LCM_BONE_BL];
 } ubob;
+
+struct PA
+{
+	vec4 s;//w1_start w2_end
+	vec4 r;
+	vec4 t;//w1-4_b
+};
+layout(std140, set = 0, binding = 2) uniform UBOA
+{
+	PA pa[NALI_LCM_BONE_BL];
+} uboa;
 
 /*layout(std430, set = 0, binding = 2) readonly buffer SSBOAS
 {
 	//vec4
-	vec3 ssboas_s[NALI_BONE_SIZE];
+	vec3 ssboas_s[NALI_LCM_BONE_BL];
 };*/
 
 layout(location = 0) out uint f_c;
+// #ifdef NALI_TEXTURE
+// 	layout(location = 1) out uint f_t;
+// #endif
 
 mat4 s2mat4(vec3 s)
 {
@@ -83,7 +97,7 @@ mat4 t2mat4(vec3 t)
 void main()
 {
 	vec4 l_v = vec4(a_v, 1);
-	uint l_j = a_j1c1 & 0xFFu;
+	uint l_j = (a_c1j1 >> 8) & 0xFFu;
 
 	//floatBitsToUint(ssbob_s[l_0 / 4].w)
 	//l_v *= vec4(ssbob_s[l_j].xyz, 1);
@@ -128,24 +142,28 @@ void main()
 	// 	//l_v = l_bp_mat4 * l_v;
 	// }
 	// //weight 1
-	// //l_v *= float((a_j1c1 >> ?) & 0xFFu);
+	// //l_v *= float((a_c1j1 >> ?) & 0xFFu);
 
 	// mat4 l_m = mat4(1);
 
-	for (uint l_0 = floatBitsToUint(ubob.s[l_j].w) & 0xFFu; l_0 < ((floatBitsToUint(ubob.s[l_j].w) >> 8) & 0xFFu); ++l_0)
+	for (uint l_0 = floatBitsToUint(uboa.pa[l_j].s.w) & 0xFFu; l_0 < ((floatBitsToUint(uboa.pa[l_j].s.w) >> 8) & 0xFFu); ++l_0)
 	{
-		uint l_0_0 = (floatBitsToUint(ubob.t[l_0 / 4].w) >> l_0 % 4 * 8) & 0xFFu;
+		uint l_0_0 = (floatBitsToUint(uboa.pa[l_0 / 4].t.w) >> l_0 % 4 * 8) & 0xFFu;
 		// l_m = ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.i_bindpose[l_0_0] * l_m;
 		// l_m = ubob.i_bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.bindpose[l_0_0] * l_m;
 		// l_v = l_m * l_v;
 		// l_v = inverse(l_m) * l_v;
 		// l_v = ubob.bindpose[l_0_0] * ubob.i_bindpose[l_0_0] * l_v;
-		l_v = ubob.bindpose[l_0_0] * t2mat4(ubob.t[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * s2mat4(ubob.s[l_0_0].xyz) * ubob.i_bindpose[l_0_0] * l_v;
+		l_v = ubob.pb[l_0_0].bindpose * t2mat4(uboa.pa[l_0_0].t.xyz) * r2mat4(uboa.pa[l_0_0].r) * s2mat4(uboa.pa[l_0_0].s.xyz) * ubob.pb[l_0_0].i_bindpose * l_v;
 		// l_v = ubob.i_bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.bindpose[l_0_0] * l_v;
 		// l_v = inverse(ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz)) * ubob.bindpose[l_0_0] * l_v;
 	}
 
 	gl_Position = ubos.p * ubos.v * l_v;
 
-	f_c = (a_j1c1 >> 8) & 0xFFu;
+	f_c = a_c1j1 & 0xFFu;
+	//use f_c
+	// #ifdef NALI_TEXTURE
+	// 	f_t = (a_c1j1 >> 16) & 0xFFFFu;
+	// #endif
 }

@@ -83,6 +83,7 @@
 
 	//
 	#include "view/view.h"
+	#include "view/data/data.h"
 	#include "view/starfield/starfield.h"
 
 	#ifdef NALI_CLIENT

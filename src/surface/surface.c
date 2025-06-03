@@ -33,7 +33,7 @@ static float
 void s_set()
 {
 	memcpy(lt_v4_array, m_m4x4_array + 12, sizeof(float) * 4);
-	memcpy(q0_m4x4_array, m_m4x4_array, sizeof(float) * 16);
+	memcpy(q0_m4x4_array, m_m4x4_array, sizeof(m_m4x4_array));
 }
 
 void s_loop()
@@ -84,7 +84,7 @@ void s_loop()
 	}
 
 
-	memcpy(lc_vkbuffer_p, m_m4x4_array, sizeof(float) * 16);
+	memcpy(lc_vkbuffer_p, m_m4x4_array, sizeof(m_m4x4_array));
 
 	m_v4_q(0, 0, s_rz, q_v4_array);
 	m_v4_q2m(q_v4_array, q0_m4x4_array);
@@ -103,7 +103,7 @@ void s_loop()
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
 	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
-	memcpy(q2_m4x4_array, m_m4x4_array, sizeof(float) * 16);
+	memcpy(q2_m4x4_array, m_m4x4_array, sizeof(m_m4x4_array));
 
 	// m_v4_m4(m_vkbuffer_p, lt_v4_array, q2_m4x4_array + 12);
 	s_tx += gt_v4_array[0] / gt_v4_array[3];
