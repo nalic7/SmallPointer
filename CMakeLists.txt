@@ -4,7 +4,7 @@ set(S_NAME linux)
 # set(S_NAME android)
 
 set(DEBUG 1)
-set(GEN 1)
+# set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
 set(VK_DEBUG 1)
@@ -64,9 +64,7 @@ if(SCENE)
   file(GLOB_RECURSE G_SOURCES src/loader/both/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
-  #
-  file(GLOB_RECURSE G_SOURCES src/view/*.c)
-  list(APPEND SOURCES ${G_SOURCES})
+  list(APPEND SOURCES src/network/linux/both/both.c)
 
   if(CLIENT)
     list(APPEND TCD NALI_CLIENT)
@@ -84,7 +82,7 @@ if(SCENE)
     file(GLOB_RECURSE G_SOURCES src/loader/client/*.c)
     list(APPEND SOURCES ${G_SOURCES})
 
-    list(APPEND SOURCES src/network/linux/client/nw_client.c)
+    list(APPEND SOURCES src/network/linux/client/client.c)
 
     list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
     list(APPEND SOURCES src/al/al.c)
@@ -94,7 +92,7 @@ if(SCENE)
     list(APPEND TCD NALI_SERVER)
 
     list(APPEND SOURCES src/loader/server/server.c)
-    list(APPEND SOURCES src/network/linux/server/nw_server.c)
+    list(APPEND SOURCES src/network/linux/server/server.c)
   endif()
 
   if(S_NAME STREQUAL "android")

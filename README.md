@@ -28,10 +28,10 @@
 	[Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)_md
 2. dev-util/android-studio-2024.3.2.14
 3. blender 4.4.3
-</span>
+<!-- </span> -->
 
-### Scene
-<span style="font-size: large;">
+<!-- ### Scene -->
+<!-- <span style="font-size: large;"> -->
 
 >Compile Shader
 ```bash
@@ -85,7 +85,7 @@ cd ..
 git clone https://github.com/jkuhlmann/cgltf
 ```
 
->CMakeLists.txt
+>[CMakeLists.txt](CMakeLists.txt)
 
 ```c#
 #select build for
@@ -102,6 +102,68 @@ set(VK_DEBUG 1)
 set(SCENE 1)
 #...
 ```
+
+>[client.h](src/network/linux/client/client.h)
+
+```c
+//...
+#define NALI_NLC_TIMEOUT &(struct timeval){.tv_sec = 5, .tv_usec = 0}
+
+#define NALI_NLC_IP "127.0.0.1"
+#define NALI_NLC_ID 0
+//...
+```
+>[server.h](src/network/linux/server/server.h)
+
+```c
+#define NALI_NLS_TIMEOUT &(struct timeval){.tv_sec = 5, .tv_usec = 0}
+
+//max get
+#define NALI_NLS_MAX_EPOLL_EVENT 1
+//max connect
+#define NALI_NLS_MAX_CLIENT 1
+```
+
+>[pch.h](src/pch.h)
+
+```c
+//...
+#ifdef NALI_S_ANDROID
+	#define NALI_HOME
+	#define NALI_READ_CACHE "/storage/emulated/0/Android/data/com.nali.scene/c"
+	#define NALI_SAVE "/storage/emulated/0/Android/data/com.nali.scene/save"
+#else
+	#define NALI_HOME "../asset/"
+	#define NALI_SAVE "../save/"
+#endif
+//...
+```
+
+>[vk.h](src/vk/release/vk/vk.h)
+
+```c
+//...
+#define NALI_VK_SGPU
+#define NALI_VK_INFO_SC
+
+#define NALI_VK_VERSION VK_API_VERSION_1_3//VK_API_VERSION_1_0 VK_API_VERSION_1_4
+
+#define NALI_VK_COLOR_FORMAT_BYTE 4
+#define NALI_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM
+#define NALI_VK_COLOR_SPACE VK_COLOR_SPACE_SRGB_NONLINEAR_KHR
+#define NALI_VK_DEPTH_FORMAT VK_FORMAT_D32_SFLOAT//VK_FORMAT_D16_UNORM
+
+#define NALI_VK_SAMPLE_S VK_TRUE//VK_FALSE
+#define NALI_VK_SAMPLE_C VK_SAMPLE_COUNT_8_BIT//VK_SAMPLE_COUNT_1_BIT
+#define NALI_VK_SAMPLE_V 1.0F//0
+
+#define NALI_VK_PRESENT VK_PRESENT_MODE_FIFO_KHR//VK_PRESENT_MODE_IMMEDIATE_KHR
+
+#define NALI_VK_MAX_SAMPLER_ANISOTROPY 16.0F//0
+//...
+```
+
+>[both.h](src/loader/both/both.h)
 
 </span>
 

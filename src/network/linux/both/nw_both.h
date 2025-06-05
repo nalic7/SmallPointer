@@ -1,4 +1,0 @@
-#ifndef NALI_NETWORK_BOTH_H
-#define NALI_NETWORK_BOTH_H
-
-#endif

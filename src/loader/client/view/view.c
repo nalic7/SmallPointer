@@ -1,3 +1,16 @@
+float m_vp_float_array[] =
+{
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1
+};
+
 uint8_t
 	**v_a_p_array[NALI_V_A_BL],
 	*v_a_bl1_p_array[NALI_V_A_BL];

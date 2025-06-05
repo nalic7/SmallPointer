@@ -1,6 +1,8 @@
 #ifndef NALI_VIEW_H
 #define NALI_VIEW_H
 
+extern float m_vp_float_array[16*2];
+
 //c1j1
 //c1j0
 //t1j1u1v1

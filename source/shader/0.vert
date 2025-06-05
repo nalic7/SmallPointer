@@ -30,6 +30,7 @@ struct PA
 layout(std140, set = 0, binding = 2) uniform UBOA
 {
 	PA pa[NALI_LCM_BONE_BL];
+	// mat4 m;
 } uboa;
 
 /*layout(std430, set = 0, binding = 2) readonly buffer SSBOAS
@@ -160,6 +161,7 @@ void main()
 	}
 
 	gl_Position = ubos.p * ubos.v * l_v;
+	// gl_Position = ubos.p * ubos.v * uboa.m * l_v;
 
 	f_c = a_c1j1 & 0xFFu;
 	//use f_c

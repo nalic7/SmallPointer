@@ -1,19 +1,13 @@
-uint8_t m_net_client_state = 0;
+uint8_t nlc_state = 0;
 
-int m_client_socket;
-static struct sockaddr_in sockaddr_in;
-
-static void clean()
-{
-	close(m_client_socket);
-}
-
-static uint8_t length;
 static void get()
 {
+	uint8_t length;
 	// info("recv %ld", recv(m_client_socket, &length, sizeof(uint8_t), MSG_DONTWAIT))
 	// info("%s", strerror(errno))
 	// info("length %d", length)
+
+	//p[length data...]
 	recv(m_client_socket, &length, sizeof(uint8_t), MSG_DONTWAIT);
 
 	if (length > 0)
@@ -38,12 +32,12 @@ static void out()
 		nali_log("c %d %s", errno, strerror(errno))
 		if (errno == ETIMEDOUT || errno == ECONNRESET || errno == ENETRESET || errno == ECONNABORTED)
 		{
-			m_net_client_state |= NALI_NET_CLIENT_FAIL;
+			nlc_state |= NALI_NLC_FAIL;
 		}
 	}
 	else
 	{
-		m_net_client_state &= 0xFFu - NALI_NET_CLIENT_INIT;
+		nlc_state &= 0xFFu - NALI_NLC_INIT;
 	}
 	errno_temp = errno;
 }
@@ -52,8 +46,11 @@ static void out()
 static int r;
 static int init(void *arg)
 {
+	int m_client_socket;
+	struct sockaddr_in sockaddr_in;
+
 	nali_log("sinit")
-	m_net_client_state &= 0xFFu - NALI_NET_CLIENT_FAIL;
+	nlc_state &= 0xFFu - NALI_NLC_FAIL;
 
 	nali_info("socket %d", r = m_client_socket = socket(AF_INET, SOCK_STREAM, 0))
 	//errno.h ECONNREFUSED ETIMEDOUT
@@ -61,18 +58,18 @@ static int init(void *arg)
 
 	if (r < 0)
 	{
-		m_net_client_state |= NALI_NET_CLIENT_FAIL;
+		nlc_state |= NALI_NLC_FAIL;
 	}
 
 	sockaddr_in.sin_family = AF_INET;
 	sockaddr_in.sin_port = htons(NALI_SC_PORT);
 
-	nali_info("inet_pton %d", r = inet_pton(AF_INET, NALI_IP, &sockaddr_in.sin_addr))
+	nali_info("inet_pton %d", r = inet_pton(AF_INET, NALI_NLC_IP, &sockaddr_in.sin_addr))
 	nali_log("%s", strerror(errno))
 
 	if (r < 0)
 	{
-		m_net_client_state |= NALI_NET_CLIENT_FAIL;
+		nlc_state |= NALI_NLC_FAIL;
 	}
 
 	nali_info("connect %d", r = connect(m_client_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)))
@@ -80,42 +77,42 @@ static int init(void *arg)
 
 	if (r < 0)
 	{
-		m_net_client_state |= NALI_NET_CLIENT_FAIL;
+		nlc_state |= NALI_NLC_FAIL;
 	}
 
-	nali_info("setsockopt %d", r = setsockopt(m_client_socket, SOL_SOCKET, SO_RCVTIMEO, &(struct timeval){.tv_sec = 5, .tv_usec = 0}, sizeof(struct timeval)))
+	nali_info("setsockopt %d", r = setsockopt(m_client_socket, SOL_SOCKET, SO_RCVTIMEO, NALI_NLC_TIMEOUT, sizeof(struct timeval)))
 	nali_log("%s", strerror(errno))
 
 	if (r < 0)
 	{
-		m_net_client_state |= NALI_NET_CLIENT_FAIL;
+		nlc_state |= NALI_NLC_FAIL;
 	}
 
-	while (!(m_net_client_state & NALI_NET_CLIENT_FAIL))
+	while (!(nlc_state & NALI_NLC_FAIL))
 	{
 		get();
 		#ifdef NALI_DEBUG
 			out();
 		#else
-			m_net_client_state &= 0xFFu - NALI_NET_CLIENT_INIT;
+			m_net_client_state &= 0xFFu - NALI_NLC_INIT;
 		#endif
 	}
 
-	clean();
-	m_net_client_state &= 0xFFu - NALI_NET_CLIENT_INIT;
+	close(m_client_socket);
+	nlc_state &= 0xFFu - NALI_NLC_INIT;
 	nali_log("einit")
 	return 0;
 }
 
-void nwc_init()
+void nlc_set()
 {
-	m_net_client_state |= NALI_NET_CLIENT_FAIL;
-	while (m_net_client_state & NALI_NET_CLIENT_FAIL)
+	nlc_state |= NALI_NLC_FAIL;
+	while (nlc_state & NALI_NLC_FAIL)
 	{
-		m_net_client_state |= NALI_NET_CLIENT_INIT;
+		nlc_state |= NALI_NLC_INIT;
 		nali_info("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
 
-		while (m_net_client_state & NALI_NET_CLIENT_INIT)
+		while (nlc_state & NALI_NLC_INIT)
 		{
 			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 		}

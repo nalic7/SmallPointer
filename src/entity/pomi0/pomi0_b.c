@@ -1,7 +1,5 @@
 #define NALI_LCS_U_RGBA 1
 #define NALI_LCS_U_A 2
-// /8
-static uint8_t *state_p_array[NALI_V_A_BL];
 //offset size
 static VkDeviceSize *vkdevicesize_p_array[NALI_V_A_BL];
 // static float *rgba_p_array[NALI_V_A_BL];
@@ -49,19 +47,34 @@ static void update(uint8_t a, uint16_t lcs_write_fp_bl)
 	// 	l_size = ;
 	// }
 
-	if (state_p_array[a][lcs_write_fp_bl / 8] & 1 << lcs_write_fp_bl % 8)
+	if (vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 1])
 	{
 		lcs_vkmappedmemoryrange_p = realloc(lcs_vkmappedmemoryrange_p, sizeof(VkMappedMemoryRange) * (lcs_vkmappedmemoryrange_bl + 1));
 		lcs_vkmappedmemoryrange_p[lcs_vkmappedmemoryrange_bl++] = (VkMappedMemoryRange)
 		{
 			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 			.memory = lc_vkdevicememory,
-			.offset = vkdevicesize_p_array[a][lcs_write_fp_bl * 2],
-			.size = (vkdevicesize_p_array[a][lcs_write_fp_bl * 2 + 1] + 63) & ~63,
+			.offset = vkdevicesize_p_array[a][lcs_write_fp_bl * 4],
+			.size = (vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 1] + 63) & ~63,
 			.pNext = VK_NULL_HANDLE
 		};
 
-		state_p_array[a][lcs_write_fp_bl / 8] &= 0xFFu - lcs_write_fp_bl % 8;
+		vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 1] = 0;
+	}
+
+	if (vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 3])
+	{
+		lcs_vkmappedmemoryrange_p = realloc(lcs_vkmappedmemoryrange_p, sizeof(VkMappedMemoryRange) * (lcs_vkmappedmemoryrange_bl + 1));
+		lcs_vkmappedmemoryrange_p[lcs_vkmappedmemoryrange_bl++] = (VkMappedMemoryRange)
+		{
+			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+			.memory = lc_vkdevicememory,
+			.offset = vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 2],
+			.size = (vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 3] + 63) & ~63,
+			.pNext = VK_NULL_HANDLE
+		};
+
+		vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 3] = 0;
 	}
 }
 
@@ -70,17 +83,26 @@ static void animate(uint8_t a, uint16_t lcs_write_fp_bl)
 	//init e and animate
 
 	//l0 rgba b
+	if (!vkdevicesize_p_array[a][lcs_write_fp_bl * 4 + 3])
+	{
+		VkDeviceSize l_vkdevicesize = v_b_vkdevicesize_p_array[a][lcs_write_fp_bl * NALI_LCS_D_SIZE + 4];
+		memcpy(lc_vkbuffer_p + l_vkdevicesize, rgba_p, sizeof(float) * 4);
+	}
 
 	//l0 a
-	v_b_vkdevicesize_p_array[a] + lcs_write_fp_bl * NALI_LCS_D_SIZE + 2;
-
-	uint8_t animate = 0;
-	uint8_t key = 11;//80
-	for (uint8_t l_1 = 0; l_1 < lckf_keyframe_p[animate][key].bone_bl; ++l_1)
+	uint8_t animate = vd_m_animate_p_array[a][lcs_write_fp_bl];//0
+	if (animate != 255)
 	{
-		memcpy(lc_vkbuffer_p + l0 + lckf_keyframe_p[animate][key].bone_p[l_1] * sizeof(float) * 4 * 3, lckf_keyframe_p[animate][key].animation_s_p[l_1], sizeof(float) * 3);
-		memcpy(lc_vkbuffer_p + l0 + sizeof(float) * 4 + lckf_keyframe_p[animate][key].bone_p[l_1] * sizeof(float) * 4 * 3, lckf_keyframe_p[animate][key].animation_r_p[l_1], sizeof(float) * 4);
-		memcpy(lc_vkbuffer_p + l0 + sizeof(float) * 4 * 2 + lckf_keyframe_p[animate][key].bone_p[l_1] * sizeof(float) * 4 * 3, lckf_keyframe_p[animate][key].animation_t_p[l_1], sizeof(float) * 3);
+		uint8_t keyframe = vd_m_keyframe_p_array[a][lcs_write_fp_bl];//11 <- 80
+
+		VkDeviceSize l_vkdevicesize = v_b_vkdevicesize_p_array[a][lcs_write_fp_bl * NALI_LCS_D_SIZE + 2];
+
+		for (uint8_t l_1 = 0; l_1 < lckf_keyframe_p[animate][keyframe].bone_bl; ++l_1)
+		{
+			memcpy(lc_vkbuffer_p + l_vkdevicesize + lckf_keyframe_p[animate][keyframe].bone_p[l_1] * sizeof(float) * 4 * 3, lckf_keyframe_p[animate][keyframe].animation_s_p[l_1], sizeof(float) * 3);
+			memcpy(lc_vkbuffer_p + l_vkdevicesize + sizeof(float) * 4 + lckf_keyframe_p[animate][keyframe].bone_p[l_1] * sizeof(float) * 4 * 3, lckf_keyframe_p[animate][keyframe].animation_r_p[l_1], sizeof(float) * 4);
+			memcpy(lc_vkbuffer_p + l_vkdevicesize + sizeof(float) * 4 * 2 + lckf_keyframe_p[animate][keyframe].bone_p[l_1] * sizeof(float) * 4 * 3, lckf_keyframe_p[animate][keyframe].animation_t_p[l_1], sizeof(float) * 3);
+		}
 	}
 }
 
@@ -91,7 +113,17 @@ static void pre_update(uint8_t a, uint16_t lcs_write_fp_bl)
 	lcs_write_fp[lcs_write_fp_bl] = update;
 }
 
-void e_pomi0_add()
+void e_pomi0_loop()
 {
-	add();
+	if (update_rgba)
+	{
+		vkdevicesize_p_array[a][lcs_write_fp_bl * 2] = ;
+		vkdevicesize_p_array[a][lcs_write_fp_bl * 2 + 1] = ;
+	}
+
+	if (update_animate)
+	{
+		vkdevicesize_p_array[a][lcs_write_fp_bl * 2 + 2] = ;
+		vkdevicesize_p_array[a][lcs_write_fp_bl * 2 + 3] = ;
+	}
 }

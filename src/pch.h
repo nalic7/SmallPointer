@@ -81,11 +81,6 @@
 	#include "ffmpeg/ffmpeg.h"
 	//e0-ffmpeg
 
-	//
-	#include "view/view.h"
-	#include "view/data/data.h"
-	#include "view/starfield/starfield.h"
-
 	#ifdef NALI_CLIENT
 		#include "surface/surface.h"
 
@@ -140,9 +135,13 @@
 		#include "loader/client/keyframe/keyframe.h"
 		#include "loader/client/model/model.h"
 		#include "loader/client/model/view/view.h"
+		#include "loader/client/view/view.h"
 		#include "loader/client/shader/shader.h"
-		#include "network/linux/client/nw_client.h"
+		#include "network/linux/client/client.h"
+		#include "network/linux/client/client_f.h"
 	#endif
+
+	#include "network/linux/both/both.h"
 
 	#ifdef NALI_SERVER
 		#include <math.h>
@@ -150,7 +149,8 @@
 		#include <sys/epoll.h>
 
 		#include "loader/server/server.h"
-		#include "network/linux/server/nw_server.h"
+		#include "network/linux/server/server.h"
+		#include "network/linux/server/server_f.h"
 	#endif
 
 	#include "file/file.h"
@@ -174,8 +174,10 @@
 	#ifdef NALI_S_ANDROID
 		#define NALI_HOME
 		#define NALI_READ_CACHE "/storage/emulated/0/Android/data/com.nali.scene/c"
+		#define NALI_SAVE "/storage/emulated/0/Android/data/com.nali.scene/save"
 	#else
 		#define NALI_HOME "../asset/"
+		#define NALI_SAVE "../save/"
 	#endif
 	#define NALI_HOME_MODEL "model"
 	#define NALI_HOME_KEYFRAME "keyframe"
