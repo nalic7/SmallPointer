@@ -1,6 +1,6 @@
 void vksp_make(uint32_t device, VkSemaphore *vksemaphore_p)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateSemaphore %d",
 		vkCreateSemaphore

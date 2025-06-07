@@ -1,6 +1,6 @@
 void vkds_make(uint32_t device, VkDescriptorPool vkdescriptorpool, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkDescriptorSet *vkdescriptorset_p)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkAllocateDescriptorSets %d",
 		vkAllocateDescriptorSets

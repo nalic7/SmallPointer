@@ -9,7 +9,7 @@ static uint8_t a_state = 0;
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
-	nali_log("window %p", window)
+	NALI_D_LOG("window %p", window)
 	s_width = ANativeWindow_getWidth(window);
 	s_height = ANativeWindow_getHeight(window);
 	sa_anativewindow_p = window;
@@ -17,7 +17,7 @@ static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* wind
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
 {
-	nali_log("window resize")
+	NALI_D_LOG("window resize")
 	s_width = ANativeWindow_getWidth(window);
 	s_height = ANativeWindow_getHeight(window);
 	s_surface_state |= NALI_SURFACE_C_S_RE;
@@ -25,21 +25,21 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
-	nali_log("window 0")
+	NALI_D_LOG("window 0")
 	sa_anativewindow_p = NULL;
 	s_surface_state |= NALI_SURFACE_C_S_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
 //{
-//	nali_log("onConfigurationChanged")
+//	NALI_D_LOG("onConfigurationChanged")
 //
 //	AConfiguration *aconfiguration_p = AConfiguration_new();
 //	AConfiguration_fromAssetManager(aconfiguration_p, activity->assetManager);
 //
 //	orientation = AConfiguration_getOrientation(aconfiguration_p);
 //
-//	nali_log("orientation %d", orientation)
+//	NALI_D_LOG("orientation %d", orientation)
 ////	if (orientation == ACONFIGURATION_ORIENTATION_PORT)
 ////	{
 ////	}
@@ -65,11 +65,16 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
-	nali_log("ANativeActivity_onCreate")
+	#ifdef NALI_D_FILE
+		d_set();
+	#endif
+
+	NALI_D_LOG("ANativeActivity_onCreate")
 	if (!(a_state & A_STATE_READY))
 	{
 		a_state |= A_STATE_READY;
-		scene_set();
+		NALI_D_LOG("scene")
+		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, s1_set, NULL))
 	}
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
@@ -80,7 +85,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	sa_anativeactivity_p = activity;
 
 //	SLObjectItf slobjectitf;
-//	nali_info("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
+//	NALI_D_INFO("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
 }
 
 void sa_wait()

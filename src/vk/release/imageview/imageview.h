@@ -3,7 +3,7 @@
 
 //mipmap 1
 #define VK_makeImageView(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkCreateImageView %d", \
 		vkCreateImageView \

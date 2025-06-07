@@ -3,7 +3,7 @@ static uint32_t thrd = 0;
 static const char C_IN[] = "./C_I";
 static const char C_OUT[] = "./C_O";
 
-static int skin(void *arg)
+static int skin(void *p)
 {
 	// info("skin %s\n", (char*)name)
 
@@ -23,7 +23,7 @@ static int skin(void *arg)
 	strcat(out_char_p, d_name_char_p);
 
 	FILE *file_p = fopen(file_char_p, "r");
-	nali_log("fopen %p", file_p);
+	NALI_D_LOG("fopen %p", file_p);
 	free(file_char_p);
 
 	collada_Source collada_source =
@@ -449,7 +449,7 @@ int main()
 	mkdir(C_OUT, 0700);
 
 	DIR *dir_p = opendir(C_IN);
-	nali_log("opendir %p", dir_p);
+	NALI_D_LOG("opendir %p", dir_p);
 
 	struct dirent *dirent_p;
 	while ((dirent_p = readdir(dir_p)) != NULL)
@@ -476,7 +476,7 @@ int main()
 			void **arg = malloc(sizeof(void *) * 2);
 			arg[0] = d_name_char_p;
 			arg[1] = file_char_p;
-			nali_info("thrd_create %d", thrd_create(&(thrd_t){}, skin, arg))
+			NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, skin, arg))
 
 			++thrd;
 		}

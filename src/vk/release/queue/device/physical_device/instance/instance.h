@@ -4,13 +4,13 @@
 extern VkInstance vkqdpdi_vkinstance;
 
 // extern const char *vkqdpdi_ppEnabledExtensionNames[
-// #ifdef NALI_VK_DEBUG
+// #ifdef C_NALI_VK_DEBUG
 // 	3
 // #else
 // 	2
 // #endif
 // ];
-#ifdef NALI_VK_DEBUG
+#ifdef C_NALI_VK_DEBUG
 	extern const char *vkqdpdi_ppEnabledLayerNames[1];
 #endif
 

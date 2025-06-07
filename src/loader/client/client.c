@@ -1,4 +1,4 @@
-float lc_rt_array[NALI_NLS_MAX_CLIENT][3+3] = {0};
+float lc_rt_array[NALI_LB_MAX_CLIENT][3+3] = {0};
 
 uint8_t lc_m_bl_array[NALI_VD_M_MAX] = {0};
 uint8_t *lc_m_p_array[NALI_VD_M_MAX];
@@ -31,7 +31,7 @@ void lc_vk()
 	//VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
 	//VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 	VK_makeBuffer(vk_device, lc_vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lc_vkbuffer, lc_vkdevicememory, vkmemoryrequirements)
-	nali_info("vkMapMemory %d", vkMapMemory(vkqd_vkdevice_p[vk_device], lc_vkdevicememory, 0, lc_vkdevicesize, 0, &lc_vkbuffer_p))
+	NALI_D_INFO("vkMapMemory %d", vkMapMemory(vkqd_vkdevice_p[vk_device], lc_vkdevicememory, 0, lc_vkdevicesize, 0, &lc_vkbuffer_p))
 	lcm_vk();
 
 	// //update vkbuffer
@@ -48,7 +48,7 @@ void lc_vk()
 	lcs_vk();
 
 	vk_cmd_draw_set();
-	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmd_draw_loop, NULL))
+	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmd_draw_loop, NULL))
 }
 
 void lc_freeVk(uint32_t device)
@@ -67,8 +67,8 @@ mtx_t *vd_mtx_t_p = &(mtx_t){};
 
 void vd_set()
 {
-	nali_info("mtx_init %d", mtx_init(vd_mtx_t_p, mtx_plain))
-	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, lc_loop, NULL))
+	NALI_D_INFO("mtx_init %d", mtx_init(vd_mtx_t_p, mtx_plain))
+	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, lc_loop, NULL))
 }
 
 void vd_free()
@@ -118,7 +118,7 @@ static void add(uint8_t a, uint8_t j, uint16_t *s_index_p, void (*fp)(uint8_t, u
 	++lcs_add_i_bl_array[a];
 }
 
-int lc_loop(void *arg)
+int lc_loop(void *p)
 {
 	while (1)
 	{

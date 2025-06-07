@@ -2,7 +2,7 @@
 #define NALI_VK_FENCE_H
 
 #define VK_makeFence(device, vkfence_p) \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkCreateFence %d", \
 		vkCreateFence \

@@ -1,6 +1,6 @@
 void vkcb_make(uint32_t device, uint32_t graphic, VkCommandBuffer *vkcommandbuffer_p, uint32_t size)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkAllocateCommandBuffers %d",
 		vkAllocateCommandBuffers

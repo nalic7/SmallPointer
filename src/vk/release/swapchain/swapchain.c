@@ -25,32 +25,32 @@ void vksc_make(VkSharingMode vksharingmode)
 
 	#ifdef NALI_VK_INFO_SC
 		uint32_t surface_format;
-		nali_info("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_format, VK_NULL_HANDLE))
+		NALI_D_INFO("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_format, VK_NULL_HANDLE))
 		VkSurfaceFormatKHR *vksurfaceformatkhr_p = malloc(surface_format * sizeof(VkSurfaceFormatKHR));
-		nali_info("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_format, vksurfaceformatkhr_p))
+		NALI_D_INFO("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_format, vksurfaceformatkhr_p))
 		for (uint32_t i = 0; i < surface_format; ++i)
 		{
 			VkSurfaceFormatKHR vksurfaceformatkhr = vksurfaceformatkhr_p[i];
-			nali_log("i %d", i)
-			nali_log("format %d", vksurfaceformatkhr.format)
-			nali_log("colorSpace %d", vksurfaceformatkhr.colorSpace)
+			NALI_D_LOG("i %d", i)
+			NALI_D_LOG("format %d", vksurfaceformatkhr.format)
+			NALI_D_LOG("colorSpace %d", vksurfaceformatkhr.colorSpace)
 		}
 
 		free(vksurfaceformatkhr_p);
 
 		uint32_t surface_present;
-		nali_info("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_present, VK_NULL_HANDLE))
+		NALI_D_INFO("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_present, VK_NULL_HANDLE))
 		VkPresentModeKHR *vkpresentmodekhr_p = malloc(surface_present * sizeof(VkPresentModeKHR));
-		nali_info("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_present, vkpresentmodekhr_p))
+		NALI_D_INFO("vkGetPhysicalDeviceSurfacePresentModesKHR %d", vkGetPhysicalDeviceSurfacePresentModesKHR(vkphysicaldevice, vks_vksurfacekhr, &surface_present, vkpresentmodekhr_p))
 		for (uint32_t i = 0; i < surface_present; ++i)
 		{
-			nali_log("VkPresentModeKHR %d", vkpresentmodekhr_p[i])
+			NALI_D_LOG("VkPresentModeKHR %d", vkpresentmodekhr_p[i])
 		}
 		free(vkpresentmodekhr_p);
 	#endif
 
 	VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr;
-	nali_info("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, vks_vksurfacekhr, &vksurfacecapabilitieskhr))
+	NALI_D_INFO("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, vks_vksurfacekhr, &vksurfacecapabilitieskhr))
 
 //	m_vksurfacetransformflagbitskhr = vksurfacecapabilitieskhr.currentTransform;
 //	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
@@ -87,7 +87,7 @@ void vksc_make(VkSharingMode vksharingmode)
 //		vksc_vkextent2d.width = m_width;
 //	}
 
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateSwapchainKHR %d",
 		vkCreateSwapchainKHR
@@ -124,17 +124,17 @@ void vksc_make(VkSharingMode vksharingmode)
 		)
 	)
 
-	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, vksc_vkswapchainkhr, &swapchain_image, VK_NULL_HANDLE))
+	NALI_D_INFO("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, vksc_vkswapchainkhr, &swapchain_image, VK_NULL_HANDLE))
 
 	#ifdef NALI_VK_INFO_SC
-		nali_log("vksurfaceformatkhr_image %d", swapchain_image)
+		NALI_D_LOG("vksurfaceformatkhr_image %d", swapchain_image)
 	#endif
 
 	vksc_vkswapchainkhr_vkimage_p = malloc(sizeof(VkImage) * swapchain_image);
 	vksc_vkswapchainkhr_vkimageview_p = malloc(sizeof(VkImageView) * swapchain_image);
 	vksc_vkswapchainkhr_vkframebuffer_p = malloc(sizeof(VkFramebuffer) * swapchain_image);
 
-	nali_info("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, vksc_vkswapchainkhr, &swapchain_image, vksc_vkswapchainkhr_vkimage_p))
+	NALI_D_INFO("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, vksc_vkswapchainkhr, &swapchain_image, vksc_vkswapchainkhr_vkimage_p))
 
 	VK_makeRenderPass(vk_device, &vksc_vkrenderpass)
 

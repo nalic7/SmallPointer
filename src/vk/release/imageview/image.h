@@ -6,7 +6,7 @@ vksamplecountflagbits VK_SAMPLE_COUNT_1_BIT
 vkimagetiling VK_IMAGE_TILING_OPTIMAL
 vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 #define VK_makeImage(device, vkformat, vkextent3d, mipmap, vkimagetiling, vkimageusageflags, vkimagelayout, vksamplecountflagbits, vkimage_p) \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkCreateImage %d", \
 		vkCreateImage \
@@ -38,7 +38,7 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 //vkmemoryrequirements f
 #define VK_genImage(device, vkimage, vkmemorypropertyflags, vkdevicememory_p, vkmemoryrequirements) \
 	vkGetImageMemoryRequirements(vkqd_vkdevice_p[device], vkimage, &vkmemoryrequirements); \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkAllocateMemory %d", \
 		vkAllocateMemory \
@@ -55,6 +55,6 @@ vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 			vkdevicememory_p \
 		) \
 	) \
-	nali_info("vkBindImageMemory %d", vkBindImageMemory(vkqd_vkdevice_p[device], vkimage, *vkdevicememory_p, 0))
+	NALI_D_INFO("vkBindImageMemory %d", vkBindImageMemory(vkqd_vkdevice_p[device], vkimage, *vkdevicememory_p, 0))
 
 #endif

@@ -133,16 +133,16 @@
 // static void init()
 // {
 // 	//s0-image
-// 	m_nali_g_image_state_uint8_t_p = f_read(NALI_HOME "image.bin", &m_nali_g_max_image_state);
+// 	m_nali_g_image_state_uint8_t_p = f_read(NALI_F_HOME "image.bin", &m_nali_g_max_image_state);
 // 	m_nali_g_image_uint8_t_p = malloc(0);
 // 	m_nali_g_image_wh_uint32_t_p = malloc(0);
 
 // 	struct dirent *dirent_p;
 
 // 	const char image_type[] = ".png";
-// 	const char image_path[] = NALI_HOME NALI_HOME_IMAGE;
+// 	const char image_path[] = NALI_F_HOME_IMAGE;
 // 	DIR *dir_p = opendir(image_path);
-// 	nali_log("opendir %p", dir_p)
+// 	NALI_D_LOG("opendir %p", dir_p)
 
 // 	size_t name_index = sizeof(image_path)-1 + 1 + 1;
 // 	char *image_file = malloc(name_index);
@@ -178,7 +178,7 @@
 // 			wh_index = index * 2;
 
 // 			// FILE *file_p = fopen(image_file, "rb");
-// 			// nali_log("file_p %p", file_p)
+// 			// NALI_D_LOG("file_p %p", file_p)
 // 			// png_init_io(png, file_p);
 // 			// png_read_info(png, info);
 

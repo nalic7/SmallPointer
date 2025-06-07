@@ -1,6 +1,6 @@
 void vkgplpllo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreatePipelineLayout %d",
 		vkCreatePipelineLayout

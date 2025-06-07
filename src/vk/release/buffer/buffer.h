@@ -5,7 +5,7 @@ uint32_t vkb_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryProper
 
 //VkMemoryRequirements vkmemoryrequirements
 #define VK_makeBuffer(device, vkdevicesize, vkbufferusageflags, vkmemorypropertyflags, vkbuffer, vkdevicememory, vkmemoryrequirements) \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkCreateBuffer %d", \
 		vkCreateBuffer \
@@ -27,7 +27,7 @@ uint32_t vkb_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryProper
 		) \
 	) \
 	vkGetBufferMemoryRequirements(vkqd_vkdevice_p[device], vkbuffer, &vkmemoryrequirements); \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkAllocateMemory %d", \
 		vkAllocateMemory \
@@ -44,11 +44,11 @@ uint32_t vkb_findMemoryType(uint32_t device, uint32_t typefilter, VkMemoryProper
 			&vkdevicememory \
 		) \
 	) \
-	nali_info("vkBindBufferMemory %d", vkBindBufferMemory(vkqd_vkdevice_p[device], vkbuffer, vkdevicememory, 0))
+	NALI_D_INFO("vkBindBufferMemory %d", vkBindBufferMemory(vkqd_vkdevice_p[device], vkbuffer, vkdevicememory, 0))
 
 //void *data_p
 #define VK_mapBuffer(device, vkdevicesize, buffer_data_p, vkdevicememory_p, data_p) \
-	nali_info("vkMapMemory %d", vkMapMemory(vkqd_vkdevice_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
+	NALI_D_INFO("vkMapMemory %d", vkMapMemory(vkqd_vkdevice_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
 	memcpy(data_p, buffer_data_p, vkdevicesize); \
 	vkUnmapMemory(vkqd_vkdevice_p[device], *vkdevicememory_p);
 

@@ -1,11 +1,11 @@
-#ifdef NALI_S_ANDROID
+#ifdef C_NALI_S_ANDROID
 static float
 	x00 = 0, y00 = 0,
 	x01 = 0, y01 = 0;
 
-static int init(void *arg)
+static int s1_set(void *p)
 {
-	#ifdef NALI_CLIENT
+	#ifdef C_NALI_CLIENT
 		lb_set();
 		lc_set();
 		vk_set();
@@ -28,7 +28,7 @@ static int init(void *arg)
 				size_t pointer_count = AMotionEvent_getPointerCount(ainputevent_p);
 //				if (pointer_count == 1)
 //				{
-//					nali_log("AINPUT_EVENT_TYPE_MOTION")
+//					NALI_D_LOG("AINPUT_EVENT_TYPE_MOTION")
 				int32_t action = AMotionEvent_getAction(ainputevent_p);
 				int32_t actionType = action & AMOTION_EVENT_ACTION_MASK;
 
@@ -94,29 +94,23 @@ static int init(void *arg)
 	}
 	return 0;
 }
-
 //JNIEXPORT void JNICALL Java_com_nali_scene_Scene_runC(JNIEnv *jnienv_p, jobject jobject)
-void scene_set()
-{
-	nali_log("scene")
-	nali_info("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
-}
 #else
 
 int main()
 {
-	// fp_read(NALI_HOME NALI_HOME_IMAGE "/0.png", &(long){});
-	// #ifdef NALI_DEBUG
-	// 	debug_init();
-	// #endif
+	// fp_read(NALI_F_HOME NALI_F_HOME_IMAGE "/0.png", &(long){});
+	#ifdef NALI_D_FILE
+		d_set();
+	#endif
 
-	#ifdef NALI_GEN
+	#ifdef C_NALI_GEN
 		g_write();
 	#endif
-	#if NALI_SERVER
+	#if C_NALI_SERVER
 		nls_set();
 	#endif
-	#ifdef NALI_CLIENT
+	#ifdef C_NALI_CLIENT
 		nlc_set();
 		//need test network
 		// lb_set();
@@ -129,6 +123,6 @@ int main()
 		// s_pointer_id = 0;
 	#endif
 
-	nlb_loop();
+	lb_loop();
 }
 #endif

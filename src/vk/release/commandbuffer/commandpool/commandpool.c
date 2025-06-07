@@ -12,7 +12,7 @@ void vkcbcp_make(uint32_t device)
 
 	for (uint32_t q = 0; q < max_queue; ++q)
 	{
-		nali_info
+		NALI_D_INFO
 		(
 			"vkCreateCommandPool %d",
 			vkCreateCommandPool

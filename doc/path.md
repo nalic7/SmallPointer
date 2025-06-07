@@ -1,5 +1,5 @@
-# Linux Path
-
+# Path
+>Linux
 ```bash
 #Project
 /SmallPointer
@@ -25,9 +25,7 @@
 			*.c
 			*.h
 ```
-
-# Android Path
-
+>Android
 ```bash
 #Home
 /

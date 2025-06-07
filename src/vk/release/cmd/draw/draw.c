@@ -7,7 +7,7 @@ static struct timespec frame_start = {0}, frame_end;
 static struct timespec delta_start = {0}, delta_end;
 static uint32_t frame;
 // static clock_t frame_time;
-static float frame_time = 0;
+static double frame_time = 0;
 
 //s0-share
 static VkDevice vkdevice;
@@ -111,7 +111,7 @@ void vk_cmd_draw_set()
 
 	// const char shader_type[] = ".spv";
 
-	// const char vert_shader_path[] = NALI_HOME NALI_HOME_SHADER NALI_HOME_SHADER_VERT "/";
+	// const char vert_shader_path[] = NALI_F_HOME NALI_F_HOME_SHADER NALI_F_HOME_SHADER_VERT "/";
 	// uint32_t vert_index = 0;
 	// uint8_t vert_name_index = sizeof(vert_shader_path)-1;
 	// char *vert_file = malloc(vert_name_index + MATH_LENGTH(vert_index) + sizeof(shader_type)-1 + 1);
@@ -119,7 +119,7 @@ void vk_cmd_draw_set()
 	// sprintf(vert_file + vert_name_index, "%u", vert_index);
 	// strcat(vert_file, shader_type);
 
-	// const char frag_shader_path[] = NALI_HOME NALI_HOME_SHADER NALI_HOME_SHADER_FRAG "/";
+	// const char frag_shader_path[] = NALI_F_HOME NALI_F_HOME_SHADER NALI_F_HOME_SHADER_FRAG "/";
 	// uint32_t frag_index = 0;
 	// uint8_t frag_name_index = sizeof(frag_shader_path)-1;
 	// char *frag_file = malloc(frag_name_index + MATH_LENGTH(frag_index) + sizeof(shader_type)-1 + 1);
@@ -128,8 +128,8 @@ void vk_cmd_draw_set()
 	// strcat(frag_file, shader_type);
 
 	// vk_setVkPipelineShaderStageCreateInfo(vk_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	// vk_setVkPipelineShaderStageCreateInfo(vk_device, NALI_HOME NALI_HOME_SHADER "vert.spv", NALI_HOME NALI_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	vk_setVkPipelineShaderStageCreateInfo(vk_device, NALI_HOME "vert.spv", NALI_HOME "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// vk_setVkPipelineShaderStageCreateInfo(vk_device, NALI_F_HOME NALI_F_HOME_SHADER "vert.spv", NALI_F_HOME NALI_F_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	vk_setVkPipelineShaderStageCreateInfo(vk_device, NALI_F_HOME_VERT, NALI_F_HOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 	// free(vert_file);
 	// free(frag_file);
 
@@ -178,7 +178,7 @@ void vk_cmd_draw_set()
 	//e0-draw
 
 	// //s0-mtx
-	// nali_info("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
+	// NALI_D_INFO("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
 	// //e0-mtx
 
 	// // frame_start = time(0);
@@ -187,7 +187,7 @@ void vk_cmd_draw_set()
 
 void freeCmdDraw()
 {
-	nali_info("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
+	NALI_D_INFO("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
 	vkFreeCommandBuffers(vkdevice, vkcbcp_vkcommandpool_p[vk_device][vk_queue_g], 1, &vkcommandbuffer);
 	vkDestroyPipeline(vkdevice, vkpipeline, VK_NULL_HANDLE);
@@ -215,7 +215,7 @@ void freeCmdDraw()
 // }
 
 // static void (*a_fp[NALI_V_A_BL])() = {c1j1, c1j0};
-int vk_cmd_draw_loop(void *arg)
+int vk_cmd_draw_loop(void *p)
 {
 	while (!(s_surface_state & NALI_SURFACE_C_S_CLEAN))
 	{
@@ -226,7 +226,7 @@ int vk_cmd_draw_loop(void *arg)
 		{
 			vksc_free();
 
-			#ifdef NALI_S_ANDROID
+			#ifdef C_NALI_S_ANDROID
 				sa_wait();
 			#endif
 
@@ -264,7 +264,7 @@ int vk_cmd_draw_loop(void *arg)
 		if (vkresult != VK_SUCCESS)
 		{
 			//support recreate vkswapchainkhr if need
-			nali_log("vkAcquireNextImageKHR %d", vkresult)
+			NALI_D_LOG("vkAcquireNextImageKHR %d", vkresult)
 		}
 
 		vkrenderpassbegininfo.framebuffer = vksc_vkswapchainkhr_vkframebuffer_p[image_index];
@@ -309,7 +309,7 @@ int vk_cmd_draw_loop(void *arg)
 				vkQueueWaitIdle(vkqueue_graphic);
 
 				clock_gettime(CLOCK_MONOTONIC, &delta_end);
-				s_deltra = delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9;
+				s_deltra = delta_end.tv_sec + (double)delta_end.tv_nsec / 1e9 - delta_start.tv_sec - (double)delta_start.tv_nsec / 1e9;
 				// ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
 
@@ -430,26 +430,26 @@ int vk_cmd_draw_loop(void *arg)
 		// frame_end = time(0);
 		// frame_time = frame_end - frame_start;
 		clock_gettime(CLOCK_MONOTONIC, &frame_end);
-		frame_time = frame_end.tv_sec + frame_end.tv_nsec / 1e9 - frame_start.tv_sec - frame_start.tv_nsec / 1e9;
+		frame_time = frame_end.tv_sec + (double)frame_end.tv_nsec / 1e9 - frame_start.tv_sec - (double)frame_start.tv_nsec / 1e9;
 		// if (frame_time > 0)
 		// if (frame == 144)
-		if (frame_time >= 1.0F)
+		if (frame_time >= 1.0)
 		{
 			// end = clock();
 			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 			frame_start = frame_end;
-			// nali_log("time %ld", frame_time)
-			nali_log("time %f", frame_time)
-			nali_log("frame %d", frame)
+			// NALI_D_LOG("time %ld", frame_time)
+			NALI_D_LOG("time %f", frame_time)
+			NALI_D_LOG("frame %d", frame)
 			frame = 0;
 		}
 
-//		#ifdef NALI_S_ANDROID
+//		#ifdef C_NALI_S_ANDROID
 //			sa_wait();
 //		#endif
 	}
 
-//	#ifdef NALI_S_ANDROID
+//	#ifdef C_NALI_S_ANDROID
 //		m_surface_state &= 0xFFu - NALI_SURFACE_C_S_CLEAN;
 //	#else
 	freeCmdDraw();

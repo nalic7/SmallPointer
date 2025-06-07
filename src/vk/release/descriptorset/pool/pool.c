@@ -1,6 +1,6 @@
 void vkdsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateDescriptorPool %d",
 		vkCreateDescriptorPool

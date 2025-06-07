@@ -1,9 +1,9 @@
 void vk_cmd(VkCommandBuffer vkcommandbuffer, VkCommandBufferBeginInfo *vkcommandbufferbegininfo_p, VkQueue vkqueue_graphic)
 {
-	// nali_info("vkBeginCommandBuffer %d", vkBeginCommandBuffer(vkcommandbuffer, vkcommandbufferbegininfo_p))
+	// NALI_D_INFO("vkBeginCommandBuffer %d", vkBeginCommandBuffer(vkcommandbuffer, vkcommandbufferbegininfo_p))
 	// vk_cmdImage(vkcommandbuffer, vkqueue_graphic);
-	// nali_info("vkEndCommandBuffer %d", vkEndCommandBuffer(vkcommandbuffer))
-	// nali_info
+	// NALI_D_INFO("vkEndCommandBuffer %d", vkEndCommandBuffer(vkcommandbuffer))
+	// NALI_D_INFO
 	// (
 	// 	"vkQueueSubmit %d",
 	// 	vkQueueSubmit
@@ -29,7 +29,7 @@ void vk_cmd(VkCommandBuffer vkcommandbuffer, VkCommandBufferBeginInfo *vkcommand
 	// 		VK_NULL_HANDLE
 	// 	)
 	// )
-	// nali_info("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
+	// NALI_D_INFO("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
 	// //s0-freeImage
 	// VkDevice vkdevice = vkqd_vkdevice_p[vk_device];

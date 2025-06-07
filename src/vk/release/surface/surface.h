@@ -3,14 +3,14 @@
 
 extern VkSurfaceKHR vks_vksurfacekhr;
 
-#ifdef NALI_S_ANDROID
+#ifdef C_NALI_S_ANDROID
 	#define VK_makeSurface \
 		while (sa_anativewindow_p == NULL) \
 		{ \
-			nali_log("ANativeActivity_onCreate_sleep") \
+			NALI_D_LOG("ANativeActivity_onCreate_sleep") \
 			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL); \
 		} \
-		nali_info \
+		NALI_D_INFO \
 		( \
 			"vkCreateAndroidSurfaceKHR %d", \
 			vkCreateAndroidSurfaceKHR \
@@ -29,7 +29,7 @@ extern VkSurfaceKHR vks_vksurfacekhr;
 		)
 #else
 	#define VK_makeSurface \
-		nali_info \
+		NALI_D_INFO \
 		( \
 			"vkCreateWaylandSurfaceKHR %d", \
 			vkCreateWaylandSurfaceKHR \

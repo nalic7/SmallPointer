@@ -1,5 +1,6 @@
 void (*nlcf_data_fp[NALI_NLC_DATA_FP_SIZE])(uint8_t *) = {nlcf_sync_player, nlcf_add_model, nlcf_rm_model};
 
+//pack
 void nlcf_read_data(uint8_t *data_p)
 {
 	if (*data_p != 255)

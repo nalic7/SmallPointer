@@ -5,13 +5,13 @@ static struct wl_buffer *wl_buffer_cursor;
 
 void wlcsp_init_cursor()
 {
-	nali_info("wl_cursor_theme_load %p", wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), wlc_wl_shm_p))
+	NALI_D_INFO("wl_cursor_theme_load %p", wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), wlc_wl_shm_p))
 
 	wl_cursor_p = malloc(sizeof(struct wl_cursor) * 2);
-	nali_info("wl_cursor_theme_get_cursor %p", wl_cursor_p[0] = wl_cursor_theme_get_cursor(wl_cursor_theme, "left_ptr"))//wait watch
-	nali_info("wl_cursor_theme_get_cursor %p", wl_cursor_p[1] = wl_cursor_theme_get_cursor(wl_cursor_theme, "progress"))
+	NALI_D_INFO("wl_cursor_theme_get_cursor %p", wl_cursor_p[0] = wl_cursor_theme_get_cursor(wl_cursor_theme, "left_ptr"))//wait watch
+	NALI_D_INFO("wl_cursor_theme_get_cursor %p", wl_cursor_p[1] = wl_cursor_theme_get_cursor(wl_cursor_theme, "progress"))
 
-	nali_info("wl_compositor_create_surface %p", wl_surface_cursor = wl_compositor_create_surface(wlc_wl_compositor_p))
+	NALI_D_INFO("wl_compositor_create_surface %p", wl_surface_cursor = wl_compositor_create_surface(wlc_wl_compositor_p))
 }
 
 static uint32_t
@@ -47,7 +47,7 @@ void wlcsp_change_cursor()
 
 				// cursor_end = clock();
 				clock_gettime(CLOCK_MONOTONIC, &cursor_end);
-				if (cursor_end.tv_sec + cursor_end.tv_nsec / 1e9 - cursor_start.tv_sec - cursor_start.tv_nsec / 1e9 >= 0.125F)
+				if (cursor_end.tv_sec + (double)cursor_end.tv_nsec / 1e9 - cursor_start.tv_sec - (double)cursor_start.tv_nsec / 1e9 >= 0.125)
 				{
 					cursor_start = cursor_end;
 					++cursor_i;
@@ -77,13 +77,13 @@ static void wl_pointer_listener_motion(void *data, struct wl_pointer *wl_pointer
 	{
 		s_pointer_x = l_x - x;
 		s_pointer_y = l_y - y;
-		// nali_log("x %f", s_pointer_x)
-		// nali_log("y %f", s_pointer_y)
+		// NALI_D_LOG("x %f", s_pointer_x)
+		// NALI_D_LOG("y %f", s_pointer_y)
 	}
 	x = l_x;
 	y = l_y;
-	// nali_log("surface_x %f", wl_fixed_to_double(surface_x))
-	// nali_log("surface_y %f", wl_fixed_to_double(surface_y))
+	// NALI_D_LOG("surface_x %f", wl_fixed_to_double(surface_x))
+	// NALI_D_LOG("surface_y %f", wl_fixed_to_double(surface_y))
 }
 
 static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state)
@@ -111,7 +111,7 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 			// break;
 	}
 
-	// nali_log("surface_button %d", button)
+	// NALI_D_LOG("surface_button %d", button)
 }
 
 static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time, uint32_t axis, wl_fixed_t value)

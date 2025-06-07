@@ -2,7 +2,7 @@
 #define NALI_VK_RENDERPASS_H
 
 #define VK_makeRenderPass(device, vkrenderpass_p) \
-	nali_info \
+	NALI_D_INFO \
 	( \
 		"vkCreateRenderPass %d", \
 		vkCreateRenderPass \

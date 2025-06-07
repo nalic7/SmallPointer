@@ -40,9 +40,9 @@ void vkqd_make(uint32_t device)
 
 	VkPhysicalDeviceFeatures vkphysicaldevicefeatures;
 	vkGetPhysicalDeviceFeatures(vkphysicaldevice, &vkphysicaldevicefeatures);
-	nali_log("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
+	NALI_D_LOG("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
 
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateDevice %d",
 		vkCreateDevice
@@ -57,7 +57,7 @@ void vkqd_make(uint32_t device)
 				.enabledExtensionCount = sizeof(vkqd_deviceextensions) / sizeof(vkqd_deviceextensions[0]),
 				.ppEnabledExtensionNames = vkqd_deviceextensions,
 
-				#ifdef NALI_VK_DEBUG
+				#ifdef C_NALI_VK_DEBUG
 					.enabledLayerCount = sizeof(vkqdpdi_ppEnabledLayerNames) / sizeof(vkqdpdi_ppEnabledLayerNames[0]),
 					.ppEnabledLayerNames = vkqdpdi_ppEnabledLayerNames,
 				#else

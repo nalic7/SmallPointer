@@ -1,6 +1,6 @@
 void vksm_make(uint32_t device, uint32_t *uint32_t_p, size_t size, VkShaderModule *vkshadermodule_p)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateShaderModule %d",
 		vkCreateShaderModule

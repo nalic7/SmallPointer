@@ -26,19 +26,19 @@
 // static const void config[];
 void g_write()
 {
-	remove(NALI_HOME "asset.bin");
+	remove(NALI_F_HOME_ASSET);
 	gkf_write();
 	gm_write();
 
-	// FILE *file = fopen(NALI_HOME "pipeline.bin", "wb");
+	// FILE *file = fopen(NALI_F_HOME "pipeline.bin", "wb");
 	// fwrite(pipeline, sizeof(char), sizeof(pipeline), file);
 	// fclose(file);
 
-	// file = fopen(NALI_HOME "model.bin", "wb");
+	// file = fopen(NALI_F_HOME "model.bin", "wb");
 	// fwrite(model, sizeof(char), sizeof(model), file);
 	// fclose(file);
 
-	// file = fopen(NALI_HOME "image.bin", "wb");
+	// file = fopen(NALI_F_HOME "image.bin", "wb");
 	// fwrite(image, sizeof(char), sizeof(image), file);
 	// fclose(file);
 }

@@ -1,6 +1,6 @@
 void vkdslo_make(uint32_t device, VkDescriptorSetLayoutBinding *vkdescriptorsetlayoutbinding_p, uint32_t vkdescriptorsetlayoutbinding_size, VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateDescriptorSetLayout %d",
 		vkCreateDescriptorSetLayout

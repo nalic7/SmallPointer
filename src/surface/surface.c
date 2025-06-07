@@ -69,9 +69,9 @@ void s_loop()
 		s_rx = MATH_D2R(-90.0F-45);
 	}
 
-	// nali_log("0 s_ry %f", s_ry)
+	// NALI_D_LOG("0 s_ry %f", s_ry)
 	s_ry = MATH_NORMALIZE(s_ry, MATH_D2R(360.0F));
-	// nali_log("1 s_ry %f", s_ry)
+	// NALI_D_LOG("1 s_ry %f", s_ry)
 
 	s_pointer_x = 0;
 	s_pointer_y = 0;

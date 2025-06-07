@@ -1,45 +1,32 @@
-void (*nlsf_data_fp[NALI_NLS_DATA_FP_SIZE])(uint8_t *) = {nlsf_key_player, 0, 0};
+void (*nlsf_data_fp[NALI_NLS_DATA_FP_SIZE])(uint8_t *) = {nlsf_key_player};
 
-void nlsf_read_data(uint8_t *data_p)
+//package won't pack
+// void nlsf_read_data(uint8_t *data_p)
+// {
+// 	if (*data_p != 255)
+// 	{
+// 		nlsf_data_fp[*data_p](data_p + 1);
+// 	}
+// }
+
+void nlsf_key_player(uint8_t *data_p)
 {
-	if (*data_p != 255)
-	{
-		nlsf_data_fp[*data_p](data_p + 1);
-	}
-}
+	NALI_LB_UT u = *(NALI_LB_UT *)data_p;
+	data_p += sizeof(NALI_LB_UT);
 
-//new sync start loop after connect
-void nlsf_new_player(uint8_t *data_p)
-{
-	NALI_LB_PT u = *(NALI_LB_PT *)data_p;
+	uint16_t key = *(uint16_t *)data_p;
+	data_p += sizeof(uint16_t);
 
-	//random spawn
-	ls_p_c_p[u][0] = rand() % NALI_LB_CIBL;
-	ls_p_c_p[u][1] = rand() % NALI_LB_CIBL;
-	ls_p_c_p[u][2] = rand() % NALI_LB_CIBL;
-
-	//world / space
-	//-NALI_LB_CFBL 0 NALI_LB_CFBL
-	memset(ls_p_rt_p[u], 0, sizeof(float) * (3 + 3));
-}
-
-void nlsf_sync_player(NALI_LB_PT u)
-{
-	//client need
-	//send
-	ls_p_c_p[u];
-	ls_p_rt_p[u];
-}
-
-void nlsf_key_player(NALI_LB_PT u, uint16_t key)
-{
 	if (key & NALI_NLB_S_KEY_W)
 	{
 
 	}
+	// nlsf_read_data(data_p);
 }
 
-void nlsf_add_model(NALI_LB_CT x, NALI_LB_CT y, NALI_LB_CT z, NALI_LB_MT m0, float rt_p[3 + 3])
+//sync entity / map
+
+static void nlsf_add_model(NALI_LB_CT x, NALI_LB_CT y, NALI_LB_CT z, NALI_LB_MT m0, float rt_p[3 + 3])
 {
 	NALI_LB_MT m1;
 	if (ls_re_m_bl_p[x][y][z][m0])
@@ -63,7 +50,7 @@ void nlsf_add_model(NALI_LB_CT x, NALI_LB_CT y, NALI_LB_CT z, NALI_LB_MT m0, flo
 //0 1 2 -> 3
 //R/C 1 2 -> 2
 //0 1 2 -> 3
-void nlsf_rm_model(NALI_LB_CT x, NALI_LB_CT y, NALI_LB_CT z, NALI_LB_MT m0, NALI_LB_MT m1)
+static void nlsf_rm_model(NALI_LB_CT x, NALI_LB_CT y, NALI_LB_CT z, NALI_LB_MT m0, NALI_LB_MT m1)
 {
 	ls_m_p[x][y][z][m0][m1 / 8] ^= 1 << m1 % 8;
 

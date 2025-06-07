@@ -1,6 +1,6 @@
 static const char *file_array[] =
 {
-	NALI_FACTORY NALI_HOME_KEYFRAME "/SuperCutePomi0.bin"
+	NALI_F_FACTORY_KEYFRAME "/SuperCutePomi0.bin"
 };
 
 static keyframe **keyframe_p;
@@ -8,7 +8,7 @@ static uint8_t *keyframe_bl_p;
 
 void gkf_write()
 {
-	FILE *file = fopen(NALI_HOME "asset.bin", "ab");
+	FILE *file = fopen(NALI_F_HOME_ASSET, "ab");
 	fwrite((uint8_t[]){sizeof(file_array) / sizeof(file_array[0])}, sizeof(uint8_t), 1, file);
 
 	keyframe_bl_p = malloc(sizeof(file_array) / sizeof(file_array[0]));

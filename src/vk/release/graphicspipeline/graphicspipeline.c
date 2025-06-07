@@ -19,7 +19,7 @@ void vkgpl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshad
 
 	VK_setPipelineDepthStencilStateCreateInfo(vkpipelinedepthstencilstatecreateinfo)
 
-	nali_info
+	NALI_D_INFO
 	(
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines
