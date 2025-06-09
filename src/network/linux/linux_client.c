@@ -1,15 +1,15 @@
 uint8_t nlc_state = 0;
 
+static int server_socket;
 static int init(void *p)
 {
 	int l_r;
-	int m_client_socket;
 	struct sockaddr_in sockaddr_in;
 
 	NALI_D_LOG("sinit")
 	nlc_state &= 0xFFu - NALI_NLC_FAIL;
 
-	NALI_D_INFO("socket %d", l_r = m_client_socket = socket(AF_INET, SOCK_STREAM, 0))
+	NALI_D_INFO("socket %d", l_r = server_socket = socket(AF_INET, SOCK_STREAM, 0))
 	//errno.h ECONNREFUSED ETIMEDOUT
 	NALI_D_LOG("%s", strerror(errno))
 
@@ -29,7 +29,7 @@ static int init(void *p)
 		nlc_state |= NALI_NLC_FAIL;
 	}
 
-	NALI_D_INFO("connect %d", l_r = connect(m_client_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)))
+	NALI_D_INFO("connect %d", l_r = connect(server_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)))
 	NALI_D_LOG("%s", strerror(errno))
 
 	if (l_r < 0)
@@ -37,32 +37,30 @@ static int init(void *p)
 		nlc_state |= NALI_NLC_FAIL;
 	}
 
-	NALI_D_INFO("setsockopt %d", l_r = setsockopt(m_client_socket, SOL_SOCKET, SO_RCVTIMEO, NALI_NLC_TIMEOUT, sizeof(struct timeval)))
+	NALI_D_INFO("setsockopt %d", l_r = setsockopt(server_socket, SOL_SOCKET, SO_RCVTIMEO, NALI_NLC_TIMEOUT, sizeof(struct timeval)))
 	NALI_D_LOG("%s", strerror(errno))
 
 	if (l_r < 0)
 	{
 		nlc_state |= NALI_NLC_FAIL;
 	}
+
+	//send new user
+	nlc_send((NALI_LB_UT *){NALI_NLC_ID}, sizeof(NALI_LB_UT));
 
 	int errno_temp = 0;
-	uint16_t data_bl;
+	NALI_LB_PT data_bl;
 	uint8_t *data_p;
 	ssize_t r;
 	while (!(nlc_state & NALI_NLC_FAIL))
 	{
 		//s0-get
-		// info("recv %ld", recv(m_client_socket, &length, sizeof(uint8_t), MSG_DONTWAIT))
-		// info("%s", strerror(errno))
-		// info("length %d", length)
-
-		//p[length data...]
-		r = recv(m_client_socket, &data_bl, sizeof(uint16_t), MSG_DONTWAIT);
+		r = recv(server_socket, &data_bl, sizeof(NALI_LB_PT), 0);
 
 		if (r > 0)
 		{
 			data_p = malloc(data_bl + 1);
-			r = recv(m_client_socket, data_p, data_bl, 0);
+			r = recv(server_socket, data_p, data_bl, 0);
 
 			if (r > 0)
 			{
@@ -77,7 +75,7 @@ static int init(void *p)
 		//s0-out
 		if (errno != errno_temp)
 		{
-			NALI_D_LOG("c %d %s", errno, strerror(errno))
+			NALI_D_INFO_A("c %d %s", errno, strerror(errno))
 			if (errno == ETIMEDOUT || errno == ECONNRESET || errno == ENETRESET || errno == ECONNABORTED)
 			{
 				nlc_state |= NALI_NLC_FAIL;
@@ -91,9 +89,9 @@ static int init(void *p)
 		//e0-out
 	}
 
-	close(m_client_socket);
-	nlc_state &= 0xFFu - NALI_NLC_INIT;
+	close(server_socket);
 	NALI_D_LOG("einit")
+	nlc_state &= 0xFFu - NALI_NLC_INIT;
 	return 0;
 }
 
@@ -110,4 +108,9 @@ void nlc_set()
 			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 		}
 	}
+}
+
+void nlc_send(uint8_t *data_p, NALI_LB_PT data_bl)
+{
+	send(server_socket, data_p, data_bl, 0);
 }

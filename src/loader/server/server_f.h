@@ -2,9 +2,9 @@
 #define NALI_NETWORK_LINUX_SERVER_F_H
 
 #define NALI_NLS_DATA_FP_SIZE 1
-extern void (*nlsf_data_fp[NALI_NLS_DATA_FP_SIZE])(uint8_t *);
+extern void (*nlsf_data_fp[NALI_NLS_DATA_FP_SIZE])(NALI_LB_UT ui, uint8_t *);
 
-// void nlsf_read_data(uint8_t *data_p);
-void nlsf_key_player(uint8_t *data_p);
+void lsf_new_user(NALI_LB_UT ui);
+void lsf_key_user(NALI_LB_UT ui, uint8_t *data_p);
 
 #endif

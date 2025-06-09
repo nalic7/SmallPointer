@@ -6,8 +6,20 @@
 
 //max connect type
 #define NALI_LB_UT uint8_t
+//void user
+#define NALI_LB_UN 255
+//void package
+#define NALI_LB_PN 255
 
+//package
+#define NALI_LB_PT uint16_t
+#define NALI_LB_MAX_TICK 20
+#define NALI_LB_NET_BL 1024
+
+//model
 #define NALI_LB_MT uint8_t
+//model index
+#define NALI_LB_MIT uint16_t
 #define NALI_LB_M8BL 256/8
 //file/chunk
 #define NALI_LB_CT uint8_t
@@ -64,10 +76,13 @@
 #define NALI_CACHE_P_D_P (((uint8_t **)lb_cache_p)[2])
 #define NALI_CACHE_P_D_BL_P (((uint32_t **)lb_cache_p)[3])
 
+// extern mtx_t *lb_mtx_t_p;
+
 extern void *lb_cache_p;
 
 void lb_set();
 void lb_loop();
-void lb_free();
+void lb_free0();
+void lb_free1();
 
 #endif

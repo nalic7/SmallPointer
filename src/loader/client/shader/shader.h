@@ -30,34 +30,40 @@
 		} \
 	};
 
+extern mtx_t *lcs_mtx_t_p;
+
+extern float m_vp_float_array[16*2];
+
+//c1j1
+//c1j0
+//t1j1u1v1
+//t1j0u1v1
+#define NALI_V_A_BL 2
+
+extern uint8_t
+	**v_a_p_array[NALI_V_A_BL],
+	*v_a_bl1_p_array[NALI_V_A_BL];
+
+extern uint16_t
+	v_a_bl0_array[NALI_V_A_BL];
+// uint16_t
+// 	v_a_bl;
+
+extern uint32_t *v_i_p;
+
+extern VkDeviceSize 
+	v_a_vkdevicesize_array[NALI_V_A_BL],
+//jN
+//default -> UBOB UBOA
+	*v_b_vkdevicesize_p_array[NALI_V_A_BL];
+
+extern float **v_s_p_array[NALI_V_A_BL];
+
 extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
-extern VkDescriptorSet *lcs_vkdescriptorset_p_array[NALI_V_A_BL];
+extern VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
 
 extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
 extern uint16_t lcs_vkmappedmemoryrange_bl;
-
-// extern void (**lcs_write_fp)(uint16_t);
-// extern uint16_t lcs_write_fp_bl;
-
-// extern uint16_t
-// 	*lcs_free_vkdescriptorset_i_p;
-extern uint8_t
-	// *lcs_free_vkdescriptorset_a_p,
-	// lcs_free_vkdescriptorset_i_bl,
-
-	// *lcs_update_vkdescriptorset_b_p,
-	// *lcs_update_vkdescriptorset_j_p,
-	// lcs_update_vkdescriptorset_i_bl,
-
-	// *lcs_edit_vkdescriptorset_b_p,
-	// *lcs_edit_vkdescriptorset_j_p,
-	// lcs_edit_vkdescriptorset_i_bl,
-
-	**lcs_add_a_p_array[NALI_V_A_BL],
-	*lcs_add_a_bl_p_array[NALI_V_A_BL],
-	*lcs_add_ds_p_array[NALI_V_A_BL],
-	*lcs_add_j_p_array[NALI_V_A_BL],
-	lcs_add_i_bl_array[NALI_V_A_BL];
 
 extern VkDeviceSize
 	*lcs_add_vkdevicesize_p[NALI_V_A_BL];
@@ -67,5 +73,6 @@ void lcs_loop();
 
 void lcs_vk();
 void lcs_freeVk();
+void lcs_free();
 
 #endif

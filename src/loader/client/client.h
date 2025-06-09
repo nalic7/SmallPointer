@@ -1,11 +1,15 @@
 #ifndef NALI_LOADER_CLIENT_H
 #define NALI_LOADER_CLIENT_H
 
-extern float lc_rt_array[NALI_LB_MAX_CLIENT][3+3];
+extern NALI_LB_UT lc_u_bl;
+extern NALI_LB_UT *lc_u_p;
+extern float *lc_u_rt_p;
+extern NALI_LB_CT *lc_u_c_p;
 
-extern uint8_t lc_m_bl_array[NALI_VD_M_MAX];
-extern uint16_t *lc_m_p_array[NALI_VD_M_MAX];
-extern float *lc_m_rt_p_array[NALI_VD_M_MAX];
+extern NALI_LB_MIT ls_m_bl;
+extern NALI_LB_MT *ls_m_p;
+extern NALI_LB_CT *ls_m_c_p;
+extern float *ls_m_rt_p;
 
 //VkBuffer
 //static / dynamic
@@ -27,16 +31,15 @@ extern VkDeviceMemory lc_vkdevicememory;
 extern void *lc_vkbuffer_p;
 extern VkDeviceSize lc_vkdevicesize;
 
+extern mtx_t *lc_mtx_t_p;
+extern NALI_LB_PT lc_net_bl;
+extern uint8_t *lc_net_p;
+
 void lc_set();
 
 void lc_vk();
-void lc_freeVk(uint32_t device);
-
-
-extern mtx_t *vd_mtx_t_p;
-
-void vd_set();
 int lc_loop(void *p);
-void vd_free();
+void lc_freeVk(uint32_t device);
+void lc_free();
 
 #endif

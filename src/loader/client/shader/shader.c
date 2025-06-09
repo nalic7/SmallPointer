@@ -1,32 +1,39 @@
+mtx_t *lcs_mtx_t_p = &(mtx_t){};
+
+float m_vp_float_array[] =
+{
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1
+};
+
+uint8_t
+	**v_a_p_array[NALI_V_A_BL],
+	*v_a_bl1_p_array[NALI_V_A_BL];
+
+uint16_t
+	v_a_bl0_array[NALI_V_A_BL] = {0};
+
+uint32_t *v_i_p;
+
+VkDeviceSize 
+	v_a_vkdevicesize_array[NALI_V_A_BL],
+	*v_b_vkdevicesize_p_array[NALI_V_A_BL];
+
+float **v_s_p_array[NALI_V_A_BL];
+
 static VkDescriptorPool vkdescriptorpool;
 VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
-VkDescriptorSet *lcs_vkdescriptorset_p_array[NALI_V_A_BL];
+VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
 
 VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
 uint16_t lcs_vkmappedmemoryrange_bl = 0;
-
-// void (**lcs_write_fp)(uint16_t);
-// uint16_t lcs_write_fp_bl = 0;
-
-// uint16_t
-// 	*lcs_free_vkdescriptorset_i_p;
-uint8_t
-	// *lcs_free_vkdescriptorset_a_p,
-	// lcs_free_vkdescriptorset_i_bl = 0,
-
-	// *lcs_update_vkdescriptorset_b_p,
-	// *lcs_update_vkdescriptorset_j_p,
-	// lcs_update_vkdescriptorset_i_bl = 0,
-
-	// *lcs_edit_vkdescriptorset_b_p,
-	// *lcs_edit_vkdescriptorset_j_p,
-	// lcs_edit_vkdescriptorset_i_bl = 0,
-
-	**lcs_add_a_p_array[NALI_V_A_BL],
-	*lcs_add_a_bl_p_array[NALI_V_A_BL],
-	*lcs_add_ds_p_array[NALI_V_A_BL],
-	*lcs_add_j_p_array[NALI_V_A_BL],
-	lcs_add_i_bl_array[NALI_V_A_BL];
 
 VkDeviceSize 
 	*lcs_add_vkdevicesize_p[NALI_V_A_BL];
@@ -177,21 +184,59 @@ static void flush(uint8_t a, uint8_t ds_bl, uint8_t *ds_p, uint8_t *j_p)
 
 void lcs_set()
 {
-	lcs_write_fp = malloc(0);
+	NALI_D_INFO("mtx_init %d", mtx_init(lcs_mtx_t_p, mtx_plain))
 
 	lcs_vkmappedmemoryrange_p = malloc(0);
 
 	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 	{
-		lcs_vkdescriptorset_p_array[l_0] = malloc(0);
+		lcs_vkdescriptorset_p[l_0] = malloc(0);
 
-		lcs_add_ds_p_array[l_0] = malloc(0);
-		lcs_add_j_p_array[l_0] = malloc(0);
-		lcs_add_a_p_array[l_0] = malloc(0);
-		lcs_add_a_bl_p_array[l_0] = malloc(0);
+		v_a_p_array[l_0] = malloc(0);
+		v_a_bl1_p_array[l_0] = malloc(0);
+		v_b_vkdevicesize_p_array[l_0] = malloc(0);
+		v_s_p_array[l_0] = malloc(0);
 
 		lcs_add_vkdevicesize_p[l_0] = malloc(0);
 	}
+}
+
+static void add(uint8_t a)
+{
+	mtx_lock(lcs_mtx_t_p);
+
+	lcs_vkdescriptorset_p[a] = realloc(lcs_vkdescriptorset_p[a], sizeof(VkDescriptorSet) * (v_a_bl0_array[a] + 1));
+	VkWriteDescriptorSet vkwritedescriptorset_array[lcs_add_i_bl_p[l_0] * NALI_LCS_D_SIZE];
+	VkDescriptorBufferInfo vkdescriptorbufferinfo_array[lcs_add_i_bl_p[l_0] * NALI_LCS_D_SIZE];
+
+	v_a_p_array[l_0] = realloc(v_a_p_array[l_0], sizeof(uint8_t *) * (v_a_bl0_array[l_0] + lcs_add_i_bl_p[l_0]));
+	v_a_bl1_p_array[l_0] = realloc(v_a_bl1_p_array[l_0], v_a_bl0_array[l_0] + lcs_add_i_bl_p[l_0]);
+	v_b_vkdevicesize_p_array[l_0] = realloc(v_b_vkdevicesize_p_array[l_0], sizeof(VkDeviceSize) * NALI_LCS_D_SIZE * (v_a_bl0_array[l_0] + lcs_add_i_bl_p[l_0]));
+	v_s_p_array[l_0] = realloc(v_s_p_array[l_0], sizeof(float *) * (v_a_bl0_array[l_0] + lcs_add_i_bl_p[l_0]));
+	for (uint8_t l_1 = 0; l_1 < lcs_add_i_bl_p[l_0]; ++l_1)
+	{
+		vkds_make(vk_device, vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, lcs_vkdescriptorset_p[l_0] + v_a_bl0_array[l_0] + lcs_add_ds_p[l_0][l_1]);
+
+		setVkWriteDescriptorSet(lcs_vkdescriptorset_p[l_0][v_a_bl0_array[l_0] + lcs_add_ds_p[l_0][l_1]], vkdescriptorbufferinfo_array + l_1 * NALI_LCS_D_SIZE, vkwritedescriptorset_array + l_1 * NALI_LCS_D_SIZE, lcs_add_vkdevicesize_p[l_0] + l_1 * NALI_LCS_D_SIZE, lcs_add_j_p[l_0][l_1]);
+
+		v_a_p_array[l_0][lcs_add_ds_p[l_0][l_1]] = lcs_add_a_p[l_0][l_1];
+		v_a_bl1_p_array[l_0][lcs_add_ds_p[l_0][l_1]] = lcs_add_a_bl_p[l_0][l_1];
+		memcpy(v_b_vkdevicesize_p_array[l_0] + lcs_add_ds_p[l_0][l_1] * NALI_LCS_D_SIZE, lcs_add_vkdevicesize_p[l_0] + l_1 * NALI_LCS_D_SIZE, sizeof(VkDeviceSize) * NALI_LCS_D_SIZE);
+	}
+	vkUpdateDescriptorSets(vkqd_vkdevice_p[vk_device], lcs_add_i_bl_p[l_0] * NALI_LCS_D_SIZE, vkwritedescriptorset_array, 0, VK_NULL_HANDLE);
+	v_a_bl0_array[l_0] += lcs_add_i_bl_p[l_0];
+
+	flush(l_0, lcs_add_i_bl_p[l_0], lcs_add_ds_p[l_0], lcs_add_j_p[l_0]);
+
+	lcs_add_ds_p[l_0] = realloc(lcs_add_ds_p[l_0], 0);
+	lcs_add_j_p[l_0] = realloc(lcs_add_j_p[l_0], 0);
+	lcs_add_a_p[l_0] = realloc(lcs_add_a_p[l_0], 0);
+	lcs_add_a_bl_p[l_0] = realloc(lcs_add_a_bl_p[l_0], 0);
+	lcs_add_vkdevicesize_p[l_0] = realloc(lcs_add_vkdevicesize_p[l_0], 0);
+
+	lcs_add_i_bl_p[l_0] = 0;
+
+	mtx_unlock(lcs_mtx_t_p);
 }
 
 void lcs_loop()
@@ -276,38 +321,9 @@ void lcs_loop()
 
 	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 	{
-		if (lcs_add_i_bl_array[l_0])
+		if (lcs_add_i_bl_p[l_0])
 		{
-			lcs_vkdescriptorset_p_array[l_0] = realloc(lcs_vkdescriptorset_p_array[l_0], sizeof(VkDescriptorSet) * (v_a_bl0_array[l_0] + lcs_add_i_bl_array[l_0]));
-			VkWriteDescriptorSet vkwritedescriptorset_array[lcs_add_i_bl_array[l_0] * NALI_LCS_D_SIZE];
-			VkDescriptorBufferInfo vkdescriptorbufferinfo_array[lcs_add_i_bl_array[l_0] * NALI_LCS_D_SIZE];
-
-			v_a_p_array[l_0] = realloc(v_a_p_array[l_0], sizeof(uint8_t *) * (v_a_bl0_array[l_0] + lcs_add_i_bl_array[l_0]));
-			v_a_bl1_p_array[l_0] = realloc(v_a_bl1_p_array[l_0], v_a_bl0_array[l_0] + lcs_add_i_bl_array[l_0]);
-			v_b_vkdevicesize_p_array[l_0] = realloc(v_b_vkdevicesize_p_array[l_0], sizeof(VkDeviceSize) * NALI_LCS_D_SIZE * (v_a_bl0_array[l_0] + lcs_add_i_bl_array[l_0]));
-			v_s_p_array[l_0] = realloc(v_s_p_array[l_0], sizeof(float *) * (v_a_bl0_array[l_0] + lcs_add_i_bl_array[l_0]));
-			for (uint8_t l_1 = 0; l_1 < lcs_add_i_bl_array[l_0]; ++l_1)
-			{
-				vkds_make(vk_device, vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, lcs_vkdescriptorset_p_array[l_0] + v_a_bl0_array[l_0] + lcs_add_ds_p_array[l_0][l_1]);
-
-				setVkWriteDescriptorSet(lcs_vkdescriptorset_p_array[l_0][v_a_bl0_array[l_0] + lcs_add_ds_p_array[l_0][l_1]], vkdescriptorbufferinfo_array + l_1 * NALI_LCS_D_SIZE, vkwritedescriptorset_array + l_1 * NALI_LCS_D_SIZE, lcs_add_vkdevicesize_p[l_0] + l_1 * NALI_LCS_D_SIZE, lcs_add_j_p_array[l_0][l_1]);
-
-				v_a_p_array[l_0][lcs_add_ds_p_array[l_0][l_1]] = lcs_add_a_p_array[l_0][l_1];
-				v_a_bl1_p_array[l_0][lcs_add_ds_p_array[l_0][l_1]] = lcs_add_a_bl_p_array[l_0][l_1];
-				memcpy(v_b_vkdevicesize_p_array[l_0] + lcs_add_ds_p_array[l_0][l_1] * NALI_LCS_D_SIZE, lcs_add_vkdevicesize_p[l_0] + l_1 * NALI_LCS_D_SIZE, sizeof(VkDeviceSize) * NALI_LCS_D_SIZE);
-			}
-			vkUpdateDescriptorSets(vkqd_vkdevice_p[vk_device], lcs_add_i_bl_array[l_0] * NALI_LCS_D_SIZE, vkwritedescriptorset_array, 0, VK_NULL_HANDLE);
-			v_a_bl0_array[l_0] += lcs_add_i_bl_array[l_0];
-
-			flush(l_0, lcs_add_i_bl_array[l_0], lcs_add_ds_p_array[l_0], lcs_add_j_p_array[l_0]);
-
-			lcs_add_ds_p_array[l_0] = realloc(lcs_add_ds_p_array[l_0], 0);
-			lcs_add_j_p_array[l_0] = realloc(lcs_add_j_p_array[l_0], 0);
-			lcs_add_a_p_array[l_0] = realloc(lcs_add_a_p_array[l_0], 0);
-			lcs_add_a_bl_p_array[l_0] = realloc(lcs_add_a_bl_p_array[l_0], 0);
-			lcs_add_vkdevicesize_p[l_0] = realloc(lcs_add_vkdevicesize_p[l_0], 0);
-
-			lcs_add_i_bl_array[l_0] = 0;
+			
 		}
 	}
 
@@ -344,12 +360,12 @@ void lcs_freeVk(uint32_t device)
 
 	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 	{
-		free(lcs_vkdescriptorset_p_array[l_0]);
+		free(lcs_vkdescriptorset_p[l_0]);
 
-		free(lcs_add_ds_p_array[l_0]);
-		free(lcs_add_j_p_array[l_0]);
-		free(lcs_add_a_p_array[l_0]);
-		free(lcs_add_a_bl_p_array[l_0]);
+		free(lcs_add_ds_p[l_0]);
+		free(lcs_add_j_p[l_0]);
+		free(lcs_add_a_p[l_0]);
+		free(lcs_add_a_bl_p[l_0]);
 
 		free(lcs_add_vkdevicesize_p[l_0]);
 	}
@@ -357,4 +373,25 @@ void lcs_freeVk(uint32_t device)
 	free(lcs_vkmappedmemoryrange_p);
 
 	free(lcs_write_fp);
+}
+
+void lcs_free()
+{
+	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	{
+		for (uint16_t l_1 = 0; l_1 < v_a_bl0_array[l_0]; ++l_1)
+		{
+			free(v_a_p_array[l_0][l_1]);
+		}
+		free(v_a_bl1_p_array[l_0]);
+		free(v_a_p_array[l_0]);
+
+		free(v_b_vkdevicesize_p_array[l_0]);
+
+		free(v_s_p_array[l_0]);
+	}
+
+	free(v_i_p);
+
+	mtx_destroy(lcs_mtx_t_p);
 }

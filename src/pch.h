@@ -16,8 +16,6 @@
 	#include <android/log.h>
 //		#include <android/looper.h>
 
-	#include "scene/scene.h"
-
 	#ifdef C_NALI_CLIENT
 		#define VK_USE_PLATFORM_ANDROID_KHR
 		#include <vulkan/vulkan.h>
@@ -135,7 +133,6 @@
 	#include "loader/client/client_f.h"
 	#include "loader/client/keyframe/keyframe.h"
 	#include "loader/client/model/model.h"
-	#include "loader/client/view/view.h"
 	#include "loader/client/shader/shader.h"
 	#include "network/linux/linux_client.h"
 #endif

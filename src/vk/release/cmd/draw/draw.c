@@ -296,7 +296,7 @@ int vk_cmd_draw_loop(void *p)
 					for (uint16_t l_1 = 0; l_1 < v_a_bl0_array[l_0]; ++l_1)
 					{
 						// vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p + l_1, 0, VK_NULL_HANDLE);
-						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p_array[l_0] + l_1, 0, VK_NULL_HANDLE);
+						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p[l_0] + l_1, 0, VK_NULL_HANDLE);
 
 						for (uint8_t l_2 = 0; l_2 < v_a_bl1_p_array[l_0][l_1]; ++l_2)
 						{
@@ -313,13 +313,13 @@ int vk_cmd_draw_loop(void *p)
 				// ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
 
-				mtx_lock(vd_mtx_t_p);
+				mtx_lock(lc_mtx_t_p);
 				for (uint8_t l_0 = 0; l_0 < vk_cmd_d_fp_bl; ++l_0)
 				{
 					//model add/update
 					vk_cmd_d_fp[l_0]();
 				}
-				mtx_unlock(vd_mtx_t_p);
+				mtx_unlock(lc_mtx_t_p);
 				lcs_loop();
 				s_loop();
 				//write b

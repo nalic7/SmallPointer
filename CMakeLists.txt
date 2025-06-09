@@ -18,8 +18,6 @@ project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
 # set(CMAKE_C_STANDARD_REQUIRED On)
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
 
-set(SOURCES src/scene/scene.c)
-
 file(GLOB_RECURSE G_SOURCES src/file/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
@@ -120,6 +118,8 @@ else()
 
     file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
     list(APPEND SOURCES ${G_SOURCES})
+
+    list(APPEND SOURCES src/surface/surface_main.c)
 
     list(APPEND TID lib/wayland)
   endif()

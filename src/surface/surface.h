@@ -9,6 +9,7 @@ extern uint8_t s_pointer_id;
 #define NALI_SURFACE_C_S_CLEAN 2
 #define NALI_SURFACE_C_S_RE 4
 #define NALI_SURFACE_C_S_RENDER_ABLE 8
+#define NALI_SURFACE_C_S_EXIT 16
 extern uint8_t s_surface_state;
 
 #define NALI_P_STATE_ROTATE 1
