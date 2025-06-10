@@ -1,3 +1,6 @@
+NALI_LCS_DSIT *lc_dsi_p;
+uint8_t *lc_a_p;
+
 NALI_LB_UT lc_u_bl = 0;
 NALI_LB_UT *lc_u_p;
 float *lc_u_rt_p;
@@ -22,7 +25,6 @@ static uint8_t lc_state;
 void lc_set()
 {
 	lcs_set();
-	v_set();
 	s_set();
 	lckf_set();
 	lcm_set();
@@ -30,6 +32,17 @@ void lc_set()
 
 	lc_state = NALI_LC_STATE_ON;
 	lc_net_p = malloc(0);
+
+	lc_dsi_p = malloc(0);
+	lc_a_p = malloc(0);
+
+	lc_u_p = malloc(0);
+	lc_u_rt_p = malloc(0);
+	lc_u_c_p = malloc(0);
+
+	lc_m_p = malloc(0);
+	lc_m_c_p = malloc(0);
+	lc_m_rt_p = malloc(0);
 	NALI_D_INFO("mtx_init %d", mtx_init(lc_mtx_t_p, mtx_plain))
 	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, lc_loop, NULL))
 }
@@ -90,6 +103,20 @@ int lc_loop(void *p)
 
 	mtx_destroy(lc_mtx_t_p);
 	free(lc_net_p);
+
+	free(lc_dsi_p);
+	free(lc_a_p);
+
+	free(lc_u_p);
+	free(lc_u_rt_p);
+	free(lc_u_c_p);
+
+	free(lc_m_p);
+	free(lc_m_c_p);
+	free(lc_m_rt_p);
+
+	lc_u_bl = 0;
+
 	lc_net_bl = 0;
 
 	return 0;

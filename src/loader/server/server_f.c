@@ -1,4 +1,4 @@
-void (*nlsf_data_fp[NALI_NLS_DATA_FP_SIZE])(NALI_LB_UT ui, uint8_t *) = {lsf_key_user};
+void (*nlsf_data_fp[NALI_LSF_DATA_FP_SIZE])(NALI_LB_UT ui, uint8_t *) = {lsf_key_user};
 
 //package won't pack
 // void nlsf_read_data(uint8_t *data_p)
@@ -54,16 +54,11 @@ void lsf_key_user(NALI_LB_UT ui, uint8_t *data_p)
 	uint16_t key = *(uint16_t *)data_p;
 	data_p += sizeof(uint16_t);
 
-	if (key & NALI_NLB_S_KEY_W)
+	if (key & NALI_LB_S_KEY_W)
 	{
 
 	}
 	// nlsf_read_data(data_p);
-}
-
-void lsf_test_add_m(NALI_LB_UT ui, uint8_t *data_p)
-{
-
 }
 
 //sync entity / map

@@ -41,6 +41,9 @@ endif()
 file(GLOB_RECURSE G_SOURCES src/loader/both/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
+file(GLOB_RECURSE G_SOURCES src/entity/both/*.c)
+list(APPEND SOURCES ${G_SOURCES})
+
 if(CLIENT)
   list(APPEND TCD C_NALI_CLIENT)
 
@@ -66,7 +69,9 @@ endif()
 if(SERVER)
   list(APPEND TCD C_NALI_SERVER)
 
-  list(APPEND SOURCES src/loader/server/server.c)
+  file(GLOB_RECURSE G_SOURCES src/loader/server/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
   list(APPEND SOURCES src/network/linux/linux_server.c)
 endif()
 

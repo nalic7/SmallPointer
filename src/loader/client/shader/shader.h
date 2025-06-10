@@ -32,7 +32,10 @@
 
 extern mtx_t *lcs_mtx_t_p;
 
-extern float m_vp_float_array[16*2];
+extern float lcs_float_p[16*2];
+
+//VkDescriptorSet index
+#define NALI_LCS_DSIT uint8_t
 
 //c1j1
 //c1j0
@@ -41,23 +44,22 @@ extern float m_vp_float_array[16*2];
 #define NALI_V_A_BL 2
 
 extern uint8_t
-	**v_a_p_array[NALI_V_A_BL],
-	*v_a_bl1_p_array[NALI_V_A_BL];
+	**lcs_a_p[NALI_V_A_BL],
+	*lcs_a_bl1_p[NALI_V_A_BL];
 
-extern uint16_t
-	v_a_bl0_array[NALI_V_A_BL];
+extern NALI_LCS_DSIT
+	lcs_a_bl0_p[NALI_V_A_BL];
 // uint16_t
 // 	v_a_bl;
 
-extern uint32_t *v_i_p;
+extern VkDeviceSize *lcs_i_p;
+extern uint32_t *lcs_ic_p;
 
 extern VkDeviceSize 
-	v_a_vkdevicesize_array[NALI_V_A_BL],
+	lcs_a_vkdevicesize_p[NALI_V_A_BL],
 //jN
 //default -> UBOB UBOA
-	*v_b_vkdevicesize_p_array[NALI_V_A_BL];
-
-extern float **v_s_p_array[NALI_V_A_BL];
+	*lcs_b_vkdevicesize_p[NALI_V_A_BL];
 
 extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
 extern VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
@@ -67,6 +69,10 @@ extern uint16_t lcs_vkmappedmemoryrange_bl;
 
 extern VkDeviceSize
 	*lcs_add_vkdevicesize_p[NALI_V_A_BL];
+
+extern VkDescriptorPool lcs_vkdescriptorpool;
+
+void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, VkDeviceSize *v_b_vkdevicesize_p, uint8_t mj);
 
 void lcs_set();
 void lcs_loop();

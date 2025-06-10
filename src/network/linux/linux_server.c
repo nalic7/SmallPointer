@@ -7,6 +7,19 @@ NALI_LB_CT *nls_u_c_p;
 
 static int *client_fd_p;
 //sizeof(int) * NALI_LB_MAX_CLIENT]
+
+static void close_fd(int epfd, int fd)
+{
+	NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL))
+	close(fd);
+
+	client_fd_p = realloc(client_fd_p, sizeof(int) * --nls_u_bl);
+	nls_u_p = realloc(nls_u_p, sizeof(NALI_LB_UT) * nls_u_bl);
+
+	nls_u_rt_p = realloc(nls_u_rt_p, nls_u_bl * sizeof(float) * (3 + 3));
+	nls_u_c_p = realloc(nls_u_c_p, nls_u_bl * sizeof(NALI_LB_CT) * 3);
+}
+
 static int init(void *p)
 {
 	client_fd_p = malloc(0);
@@ -124,14 +137,7 @@ static int init(void *p)
 
 				if (r == 0)
 				{
-					NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL))
-					close(fd);
-
-					client_fd_p = realloc(client_fd_p, sizeof(int) * --nls_u_bl);
-					nls_u_p = realloc(nls_u_p, sizeof(NALI_LB_UT) * nls_u_bl);
-
-					nls_u_rt_p = realloc(nls_u_rt_p, nls_u_bl * sizeof(float) * (3 + 3));
-					nls_u_c_p = realloc(nls_u_c_p, nls_u_bl * sizeof(NALI_LB_CT) * 3);
+					close_fd(epfd, fd);
 				}
 				else
 				{
@@ -145,18 +151,29 @@ static int init(void *p)
 						}
 					}
 
-					if (nls_u_p[ui] == NALI_LB_UN && r == sizeof(NALI_LB_UT))
+					if (nls_u_p[ui] == NALI_LB_UN)
 					{
-						data_p = malloc(data_bl);
-						r = recv(fd, &data_p, data_bl, 0);
-
-						if (r > 0)
+						if (r == sizeof(NALI_LB_UT))
 						{
-							nls_u_p[ui] = *data_p;
-							lsf_new_user(ui);
-						}
+							data_p = malloc(data_bl);
+							r = recv(fd, &data_p, data_bl, 0);
 
-						free(data_p);
+							if (r > 0 && *data_p < NALI_LB_MAX_CLIENT)
+							{
+								nls_u_p[ui] = *data_p;
+								lsf_new_user(ui);
+							}
+							else
+							{
+								close_fd(epfd, fd);
+							}
+
+							free(data_p);
+						}
+						else
+						{
+							close_fd(epfd, fd);
+						}
 					}
 					else
 					{

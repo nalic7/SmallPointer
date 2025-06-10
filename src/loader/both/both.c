@@ -1,14 +1,34 @@
 // mtx_t *lb_mtx_t_p = &(mtx_t){};
+uint8_t lb_ms_p[NALI_LB_N_MAX] =
+{
+	NALI_EPOMI0_M
+};
+
+uint8_t lb_ms_a_p[NALI_LB_N_MAX] =
+{
+	NALI_EPOMI0_A
+};
+
+uint8_t *lb_ms_ap_p[NALI_LB_N_MAX] =
+{
+	e_pomi0_ms_ap_p
+};
+
+uint8_t lb_ms_abl_p[NALI_LB_N_MAX] =
+{
+	NALI_EPOMI0_MS_AP_BL
+};
+
 void *lb_cache_p;
 
 void lb_set()
 {
 	// NALI_D_INFO("mtx_init %d", mtx_init(lb_mtx_t_p, mtx_plain))
 
-	lb_cache_p = malloc(NALI_CACHE_P_BL);
-	NALI_CACHE_P_D_BL_P = malloc(sizeof(uint32_t) * 2);
-	NALI_CACHE_P_D_BL_P[1] = 0;
-	NALI_CACHE_P_D_P = f_read(NALI_F_HOME_ASSET, NALI_CACHE_P_D_BL_P);
+	lb_cache_p = malloc(NALI_LB_CACHE_P_BL);
+	NALI_LB_CACHE_P_D_BL_P = malloc(sizeof(uint32_t) * 2);
+	NALI_LB_CACHE_P_D_BL_P[1] = 0;
+	NALI_LB_CACHE_P_D_P = f_read(NALI_F_HOME_ASSET, NALI_LB_CACHE_P_D_BL_P);
 }
 
 void lb_loop()
@@ -53,8 +73,8 @@ void lb_loop()
 
 void lb_free0()
 {
-	free(NALI_CACHE_P_D_BL_P);
-	free(NALI_CACHE_P_D_P);
+	free(NALI_LB_CACHE_P_D_BL_P);
+	free(NALI_LB_CACHE_P_D_P);
 	free(lb_cache_p);
 }
 

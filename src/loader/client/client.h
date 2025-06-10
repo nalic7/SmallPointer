@@ -1,15 +1,18 @@
 #ifndef NALI_LOADER_CLIENT_H
 #define NALI_LOADER_CLIENT_H
 
+extern NALI_LCS_DSIT *lc_dsi_p;
+extern uint8_t *lc_a_p;
+
 extern NALI_LB_UT lc_u_bl;
 extern NALI_LB_UT *lc_u_p;
 extern float *lc_u_rt_p;
 extern NALI_LB_CT *lc_u_c_p;
 
-extern NALI_LB_MIT ls_m_bl;
-extern NALI_LB_MT *ls_m_p;
-extern NALI_LB_CT *ls_m_c_p;
-extern float *ls_m_rt_p;
+extern NALI_LB_MIT lc_m_bl;
+extern NALI_LB_MT *lc_m_p;
+extern NALI_LB_CT *lc_m_c_p;
+extern float *lc_m_rt_p;
 
 //VkBuffer
 //static / dynamic

@@ -78,6 +78,7 @@
 //e0-ffmpeg
 
 #include "loader/both/both.h"
+#include "entity/both/pomi0/pomi0.h"
 
 #ifdef C_NALI_CLIENT
 	#include "surface/surface.h"
@@ -129,11 +130,11 @@
 	#include "vk/release/cmd/image/image.h"
 	#include "vk/release/cmd/draw/draw.h"
 
-	#include "loader/client/client.h"
 	#include "loader/client/client_f.h"
 	#include "loader/client/keyframe/keyframe.h"
 	#include "loader/client/model/model.h"
 	#include "loader/client/shader/shader.h"
+	#include "loader/client/client.h"
 	#include "network/linux/linux_client.h"
 #endif
 
