@@ -10,14 +10,7 @@
 #define NALI_NLS_FAIL 2
 extern uint8_t nls_state;
 
-extern NALI_LB_UT nls_u_bl;
-extern NALI_LB_UT *nls_u_p;
-//NALI_LB_MAX_CLIENT * (3+3)
-extern float *nls_u_rt_p;
-//NALI_LB_MAX_CLIENT * 3
-extern NALI_LB_CT *nls_u_c_p;
-
 void nls_set();
-void nls_send(NALI_LB_UT u, uint8_t *data_p, uint16_t data_bl);
+void nls_send(NALI_LB_UT ui);
 
 #endif

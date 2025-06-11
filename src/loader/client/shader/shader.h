@@ -30,8 +30,6 @@
 		} \
 	};
 
-extern mtx_t *lcs_mtx_t_p;
-
 extern float lcs_float_p[16*2];
 
 //VkDescriptorSet index
@@ -66,9 +64,6 @@ extern VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
 
 extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
 extern uint16_t lcs_vkmappedmemoryrange_bl;
-
-extern VkDeviceSize
-	*lcs_add_vkdevicesize_p[NALI_V_A_BL];
 
 extern VkDescriptorPool lcs_vkdescriptorpool;
 

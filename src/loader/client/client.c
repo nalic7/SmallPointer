@@ -3,13 +3,13 @@ uint8_t *lc_a_p;
 
 NALI_LB_UT lc_u_bl = 0;
 NALI_LB_UT *lc_u_p;
-float *lc_u_rt_p;
-NALI_LB_CT *lc_u_c_p;
+float *lc_urt_p;
+NALI_LB_CT *lc_uc_p;
 
 NALI_LB_MIT lc_m_bl = 0;
 NALI_LB_MT *lc_m_p;
-NALI_LB_CT *lc_m_c_p;
-float *lc_m_rt_p;
+NALI_LB_CT *lc_mc_p;
+float *lc_mrt_p;
 
 VkBuffer lc_vkbuffer;
 VkDeviceMemory lc_vkdevicememory;
@@ -18,38 +18,55 @@ VkDeviceSize lc_vkdevicesize;
 
 mtx_t *lc_mtx_t_p = &(mtx_t){};
 NALI_LB_PT lc_net_bl = 0;
-uint8_t *lc_net_p;
+uint8_t lc_net_p[NALI_LB_NET_BL];
 
-#define NALI_LC_STATE_ON 1
-static uint8_t lc_state;
+// #define NALI_LC_STATE_ON 1
+// static uint8_t lc_state;
 void lc_set()
 {
 	lcs_set();
 	s_set();
 	lckf_set();
 	lcm_set();
-	s_surface_state |= NALI_SURFACE_C_S_RENDER_ABLE;
+	s_surface_state |= NALI_S_S_DATA_ABLE;
 
-	lc_state = NALI_LC_STATE_ON;
-	lc_net_p = malloc(0);
+	// lc_state = NALI_LC_STATE_ON;
 
 	lc_dsi_p = malloc(0);
 	lc_a_p = malloc(0);
 
 	lc_u_p = malloc(0);
-	lc_u_rt_p = malloc(0);
-	lc_u_c_p = malloc(0);
+	lc_urt_p = malloc(0);
+	lc_uc_p = malloc(0);
 
 	lc_m_p = malloc(0);
-	lc_m_c_p = malloc(0);
-	lc_m_rt_p = malloc(0);
+	lc_mc_p = malloc(0);
+	lc_mrt_p = malloc(0);
 	NALI_D_INFO("mtx_init %d", mtx_init(lc_mtx_t_p, mtx_plain))
-	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, lc_loop, NULL))
+	// NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, lc_loop, NULL))
+
+	nlc_set();
+}
+
+void lc_re()
+{
+	lc_dsi_p = realloc(lc_dsi_p, 0);
+	lc_a_p = realloc(lc_a_p, 0);
+
+	lc_u_bl = 0;
+	lc_u_p = realloc(lc_u_p, 0);
+	lc_urt_p = realloc(lc_urt_p, 0);
+	lc_uc_p = realloc(lc_uc_p, 0);
+
+	lc_m_bl = 0;
+	lc_m_p = realloc(lc_m_p, 0);
+	lc_mc_p = realloc(lc_mc_p, 0);
+	lc_mrt_p = realloc(lc_mrt_p, 0);
 }
 
 void lc_vk()
 {
-	while (!(s_surface_state & NALI_SURFACE_C_S_RENDER_ABLE))
+	while (!(s_surface_state & NALI_S_S_DATA_ABLE))
 	{
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
@@ -78,48 +95,38 @@ void lc_vk()
 	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmd_draw_loop, NULL))
 }
 
-int lc_loop(void *p)
+void lc_freeloop()
 {
-	while (lc_state & NALI_LC_STATE_ON)
-	{
-		// mtx_lock(lc_mtx_t_p);
-		// if (data_p)
-		// {
-		// 	free(data_p);
-		// }
-		// mtx_unlock(lc_mtx_t_p);
+	//switch to render loop
+	// while (lc_state & NALI_LC_STATE_ON)
+	// {
+	// 	// mtx_lock(lc_mtx_t_p);
+	// 	// mtx_unlock(lc_mtx_t_p);
+	// }
 
-		// if (add_pomi)
-		// {
-		// 	mtx_lock(lc_mtx_t_p);
-		// 	vk_cmd_d_fp = realloc(vk_cmd_d_fp, sizeof(void (*)()) * (vk_cmd_d_fp_bl + 1));
-		// 	vk_cmd_d_fp[vk_cmd_d_fp_bl] = e_pomi0_add;
-		// 	++vk_cmd_d_fp_bl;
-		// 	mtx_unlock(lc_mtx_t_p);
-		// }
-		//read
-		//draw
-	}
+	mtx_lock(lc_mtx_t_p);
 
-	mtx_destroy(lc_mtx_t_p);
-	free(lc_net_p);
+	lcm_free();
+	lcs_free();
 
 	free(lc_dsi_p);
 	free(lc_a_p);
 
 	free(lc_u_p);
-	free(lc_u_rt_p);
-	free(lc_u_c_p);
+	free(lc_urt_p);
+	free(lc_uc_p);
 
 	free(lc_m_p);
-	free(lc_m_c_p);
-	free(lc_m_rt_p);
+	free(lc_mc_p);
+	free(lc_mrt_p);
+
+	mtx_destroy(lc_mtx_t_p);
 
 	lc_u_bl = 0;
 
 	lc_net_bl = 0;
 
-	return 0;
+	mtx_unlock(lb_mtx_t_p);
 }
 
 void lc_freeVk(uint32_t device)
@@ -131,4 +138,21 @@ void lc_freeVk(uint32_t device)
 	vkDestroyBuffer(vkdevice, lc_vkbuffer, VK_NULL_HANDLE);
 	vkFreeMemory(vkdevice, lc_vkdevicememory, VK_NULL_HANDLE);
 	lc_vkbuffer_p = NULL;
+}
+
+void lc_free()
+{
+	if (s_surface_state & NALI_S_S_EXIT_C)
+	{
+		return;
+	}
+	s_surface_state |= NALI_S_S_EXIT_C;
+
+	mtx_lock(lb_mtx_t_p);
+	mtx_lock(lc_mtx_t_p);
+
+	nlc_state |= NALI_NLC_FAIL;
+
+	s_surface_state |= NALI_S_S_CLEAN;
+	// lc_state &= 0xFFu - NALI_LC_STATE_ON;
 }

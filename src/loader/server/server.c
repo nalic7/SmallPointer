@@ -1,35 +1,33 @@
-// mtx_t *ls_mtx_t_p = &(mtx_t){};
+mtx_t *ls_mtx_t_p = &(mtx_t){};
+
+NALI_LB_UT ls_u_bl = 0;
+NALI_LB_UT *ls_u_p;
+float *ls_urt_p;
+NALI_LB_CT *ls_uc_p;
 
 NALI_LB_MIT ls_m_bl = 0;
 NALI_LB_MT *ls_m_p;
-// NALI_LB_MIT *ls_m_i_p;
-NALI_LB_CT *ls_m_c_p;
-float *ls_m_rt_p;
+NALI_LB_CT *ls_mc_p;
+float *ls_mrt_p;
 
-// NALI_LB_MIT ls_r_m_bl = 0;
-// NALI_LB_MIT *ls_r_m_i_p;
-
-//sync c0 c1 ...
-NALI_LB_PT *ls_net_bl_p;
-uint8_t *ls_net_p;
+NALI_LB_PT ls_net_bl = 0;
+uint8_t ls_net_p[NALI_LB_NET_BL];
 
 #define NALI_LS_STATE_ON 1
 static uint8_t ls_state;
 void ls_set()
 {
-	// NALI_D_INFO("mtx_init %d", mtx_init(ls_mtx_t_p, mtx_plain))
+	NALI_D_INFO("mtx_init %d", mtx_init(ls_mtx_t_p, mtx_plain))
 
 	ls_state = NALI_LS_STATE_ON;
 
+	ls_u_p = malloc(0);
+	ls_urt_p = malloc(0);
+	ls_uc_p = malloc(0);
+
 	ls_m_p = malloc(0);
-	// ls_m_i_p = malloc(0);
-	ls_m_c_p = malloc(0);
-	ls_m_rt_p = malloc(0);
-
-	ls_net_bl_p = malloc(0);
-	ls_net_p = malloc(0);
-
-	// ls_r_m_i_p = malloc(0);
+	ls_mc_p = malloc(0);
+	ls_mrt_p = malloc(0);
 
 	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER, S_IRUSR | S_IWUSR | S_IXUSR))
 	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER_ITEM, S_IRUSR | S_IWUSR | S_IXUSR))
@@ -38,6 +36,21 @@ void ls_set()
 	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_MAP, S_IRUSR | S_IWUSR | S_IXUSR))
 
 	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
+
+	nls_set();
+}
+
+void ls_re()
+{
+	ls_u_bl = 0;
+	ls_u_p = realloc(ls_u_p, 0);
+	ls_urt_p = realloc(ls_urt_p, 0);
+	ls_uc_p = realloc(ls_uc_p, 0);
+
+	ls_m_bl = 0;
+	ls_m_p = realloc(ls_m_p, 0);
+	ls_mc_p = realloc(ls_mc_p, 0);
+	ls_mrt_p = realloc(ls_mrt_p, 0);
 }
 
 static NALI_LB_CT ls_load_bl = 0;
@@ -54,20 +67,19 @@ int ls_loop(void *p)
 	clock_gettime(CLOCK_MONOTONIC, &tick_start);
 	while (ls_state & NALI_LS_STATE_ON)
 	{
+		mtx_lock(ls_mtx_t_p);
+
 		//read file
 		//map
 		//e
 
-		for (NALI_LB_CT l_0 = 0; l_0 < ls_load_bl; ++l_0)
-		{
-			ls_load_p[l_0 * sizeof(NALI_LB_CT) * 3];
-		}
+		//sync
+		lsc_sync_u();
 
-		//send
-		for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_MAX_CLIENT; ++l_0)
-		{
-			nls_send(l_0, ls_net_p + l_0 * NALI_LB_NET_BL, ls_net_bl_p[l_0]);
-		}
+		// for (NALI_LB_CT l_0 = 0; l_0 < ls_load_bl; ++l_0)
+		// {
+		// 	ls_load_p[l_0 * sizeof(NALI_LB_CT) * 3];
+		// }
 
 		if (++tick == NALI_LB_MAX_TICK)
 		{
@@ -80,25 +92,43 @@ int ls_loop(void *p)
 			}
 			tick = 0;
 		}
+
+		mtx_unlock(ls_mtx_t_p);
 	}
 
-	// free(ls_r_m_i_p);
+	mtx_lock(ls_mtx_t_p);
 
-	free(ls_net_p);
-	free(ls_net_bl_p);
+	free(ls_uc_p);
+	free(ls_urt_p);
+	free(ls_u_p);
+	ls_u_bl = 0;
 
-	free(ls_m_rt_p);
-	free(ls_m_c_p);
-	// free(ls_m_i_p);
+	ls_net_bl = 0;
+
+	free(ls_mrt_p);
+	free(ls_mc_p);
 	free(ls_m_p);
 	ls_m_bl = 0;
 
-	// mtx_destroy(ls_mtx_t_p);
+	mtx_destroy(ls_mtx_t_p);
+
+	mtx_unlock(lb_mtx_t_p);
 
 	return 0;
 }
 
 void ls_free()
 {
+	if (s_surface_state & NALI_S_S_EXIT_S)
+	{
+		return;
+	}
+	s_surface_state |= NALI_S_S_EXIT_S;
+
+	mtx_lock(lb_mtx_t_p);
+	mtx_lock(ls_mtx_t_p);
+
+	nls_state |= NALI_NLS_FAIL;
+
 	ls_state &= 0xFFu - NALI_LS_STATE_ON;
 }

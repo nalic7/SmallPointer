@@ -12,33 +12,33 @@ static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard
 			wlczwp_setPointer();
 
 		if (key == KEY_W)
-			s_key |= NALI_KEY_W;
+			s_key |= NALI_S_KEY_W;
 		if (key == KEY_S)
-			s_key |= NALI_KEY_S;
+			s_key |= NALI_S_KEY_S;
 		if (key == KEY_A)
-			s_key |= NALI_KEY_A;
+			s_key |= NALI_S_KEY_A;
 		if (key == KEY_D)
-			s_key |= NALI_KEY_D;
+			s_key |= NALI_S_KEY_D;
 		if (key == KEY_SPACE)
-			s_key |= NALI_KEY_SPACE;
+			s_key |= NALI_S_KEY_SPACE;
 		if (key == KEY_LEFTCTRL)
-			s_key |= NALI_KEY_LEFTCTRL;
+			s_key |= NALI_S_KEY_LEFTCTRL;
 		//KEY_LEFTSHIFT
 	}
 	else
 	{
 		if (key == KEY_W)
-			s_key &= 0xFFu - NALI_KEY_W;
+			s_key &= 0xFFu - NALI_S_KEY_W;
 		if (key == KEY_S)
-			s_key &= 0xFFu - NALI_KEY_S;
+			s_key &= 0xFFu - NALI_S_KEY_S;
 		if (key == KEY_A)
-			s_key &= 0xFFu - NALI_KEY_A;
+			s_key &= 0xFFu - NALI_S_KEY_A;
 		if (key == KEY_D)
-			s_key &= 0xFFu - NALI_KEY_D;
+			s_key &= 0xFFu - NALI_S_KEY_D;
 		if (key == KEY_SPACE)
-			s_key &= 0xFFu - NALI_KEY_SPACE;
+			s_key &= 0xFFu - NALI_S_KEY_SPACE;
 		if (key == KEY_LEFTCTRL)
-			s_key &= 0xFFu - NALI_KEY_LEFTCTRL;
+			s_key &= 0xFFu - NALI_S_KEY_LEFTCTRL;
 	}
 }
 

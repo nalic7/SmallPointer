@@ -1,28 +1,61 @@
-void (*nlcf_data_fp[NALI_LCF_DATA_FP_SIZE])(uint8_t *) = {lcf_sync_u, lcf_add_m, lcf_rm_m};
+void (*nlcf_data_fp[NALI_LCF_DATA_FP_BL])(uint8_t *) = {lcf_sync_u, lcf_add_m, lcf_rm_m};
 
-//pack
-void lcf_read_data(uint8_t *data_p)
+// void lcf_read_data(uint8_t *data_p)
+// {
+// 	if (*data_p != 255)
+// 	{
+// 		nlcf_data_fp[*data_p](data_p + 1);
+// 	}
+// }
+
+//should send u or id
+void lcf_add_u(uint8_t *data_p)
 {
-	if (*data_p != 255)
-	{
-		nlcf_data_fp[*data_p](data_p + 1);
-	}
+	mtx_lock(lc_mtx_t_p);
+
+	lc_u_p = realloc(lc_u_p, (lc_u_bl + 1) * sizeof(NALI_LB_UT));
+	lc_u_p[lc_u_bl] = *(NALI_LB_UT *)data_p;
+	data_p += sizeof(NALI_LB_UT);
+
+	lc_urt_p = realloc(lc_urt_p, (lc_u_bl + 1) * sizeof(float) * (3 + 3));
+	memcpy(lc_urt_p + lc_u_bl * (3 + 3), data_p, sizeof(float) * (3 + 3));
+	data_p += (3 + 3) * sizeof(float);
+
+	lc_uc_p = realloc(lc_uc_p, (lc_u_bl + 1) * sizeof(NALI_LB_CT) * 3);
+	memcpy(lc_uc_p + lc_u_bl * 3, data_p, sizeof(NALI_LB_CT) * 3);
+	// data_p += 3 * sizeof(NALI_LB_CT);
+
+	++lc_u_bl;
+
+	mtx_unlock(lc_mtx_t_p);
 }
 
 void lcf_sync_u(uint8_t *data_p)
 {
-	uint8_t id = *data_p;
-	data_p += sizeof(uint8_t);
+	NALI_LB_UT max_u = *data_p;
+	data_p += sizeof(NALI_LB_UT);
 
-	memcpy(lc_u_rt_p + id * (3 + 3), data_p, (3 + 3) * sizeof(float));
-	data_p += (3 + 3) * sizeof(float);
+	mtx_lock(lc_mtx_t_p);
 
-	lcf_read_data(data_p);
+	lc_u_p = realloc(lc_u_p, max_u * sizeof(NALI_LB_UT));
+	memcpy(lc_u_p, data_p, max_u * sizeof(NALI_LB_UT));
+	data_p += max_u * sizeof(NALI_LB_UT);
+
+	lc_urt_p = realloc(lc_urt_p, max_u * sizeof(float) * (3 + 3));
+	memcpy(lc_urt_p, data_p, max_u * sizeof(float) * (3 + 3));
+	data_p += max_u * sizeof(float) * (3 + 3);
+
+	lc_uc_p = realloc(lc_uc_p, max_u * sizeof(NALI_LB_CT) * 3);
+	memcpy(lc_uc_p, data_p, max_u * sizeof(NALI_LB_CT) * 3);
+
+	lc_u_bl += max_u;
+
+	mtx_unlock(lc_mtx_t_p);
 }
 
 //-extra byte if more than 1-
 //ma key? -> keyframe
-//mal animate data? -> timeline
+//mal animate data? -> timeline /255
 void lcf_add_m(uint8_t *data_p)
 {
 	NALI_LB_MIT mi = *(NALI_LB_MIT *)data_p;
@@ -47,15 +80,10 @@ void lcf_add_m(uint8_t *data_p)
 	uint8_t a_bl = lb_ms_abl_p[ms];
 	uint8_t *a_p = lb_ms_ap_p[ms];
 	//0 gui or world
-	VkDeviceSize vkdevicesize_p[NALI_LCS_D_SIZE];
-	vkdevicesize_p[0] = sizeof(float) * 16 * 2;
-	vkdevicesize_p[1] = lcm_vkdevicesize_p[m];
-	vkdevicesize_p[2] = lcm_vkdevicesize_p[lcm_joint_count_bl + 1] + NALI_LCM_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * lcs_a_bl0_p[a] + sizeof(float) * 4;
-	vkdevicesize_p[3] = NALI_LCM_VP_BL;
-	vkdevicesize_p[4] = lcm_vkdevicesize_p[lcm_joint_count_bl + 1] + NALI_LCM_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * lcs_a_bl0_p[a];
+
 	//e0-ms
 
-	mtx_lock(lcs_mtx_t_p);
+	mtx_lock(lc_mtx_t_p);
 
 	uint8_t mj = m >= lcm_joint_count_bl ? 1 : lcm_joint_count_p[m];
 
@@ -65,15 +93,20 @@ void lcf_add_m(uint8_t *data_p)
 
 	lcs_a_p[a] = realloc(lcs_a_p[a], sizeof(uint8_t *) * (lcs_a_bl0_p[a] + 1));
 	lcs_a_bl1_p[a] = realloc(lcs_a_bl1_p[a], lcs_a_bl0_p[a] + 1);
+
 	lcs_b_vkdevicesize_p[a] = realloc(lcs_b_vkdevicesize_p[a], sizeof(VkDeviceSize) * NALI_LCS_D_SIZE * (lcs_a_bl0_p[a] + 1));
+	lcs_b_vkdevicesize_p[a][NALI_LCS_D_SIZE * lcs_a_bl0_p[a]] = lb_ms_vkdevicesize_p[ms];
+	lcs_b_vkdevicesize_p[a][NALI_LCS_D_SIZE * lcs_a_bl0_p[a] + 1] = lcm_vkdevicesize_p[m];
+	lcs_b_vkdevicesize_p[a][NALI_LCS_D_SIZE * lcs_a_bl0_p[a] + 2] = lcm_vkdevicesize_p[lcm_joint_count_bl + 1] + NALI_LCM_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * lcs_a_bl0_p[a] + sizeof(float) * 4;
+	lcs_b_vkdevicesize_p[a][NALI_LCS_D_SIZE * lcs_a_bl0_p[a] + 3] = NALI_LCM_VP_BL;
+	lcs_b_vkdevicesize_p[a][NALI_LCS_D_SIZE * lcs_a_bl0_p[a] + 4] = lcm_vkdevicesize_p[lcm_joint_count_bl + 1] + NALI_LCM_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * lcs_a_bl0_p[a];
 
 	vkds_make(vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, lcs_vkdescriptorset_p[a] + lcs_a_bl0_p[a] + 1);
 
-	lcs_setVkWriteDescriptorSet(lcs_vkdescriptorset_p[a][lcs_a_bl0_p[a] + 1], vkdescriptorbufferinfo_p, vkwritedescriptorset_p, vkdevicesize_p, (sizeof(float) * 4 + sizeof(float) * 4 * 3) * mj);
+	lcs_setVkWriteDescriptorSet(lcs_vkdescriptorset_p[a][lcs_a_bl0_p[a] + 1], vkdescriptorbufferinfo_p, vkwritedescriptorset_p, lcs_b_vkdevicesize_p[a] + NALI_LCS_D_SIZE * lcs_a_bl0_p[a], (sizeof(float) * 4 + sizeof(float) * 4 * 3) * mj);
 
 	lcs_a_p[a][lcs_a_bl0_p[a]] = a_p;
 	lcs_a_bl1_p[a][lcs_a_bl0_p[a]] = a_bl;
-	memcpy(lcs_b_vkdevicesize_p[a] + lcs_a_bl0_p[a] * NALI_LCS_D_SIZE, vkdevicesize_p, sizeof(VkDeviceSize) * NALI_LCS_D_SIZE);
 
 	vkUpdateDescriptorSets(vkqd_vkdevice_p[vk_device], NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	++lcs_a_bl0_p[a];
@@ -82,7 +115,7 @@ void lcf_add_m(uint8_t *data_p)
 	uint32_t l0;
 	uint32_t l_offset;
 	uint32_t l_size;
-	l0 = vkdevicesize_p[4];
+	l0 = lcs_b_vkdevicesize_p[a][NALI_LCS_D_SIZE * lcs_a_bl0_p[a] + 4];
 	for (uint32_t l_1 = 0; l_1 < 4; ++l_1)
 	{
 		((float *)(lc_vkbuffer_p + l0))[l_1] = 1.0F;
@@ -105,9 +138,7 @@ void lcf_add_m(uint8_t *data_p)
 		.pNext = VK_NULL_HANDLE
 	};
 
-	mtx_unlock(lcs_mtx_t_p);
-
-	lcf_read_data(data_p);
+	mtx_unlock(lc_mtx_t_p);
 }
 
 void lcf_rm_m(uint8_t *data_p)
@@ -115,7 +146,7 @@ void lcf_rm_m(uint8_t *data_p)
 	NALI_LB_MIT mi = *(NALI_LB_MIT *)data_p;
 	data_p += sizeof(NALI_LB_MIT);
 
-	mtx_lock(lcs_mtx_t_p);
+	mtx_lock(lc_mtx_t_p);
 
 	NALI_LCS_DSIT dsi = lc_dsi_p[mi];
 	uint8_t a = lc_a_p[mi];
@@ -140,30 +171,28 @@ void lcf_rm_m(uint8_t *data_p)
 	//remove data
 	lc_m_p[mi] = lc_m_p[--lc_m_bl];
 	// lc_m_i_p[mi] = lc_m_i_p[lc_m_bl];
-	memcpy(lc_m_c_p + mi * sizeof(NALI_LB_CT) * 3, lc_m_c_p + lc_m_bl * sizeof(NALI_LB_CT) * 3, sizeof(NALI_LB_CT) * 3);
-	memcpy(lc_m_rt_p + mi * sizeof(float) * (3 + 3), lc_m_rt_p + lc_m_bl * sizeof(float) * (3 + 3), sizeof(float) * (3 + 3));
+	memcpy(lc_mc_p + mi * sizeof(NALI_LB_CT) * 3, lc_mc_p + lc_m_bl * sizeof(NALI_LB_CT) * 3, sizeof(NALI_LB_CT) * 3);
+	memcpy(lc_mrt_p + mi * sizeof(float) * (3 + 3), lc_mrt_p + lc_m_bl * sizeof(float) * (3 + 3), sizeof(float) * (3 + 3));
 	lc_m_p = realloc(lc_m_p, sizeof(NALI_LB_MT) * lc_m_bl);
 	// lc_m_i_p = realloc(lc_m_i_p, sizeof(NALI_LB_MIT) * lc_m_bl);
-	lc_m_c_p = realloc(lc_m_c_p, sizeof(NALI_LB_CT) * 3 * lc_m_bl);
-	lc_m_rt_p = realloc(lc_m_rt_p, sizeof(float) * (3 + 3) * lc_m_bl);
+	lc_mc_p = realloc(lc_mc_p, sizeof(NALI_LB_CT) * 3 * lc_m_bl);
+	lc_mrt_p = realloc(lc_mrt_p, sizeof(float) * (3 + 3) * lc_m_bl);
 
-	mtx_unlock(lcs_mtx_t_p);
-
-	lcf_read_data(data_p);
+	mtx_unlock(lc_mtx_t_p);
 }
 
 void lcf_sync_m(uint8_t *data_p)
 {
 	NALI_LB_MIT mi;
 	float rt[3 + 3];
-	mtx_lock(lcs_mtx_t_p);
+	mtx_lock(lc_mtx_t_p);
 
 	uint8_t a;
 	uint8_t ds_bl;
 	uint8_t *ds_p;
 	uint8_t *j_p;
 
-	mtx_unlock(lcs_mtx_t_p);
+	mtx_unlock(lc_mtx_t_p);
 }
 
 // static VkDeviceSize *vkdevicesize_p_array[NALI_V_A_BL];

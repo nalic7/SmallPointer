@@ -55,16 +55,15 @@ static int init(void *p)
 	while (!(nlc_state & NALI_NLC_FAIL))
 	{
 		//s0-get
-		r = recv(server_socket, &data_bl, sizeof(NALI_LB_PT), 0);
+		r = recv(server_socket, &data_bl, sizeof(NALI_LB_PT), MSG_DONTWAIT);
 
 		if (r > 0)
 		{
-			data_p = malloc(data_bl + 1);
-			r = recv(server_socket, data_p, data_bl, 0);
+			data_p = malloc(data_bl);
+			r = recv(server_socket, data_p, data_bl, MSG_DONTWAIT);
 
 			if (r > 0)
 			{
-				data_p[data_bl] = 255;
 				nlcf_data_fp[*data_p](data_p);
 			}
 
@@ -92,6 +91,17 @@ static int init(void *p)
 	close(server_socket);
 	NALI_D_LOG("einit")
 	nlc_state &= 0xFFu - NALI_NLC_INIT;
+
+	if (s_surface_state & NALI_S_S_EXIT_C)
+	{
+		mtx_unlock(lc_mtx_t_p);
+	}
+	else
+	{
+		lc_re();
+		nlc_set();
+	}
+
 	return 0;
 }
 
@@ -110,7 +120,7 @@ void nlc_set()
 	}
 }
 
-void nlc_send(uint8_t *data_p, NALI_LB_PT data_bl)
+void nlc_send()
 {
-	send(server_socket, data_p, data_bl, 0);
+	send(server_socket, lc_net_p, lc_net_bl, MSG_DONTWAIT);
 }

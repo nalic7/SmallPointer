@@ -73,7 +73,7 @@ static void wl_pointer_listener_motion(void *data, struct wl_pointer *wl_pointer
 	float
 		l_x = wl_fixed_to_double(surface_x),
 		l_y = wl_fixed_to_double(surface_y);
-	if (s_pointer_state & NALI_P_STATE_ROTATE)
+	if (s_pointer_state & NALI_S_PS_ROTATE)
 	{
 		s_pointer_x = l_x - x;
 		s_pointer_y = l_y - y;
@@ -92,22 +92,22 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 	{
 		case BTN_LEFT:
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				s_pointer_state |= NALI_P_STATE_ACT;
+				s_pointer_state |= NALI_S_PS_ACT;
 			else
-				s_pointer_state &= 0xFFu - NALI_P_STATE_ACT;
+				s_pointer_state &= 0xFFu - NALI_S_PS_ACT;
 			break;
 		case BTN_RIGHT:
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				s_pointer_state |= NALI_P_STATE_ROTATE;
+				s_pointer_state |= NALI_S_PS_ROTATE;
 			else
-				s_pointer_state &= 0xFFu - NALI_P_STATE_ROTATE;
+				s_pointer_state &= 0xFFu - NALI_S_PS_ROTATE;
 			break;
 		case BTN_MIDDLE:
-			s_pointer_state |= NALI_P_STATE_REROTATE;
+			s_pointer_state |= NALI_S_PS_REROTATE;
 			// if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-			// 	s_pointer_state |= NALI_P_STATE_MOVE;
+			// 	s_pointer_state |= NALI_S_PS_MOVE;
 			// else
-			// 	s_pointer_state &= 0xFFu - NALI_P_STATE_MOVE;
+			// 	s_pointer_state &= 0xFFu - NALI_S_PS_MOVE;
 			// break;
 	}
 

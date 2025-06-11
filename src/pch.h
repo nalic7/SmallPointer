@@ -145,6 +145,7 @@
 
 	#include "loader/server/server.h"
 	#include "loader/server/server_f.h"
+	#include "loader/server/server_c.h"
 	#include "network/linux/linux_server.h"
 #endif
 

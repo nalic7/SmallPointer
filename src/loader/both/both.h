@@ -8,13 +8,11 @@
 #define NALI_LB_UT uint8_t
 //void user
 #define NALI_LB_UN 255
-//void package
-#define NALI_LB_PN 255
 
 //package
-#define NALI_LB_PT uint16_t
+#define NALI_LB_PT uint8_t
 #define NALI_LB_MAX_TICK 20
-#define NALI_LB_NET_BL 1024
+#define NALI_LB_NET_BL 255
 
 //model slot
 #define NALI_LB_MST uint8_t
@@ -45,16 +43,22 @@ extern uint8_t lb_ms_p[NALI_LB_N_MAX];
 extern uint8_t lb_ms_a_p[NALI_LB_N_MAX];
 extern uint8_t *lb_ms_ap_p[NALI_LB_N_MAX];
 extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
+extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
 //e0-data
 
 //s0-net
 //s1-client
-#define NALI_LB_C_SYNC_U 0
-#define NALI_LB_C_ADD_M 1
-#define NALI_LB_C_RM_M 1
+#define NALI_LB_C_DATA_FP_T uint8_t
+
+#define NALI_LB_C_ADD_U 0
+#define NALI_LB_C_SYNC_ALL_U2NEW_U 1
+#define NALI_LB_C_ADD_M 2
+#define NALI_LB_C_RM_M 3
 //e1-client
 
 //s1-server
+#define NALI_LB_S_DATA_FP_T uint8_t
+
 #define NALI_LB_S_KEY_U 0
 
 //s2-key
@@ -84,7 +88,7 @@ extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
 #define NALI_LB_CACHE_P_D_P (((uint8_t **)lb_cache_p)[2])
 #define NALI_LB_CACHE_P_D_BL_P (((uint32_t **)lb_cache_p)[3])
 
-// extern mtx_t *lb_mtx_t_p;
+extern mtx_t *lb_mtx_t_p;
 
 extern void *lb_cache_p;
 

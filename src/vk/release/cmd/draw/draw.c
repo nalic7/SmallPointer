@@ -201,6 +201,8 @@ void freeCmdDraw()
 
 	vk_free();
 
+	lc_freeloop();
+
 	// free(vk_cmd_d_fp);
 	// mtx_destroy(m_mtx_t_draw_p);
 }
@@ -216,12 +218,12 @@ void freeCmdDraw()
 // static void (*a_fp[NALI_V_A_BL])() = {c1j1, c1j0};
 int vk_cmd_draw_loop(void *p)
 {
-	while (!(s_surface_state & NALI_SURFACE_C_S_CLEAN))
+	while (!(s_surface_state & NALI_S_S_CLEAN))
 	{
 		vkWaitForFences(vkdevice, 1, &vkfence, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence);
 
-		if (s_surface_state & NALI_SURFACE_C_S_RE)
+		if (s_surface_state & NALI_S_S_RE)
 		{
 			vksc_free();
 
@@ -255,7 +257,7 @@ int vk_cmd_draw_loop(void *p)
 				.size = 16 * sizeof(float),
 				.pNext = VK_NULL_HANDLE
 			});
-			s_surface_state &= 0xFFu - NALI_SURFACE_C_S_RE;
+			s_surface_state &= 0xFFu - NALI_S_S_RE;
 		}
 
 		uint32_t image_index;
@@ -364,7 +366,7 @@ int vk_cmd_draw_loop(void *p)
 	}
 
 //	#ifdef C_NALI_S_ANDROID
-//		m_surface_state &= 0xFFu - NALI_SURFACE_C_S_CLEAN;
+//		m_surface_state &= 0xFFu - NALI_S_S_CLEAN;
 //	#else
 	freeCmdDraw();
 	return 0;

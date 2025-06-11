@@ -6,13 +6,13 @@ extern uint8_t *lc_a_p;
 
 extern NALI_LB_UT lc_u_bl;
 extern NALI_LB_UT *lc_u_p;
-extern float *lc_u_rt_p;
-extern NALI_LB_CT *lc_u_c_p;
+extern float *lc_urt_p;
+extern NALI_LB_CT *lc_uc_p;
 
 extern NALI_LB_MIT lc_m_bl;
 extern NALI_LB_MT *lc_m_p;
-extern NALI_LB_CT *lc_m_c_p;
-extern float *lc_m_rt_p;
+extern NALI_LB_CT *lc_mc_p;
+extern float *lc_mrt_p;
 
 //VkBuffer
 //static / dynamic
@@ -35,13 +35,15 @@ extern void *lc_vkbuffer_p;
 extern VkDeviceSize lc_vkdevicesize;
 
 extern mtx_t *lc_mtx_t_p;
+
 extern NALI_LB_PT lc_net_bl;
-extern uint8_t *lc_net_p;
+extern uint8_t lc_net_p[NALI_LB_NET_BL];
 
 void lc_set();
+void lc_re();
 
 void lc_vk();
-int lc_loop(void *p);
+void lc_freeloop();
 void lc_freeVk(uint32_t device);
 void lc_free();
 

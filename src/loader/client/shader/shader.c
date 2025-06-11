@@ -1,5 +1,3 @@
-mtx_t *lcs_mtx_t_p = &(mtx_t){};
-
 float lcs_float_p[] =
 {
 	0, 0, 0, 0,
@@ -33,9 +31,6 @@ VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
 
 VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
 uint16_t lcs_vkmappedmemoryrange_bl = 0;
-
-VkDeviceSize 
-	*lcs_add_vkdevicesize_p[NALI_V_A_BL];
 
 static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
@@ -150,8 +145,6 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 
 void lcs_set()
 {
-	NALI_D_INFO("mtx_init %d", mtx_init(lcs_mtx_t_p, mtx_plain))
-
 	lcs_vkmappedmemoryrange_p = malloc(0);
 
 	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
@@ -161,14 +154,12 @@ void lcs_set()
 		lcs_a_p[l_0] = malloc(0);
 		lcs_a_bl1_p[l_0] = malloc(0);
 		lcs_b_vkdevicesize_p[l_0] = malloc(0);
-
-		lcs_add_vkdevicesize_p[l_0] = malloc(0);
 	}
 }
 
 void lcs_loop()
 {
-	mtx_lock(lcs_mtx_t_p);
+	mtx_lock(lc_mtx_t_p);
 
 	if (lcs_vkmappedmemoryrange_bl)
 	{
@@ -177,14 +168,14 @@ void lcs_loop()
 		lcs_vkmappedmemoryrange_bl = 0;
 	}
 
-	mtx_unlock(lcs_mtx_t_p);
+	mtx_unlock(lc_mtx_t_p);
 }
 
 void lcs_vk()
 {
-	VkDescriptorPoolSize vkdescriptorpoolsize_array[NALI_LCS_D_SIZE];
-	setVkDescriptorPoolSize(vkdescriptorpoolsize_array);
-	vkdsp_make(vk_device, vkdescriptorpoolsize_array, NALI_LCS_D_SIZE, &lcs_vkdescriptorpool);
+	VkDescriptorPoolSize vkdescriptorpoolsize_p[NALI_LCS_D_SIZE];
+	setVkDescriptorPoolSize(vkdescriptorpoolsize_p);
+	vkdsp_make(vk_device, vkdescriptorpoolsize_p, NALI_LCS_D_SIZE, &lcs_vkdescriptorpool);
 	setVkDescriptorSetLayout(&lcs_vkdescriptorsetlayout);
 }
 
@@ -198,8 +189,6 @@ void lcs_freeVk(uint32_t device)
 	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 	{
 		free(lcs_vkdescriptorset_p[l_0]);
-
-		free(lcs_add_vkdevicesize_p[l_0]);
 	}
 
 	free(lcs_vkmappedmemoryrange_p);
@@ -221,6 +210,4 @@ void lcs_free()
 
 	free(lcs_i_p);
 	free(lcs_ic_p);
-
-	mtx_destroy(lcs_mtx_t_p);
 }

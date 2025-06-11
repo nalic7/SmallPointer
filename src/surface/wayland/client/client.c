@@ -105,15 +105,25 @@ void wlc_clean()
 
 static int loop(void* arg)
 {
-	while (!(s_surface_state & NALI_SURFACE_C_S_CONFIG))
-	{
-		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
-	}
+	// while (!(s_surface_state & NALI_S_S_CONFIG))
+	// {
+	// 	thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
+	// }
 
+	//wl_display_dispatch after then set vk
 	int r = wl_display_dispatch(wlc_wl_display_client_p);
+	//if surface fail on vk need re vksurface
+	if (r < 0)
+	{
+		NALI_D_LOG("wl_display_dispatch %d", r);
+		wlc_clean();
+		wlc_set();
+	}
+	s_surface_state |= NALI_S_S_RENDER_ABLE;
+
 	while (r > -1 && r != INT_MAX)
 	{
-		if (s_surface_state & NALI_SURFACE_C_S_CLEAN)
+		if (s_surface_state & NALI_S_S_CLEAN)
 		{
 			r = INT_MAX;
 		}
@@ -128,8 +138,6 @@ static int loop(void* arg)
 	{
 		NALI_D_LOG("wl_display_dispatch %d", r);
 		wlc_clean();
-		wlc_set();
-		//if surface fail on vk need re vksurface
 	}
 	return 0;
 }

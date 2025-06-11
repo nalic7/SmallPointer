@@ -1,32 +1,23 @@
 uint8_t nls_state = 0;
 
-NALI_LB_UT nls_u_bl = 0;
-NALI_LB_UT *nls_u_p;
-float *nls_u_rt_p;
-NALI_LB_CT *nls_u_c_p;
+typedef struct
+{
+	int fd;
+	NALI_LB_UT ui;
+} c_fd;
+static c_fd *c_fd_p;
 
-static int *client_fd_p;
-//sizeof(int) * NALI_LB_MAX_CLIENT]
-
-static void close_fd(int epfd, int fd)
+static void close_i(int epfd, int fd)
 {
 	NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL))
 	close(fd);
 
-	client_fd_p = realloc(client_fd_p, sizeof(int) * --nls_u_bl);
-	nls_u_p = realloc(nls_u_p, sizeof(NALI_LB_UT) * nls_u_bl);
-
-	nls_u_rt_p = realloc(nls_u_rt_p, nls_u_bl * sizeof(float) * (3 + 3));
-	nls_u_c_p = realloc(nls_u_c_p, nls_u_bl * sizeof(NALI_LB_CT) * 3);
+	c_fd_p = realloc(c_fd_p, sizeof(c_fd) * --ls_u_bl);
 }
 
 static int init(void *p)
 {
-	client_fd_p = malloc(0);
-
-	nls_u_p = malloc(0);
-	nls_u_rt_p = malloc(0);
-	nls_u_c_p = malloc(0);
+	c_fd_p = malloc(0);
 
 	//s0-l
 	int
@@ -84,7 +75,7 @@ static int init(void *p)
 		nls_state |= NALI_NLS_FAIL;
 	}
 
-	NALI_D_INFO("epoll_ctl %d", l_r = epoll_ctl(epfd, EPOLL_CTL_ADD, server_fd, &(struct epoll_event){.events = EPOLLIN, .data.fd = server_fd}))
+	NALI_D_INFO("epoll_ctl %d", l_r = epoll_ctl(epfd, EPOLL_CTL_ADD, server_fd, &(struct epoll_event){.events = EPOLLIN, .data.ptr = &server_fd}))
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
@@ -102,87 +93,73 @@ static int init(void *p)
 
 		for (int i = 0; i < event_count; i++)
 		{
-			int fd = epoll_event_p[i].data.fd;
-
-			if (fd == server_fd)
+			if (epoll_event_p[i].data.ptr == &server_fd)
 			{
 				int new_fd;
 				NALI_D_INFO("accept %d", new_fd = accept(server_fd, (struct sockaddr*)&client_sockaddr_in, &addrlen))
 				NALI_D_LOG("%s", strerror(errno))
 
-				if (nls_u_bl == NALI_LB_MAX_CLIENT)
+				if (ls_u_bl == NALI_LB_MAX_CLIENT)
 				{
 					close(new_fd);
 				}
 				else
 				{
-					client_fd_p = realloc(client_fd_p, sizeof(int) * (nls_u_bl + 1));
-					nls_u_p = realloc(nls_u_p, sizeof(NALI_LB_UT) * (nls_u_bl + 1));
-
-					client_fd_p[nls_u_bl] = new_fd;
-					NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_ADD, client_fd_p[nls_u_bl], &(struct epoll_event){.events = EPOLLIN, .data.fd = client_fd_p[nls_u_bl]}))
-
-					nls_u_p[nls_u_bl] = NALI_LB_UN;
-					++nls_u_bl;
-
-					nls_u_rt_p = realloc(nls_u_rt_p, nls_u_bl * sizeof(float) * (3 + 3));
-					nls_u_c_p = realloc(nls_u_c_p, nls_u_bl * sizeof(NALI_LB_CT) * 3);
+					c_fd_p = realloc(c_fd_p, sizeof(c_fd) * (ls_u_bl + 1));
+					c_fd_p[ls_u_bl].fd = new_fd;
+					NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_ADD, new_fd, &(struct epoll_event){.events = EPOLLIN, .data.ptr = c_fd_p}))
 				}
 			}
 			else
 			{
-				// ssize_t r = recv(fd, &size, sizeof(uint8_t), MSG_DONTWAIT);
-				r = recv(fd, &data_bl, sizeof(NALI_LB_PT), 0);
-				NALI_D_LOG("recv %ld", r)
+				c_fd l_c_fd_p = *(c_fd *)epoll_event_p[i].data.ptr;
+				int fd = l_c_fd_p.fd;
+				NALI_LB_UT ui = l_c_fd_p.ui;
+
+				r = recv(fd, &data_bl, sizeof(NALI_LB_PT), MSG_DONTWAIT);
 
 				if (r == 0)
 				{
-					close_fd(epfd, fd);
+					close_i(epfd, fd);
+
+					if (ui != NALI_LB_UN)
+					{
+						lsf_rm_u(ui);
+					}
 				}
 				else
 				{
-					NALI_LB_UT ui;
-					for (NALI_LB_UT l_0 = 0; l_0 < nls_u_bl; ++l_0)
-					{
-						if (client_fd_p[l_0] == fd)
-						{
-							ui = l_0;
-							break;
-						}
-					}
-
-					if (nls_u_p[ui] == NALI_LB_UN)
+					if (ls_u_p[ui] == NALI_LB_UN)
 					{
 						if (r == sizeof(NALI_LB_UT))
 						{
 							data_p = malloc(data_bl);
-							r = recv(fd, &data_p, data_bl, 0);
+							r = recv(fd, &data_p, data_bl, MSG_DONTWAIT);
 
 							if (r > 0 && *data_p < NALI_LB_MAX_CLIENT)
 							{
-								nls_u_p[ui] = *data_p;
-								lsf_new_user(ui);
+								ls_u_p[ui] = *data_p;
+								lsf_add_u(ui);
 							}
 							else
 							{
-								close_fd(epfd, fd);
+								close_i(epfd, fd);
 							}
 
 							free(data_p);
 						}
 						else
 						{
-							close_fd(epfd, fd);
+							close_i(epfd, fd);
 						}
 					}
 					else
 					{
-						data_p = malloc(data_bl + 1);
-						r = recv(fd, &data_p, data_bl, 0);
+						data_p = malloc(data_bl);
+						r = recv(fd, &data_p, data_bl, MSG_DONTWAIT);
 
 						if (r > 0)
 						{
-							data_p[data_bl] = 255;
 							nlsf_data_fp[*data_p](ui, data_p);
 						}
 
@@ -204,27 +181,30 @@ static int init(void *p)
 	}
 
 	//s0-clean
-	for (uint8_t u = 0; u < nls_u_bl; u++)
+	for (uint8_t u = 0; u < ls_u_bl; u++)
 	{
-		if (client_fd_p[u] != -1)
-		{
-			close(client_fd_p[u]);
-		}
+		close_i(epfd, c_fd_p[u].fd);
 	}
 
 	close(epfd);
 	close(server_fd);
 	NALI_D_LOG("clean_nw_server")
 	//e0-clean
-	
-	free(client_fd_p);
 
-	free(nls_u_c_p);
-	free(nls_u_rt_p);
-	free(nls_u_p);
-	nls_u_bl = 0;
+	free(c_fd_p);
 
 	nls_state &= 0xFFu - NALI_NLS_INIT;
+
+	if (s_surface_state & NALI_S_S_EXIT_S)
+	{
+		mtx_unlock(ls_mtx_t_p);
+	}
+	else
+	{
+		ls_re();
+		nls_set();
+	}
+
 	return 0;
 }
 
@@ -243,8 +223,7 @@ void nls_set()
 	}
 }
 
-//nls_client_i_p to find u
-void nls_send(NALI_LB_UT u, uint8_t *data_p, NALI_LB_PT data_bl)
+void nls_send(NALI_LB_UT ui)
 {
-	send(client_fd_p[u], data_p, data_bl, 0);
+	send(c_fd_p[ui].fd, ls_net_p, ls_net_bl, MSG_DONTWAIT);
 }

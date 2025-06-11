@@ -38,23 +38,23 @@ void s_set()
 
 void s_loop()
 {
-	if (s_key & NALI_KEY_W)
+	if (s_key & NALI_S_KEY_W)
 		lt_v4_array[2] = 1.0F * s_deltra;
-	else if (s_key & NALI_KEY_S)
+	else if (s_key & NALI_S_KEY_S)
 		lt_v4_array[2] = -1.0F * s_deltra;
 	else
 		lt_v4_array[2] = 0;
 
-	if (s_key & NALI_KEY_A)
+	if (s_key & NALI_S_KEY_A)
 		lt_v4_array[0] = -1.0F * s_deltra;
-	else if (s_key & NALI_KEY_D)
+	else if (s_key & NALI_S_KEY_D)
 		lt_v4_array[0] = 1.0F * s_deltra;
 	else
 		lt_v4_array[0] = 0;
 
-	if (s_key & NALI_KEY_LEFTCTRL)
+	if (s_key & NALI_S_KEY_LEFTCTRL)
 		s_ty += 1.0F * s_deltra;
-	if (s_key & NALI_KEY_SPACE)
+	if (s_key & NALI_S_KEY_SPACE)
 		s_ty -= 1.0F * s_deltra;
 
 	s_rx += s_pointer_y * s_deltra;
@@ -76,11 +76,11 @@ void s_loop()
 	s_pointer_x = 0;
 	s_pointer_y = 0;
 
-	if (s_pointer_state & NALI_P_STATE_REROTATE)
+	if (s_pointer_state & NALI_S_PS_REROTATE)
 	{
 		s_rx = 0;
 		s_ry = 0;
-		s_pointer_state &= 0xFFu - NALI_P_STATE_REROTATE;
+		s_pointer_state &= 0xFFu - NALI_S_PS_REROTATE;
 	}
 
 

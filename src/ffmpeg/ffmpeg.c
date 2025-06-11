@@ -33,7 +33,7 @@ void ffmpeg_read(const char *filename)
 uint8_t *ffmpeg_png(uint32_t *width_p, uint32_t *height_p)
 {
 	int video_stream_index;
-	AVCodec *avcodec_p = NULL;
+	const AVCodec *avcodec_p;
 	NALI_D_INFO("av_find_best_stream %d", video_stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0))
 
 	NALI_D_INFO("avcodec_find_decoder %p", avcodec_p = avcodec_find_decoder(avformatcontext_p->streams[video_stream_index]->codecpar->codec_id))

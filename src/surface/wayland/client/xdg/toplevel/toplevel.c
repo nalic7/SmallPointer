@@ -10,7 +10,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 		s_width = width;
 		s_height = height;
 		wl_surface_commit(wlc_wl_surface_p);
-		s_surface_state |= NALI_SURFACE_C_S_RE;
+		s_surface_state |= NALI_S_S_RE;
 	}
 
 	// if (width > 0 && height > 0)

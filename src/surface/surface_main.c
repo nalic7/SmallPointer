@@ -9,13 +9,12 @@ int main()
 		g_write();
 	#endif
 	#if C_NALI_SERVER
-		nls_set();
+		ls_set();
 	#endif
 	#ifdef C_NALI_CLIENT
-		nlc_set();
-		//need test network
+		lc_set();
+
 		// lb_set();
-		// lc_set();
 		// wlc_set();
 		// vk_set();
 		// al_set();

@@ -7,8 +7,7 @@ extern VkSurfaceKHR vks_vksurfacekhr;
 	#define VK_makeSurface \
 		while (sa_anativewindow_p == NULL) \
 		{ \
-			NALI_D_LOG("ANativeActivity_onCreate_sleep") \
-			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL); \
+			NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL)) \
 		} \
 		NALI_D_INFO \
 		( \
@@ -29,6 +28,10 @@ extern VkSurfaceKHR vks_vksurfacekhr;
 		)
 #else
 	#define VK_makeSurface \
+		while (!(s_surface_state & NALI_S_S_RENDER_ABLE)) \
+		{ \
+			NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL)) \
+		} \
 		NALI_D_INFO \
 		( \
 			"vkCreateWaylandSurfaceKHR %d", \
@@ -47,7 +50,7 @@ extern VkSurfaceKHR vks_vksurfacekhr;
 				&vks_vksurfacekhr \
 			) \
 		) \
-		s_surface_state |= NALI_SURFACE_C_S_CONFIG;
+		// s_surface_state |= NALI_S_S_CONFIG;
 #endif
 
 #define VK_freeSurface \

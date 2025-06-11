@@ -4,9 +4,13 @@ static float
 
 static int s1_set(void *p)
 {
+	#if C_NALI_SERVER
+		ls_set();
+	#endif
 	#ifdef C_NALI_CLIENT
-		lb_set();
 		lc_set();
+
+		lb_set();
 		vk_set();
 		al_set();
 		lc_vk();
@@ -59,24 +63,24 @@ static int s1_set(void *p)
 
 						if (l_y01 < -2.0F)
 						{
-							s_key |= NALI_KEY_W;
-							s_key &= 0xFFu - NALI_KEY_S;
+							s_key |= NALI_S_KEY_W;
+							s_key &= 0xFFu - NALI_S_KEY_S;
 						}
 						else if (l_y01 > 2.0F)
 						{
-							s_key |= NALI_KEY_S;
-							s_key &= 0xFFu - NALI_KEY_W;
+							s_key |= NALI_S_KEY_S;
+							s_key &= 0xFFu - NALI_S_KEY_W;
 						}
 
 						if (l_x01 < -2.0F)
 						{
-							s_key |= NALI_KEY_A;
-							s_key &= 0xFFu - NALI_KEY_D;
+							s_key |= NALI_S_KEY_A;
+							s_key &= 0xFFu - NALI_S_KEY_D;
 						}
 						else if (l_x01 > 2.0F)
 						{
-							s_key |= NALI_KEY_D;
-							s_key &= 0xFFu - NALI_KEY_A;
+							s_key |= NALI_S_KEY_D;
+							s_key &= 0xFFu - NALI_S_KEY_A;
 						}
 					}
 
@@ -85,7 +89,7 @@ static int s1_set(void *p)
 				}
 				else
 				{
-					s_key &= 0xFFu - NALI_KEY_W - NALI_KEY_S - NALI_KEY_A - NALI_KEY_D;
+					s_key &= 0xFFu - NALI_S_KEY_W - NALI_S_KEY_S - NALI_S_KEY_A - NALI_S_KEY_D;
 				}
 			}
 			AInputQueue_finishEvent(sa_ainputqueue_p, ainputevent_p, 1);
@@ -117,14 +121,14 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 	NALI_D_LOG("window resize")
 	s_width = ANativeWindow_getWidth(window);
 	s_height = ANativeWindow_getHeight(window);
-	s_surface_state |= NALI_SURFACE_C_S_RE;
+	s_surface_state |= NALI_S_S_RE;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
 	NALI_D_LOG("window 0")
 	sa_anativewindow_p = NULL;
-	s_surface_state |= NALI_SURFACE_C_S_RE;
+	s_surface_state |= NALI_S_S_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
@@ -210,8 +214,8 @@ void sa_wait()
 //		vk_makeDevice(vk_device);
 //		vk_getQueue(vk_device);
 
-//		m_surface_state |= NALI_SURFACE_C_S_CLEAN;
-		s_surface_state |= NALI_SURFACE_C_S_RE;
+//		m_surface_state |= NALI_S_S_CLEAN;
+		s_surface_state |= NALI_S_S_RE;
 		a_state &= 0xFFu - A_STATE_WAIT;
 	}
 }

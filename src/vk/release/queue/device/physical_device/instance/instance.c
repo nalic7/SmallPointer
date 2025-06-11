@@ -1,4 +1,4 @@
-VkInstance vkqdpdi_vkinstance = VK_NULL_HANDLE;
+VkInstance vkqdpdi_vkinstance;
 
 static const char *ppEnabledExtensionNames[] =
 {
@@ -68,5 +68,4 @@ void vkqdpdi_make()
 void vkqdpdi_free()
 {
 	vkDestroyInstance(vkqdpdi_vkinstance, NULL);
-	vkqdpdi_vkinstance = VK_NULL_HANDLE;
 }

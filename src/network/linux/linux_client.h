@@ -11,6 +11,6 @@
 extern uint8_t nlc_state;
 
 void nlc_set();
-void nlc_send(uint8_t *data_p, uint16_t data_bl);
+void nlc_send();
 
 #endif

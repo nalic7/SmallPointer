@@ -22,5 +22,6 @@ extern VkDeviceSize *lcm_vkdevicesize_p;
 
 void lcm_set();
 void lcm_vk();
+void lcm_free();
 
 #endif
