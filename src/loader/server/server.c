@@ -29,6 +29,8 @@ void ls_set()
 	ls_mc_p = malloc(0);
 	ls_mrt_p = malloc(0);
 
+	lsc_set();
+
 	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER, S_IRUSR | S_IWUSR | S_IXUSR))
 	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER_ITEM, S_IRUSR | S_IWUSR | S_IXUSR))
 	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER_TEAM, S_IRUSR | S_IWUSR | S_IXUSR))
@@ -74,7 +76,7 @@ int ls_loop(void *p)
 		//e
 
 		//sync
-		lsc_sync_u();
+		// lsc_sync_u();
 
 		// for (NALI_LB_CT l_0 = 0; l_0 < ls_load_bl; ++l_0)
 		// {
@@ -97,6 +99,8 @@ int ls_loop(void *p)
 	}
 
 	mtx_lock(ls_mtx_t_p);
+
+	lsc_free();
 
 	free(ls_uc_p);
 	free(ls_urt_p);

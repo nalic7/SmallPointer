@@ -54,6 +54,7 @@ extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
 #define NALI_LB_C_SYNC_ALL_U2NEW_U 1
 #define NALI_LB_C_ADD_M 2
 #define NALI_LB_C_RM_M 3
+#define NALI_LB_C_SYNC_ALL_M_C 4
 //e1-client
 
 //s1-server

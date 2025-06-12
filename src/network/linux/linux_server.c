@@ -138,8 +138,25 @@ static int init(void *p)
 
 							if (r > 0 && *data_p < NALI_LB_MAX_CLIENT)
 							{
-								ls_u_p[ui] = *data_p;
-								lsf_add_u(ui);
+								uint8_t l0 = 0;
+								for (NALI_LB_UT l_0 = 0; l_0 < ls_u_bl; ++l_0)
+								{
+									if (ls_u_p[ui] == *data_p)
+									{
+										l0 |= 1;
+										break;
+									}
+								}
+
+								if (l0)
+								{
+									close_i(epfd, fd);
+								}
+								else
+								{
+									ls_u_p[ui] = *data_p;
+									lsf_add_u(ui);
+								}
 							}
 							else
 							{

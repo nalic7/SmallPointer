@@ -94,6 +94,9 @@ void lsf_add_u(NALI_LB_UT u)
 	{
 		nls_send(l_0);
 	}
+	lsc_sync_all_m2new_u(ls_u_bl);
+
+	//add to h
 
 	++ls_u_bl;
 
@@ -145,9 +148,41 @@ static void lsf_add_m(NALI_LB_MT m, NALI_LB_CT c_p[3], float rt_p[3 + 3])
 
 	ls_m_p[ls_m_bl] = m;
 	// ls_m_i_p[ls_m_bl] = ls_m_bl;
-	memcpy(ls_mc_p + ls_m_bl * sizeof(NALI_LB_CT) * 3, c_p, sizeof(NALI_LB_CT) * 3);
-	memcpy(ls_mrt_p + ls_m_bl * sizeof(NALI_LB_CT) * (3 + 3), rt_p, sizeof(NALI_LB_CT) * (3 + 3));
+	memcpy(ls_mc_p + ls_m_bl * 3, c_p, sizeof(NALI_LB_CT) * 3);
+	memcpy(ls_mrt_p + ls_m_bl * (3 + 3), rt_p, sizeof(float) * (3 + 3));
+
+	NALI_LSC_CHT c_h = lsc_new_c_h(ls_mc_p[ls_m_bl * 3], ls_mc_p[ls_m_bl * 3 + 1], ls_mc_p[ls_m_bl * 3 + 2]);
+	lsc_mihi_p = realloc(lsc_mihi_p, sizeof(NALI_LSC_CHT) * (lsc_mihi_bl + 1));
+	if (lsc_mihi_bl > 0)
+	{
+		if (lsc_mihi_p[lsc_mihi_bl - 1] > c_h)
+		{
+			lsc_mihi_p[lsc_mihi_bl] = lsc_mihi_p[lsc_mihi_bl - 1];
+		}
+		else
+		{
+			lsc_mihi_p[lsc_mihi_bl] = c_h;
+
+			if (lsc_mihi_p[lsc_mihi_bl - 1] < c_h)
+			{
+				lsc_mihbl_p = realloc(lsc_mihbl_p, sizeof(NALI_LB_MIT) * (c_h + 1));
+				lsc_mih_p = realloc(lsc_mih_p, sizeof(NALI_LB_MIT *) * (c_h + 1));
+				lsc_mihbl_p[c_h] = 0;
+				lsc_mih_p[c_h] = malloc(0);
+			}
+		}
+	}
+	++lsc_mihi_bl;
+
+	lsc_mih_p[c_h] = realloc(lsc_mih_p[c_h], sizeof(NALI_LB_MIT) * (lsc_mihbl_p[c_h] + 1));
+	lsc_mih_p[c_h][lsc_mihbl_p[c_h]] = ls_m_bl;
+
+	++lsc_mihbl_p[c_h];
+
 	++ls_m_bl;
+
+	//send in c u
+	lsc_add_m2u(c_h);
 
 	mtx_unlock(ls_mtx_t_p);
 }
@@ -155,10 +190,35 @@ static void lsf_rm_m(NALI_LB_MIT mi)
 {
 	mtx_lock(ls_mtx_t_p);
 
+	NALI_LSC_CHT c_h = lsc_new_c_h(ls_mc_p[mi * 3], ls_mc_p[mi * 3 + 1], ls_mc_p[mi * 3 + 2]);
+	--lsc_mihi_bl;
+	if (lsc_mihi_p[lsc_mihi_bl] > c_h)
+	{
+		for (NALI_LB_MIT l_0 = 0; l_0 < lsc_mihi_bl; ++l_0)
+		{
+			lsc_mihi_p[c_h] = lsc_mihi_p[lsc_mihi_bl];
+		}
+	}
+	lsc_mihi_p = realloc(lsc_mihi_p, sizeof(NALI_LSC_CHT) * lsc_mihi_bl);
+
+	if (--lsc_mihbl_p[c_h] == 0)
+	{
+		lsc_mihbl_p[c_h] = lsc_mihbl_p[lsc_mihi_bl];
+		free(lsc_mih_p[c_h]);
+		lsc_mih_p[c_h] = lsc_mih_p[lsc_mihi_bl];
+
+		lsc_mihbl_p = realloc(lsc_mihbl_p, sizeof(NALI_LB_MIT) * lsc_mihi_bl);
+		lsc_mih_p = realloc(lsc_mih_p, sizeof(NALI_LB_MT) * lsc_mihi_bl);
+	}
+	else
+	{
+		lsc_mih_p[c_h] = realloc(lsc_mih_p[c_h], sizeof(NALI_LB_MIT) * lsc_mihbl_p[c_h]);
+	}
+
 	ls_m_p[mi] = ls_m_p[--ls_m_bl];
 	// ls_m_i_p[mi] = ls_m_i_p[ls_m_bl];
-	memcpy(ls_mc_p + mi * sizeof(NALI_LB_CT) * 3, ls_mc_p + ls_m_bl * sizeof(NALI_LB_CT) * 3, sizeof(NALI_LB_CT) * 3);
-	memcpy(ls_mrt_p + mi * sizeof(float) * (3 + 3), ls_mrt_p + ls_m_bl * sizeof(float) * (3 + 3), sizeof(float) * (3 + 3));
+	memcpy(ls_mc_p + mi * 3, ls_mc_p + ls_m_bl * 3, sizeof(NALI_LB_CT) * 3);
+	memcpy(ls_mrt_p + mi * (3 + 3), ls_mrt_p + ls_m_bl * (3 + 3), sizeof(float) * (3 + 3));
 	ls_m_p = realloc(ls_m_p, sizeof(NALI_LB_MT) * ls_m_bl);
 	// ls_m_i_p = realloc(ls_m_i_p, sizeof(NALI_LB_MIT) * ls_m_bl);
 	ls_mc_p = realloc(ls_mc_p, sizeof(NALI_LB_CT) * 3 * ls_m_bl);
