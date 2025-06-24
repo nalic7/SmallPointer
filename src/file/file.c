@@ -13,14 +13,14 @@ void *f_read(const char *c_p, uint32_t *bl_p)
 
 	return p;
 #else
-	return f_read1(fopen(c_p, "rb"), bl_p);
+	FILE *file_p = fopen(c_p, "rb");
+	NALI_D_LOG("fopen %p", file_p)
+	return f_read1(file_p, bl_p);
 #endif
 }
 
 void *f_read1(FILE *file_p, uint32_t *bl_p)
 {
-	NALI_D_LOG("fopen %p", file_p)
-
 	NALI_D_INFO("fseek %d", fseek(file_p, 0, SEEK_END))
 	NALI_D_INFO("ftell %d", *bl_p = ftell(file_p))
 	NALI_D_INFO("fseek %d", fseek(file_p, 0, SEEK_SET))

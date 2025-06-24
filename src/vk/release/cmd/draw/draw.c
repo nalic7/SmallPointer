@@ -114,7 +114,7 @@ void vk_cmd_draw_set()
 	// const char vert_shader_path[] = NALI_F_HOME NALI_F_HOME_SHADER NALI_F_HOME_SHADER_VERT "/";
 	// uint32_t vert_index = 0;
 	// uint8_t vert_name_index = sizeof(vert_shader_path)-1;
-	// char *vert_file = malloc(vert_name_index + MATH_LENGTH(vert_index) + sizeof(shader_type)-1 + 1);
+	// char *vert_file = malloc(vert_name_index + M_LENGTH(vert_index) + sizeof(shader_type)-1 + 1);
 	// strcpy(vert_file, vert_shader_path);
 	// sprintf(vert_file + vert_name_index, "%u", vert_index);
 	// strcat(vert_file, shader_type);
@@ -122,7 +122,7 @@ void vk_cmd_draw_set()
 	// const char frag_shader_path[] = NALI_F_HOME NALI_F_HOME_SHADER NALI_F_HOME_SHADER_FRAG "/";
 	// uint32_t frag_index = 0;
 	// uint8_t frag_name_index = sizeof(frag_shader_path)-1;
-	// char *frag_file = malloc(frag_name_index + MATH_LENGTH(frag_index) + sizeof(shader_type)-1 + 1);
+	// char *frag_file = malloc(frag_name_index + M_LENGTH(frag_index) + sizeof(shader_type)-1 + 1);
 	// strcpy(frag_file, frag_shader_path);
 	// sprintf(frag_file + frag_name_index, "%u", frag_index);
 	// strcat(frag_file, shader_type);
@@ -220,6 +220,8 @@ int vk_cmd_draw_loop(void *p)
 {
 	while (!(s_surface_state & NALI_S_S_CLEAN))
 	{
+		nc_get();
+
 		vkWaitForFences(vkdevice, 1, &vkfence, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence);
 
@@ -240,7 +242,7 @@ int vk_cmd_draw_loop(void *p)
 			vkrect2d.extent = vksc_vkextent2d;
 
 			vkQueueWaitIdle(vkqueue_graphic);
-			M_M4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)lc_vkbuffer_p + 16)
+			MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)lc_vkbuffer_p + 16)
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
 //				rz = 0.0F;
@@ -288,7 +290,6 @@ int vk_cmd_draw_loop(void *p)
 
 				// // mtx_lock(m_mtx_t_draw_p);
 
-				mtx_lock(lc_mtx_t_p);
 				for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 				{
 					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &lc_vkbuffer, lcs_a_vkdevicesize_p + l_0);
@@ -312,7 +313,7 @@ int vk_cmd_draw_loop(void *p)
 
 				clock_gettime(CLOCK_MONOTONIC, &delta_end);
 				s_deltra = delta_end.tv_sec + (double)delta_end.tv_nsec / 1e9 - delta_start.tv_sec - (double)delta_start.tv_nsec / 1e9;
-				// ry += MATH_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
+				// ry += M_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
 
 				// for (uint8_t l_0 = 0; l_0 < vk_cmd_d_fp_bl; ++l_0)
@@ -332,8 +333,6 @@ int vk_cmd_draw_loop(void *p)
 					.size = 16 * sizeof(float),
 					.pNext = VK_NULL_HANDLE
 				});
-
-				mtx_unlock(lc_mtx_t_p);
 
 			vkCmdEndRenderPass(vkcommandbuffer);
 

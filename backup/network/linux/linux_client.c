@@ -7,7 +7,7 @@ static int init(void *p)
 	struct sockaddr_in sockaddr_in;
 
 	NALI_D_LOG("sinit")
-	nlc_state &= 0xFFu - NALI_NLC_FAIL;
+	nlc_state &= 0xFFu - NALI_NC_FAIL;
 
 	NALI_D_INFO("socket %d", l_r = server_socket = socket(AF_INET, SOCK_STREAM, 0))
 	//errno.h ECONNREFUSED ETIMEDOUT
@@ -15,18 +15,18 @@ static int init(void *p)
 
 	if (l_r < 0)
 	{
-		nlc_state |= NALI_NLC_FAIL;
+		nlc_state |= NALI_NC_FAIL;
 	}
 
 	sockaddr_in.sin_family = AF_INET;
 	sockaddr_in.sin_port = htons(NALI_SC_PORT);
 
-	NALI_D_INFO("inet_pton %d", l_r = inet_pton(AF_INET, NALI_NLC_IP, &sockaddr_in.sin_addr))
+	NALI_D_INFO("inet_pton %d", l_r = inet_pton(AF_INET, NALI_NC_IP, &sockaddr_in.sin_addr))
 	NALI_D_LOG("%s", strerror(errno))
 
 	if (l_r < 0)
 	{
-		nlc_state |= NALI_NLC_FAIL;
+		nlc_state |= NALI_NC_FAIL;
 	}
 
 	NALI_D_INFO("connect %d", l_r = connect(server_socket, (struct sockaddr*)&sockaddr_in, sizeof(sockaddr_in)))
@@ -34,7 +34,7 @@ static int init(void *p)
 
 	if (l_r < 0)
 	{
-		nlc_state |= NALI_NLC_FAIL;
+		nlc_state |= NALI_NC_FAIL;
 	}
 
 	NALI_D_INFO("setsockopt %d", l_r = setsockopt(server_socket, SOL_SOCKET, SO_RCVTIMEO, NALI_NLC_TIMEOUT, sizeof(struct timeval)))
@@ -42,7 +42,7 @@ static int init(void *p)
 
 	if (l_r < 0)
 	{
-		nlc_state |= NALI_NLC_FAIL;
+		nlc_state |= NALI_NC_FAIL;
 	}
 
 	//send new user
@@ -52,7 +52,7 @@ static int init(void *p)
 	NALI_LB_PT data_bl;
 	uint8_t *data_p;
 	ssize_t r;
-	while (!(nlc_state & NALI_NLC_FAIL))
+	while (!(nlc_state & NALI_NC_FAIL))
 	{
 		//s0-get
 		r = recv(server_socket, &data_bl, sizeof(NALI_LB_PT), MSG_DONTWAIT);
@@ -77,12 +77,12 @@ static int init(void *p)
 			NALI_D_INFO_A("c %d %s", errno, strerror(errno))
 			if (errno == ETIMEDOUT || errno == ECONNRESET || errno == ENETRESET || errno == ECONNABORTED)
 			{
-				nlc_state |= NALI_NLC_FAIL;
+				nlc_state |= NALI_NC_FAIL;
 			}
 		}
 		else
 		{
-			nlc_state &= 0xFFu - NALI_NLC_INIT;
+			nlc_state &= 0xFFu - NALI_NC_INIT;
 		}
 		errno_temp = errno;
 		//e0-out
@@ -90,7 +90,7 @@ static int init(void *p)
 
 	close(server_socket);
 	NALI_D_LOG("einit")
-	nlc_state &= 0xFFu - NALI_NLC_INIT;
+	nlc_state &= 0xFFu - NALI_NC_INIT;
 
 	if (s_surface_state & NALI_S_S_EXIT_C)
 	{
@@ -107,13 +107,13 @@ static int init(void *p)
 
 void nlc_set()
 {
-	nlc_state |= NALI_NLC_FAIL;
-	while (nlc_state & NALI_NLC_FAIL)
+	nlc_state |= NALI_NC_FAIL;
+	while (nlc_state & NALI_NC_FAIL)
 	{
-		nlc_state |= NALI_NLC_INIT;
+		nlc_state |= NALI_NC_INIT;
 		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
 
-		while (nlc_state & NALI_NLC_INIT)
+		while (nlc_state & NALI_NC_INIT)
 		{
 			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 		}

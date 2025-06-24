@@ -10,10 +10,12 @@ void d_set()
 	int l_i2 = remove(NALI_F_SAVE_LOG);
 	file_p = fopen(NALI_F_SAVE_LOG, "ab");
 
-	d_write("mtx_init %d", l_i0);
-	d_write("mkdir %d", l_i1);
-	d_write("remove %d", l_i2);
-	d_write("fopen %p", file_p);
+	NALI_D_LOG("_SC_OPEN_MAX %ld", sysconf(_SC_OPEN_MAX))
+
+	NALI_D_LOG("mtx_init %d", l_i0)
+	NALI_D_LOG("mkdir %d", l_i1)
+	NALI_D_LOG("remove %d", l_i2)
+	NALI_D_LOG("fopen %p", file_p)
 }
 
 void d_write(const char *format_p, ...)

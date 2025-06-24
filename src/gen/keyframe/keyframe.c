@@ -60,7 +60,7 @@ void gkf_write()
 				keyframe_p[l_0][l_1].animation_r_p[l_2][0] = *(float *)(data_p + step + sizeof(float));
 				keyframe_p[l_0][l_1].animation_r_p[l_2][1] = *(float *)(data_p + step + sizeof(float) * 2);
 				keyframe_p[l_0][l_1].animation_r_p[l_2][2] = *(float *)(data_p + step + sizeof(float) * 3);
-				M_V4_qi(keyframe_p[l_0][l_1].animation_r_p[l_2], 0)
+				MV4_qi(keyframe_p[l_0][l_1].animation_r_p[l_2], 0)
 				fwrite(keyframe_p[l_0][l_1].animation_r_p[l_2], sizeof(float), 4, file);
 				step += sizeof(float) * 4;
 

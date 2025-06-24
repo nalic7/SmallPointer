@@ -13,7 +13,7 @@ float
 	s_pointer_x = 0, s_pointer_y = 0,
 	s_rx = 0.0F,
 	s_ry = 0.0F,
-	s_rz = MATH_D2R(180.0F),
+	s_rz = M_D2R(180.0F),
 
 	s_tx = 0.0F,
 	s_ty = -1.5F,
@@ -32,8 +32,8 @@ static float
 
 void s_set()
 {
-	memcpy(lt_v4_array, m_m4x4_array + 12, sizeof(float) * 4);
-	memcpy(q0_m4x4_array, m_m4x4_array, sizeof(m_m4x4_array));
+	memcpy(lt_v4_array, mm4x4_array + 12, sizeof(float) * 4);
+	memcpy(q0_m4x4_array, mm4x4_array, sizeof(mm4x4_array));
 }
 
 void s_loop()
@@ -60,17 +60,17 @@ void s_loop()
 	s_rx += s_pointer_y * s_deltra;
 	s_ry += s_pointer_x * s_deltra;
 
-	if (s_rx > MATH_D2R(90.0F+45))
+	if (s_rx > M_D2R(90.0F+45))
 	{
-		s_rx = MATH_D2R(90.0F+45);
+		s_rx = M_D2R(90.0F+45);
 	}
-	else if (s_rx < MATH_D2R(-90.0F-45))
+	else if (s_rx < M_D2R(-90.0F-45))
 	{
-		s_rx = MATH_D2R(-90.0F-45);
+		s_rx = M_D2R(-90.0F-45);
 	}
 
 	// NALI_D_LOG("0 s_ry %f", s_ry)
-	s_ry = MATH_NORMALIZE(s_ry, MATH_D2R(360.0F));
+	s_ry = M_NORMALIZE(s_ry, M_D2R(360.0F));
 	// NALI_D_LOG("1 s_ry %f", s_ry)
 
 	s_pointer_x = 0;
@@ -84,26 +84,26 @@ void s_loop()
 	}
 
 
-	memcpy(lc_vkbuffer_p, m_m4x4_array, sizeof(m_m4x4_array));
+	memcpy(lc_vkbuffer_p, mm4x4_array, sizeof(mm4x4_array));
 
-	m_v4_q(0, 0, s_rz, q_v4_array);
-	m_v4_q2m(q_v4_array, q0_m4x4_array);
+	mv4_q(0, 0, s_rz, q_v4_array);
+	mv4_q2m(q_v4_array, q0_m4x4_array);
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
+	mm4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
-	m_v4_q(0, s_ry, 0, q_v4_array);
-	m_v4_q2m(q_v4_array, q0_m4x4_array);
+	mv4_q(0, s_ry, 0, q_v4_array);
+	mv4_q2m(q_v4_array, q0_m4x4_array);
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
+	mm4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
-	m_v4_m4(lc_vkbuffer_p, lt_v4_array, gt_v4_array);
+	mv4_m4(lc_vkbuffer_p, lt_v4_array, gt_v4_array);
 
-	m_v4_q(s_rx, 0, 0, q_v4_array);
-	m_v4_q2m(q_v4_array, q0_m4x4_array);
+	mv4_q(s_rx, 0, 0, q_v4_array);
+	mv4_q2m(q_v4_array, q0_m4x4_array);
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
+	mm4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
-	memcpy(q2_m4x4_array, m_m4x4_array, sizeof(m_m4x4_array));
+	memcpy(q2_m4x4_array, mm4x4_array, sizeof(mm4x4_array));
 
 	// m_v4_m4(m_vkbuffer_p, lt_v4_array, q2_m4x4_array + 12);
 	s_tx += gt_v4_array[0] / gt_v4_array[3];
@@ -113,7 +113,7 @@ void s_loop()
 	q2_m4x4_array[13] = s_ty;
 	q2_m4x4_array[14] = s_tz;
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
-	m_m4x4_m(q2_m4x4_array, q1_m4x4_array, lc_vkbuffer_p);
+	mm4x4_m(q2_m4x4_array, q1_m4x4_array, lc_vkbuffer_p);
 	// ((float *)m_vkbuffer_p)[12] = s_tx;
 	// ((float *)m_vkbuffer_p)[13] = s_ty;
 	// ((float *)m_vkbuffer_p)[14] = s_tz;

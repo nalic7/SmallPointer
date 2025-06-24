@@ -1,4 +1,4 @@
-const float m_m4x4_array[] =
+const float mm4x4_array[] =
 {
 	1.0F, 0.0F, 0.0F, 0.0F,
 	0.0F, 1.0F, 0.0F, 0.0F,
@@ -6,7 +6,7 @@ const float m_m4x4_array[] =
 	0.0F, 0.0F, 0.0F, 1.0F
 };
 
-void m_m4x4_i(float m[16])
+void mm4x4_i(float m[16])
 {
 	float identity[] =
 	{
@@ -19,7 +19,7 @@ void m_m4x4_i(float m[16])
 	int32_t l_0, l_1, l_2;
 	float s[16];
 	float t[16];
-	memcpy(s, m_m4x4_array, sizeof(m_m4x4_array));
+	memcpy(s, mm4x4_array, sizeof(mm4x4_array));
 	memcpy(t, m, sizeof(float) * 16);
 
 	for (l_0 = 0; l_0 < 3; l_0++)
@@ -120,7 +120,7 @@ void m_m4x4_i(float m[16])
 	memcpy(m, s, sizeof(float) * 16);
 }
 
-void m_m4x4_m(const float a[16], const float b[16], float w[16])
+void mm4x4_m(const float a[16], const float b[16], float w[16])
 {
 	// float float_array[16];
 	for (uint8_t l_0 = 0; l_0 < 4; l_0++)

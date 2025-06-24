@@ -130,23 +130,28 @@
 	#include "vk/release/cmd/image/image.h"
 	#include "vk/release/cmd/draw/draw.h"
 
-	#include "loader/client/client_f.h"
+	#include "loader/client/client_c.h"
+	#include "loader/client/client_a.h"
+	#include "loader/client/client_u.h"
+	#include "loader/client/client_m.h"
 	#include "loader/client/keyframe/keyframe.h"
-	#include "loader/client/model/model.h"
+	#include "loader/client/pose/pose.h"
 	#include "loader/client/shader/shader.h"
 	#include "loader/client/client.h"
-	#include "network/linux/linux_client.h"
+	#include "network/network_client.h"
 #endif
 
 #ifdef C_NALI_SERVER
 	#include <math.h>
 	// #include <stdint.h>
-	#include <sys/epoll.h>
+	// #include <sys/epoll.h>
 
-	#include "loader/server/server.h"
-	#include "loader/server/server_f.h"
 	#include "loader/server/server_c.h"
-	#include "network/linux/linux_server.h"
+	#include "loader/server/server.h"
+	#include "loader/server/server_a.h"
+	#include "loader/server/server_u.h"
+	#include "loader/server/server_m.h"
+	#include "network/network_server.h"
 #endif
 
 #include "file/file.h"
@@ -160,7 +165,7 @@
 	#include <errno.h>
 	#include <unistd.h>
 	#include <arpa/inet.h>
-	// #include <fcntl.h>
+	#include <fcntl.h>
 	#define NALI_SC_PORT 11111
 #endif
 

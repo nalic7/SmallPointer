@@ -2,8 +2,7 @@
 #define NALI_LOADER_BOTH_H
 
 //max connect
-#define NALI_LB_MAX_CLIENT 1
-
+#define NALI_LB_UM 1
 //max connect type
 #define NALI_LB_UT uint8_t
 //void user
@@ -27,11 +26,16 @@
 //model index
 #define NALI_LB_MIT uint16_t
 #define NALI_LB_M8BL 256/8
-//file/chunk
+#define NALI_LB_MIM 0xFFFFu-1
+#define NALI_LB_MIN 0xFFFFu
+//chunk
 #define NALI_LB_CT uint8_t
 #define NALI_LB_CIBL 16
 //xyz
 #define NALI_LB_CFBL 1024.0F
+//chunk hash
+//3 key
+#define NALI_LB_CHT uint16_t
 
 //s0-data
 //stage 1-2 data shader
@@ -47,20 +51,17 @@ extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
 //e0-data
 
 //s0-net
+typedef struct
+{
+	NALI_LB_MT m;
+	float *rt_p;
+} LB_M;
 //s1-client
 #define NALI_LB_C_DATA_FP_T uint8_t
-
-#define NALI_LB_C_ADD_U 0
-#define NALI_LB_C_SYNC_ALL_U2NEW_U 1
-#define NALI_LB_C_ADD_M 2
-#define NALI_LB_C_RM_M 3
-#define NALI_LB_C_SYNC_ALL_M_C 4
 //e1-client
 
 //s1-server
 #define NALI_LB_S_DATA_FP_T uint8_t
-
-#define NALI_LB_S_KEY_U 0
 
 //s2-key
 #define NALI_LB_S_KEY_W 1

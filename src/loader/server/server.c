@@ -1,58 +1,52 @@
-mtx_t *ls_mtx_t_p = &(mtx_t){};
+FILE *ls_file_p;
+uint32_t ls_file_step = 0;
 
-NALI_LB_UT ls_u_bl = 0;
-NALI_LB_UT *ls_u_p;
-float *ls_urt_p;
-NALI_LB_CT *ls_uc_p;
-
-NALI_LB_MIT ls_m_bl = 0;
-NALI_LB_MT *ls_m_p;
-NALI_LB_CT *ls_mc_p;
-float *ls_mrt_p;
-
-NALI_LB_PT ls_net_bl = 0;
+NALI_LB_PT ls_net_bl;
 uint8_t ls_net_p[NALI_LB_NET_BL];
 
 #define NALI_LS_STATE_ON 1
 static uint8_t ls_state;
 void ls_set()
 {
-	NALI_D_INFO("mtx_init %d", mtx_init(ls_mtx_t_p, mtx_plain))
+	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR))
+	NALI_D_INFO("fopen %d", ls_file_p = fopen(NALI_F_SAVE_SPACE, "rb"))
+	if (ls_file_p)
+	{
+		uint32_t data_bl;
+		uint8_t *data_p = f_read1(ls_file_p, &data_bl);
+		free(data_p);
+	}
+	NALI_D_INFO("fopen %d", ls_file_p = fopen(NALI_F_SAVE_SPACE, "wb"))
 
 	ls_state = NALI_LS_STATE_ON;
 
-	ls_u_p = malloc(0);
-	ls_urt_p = malloc(0);
-	ls_uc_p = malloc(0);
+	lsu_set();
 
-	ls_m_p = malloc(0);
-	ls_mc_p = malloc(0);
-	ls_mrt_p = malloc(0);
+	lsm_set();
 
-	lsc_set();
-
-	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER, S_IRUSR | S_IWUSR | S_IXUSR))
-	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER_ITEM, S_IRUSR | S_IWUSR | S_IXUSR))
-	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_USER_TEAM, S_IRUSR | S_IWUSR | S_IXUSR))
-
-	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE_MAP, S_IRUSR | S_IWUSR | S_IXUSR))
+	ns_set();
 
 	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
-
-	nls_set();
 }
 
-void ls_re()
+void ls_send()
 {
-	ls_u_bl = 0;
-	ls_u_p = realloc(ls_u_p, 0);
-	ls_urt_p = realloc(ls_urt_p, 0);
-	ls_uc_p = realloc(ls_uc_p, 0);
+	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)ls_net_p);
+	ls_net_bl = sizeof(struct timespec);
 
-	ls_m_bl = 0;
-	ls_m_p = realloc(ls_m_p, 0);
-	ls_mc_p = realloc(ls_mc_p, 0);
-	ls_mrt_p = realloc(ls_mrt_p, 0);
+	lsm_send_m_c2u_c(ls_net_bl);
+}
+
+void ls_read(NALI_LB_UT ui)
+{
+	ls_net_p;
+}
+
+void ls_save()
+{
+	lsc_save();
+	lsu_save();
+	lsm_save();
 }
 
 static NALI_LB_CT ls_load_bl = 0;
@@ -69,8 +63,6 @@ int ls_loop(void *p)
 	clock_gettime(CLOCK_MONOTONIC, &tick_start);
 	while (ls_state & NALI_LS_STATE_ON)
 	{
-		mtx_lock(ls_mtx_t_p);
-
 		//read file
 		//map
 		//e
@@ -83,6 +75,11 @@ int ls_loop(void *p)
 		// 	ls_load_p[l_0 * sizeof(NALI_LB_CT) * 3];
 		// }
 
+		lsm_update_m();
+		ls_send();
+		ns_get();
+		ns_check();
+
 		if (++tick == NALI_LB_MAX_TICK)
 		{
 			clock_gettime(CLOCK_MONOTONIC, &tick_end);
@@ -94,27 +91,14 @@ int ls_loop(void *p)
 			}
 			tick = 0;
 		}
-
-		mtx_unlock(ls_mtx_t_p);
 	}
 
-	mtx_lock(ls_mtx_t_p);
+	ns_free();
 
-	lsc_free();
+	fclose(ls_file_p);
 
-	free(ls_uc_p);
-	free(ls_urt_p);
-	free(ls_u_p);
-	ls_u_bl = 0;
-
-	ls_net_bl = 0;
-
-	free(ls_mrt_p);
-	free(ls_mc_p);
-	free(ls_m_p);
-	ls_m_bl = 0;
-
-	mtx_destroy(ls_mtx_t_p);
+	lsu_free();
+	lsm_free();
 
 	mtx_unlock(lb_mtx_t_p);
 
@@ -130,9 +114,6 @@ void ls_free()
 	s_surface_state |= NALI_S_S_EXIT_S;
 
 	mtx_lock(lb_mtx_t_p);
-	mtx_lock(ls_mtx_t_p);
-
-	nls_state |= NALI_NLS_FAIL;
 
 	ls_state &= 0xFFu - NALI_LS_STATE_ON;
 }

@@ -1,10 +1,10 @@
 #ifndef NALI_MATH_M4X4_H
 #define NALI_MATH_M4X4_H
 
-extern const float m_m4x4_array[16];
+extern const float mm4x4_array[16];
 
-void m_m4x4_i(float m[16]);
-void m_m4x4_m(const float a[16], const float b[16], float w[16]);
+void mm4x4_i(float m[16]);
+void mm4x4_m(const float a[16], const float b[16], float w[16]);
 
 // float z_range = z_near - z_far;
 // float tan_fov = tanf(fov);
@@ -13,7 +13,7 @@ void m_m4x4_m(const float a[16], const float b[16], float w[16]);
 // m4x4_p[10] = (-z_near - z_far) / z_range;
 // m4x4_p[11] = 1.0F;
 // m4x4_p[14] = 2.0F * z_far * z_near / z_range;
-#define M_M4X4_P(fov, aspect, z_near, z_far, m4x4_p) \
+#define MM4X4_P(fov, aspect, z_near, z_far, m4x4_p) \
 	(m4x4_p)[0] = -1.0F / (fov * aspect); \
 	(m4x4_p)[5] = 1.0F / fov; \
 	(m4x4_p)[10] = -(z_far + z_near) / (z_far - z_near); \

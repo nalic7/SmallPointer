@@ -32,12 +32,13 @@
 #define NALI_F_HOME_FRAG NALI_F_HOME "frag.spv"
 
 #define NALI_F_SAVE_LOG NALI_F_SAVE "log.dat"
+#define NALI_F_SAVE_SPACE NALI_F_SAVE "space.bin"
 
-#define NALI_F_SAVE_USER NALI_F_SAVE "user/"
-#define NALI_F_SAVE_USER_ITEM NALI_F_SAVE "user/item/"
-#define NALI_F_SAVE_USER_TEAM NALI_F_SAVE "user/team/"
+// #define NALI_F_SAVE_USER NALI_F_SAVE "user/"
+// #define NALI_F_SAVE_USER_ITEM NALI_F_SAVE "user/item/"
+// #define NALI_F_SAVE_USER_TEAM NALI_F_SAVE "user/team/"
 
-#define NALI_F_SAVE_MAP NALI_F_SAVE "map/"
+// #define NALI_F_SAVE_MAP NALI_F_SAVE "map/"
 
 void *f_read(const char *c_p, uint32_t *bl_p);
 void *f_read1(FILE *file_p, uint32_t *bl_p);

@@ -157,7 +157,7 @@
 
 // 		if (m_nali_g_image_state_uint8_t_p[i / (8/2)] & 1 << (i % (8/2)) * 2)
 // 		{
-// 			vkimagememorybarrier_array[0].subresourceRange.levelCount = MATH_MIPMAP(m_nali_g_image_wh_uint32_t_p[i2], m_nali_g_image_wh_uint32_t_p[i2_1]);
+// 			vkimagememorybarrier_array[0].subresourceRange.levelCount = M_MIPMAP(m_nali_g_image_wh_uint32_t_p[i2], m_nali_g_image_wh_uint32_t_p[i2_1]);
 // 			vkCmdPipelineBarrier(vkcommandbuffer, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, VK_NULL_HANDLE, 0, VK_NULL_HANDLE, 1, vkimagememorybarrier_array);
 // 			vkCmdCopyBufferToImage(vkcommandbuffer, m_nali_g_image_vkbuffer_p[i], m_nali_g_image_vkimage_p[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &vkbufferimagecopy);
 

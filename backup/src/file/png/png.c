@@ -15,7 +15,7 @@ void fp_read(const char *name_char_p, long *size_p)
 
 	uint32_t chunk_size;
 	NALI_D_INFO("fread %ld", fread(head_p, sizeof(uint32_t), 1, file_p))
-	// MATH_4E2S(chunk_size, (uint8_t *)&chunk_size, 0)
+	// M_4E2S(chunk_size, (uint8_t *)&chunk_size, 0)
 	NALI_D_LOG("chunk_size %d", chunk_size)
 
 	uint8_t *chunk_type_p = malloc(sizeof(uint8_t) * 4 + 1);
@@ -27,12 +27,12 @@ void fp_read(const char *name_char_p, long *size_p)
 	{
 		uint32_t width;
 		NALI_D_INFO("fread %ld", fread(&width, sizeof(uint32_t), 1, file_p))
-		MATH_4E2S(width, (uint8_t *)&width, 0)
+		M_4E2S(width, (uint8_t *)&width, 0)
 		NALI_D_LOG("width %d", width)
 
 		uint32_t height;
 		NALI_D_INFO("fread %ld", fread(&height, sizeof(uint32_t), 1, file_p))
-		MATH_4E2S(height, (uint8_t *)&height, 0)
+		M_4E2S(height, (uint8_t *)&height, 0)
 		NALI_D_LOG("height %d", height)
 
 		//bit_depth
@@ -61,7 +61,7 @@ void fp_read(const char *name_char_p, long *size_p)
 
 	uint32_t data_size;
 	NALI_D_INFO("fread %ld", fread(head_p, sizeof(uint32_t), 1, file_p))
-	MATH_4E2S(data_size, (uint8_t *)&data_size, 0)
+	M_4E2S(data_size, (uint8_t *)&data_size, 0)
 	NALI_D_LOG("data_size %d", data_size)
 
 	uint8_t *test = malloc(40 + 1);

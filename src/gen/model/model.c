@@ -259,12 +259,12 @@ void gm_write()
 		// 				joint_head_array[j / 8 + j_next / 8] |= 1 << (j_next % 8);
 
 		// 				memcpy(l_q, cgltf_animation_channel_p->target_node->rotation, sizeof(float) * 4);
-		// 				M_V4_qi(l_q, 0)
+		// 				MV4_qi(l_q, 0)
 		// 				for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
 		// 				{
-		// 					// M_V4_qi(p, l_4 * 4)
+		// 					// MV4_qi(p, l_4 * 4)
 		// 					m_v4_m(l_q, p + l_4 * 4, q + l_4 * 4);
-		// 					M_V4_qi(q, l_4 * 4)
+		// 					MV4_qi(q, l_4 * 4)
 		// 				}
 		// 				// for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
 		// 				// {

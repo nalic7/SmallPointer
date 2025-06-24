@@ -12,7 +12,7 @@ static void close_i(int epfd, int fd)
 	NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL))
 	close(fd);
 
-	c_fd_p = realloc(c_fd_p, sizeof(c_fd) * --ls_u_bl);
+	c_fd_p = realloc(c_fd_p, sizeof(c_fd) * --lsu_h1_bl);
 }
 
 static int init(void *p)
@@ -29,7 +29,7 @@ static int init(void *p)
 	struct epoll_event epoll_event_p[NALI_NLS_MAX_EPOLL_EVENT];
 	//e0-l
 
-	nls_state &= 0xFFu - NALI_NLS_FAIL;
+	nls_state &= 0xFFu - NALI_NS_FAIL;
 
 	struct sockaddr_in server_sockaddr_in, client_sockaddr_in;
 	socklen_t addrlen = sizeof(server_sockaddr_in);
@@ -38,7 +38,7 @@ static int init(void *p)
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
-		nls_state |= NALI_NLS_FAIL;
+		nls_state |= NALI_NS_FAIL;
 	}
 
 	//SO_RCVTIMEO
@@ -46,7 +46,7 @@ static int init(void *p)
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
-		nls_state |= NALI_NLS_FAIL;
+		nls_state |= NALI_NS_FAIL;
 	}
 
 	memset(&server_sockaddr_in, 0, sizeof(struct sockaddr_in));
@@ -58,28 +58,28 @@ static int init(void *p)
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
-		nls_state |= NALI_NLS_FAIL;
+		nls_state |= NALI_NS_FAIL;
 	}
 
 	NALI_D_INFO("listen %d", l_r = listen(server_fd, 3))
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
-		nls_state |= NALI_NLS_FAIL;
+		nls_state |= NALI_NS_FAIL;
 	}
 
 	NALI_D_INFO("epoll_create1 %d", l_r = epfd = epoll_create1(0))
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
-		nls_state |= NALI_NLS_FAIL;
+		nls_state |= NALI_NS_FAIL;
 	}
 
 	NALI_D_INFO("epoll_ctl %d", l_r = epoll_ctl(epfd, EPOLL_CTL_ADD, server_fd, &(struct epoll_event){.events = EPOLLIN, .data.ptr = &server_fd}))
 	NALI_D_LOG("%s", strerror(errno))
 	if (l_r < 0)
 	{
-		nls_state |= NALI_NLS_FAIL;
+		nls_state |= NALI_NS_FAIL;
 	}
 
 	NALI_LB_PT data_bl;
@@ -87,7 +87,7 @@ static int init(void *p)
 	ssize_t r;
 
 	int errno_temp = 0;
-	while (!(nls_state & NALI_NLS_FAIL))
+	while (!(nls_state & NALI_NS_FAIL))
 	{
 		int event_count = epoll_wait(epfd, epoll_event_p, NALI_NLS_MAX_EPOLL_EVENT, 1000);
 
@@ -99,14 +99,15 @@ static int init(void *p)
 				NALI_D_INFO("accept %d", new_fd = accept(server_fd, (struct sockaddr*)&client_sockaddr_in, &addrlen))
 				NALI_D_LOG("%s", strerror(errno))
 
-				if (ls_u_bl == NALI_LB_MAX_CLIENT)
+				if (lsu_h1_bl == NALI_LB_UM)
 				{
 					close(new_fd);
 				}
 				else
 				{
-					c_fd_p = realloc(c_fd_p, sizeof(c_fd) * (ls_u_bl + 1));
-					c_fd_p[ls_u_bl].fd = new_fd;
+					c_fd_p = realloc(c_fd_p, sizeof(c_fd) * (lsu_h1_bl + 1));
+					c_fd_p[lsu_h1_bl].fd = new_fd;
+					c_fd_p[lsu_h1_bl].ui = NALI_LB_UN;
 					NALI_D_INFO("epoll_ctl %d", epoll_ctl(epfd, EPOLL_CTL_ADD, new_fd, &(struct epoll_event){.events = EPOLLIN, .data.ptr = c_fd_p}))
 				}
 			}
@@ -129,19 +130,21 @@ static int init(void *p)
 				}
 				else
 				{
-					if (ls_u_p[ui] == NALI_LB_UN)
+					if (lsu_h1_p[ui] == NALI_LB_UN)
 					{
 						if (r == sizeof(NALI_LB_UT))
 						{
 							data_p = malloc(data_bl);
 							r = recv(fd, &data_p, data_bl, MSG_DONTWAIT);
 
-							if (r > 0 && *data_p < NALI_LB_MAX_CLIENT)
+							if (r > 0 && *data_p < NALI_LB_UM)
 							{
 								uint8_t l0 = 0;
-								for (NALI_LB_UT l_0 = 0; l_0 < ls_u_bl; ++l_0)
+								for (NALI_LB_UT l_0 = 0; l_0 < lsu_h1_bl; ++l_0)
 								{
-									if (ls_u_p[ui] == *data_p)
+									// fseek(ls_file_p, lsu_h1_p[lsu_h_ul] * (sizeof(uint8_t) + sizeof(NALI_LB_CT) * 3 + sizeof(float) * (3 + 3)), SEEK_SET);
+
+									if (lsu_h1_p[ui] == *data_p)
 									{
 										l0 |= 1;
 										break;
@@ -154,7 +157,7 @@ static int init(void *p)
 								}
 								else
 								{
-									ls_u_p[ui] = *data_p;
+									lsu_h1_p[ui] = *data_p;
 									lsf_add_u(ui);
 								}
 							}
@@ -192,13 +195,13 @@ static int init(void *p)
 		}
 		else
 		{
-			nls_state &= 0xFFu - NALI_NLS_INIT;
+			nls_state &= 0xFFu - NALI_NS_INIT;
 		}
 		errno_temp = errno;
 	}
 
 	//s0-clean
-	for (uint8_t u = 0; u < ls_u_bl; u++)
+	for (uint8_t u = 0; u < lsu_h1_bl; u++)
 	{
 		close_i(epfd, c_fd_p[u].fd);
 	}
@@ -210,7 +213,7 @@ static int init(void *p)
 
 	free(c_fd_p);
 
-	nls_state &= 0xFFu - NALI_NLS_INIT;
+	nls_state &= 0xFFu - NALI_NS_INIT;
 
 	if (s_surface_state & NALI_S_S_EXIT_S)
 	{
@@ -227,13 +230,13 @@ static int init(void *p)
 
 void nls_set()
 {
-	nls_state |= NALI_NLS_FAIL;
-	while (nls_state & NALI_NLS_FAIL)
+	nls_state |= NALI_NS_FAIL;
+	while (nls_state & NALI_NS_FAIL)
 	{
-		nls_state |= NALI_NLS_INIT;
+		nls_state |= NALI_NS_INIT;
 		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, init, NULL))
 
-		while (nls_state & NALI_NLS_INIT)
+		while (nls_state & NALI_NS_INIT)
 		{
 			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 		}

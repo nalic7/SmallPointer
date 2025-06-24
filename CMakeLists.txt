@@ -60,7 +60,7 @@ if(CLIENT)
   file(GLOB_RECURSE G_SOURCES src/loader/client/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
-  list(APPEND SOURCES src/network/linux/linux_client.c)
+  list(APPEND SOURCES src/network/network_client.c)
 
   list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
   list(APPEND SOURCES src/al/al.c)
@@ -72,7 +72,7 @@ if(SERVER)
   file(GLOB_RECURSE G_SOURCES src/loader/server/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
-  list(APPEND SOURCES src/network/linux/linux_server.c)
+  list(APPEND SOURCES src/network/network_server.c)
 endif()
 
 if(S_NAME STREQUAL "android")

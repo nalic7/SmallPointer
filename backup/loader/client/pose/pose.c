@@ -1,16 +1,16 @@
-uint32_t lcm_rgba_bl;
+uint32_t lcp_rgba_bl;
 
 uint8_t
 	// lcm_max_j = 0,
 
-	*lcm_joint_count_p,
-	lcm_joint_count_bl;
+	*lcp_joint_count_p,
+	lcp_joint_count_bl;
 
 float
-	**lcm_bp_p,
-	**lcm_a_p;
+	**lcp_bp_p,
+	**lcp_a_p;
 
-VkDeviceSize *lcm_vkdevicesize_p;
+VkDeviceSize *lcp_vkdevicesize_p;
 //cache
 
 typedef struct
@@ -32,41 +32,41 @@ static uint8_t model_il;
 
 static float *rgba_p;
 
-void lcm_set()
+void lcp_set()
 {
-	lcm_joint_count_bl = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
+	lcp_joint_count_bl = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
 	NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
 
-	NALI_LB_CACHE_P_BS_P = malloc(sizeof(uint8_t *) * lcm_joint_count_bl);
-	NALI_LB_CACHE_P_BE_P = malloc(sizeof(uint8_t *) * lcm_joint_count_bl);
+	NALI_LB_CACHE_P_BS_P = malloc(sizeof(uint8_t *) * lcp_joint_count_bl);
+	NALI_LB_CACHE_P_BE_P = malloc(sizeof(uint8_t *) * lcp_joint_count_bl);
 
-	lcm_joint_count_p = malloc(lcm_joint_count_bl);
-	memcpy(lcm_joint_count_p, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], lcm_joint_count_bl);
-	NALI_LB_CACHE_P_D_BL_P[1] += lcm_joint_count_bl;
+	lcp_joint_count_p = malloc(lcp_joint_count_bl);
+	memcpy(lcp_joint_count_p, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], lcp_joint_count_bl);
+	NALI_LB_CACHE_P_D_BL_P[1] += lcp_joint_count_bl;
 
 	uint16_t l_bone_bl = 0;
 	m_bone_p = malloc(0);
 
-	lcm_bp_p = malloc(sizeof(float *) * lcm_joint_count_bl);
-	lcm_a_p = malloc(sizeof(float *) * lcm_joint_count_bl);
+	lcp_bp_p = malloc(sizeof(float *) * lcp_joint_count_bl);
+	lcp_a_p = malloc(sizeof(float *) * lcp_joint_count_bl);
 
-	lcm_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * (lcm_joint_count_bl + 2));
+	lcp_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * (lcp_joint_count_bl + 2));
 
-	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
 		// if (lcm_max_j < lcm_joint_count_p[l_0])
 		// {
 		// 	lcm_max_j = lcm_joint_count_p[l_0];
 		// }
 
-		NALI_LB_CACHE_P_BS_P[l_0] = malloc(lcm_joint_count_p[l_0]);
-		NALI_LB_CACHE_P_BE_P[l_0] = malloc(lcm_joint_count_p[l_0]);
+		NALI_LB_CACHE_P_BS_P[l_0] = malloc(lcp_joint_count_p[l_0]);
+		NALI_LB_CACHE_P_BE_P[l_0] = malloc(lcp_joint_count_p[l_0]);
 		NALI_LB_CACHE_P_BS_P[l_0][0] = 0;
 
-		m_bone_p = realloc(m_bone_p, sizeof(m_bone) * (l_bone_bl + lcm_joint_count_p[l_0]));
-		lcm_bp_p[l_0] = malloc(sizeof(float) * 16 * 2 * lcm_joint_count_p[l_0]);
+		m_bone_p = realloc(m_bone_p, sizeof(m_bone) * (l_bone_bl + lcp_joint_count_p[l_0]));
+		lcp_bp_p[l_0] = malloc(sizeof(float) * 16 * 2 * lcp_joint_count_p[l_0]);
 
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
 			uint8_t size = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
 			NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
@@ -84,23 +84,23 @@ void lcm_set()
 			NALI_LB_CACHE_P_BE_P[l_0][l_1] = NALI_LB_CACHE_P_BS_P[l_0][l_1] + size;
 		}
 
-		l_bone_bl += lcm_joint_count_p[l_0];
+		l_bone_bl += lcp_joint_count_p[l_0];
 	}
 
 	l_bone_bl = 0;
-	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
-			memcpy(lcm_bp_p[l_0] + l_1 * 16, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
-			memcpy(lcm_bp_p[l_0] + l_1 * 16 + 16, lcm_bp_p[l_0] + l_1 * 16, sizeof(float) * 16);
+			memcpy(lcp_bp_p[l_0] + l_1 * 16, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
+			memcpy(lcp_bp_p[l_0] + l_1 * 16 + 16, lcp_bp_p[l_0] + l_1 * 16, sizeof(float) * 16);
 		}
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
-			m_m4x4_i(lcm_bp_p[l_0] + l_1 * 16 + 16);
+			mm4x4_i(lcp_bp_p[l_0] + l_1 * 16 + 16);
 		}
-		NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 16 * lcm_joint_count_p[l_0];
-		l_bone_bl += lcm_joint_count_p[l_0];
+		NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 16 * lcp_joint_count_p[l_0];
+		l_bone_bl += lcp_joint_count_p[l_0];
 	}
 
 	// l_bone_bl = 0;
@@ -280,14 +280,14 @@ void lcm_set()
 		lcs_ic_p[l_0] = index_bl_p[l_0] / sizeof(uint32_t);
 	}
 
-	lcm_rgba_bl = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
+	lcp_rgba_bl = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
 	NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
-	lcm_rgba_bl *= 4 * sizeof(float);
-	rgba_p = malloc(lcm_rgba_bl);
-	memcpy(rgba_p, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], lcm_rgba_bl);
-	NALI_LB_CACHE_P_D_BL_P[1] += lcm_rgba_bl;
+	lcp_rgba_bl *= 4 * sizeof(float);
+	rgba_p = malloc(lcp_rgba_bl);
+	memcpy(rgba_p, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], lcp_rgba_bl);
+	NALI_LB_CACHE_P_D_BL_P[1] += lcp_rgba_bl;
 	//apply color
-	for (uint32_t l_0 = 0; l_0 < lcm_rgba_bl / sizeof(float); ++l_0)
+	for (uint32_t l_0 = 0; l_0 < lcp_rgba_bl / sizeof(float); ++l_0)
 	{
 		rgba_p[l_0] = pow(rgba_p[l_0], 1.0F / 5.0F);
 	}
@@ -332,30 +332,30 @@ void lcm_set()
 
 	//init data
 	l_step = 0;
-	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
 		uint8_t l_0_0 = 0;
-		lcm_a_p[l_0] = malloc(sizeof(float) * 4 * 3 * lcm_joint_count_p[l_0]);
+		lcp_a_p[l_0] = malloc(sizeof(float) * 4 * 3 * lcp_joint_count_p[l_0]);
 
-		for (uint8_t l_1 = 0; l_1 < lcm_joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
 			for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
 			{
-				*(float *)(lcm_a_p[l_0] + l_step + l_2 * sizeof(float)) = 1;
+				*(float *)(lcp_a_p[l_0] + l_step + l_2 * sizeof(float)) = 1;
 			}
 
 			//start end
-			*(uint32_t *)(lcm_a_p[l_0] + l_step + 3 * sizeof(float)) = NALI_LB_CACHE_P_BS_P[l_0][l_1] | NALI_LB_CACHE_P_BE_P[l_0][l_1] << 8;
+			*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = NALI_LB_CACHE_P_BS_P[l_0][l_1] | NALI_LB_CACHE_P_BE_P[l_0][l_1] << 8;
 			l_step += 4 * sizeof(float);
 
-			memcpy(lcm_a_p[l_0] + l_step, m_m4x4_array + 12, 4 * sizeof(float));
+			memcpy(lcp_a_p[l_0] + l_step, mm4x4_array + 12, 4 * sizeof(float));
 			l_step += 4 * sizeof(float);
 
-			memset(lcm_a_p[l_0] + l_step, 0, 3 * sizeof(float));
+			memset(lcp_a_p[l_0] + l_step, 0, 3 * sizeof(float));
 
 			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
 			{
-				*(uint32_t *)(lcm_a_p[l_0] + l_step + 3 * sizeof(float)) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
+				*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
 
 				++l_0_0;
 				if (l_0_0 == 4)
@@ -373,7 +373,7 @@ void lcm_set()
 	free(NALI_LB_CACHE_P_BE_P);
 
 	//step
-	lc_vkdevicesize = NALI_LCM_VP_BL + lcm_rgba_bl;
+	lc_vkdevicesize = NALI_LCP_VP_BL + lcp_rgba_bl;
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
@@ -394,24 +394,24 @@ void lcm_set()
 	// {
 	// 	lc_vkdevicesize += lcm_joint_count_p[l_0] * sizeof(float) * 16 * 2 + lcm_joint_count_p[l_0] * sizeof(float) * 4 * 3;
 	// }
-	lc_vkdevicesize += NALI_LCM_P_BL;
+	lc_vkdevicesize += NALI_LCP_P_BL;
 
 	lc_vkdevicesize = (lc_vkdevicesize + 63) & ~63;
 }
 
-void lcm_vk()
+void lcp_vk()
 {
 	uint32_t step = 0;
 
 	//UBOS gui world
-	memcpy(lc_vkbuffer_p + step, m_m4x4_array, sizeof(m_m4x4_array));
-	step += sizeof(m_m4x4_array);
+	memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));
+	step += sizeof(mm4x4_array);
 
 	memset(lc_vkbuffer_p + step, 0, sizeof(float) * 16);
 	step += sizeof(float) * 16;
 
-	memcpy(lc_vkbuffer_p + step, rgba_p, lcm_rgba_bl);
-	step += lcm_rgba_bl;
+	memcpy(lc_vkbuffer_p + step, rgba_p, lcp_rgba_bl);
+	step += lcp_rgba_bl;
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
@@ -427,14 +427,14 @@ void lcm_vk()
 
 	//UBOB
 	//use index 0 with limit as default
-	lcm_vkdevicesize_p[lcm_joint_count_bl] = step;
-	for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	lcp_vkdevicesize_p[lcp_joint_count_bl] = step;
+	for (uint32_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
-		lcm_vkdevicesize_p[l_0] = step;
-		memcpy(lc_vkbuffer_p + step, lcm_bp_p[l_0], sizeof(float) * 16 * 2 * lcm_joint_count_p[l_0]);
-		step += sizeof(float) * 16 * 2 * lcm_joint_count_p[l_0];
+		lcp_vkdevicesize_p[l_0] = step;
+		memcpy(lc_vkbuffer_p + step, lcp_bp_p[l_0], sizeof(float) * 16 * 2 * lcp_joint_count_p[l_0]);
+		step += sizeof(float) * 16 * 2 * lcp_joint_count_p[l_0];
 	}
-	lcm_vkdevicesize_p[lcm_joint_count_bl + 1] = step;
+	lcp_vkdevicesize_p[lcp_joint_count_bl + 1] = step;
 
 	vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
 	{
@@ -515,17 +515,17 @@ void lcm_vk()
 	//e0-ssboa default
 }
 
-void lcm_free()
+void lcp_free()
 {
-	for (uint8_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
-		free(lcm_bp_p[l_0]);
-		free(lcm_a_p[l_0]);
+		free(lcp_bp_p[l_0]);
+		free(lcp_a_p[l_0]);
 	}
-	free(lcm_bp_p);
-	free(lcm_a_p);
+	free(lcp_bp_p);
+	free(lcp_a_p);
 
-	free(lcm_joint_count_p);
+	free(lcp_joint_count_p);
 
 	free(m_bone_p);
 }

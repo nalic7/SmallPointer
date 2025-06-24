@@ -1,6 +1,6 @@
 #version 450
 
-#define NALI_LCM_BONE_BL 22
+#define NALI_LCP_BONE_BL 22
 
 layout(location = 0) in vec3 a_v;
 layout(location = 1) in uint a_c1j1;
@@ -18,7 +18,7 @@ struct PB
 };
 layout(std140, set = 0, binding = 1) uniform UBOB
 {
-	PB pb[NALI_LCM_BONE_BL];
+	PB pb[NALI_LCP_BONE_BL];
 } ubob;
 
 struct PA
@@ -29,14 +29,14 @@ struct PA
 };
 layout(std140, set = 0, binding = 2) uniform UBOA
 {
-	PA pa[NALI_LCM_BONE_BL];
+	PA pa[NALI_LCP_BONE_BL];
 	// mat4 m;
 } uboa;
 
 /*layout(std430, set = 0, binding = 2) readonly buffer SSBOAS
 {
 	//vec4
-	vec3 ssboas_s[NALI_LCM_BONE_BL];
+	vec3 ssboas_s[NALI_LCP_BONE_BL];
 };*/
 
 layout(location = 0) out uint f_c;

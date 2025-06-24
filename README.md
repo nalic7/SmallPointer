@@ -2,29 +2,32 @@
 # [Shader](source/shader)
 # [Path](doc/path.md)
 # [Gentoo Linux](doc/gentoo.md)
-# SETUP
->Linux / Android
-1. app-editors/vscodium-1.100.33714
+# README
+>Extensions
 
-	settings.json
-	```json
+Clang [clangd](https://github.com/clangd/vscode-clangd)  
+CMake [CMake Tools](https://github.com/microsoft/vscode-cmake-tools)  
+LLDB Debug [CodeLLDB](https://github.com/vadimcn/codelldb)  
+GLSL [Shader validator](https://github.com/antaalt/shader-validator)  
+MD [Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)
+>~/.config/VSCodium/User/settings.json
+```json
+{
+	"editor.largeFileOptimizations": false,
+	"editor.renderWhitespace": "all",
+	"clangd.enableCodeCompletion": false,
+	"editor.minimap.enabled": false,
+	"cmake.debugConfig.type": "lldb",
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false,
+	"[cmake]":
 	{
-		"editor.largeFileOptimizations": false,
-		"editor.renderWhitespace": "all",
-		"clangd.enableCodeCompletion": false,
-		"editor.minimap.enabled": false,
-		"cmake.debugConfig.type": "lldb"
+		"editor.insertSpaces": true,
+		"editor.tabSize": 2
 	}
-	```
-
-	Extensions
-	[clangd](https://github.com/clangd/vscode-clangd)_c
-	[CMake Tools](https://github.com/microsoft/vscode-cmake-tools)_cmake
-	[CodeLLDB](https://github.com/vadimcn/codelldb)_debug
-	[Shader validator](https://github.com/antaalt/shader-validator)_glsl
-	[Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)_md
-2. dev-util/android-studio-2024.3.2.14
-3. blender 4.4.3
+}
+```
 >Compile Shader
 ```bash
 #vulkan SPIR-V
@@ -89,14 +92,8 @@ git clone https://github.com/jkuhlmann/cgltf
 
 >[debug.h](src/debug/debug.h)
 <!-- ### LWJGL64
-<span style="font-size: large;">
-
 >JVM arguments
-
 	-Dorg.lwjgl.librarypath=/path
 	-Dorg.lwjgl3.glfw.libname=/path
-
-</span>
-
 ### NALIGL
 ### NALIAL -->

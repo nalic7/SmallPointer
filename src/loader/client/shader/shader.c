@@ -129,7 +129,7 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 	{
 		.buffer = lc_vkbuffer,
 		.offset = v_b_vkdevicesize_p[3],
-		.range = lcm_rgba_bl
+		.range = lcp_rgba_bl
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 3, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[3], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 3);
 
@@ -138,7 +138,7 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 	{
 		.buffer = lc_vkbuffer,
 		.offset = v_b_vkdevicesize_p[4],
-		.range = lcm_rgba_bl
+		.range = lcp_rgba_bl
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 4, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[4], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 4);
 }
@@ -159,16 +159,12 @@ void lcs_set()
 
 void lcs_loop()
 {
-	mtx_lock(lc_mtx_t_p);
-
 	if (lcs_vkmappedmemoryrange_bl)
 	{
 		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], lcs_vkmappedmemoryrange_bl, lcs_vkmappedmemoryrange_p);
 		lcs_vkmappedmemoryrange_p = realloc(lcs_vkmappedmemoryrange_p, 0);
 		lcs_vkmappedmemoryrange_bl = 0;
 	}
-
-	mtx_unlock(lc_mtx_t_p);
 }
 
 void lcs_vk()
