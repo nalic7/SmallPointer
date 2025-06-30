@@ -19,7 +19,7 @@ struct zwp_locked_pointer_v1 *wlc_zwp_locked_pointer_v1_p = NULL;
 struct zwp_relative_pointer_manager_v1 *wlc_zwp_relative_pointer_manager_v1_p = NULL;
 struct zwp_relative_pointer_v1 *wlc_zwp_relative_pointer_v1_p = NULL;
 
-void wlc_clean()
+void swlc_clean()
 {
 	if (wlc_wl_seat_p)
 	{
@@ -116,20 +116,20 @@ static int loop(void* arg)
 	if (r < 0)
 	{
 		NALI_D_LOG("wl_display_dispatch %d", r);
-		wlc_clean();
-		wlc_set();
+		swlc_clean();
+		swlc_set();
 	}
-	s_surface_state |= NALI_S_S_RENDER_ABLE;
+	s_state |= NALI_S_S_RENDER_ABLE;
 
 	while (r > -1 && r != INT_MAX)
 	{
-		if (s_surface_state & NALI_S_S_CLEAN)
+		if (s_state & NALI_S_S_CLEAN)
 		{
 			r = INT_MAX;
 		}
 		else
 		{
-			wlcsp_change_cursor(1);
+			swlcsp_change_cursor(1);
 			r = wl_display_dispatch(wlc_wl_display_client_p);
 		}
 	}
@@ -137,20 +137,20 @@ static int loop(void* arg)
 	if (r < 0)
 	{
 		NALI_D_LOG("wl_display_dispatch %d", r);
-		wlc_clean();
+		swlc_clean();
 	}
 	return 0;
 }
-void wlc_set()
+void swlc_set()
 {
 	NALI_D_INFO("wl_display_connect %p", wlc_wl_display_client_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
 	// info("wl_display_get_fd %d", wl_display_get_fd(m_wl_display_client))
 
 	NALI_D_INFO("wl_display_get_registry %p", wlc_wl_registry_p = wl_display_get_registry(wlc_wl_display_client_p))
 
-	NALI_D_INFO("wl_registry_add_listener %d", wl_registry_add_listener(wlc_wl_registry_p, &wlcr_wl_registry_listener, NULL))
+	NALI_D_INFO("wl_registry_add_listener %d", wl_registry_add_listener(wlc_wl_registry_p, &swlcr_wl_registry_listener, NULL))
 	NALI_D_INFO("wl_display_roundtrip %d", wl_display_roundtrip(wlc_wl_display_client_p))
-	wlcsp_init_cursor();
+	swlcsp_init_cursor();
 
 	// if (!m_wl_compositor)
 	// {
@@ -162,8 +162,8 @@ void wlc_set()
 	NALI_D_INFO("xdg_wm_base_get_xdg_surface %p", wlc_xdg_surface_p = xdg_wm_base_get_xdg_surface(wlc_xdg_wm_base_p, wlc_wl_surface_p))
 	NALI_D_INFO("xdg_surface_get_toplevel %p", wlc_xdg_toplevel_p = xdg_surface_get_toplevel(wlc_xdg_surface_p))
 
-	NALI_D_INFO("xdg_surface_add_listener %d", xdg_surface_add_listener(wlc_xdg_surface_p, &wlcxdg_xdg_surface_listener, NULL))
-	NALI_D_INFO("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(wlc_xdg_toplevel_p, &wlcxdg_xdg_toplevel_listener, NULL))
+	NALI_D_INFO("xdg_surface_add_listener %d", xdg_surface_add_listener(wlc_xdg_surface_p, &swlcxdg_xdg_surface_listener, NULL))
+	NALI_D_INFO("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(wlc_xdg_toplevel_p, &swlcxdg_xdg_toplevel_listener, NULL))
 
 	wl_surface_commit(wlc_wl_surface_p);
 

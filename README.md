@@ -5,9 +5,9 @@
 # README
 >Extensions
 
-Clang [clangd](https://github.com/clangd/vscode-clangd)  
+Code-GCC [clangd](https://github.com/clangd/vscode-clangd)  
 CMake [CMake Tools](https://github.com/microsoft/vscode-cmake-tools)  
-LLDB Debug [CodeLLDB](https://github.com/vadimcn/codelldb)  
+Debug-GDB [CodeLLDB](https://github.com/vadimcn/codelldb)  
 GLSL [Shader validator](https://github.com/antaalt/shader-validator)  
 MD [Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)
 >~/.config/VSCodium/User/settings.json

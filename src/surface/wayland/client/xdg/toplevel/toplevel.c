@@ -10,7 +10,7 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 		s_width = width;
 		s_height = height;
 		wl_surface_commit(wlc_wl_surface_p);
-		s_surface_state |= NALI_S_S_RE;
+		s_state |= NALI_S_S_RE;
 	}
 
 	// if (width > 0 && height > 0)
@@ -38,7 +38,7 @@ static void xdg_toplevel_listener_wm_capabilities(void* data, struct xdg_topleve
 	// info("xdg_toplevel_listener_wm_capabilities")
 }
 
-struct xdg_toplevel_listener wlcxdg_xdg_toplevel_listener =
+struct xdg_toplevel_listener swlcxdg_xdg_toplevel_listener =
 {
 	.configure = xdg_toplevel_listener_configure,
 	.close = xdg_toplevel_listener_close,

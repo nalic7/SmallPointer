@@ -8,9 +8,11 @@ typedef struct
 	struct sockaddr_in client_sockaddr_in;
 	socklen_t client_sockaddr_in_bl;
 
-	//u
-	NALI_LB_CHT ch;
-	float rt[6];
+	float _rt_p[3 + 2];
+	NALI_LB_CT c_p[3];
+	NALI_LB_CHT *ch_p;
+	uint8_t ch_bl;
+	LB_U lb_u;
 } NS;
 extern NS ns_p[NALI_LB_UM];
 

@@ -1,6 +1,6 @@
 const uint32_t ns_u_p[NALI_LB_UM] =
 {
-	M_IP(127, 0, 0, 1)
+	NALI_M_IP(127, 0, 0, 1)
 };
 
 static int server_fd;

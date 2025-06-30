@@ -1,6 +1,6 @@
 #ifndef NALI_WAYLAND_CLIENT_REGISTER_H
 #define NALI_WAYLAND_CLIENT_REGISTER_H
 
-extern struct wl_registry_listener wlcr_wl_registry_listener;
+extern struct wl_registry_listener swlcr_wl_registry_listener;
 
 #endif

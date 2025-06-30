@@ -9,36 +9,36 @@ static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard
 	if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
 	{
 		if (key == KEY_TAB)
-			wlczwp_setPointer();
+			swlczwp_setPointer();
 
 		if (key == KEY_W)
-			s_key |= NALI_S_KEY_W;
+			lcu_k ^= NALI_LB_K_W;
 		if (key == KEY_S)
-			s_key |= NALI_S_KEY_S;
+			lcu_k ^= NALI_LB_K_S;
 		if (key == KEY_A)
-			s_key |= NALI_S_KEY_A;
+			lcu_k ^= NALI_LB_K_A;
 		if (key == KEY_D)
-			s_key |= NALI_S_KEY_D;
+			lcu_k ^= NALI_LB_K_D;
 		if (key == KEY_SPACE)
-			s_key |= NALI_S_KEY_SPACE;
+			lcu_k ^= NALI_LB_K_JUMP;
 		if (key == KEY_LEFTCTRL)
-			s_key |= NALI_S_KEY_LEFTCTRL;
+			lcu_k ^= NALI_LB_K_DIG;
 		//KEY_LEFTSHIFT
 	}
 	else
 	{
 		if (key == KEY_W)
-			s_key &= 0xFFu - NALI_S_KEY_W;
+			lcu_k ^= NALI_LB_K_W;
 		if (key == KEY_S)
-			s_key &= 0xFFu - NALI_S_KEY_S;
+			lcu_k ^= NALI_LB_K_S;
 		if (key == KEY_A)
-			s_key &= 0xFFu - NALI_S_KEY_A;
+			lcu_k ^= NALI_LB_K_A;
 		if (key == KEY_D)
-			s_key &= 0xFFu - NALI_S_KEY_D;
+			lcu_k ^= NALI_LB_K_D;
 		if (key == KEY_SPACE)
-			s_key &= 0xFFu - NALI_S_KEY_SPACE;
+			lcu_k ^= NALI_LB_K_JUMP;
 		if (key == KEY_LEFTCTRL)
-			s_key &= 0xFFu - NALI_S_KEY_LEFTCTRL;
+			lcu_k ^= NALI_LB_K_DIG;
 	}
 }
 
@@ -62,7 +62,7 @@ static void wl_keyboard_listener_repeat_info(void* data, struct wl_keyboard* wl_
 	// NALI_D_LOG("wl_keyboard_listener_repeat_info")
 }
 
-struct wl_keyboard_listener wlcsk_wl_keyboard_listener =
+struct wl_keyboard_listener swlcsk_wl_keyboard_listener =
 {
 	.keymap = wl_keyboard_listener_keymap,
 	.enter = wl_keyboard_listener_enter,

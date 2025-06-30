@@ -37,6 +37,23 @@ void lb_set()
 	NALI_LB_CACHE_P_D_P = f_read(NALI_F_HOME_ASSET, NALI_LB_CACHE_P_D_BL_P);
 }
 
+#define NALI_LB_RZ NALI_M_D2R(180.0F)
+//t_p lt_v4_array
+void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_array[16], float q1_m4x4_array[16])
+{
+	memcpy(w_p, mm4x4_array, sizeof(mm4x4_array));
+
+	mv4_q(0, 0, NALI_LB_RZ, q_v4_array);
+	mv4_q2m(q_v4_array, q0_m4x4_array);
+	memcpy(q1_m4x4_array, w_p, sizeof(float) * 16);
+	mm4x4_m(q1_m4x4_array, q0_m4x4_array, w_p);
+
+	mv4_q(0, ry, 0, q_v4_array);
+	mv4_q2m(q_v4_array, q0_m4x4_array);
+	memcpy(q1_m4x4_array, w_p, sizeof(float) * 16);
+	mm4x4_m(q1_m4x4_array, q0_m4x4_array, w_p);
+}
+
 void lb_loop()
 {
 	#if C_NALI_SERVER || C_NALI_CLIENT
@@ -91,11 +108,11 @@ void lb_free0()
 
 void lb_free1()
 {
-	if (s_surface_state & NALI_S_S_EXIT)
+	if (s_state & NALI_S_S_EXIT)
 	{
 		return;
 	}
-	s_surface_state |= NALI_S_S_EXIT;
+	s_state |= NALI_S_S_EXIT;
 
 	ls_free();
 	mtx_lock(lb_mtx_t_p);
@@ -107,7 +124,7 @@ void lb_free1()
 	al_clean();
 
 	#ifndef C_NALI_S_ANDROID
-		wlc_clean();
+		swlc_clean();
 	#endif
 
 	mtx_destroy(lb_mtx_t_p);

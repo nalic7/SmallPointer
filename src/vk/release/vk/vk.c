@@ -129,7 +129,7 @@ void vk_set()
 	vkqd_set();
 	vkcbcp_set();
 
-	VK_makeSurface
+	vk_makeSurface();
 
 	for (uint32_t d = 0; d < vkqdpd_physical_device; ++d)
 	{
@@ -170,6 +170,6 @@ void vk_free()
 		vkd_free();
 	#endif
 
-	VK_freeSurface
+	vk_freeSurface();
 	vkqdpdi_free();
 }

@@ -5,7 +5,7 @@ static void xdg_surface_listener_configure(void* data, struct xdg_surface* _xdg_
 	wl_surface_commit(wlc_wl_surface_p);
 }
 
-struct xdg_surface_listener wlcxdg_xdg_surface_listener =
+struct xdg_surface_listener swlcxdg_xdg_surface_listener =
 {
 	.configure = xdg_surface_listener_configure
 };

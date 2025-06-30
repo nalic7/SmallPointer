@@ -38,6 +38,7 @@ out
 *.json
 
 asset
+save
 source/model/*.glb
 source/keyframe/*.bin
 

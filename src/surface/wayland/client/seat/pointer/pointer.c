@@ -1,9 +1,16 @@
+uint8_t swlcsp_pointer = 1;
+
+static uint8_t swlcp_pointer = 0;
+#define NALI_SWLCP_P_ROTATE 1
+#define NALI_SWLCP_P_MOVE 2
+#define NALI_SWLCP_P_ACT 4
+
 static struct wl_cursor_theme *wl_cursor_theme;
 static struct wl_cursor **wl_cursor_p;
 static struct wl_surface *wl_surface_cursor;
 static struct wl_buffer *wl_buffer_cursor;
 
-void wlcsp_init_cursor()
+void swlcsp_init_cursor()
 {
 	NALI_D_INFO("wl_cursor_theme_load %p", wl_cursor_theme = wl_cursor_theme_load(getenv("XCURSOR_THEME"), atoi(getenv("XCURSOR_SIZE")), wlc_wl_shm_p))
 
@@ -22,17 +29,17 @@ static struct timespec cursor_start = {0}, cursor_end;
 // static clock_t
 // 	cursor_start = 0,
 // 	cursor_end;
-void wlcsp_change_cursor()
+void swlcsp_change_cursor()
 {
 	if (pointer_serial != -1)
 	{
-		if (s_pointer_id == 255)
+		if (swlcsp_pointer == 255)
 		{
 			wl_pointer_set_cursor(wlc_wl_pointer_p, pointer_serial, NULL, 0, 0);
 		}
 		else
 		{
-			wl_cursor = wl_cursor_p[s_pointer_id];
+			wl_cursor = wl_cursor_p[swlcsp_pointer];
 
 			if (wl_cursor && wl_cursor->image_count > 0)
 			{
@@ -73,13 +80,20 @@ static void wl_pointer_listener_motion(void *data, struct wl_pointer *wl_pointer
 	float
 		l_x = wl_fixed_to_double(surface_x),
 		l_y = wl_fixed_to_double(surface_y);
-	if (s_pointer_state & NALI_S_PS_ROTATE)
+	mtx_lock(lb_mtx_t_p);
+	if (swlcp_pointer & NALI_SWLCP_P_ROTATE)
 	{
-		s_pointer_x = l_x - x;
-		s_pointer_y = l_y - y;
+		lcu_xy_p[0] = l_x - x;
+		lcu_xy_p[1] = l_y - y;
 		// NALI_D_LOG("x %f", s_pointer_x)
 		// NALI_D_LOG("y %f", s_pointer_y)
 	}
+	else
+	{
+		lcu_xy_p[0] = 0;
+		lcu_xy_p[1] = 0;
+	}
+	mtx_unlock(lb_mtx_t_p);
 	x = l_x;
 	y = l_y;
 	// NALI_D_LOG("surface_x %f", wl_fixed_to_double(surface_x))
@@ -92,43 +106,37 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 	{
 		case BTN_LEFT:
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				s_pointer_state |= NALI_S_PS_ACT;
+				swlcp_pointer |= NALI_SWLCP_P_ACT;
 			else
-				s_pointer_state &= 0xFFu - NALI_S_PS_ACT;
+				swlcp_pointer &= 0xFFu - NALI_SWLCP_P_ACT;
 			break;
 		case BTN_RIGHT:
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				s_pointer_state |= NALI_S_PS_ROTATE;
+				swlcp_pointer |= NALI_SWLCP_P_ROTATE;
 			else
-				s_pointer_state &= 0xFFu - NALI_S_PS_ROTATE;
+				swlcp_pointer &= 0xFFu - NALI_SWLCP_P_ROTATE;
 			break;
 		case BTN_MIDDLE:
-			s_pointer_state |= NALI_S_PS_REROTATE;
-			// if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-			// 	s_pointer_state |= NALI_S_PS_MOVE;
-			// else
-			// 	s_pointer_state &= 0xFFu - NALI_S_PS_MOVE;
-			// break;
+			mtx_lock(lb_mtx_t_p);
+			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
+				lcu_k |= NALI_LB_K_REROTATE;
+			else
+				lcu_k &= 0xFFu - NALI_SWLCP_P_ROTATE;
+			mtx_unlock(lb_mtx_t_p);
 	}
-
 	// NALI_D_LOG("surface_button %d", button)
 }
 
 static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time, uint32_t axis, wl_fixed_t value)
 {
 	float scroll = wl_fixed_to_double(value);
-
-	if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
-	{
-		s_pointer_y = scroll;
-    }
-	else if (axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL)
-	{
-		s_pointer_x = scroll;
-    }
+	mtx_lock(lb_mtx_t_p);
+	lcu_xy_p[0] = axis == WL_POINTER_AXIS_VERTICAL_SCROLL ? scroll : 0;
+	lcu_xy_p[1] = axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL ? scroll : 0;
+	mtx_unlock(lb_mtx_t_p);
 }
 
-struct wl_pointer_listener wlcsp_wl_pointer_listener =
+struct wl_pointer_listener swlcsp_wl_pointer_listener =
 {
 	.enter = wl_pointer_listener_enter,
 	.leave = wl_pointer_listener_leave,

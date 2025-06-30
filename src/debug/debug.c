@@ -5,7 +5,7 @@ static FILE *file_p;
 
 void d_set()
 {
-	int l_i0 = mtx_init(lc_mtx_t_p, mtx_plain);
+	int l_i0 = mtx_init(d_mtx_t_p, mtx_plain);
 	int l_i1 = mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR);
 	int l_i2 = remove(NALI_F_SAVE_LOG);
 	file_p = fopen(NALI_F_SAVE_LOG, "ab");

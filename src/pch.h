@@ -80,6 +80,16 @@
 #include "loader/both/both.h"
 #include "entity/both/pomi0/pomi0.h"
 
+#if C_NALI_CLIENT || C_NALI_SERVER
+	#include <errno.h>
+	#include <unistd.h>
+	// #include <arpa/inet.h>
+	#include <fcntl.h>
+	#include <netinet/in.h> 
+	// #include <sys/socket.h>
+	#define NALI_SC_PORT 11111
+#endif
+
 #ifdef C_NALI_CLIENT
 	#include "surface/surface.h"
 
@@ -130,7 +140,6 @@
 	#include "vk/release/cmd/image/image.h"
 	#include "vk/release/cmd/draw/draw.h"
 
-	#include "loader/client/client_c.h"
 	#include "loader/client/client_a.h"
 	#include "loader/client/client_u.h"
 	#include "loader/client/client_m.h"
@@ -146,7 +155,6 @@
 	// #include <stdint.h>
 	// #include <sys/epoll.h>
 
-	#include "loader/server/server_c.h"
 	#include "loader/server/server.h"
 	#include "loader/server/server_a.h"
 	#include "loader/server/server_u.h"
@@ -160,14 +168,6 @@
 #include "math/m4x4/m4x4.h"
 #include "math/v4/v4.h"
 // #include "math/str/str.h"
-
-#if C_NALI_CLIENT || C_NALI_SERVER
-	#include <errno.h>
-	#include <unistd.h>
-	#include <arpa/inet.h>
-	#include <fcntl.h>
-	#define NALI_SC_PORT 11111
-#endif
 
 #ifdef C_NALI_GEN
 	#include "gen/model/model.h"

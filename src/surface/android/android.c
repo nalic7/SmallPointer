@@ -4,13 +4,13 @@ static float
 
 static int s1_set(void *p)
 {
+	lb_set();
 	#if C_NALI_SERVER
 		ls_set();
 	#endif
 	#ifdef C_NALI_CLIENT
 		lc_set();
 
-		lb_set();
 		vk_set();
 		al_set();
 		lc_vk();
@@ -40,8 +40,13 @@ static int s1_set(void *p)
 
 				if (actionType == AMOTION_EVENT_ACTION_MOVE)
 				{
-					s_pointer_x = l_x - x00;
-					s_pointer_y = l_y - y00;
+					lcu_xy_p[0] = l_x - x00;
+					lcu_xy_p[1] = l_y - y00;
+				}
+				else
+				{
+					lcu_xy_p[0] = 0;
+					lcu_xy_p[1] = 0;
 				}
 //					else if (/*actionType == AMOTION_EVENT_ACTION_DOWN || */actionType == AMOTION_EVENT_ACTION_UP)
 //					{
@@ -61,35 +66,19 @@ static int s1_set(void *p)
 						float l_x01 = l_x - x01;
 						float l_y01 = l_y - y01;
 
-						if (l_y01 < -2.0F)
-						{
-							s_key |= NALI_S_KEY_W;
-							s_key &= 0xFFu - NALI_S_KEY_S;
-						}
-						else if (l_y01 > 2.0F)
-						{
-							s_key |= NALI_S_KEY_S;
-							s_key &= 0xFFu - NALI_S_KEY_W;
-						}
+						lcu_k |= l_y01 < -2.0F ? NALI_LB_K_W :
+							l_y01 > 2.0F ? NALI_LB_K_S : 0;
+						lcu_k &= l_y01 < -2.0F ? 0xFFu - NALI_LB_K_S :
+							l_y01 > 2.0F ? 0xFFu - NALI_LB_K_W : 0xFFu;
 
-						if (l_x01 < -2.0F)
-						{
-							s_key |= NALI_S_KEY_A;
-							s_key &= 0xFFu - NALI_S_KEY_D;
-						}
-						else if (l_x01 > 2.0F)
-						{
-							s_key |= NALI_S_KEY_D;
-							s_key &= 0xFFu - NALI_S_KEY_A;
-						}
+						lcu_k |= l_x01 < -2.0F ? NALI_LB_K_A :
+							l_x01 > 2.0F ? NALI_LB_K_D : 0;
+						lcu_k &= l_x01 < -2.0F ? 0xFFu - NALI_LB_K_D :
+							l_x01 > 2.0F ? 0xFFu - NALI_LB_K_A : 0xFFu;
 					}
 
 					x01 = l_x;
 					y01 = l_y;
-				}
-				else
-				{
-					s_key &= 0xFFu - NALI_S_KEY_W - NALI_S_KEY_S - NALI_S_KEY_A - NALI_S_KEY_D;
 				}
 			}
 			AInputQueue_finishEvent(sa_ainputqueue_p, ainputevent_p, 1);
@@ -121,14 +110,14 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 	NALI_D_LOG("window resize")
 	s_width = ANativeWindow_getWidth(window);
 	s_height = ANativeWindow_getHeight(window);
-	s_surface_state |= NALI_S_S_RE;
+	s_state |= NALI_S_S_RE;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
 	NALI_D_LOG("window 0")
 	sa_anativewindow_p = NULL;
-	s_surface_state |= NALI_S_S_RE;
+	s_state |= NALI_S_S_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
@@ -215,7 +204,7 @@ void sa_wait()
 //		vk_getQueue(vk_device);
 
 //		m_surface_state |= NALI_S_S_CLEAN;
-		s_surface_state |= NALI_S_S_RE;
+		s_state |= NALI_S_S_RE;
 		a_state &= 0xFFu - A_STATE_WAIT;
 	}
 }

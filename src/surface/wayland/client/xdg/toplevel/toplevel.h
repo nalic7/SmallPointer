@@ -1,6 +1,6 @@
 #ifndef NALI_WAYLAND_CLIENT_TOPLEVEL_H
 #define NALI_WAYLAND_CLIENT_TOPLEVEL_H
 
-extern struct xdg_toplevel_listener wlcxdg_xdg_toplevel_listener;
+extern struct xdg_toplevel_listener swlcxdg_xdg_toplevel_listener;
 
 #endif

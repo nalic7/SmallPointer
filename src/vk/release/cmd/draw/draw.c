@@ -218,14 +218,14 @@ void freeCmdDraw()
 // static void (*a_fp[NALI_V_A_BL])() = {c1j1, c1j0};
 int vk_cmd_draw_loop(void *p)
 {
-	while (!(s_surface_state & NALI_S_S_CLEAN))
+	while (!(s_state & NALI_S_S_CLEAN))
 	{
-		nc_get();
+		nc_send();
 
 		vkWaitForFences(vkdevice, 1, &vkfence, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence);
 
-		if (s_surface_state & NALI_S_S_RE)
+		if (s_state & NALI_S_S_RE)
 		{
 			vksc_free();
 
@@ -259,7 +259,7 @@ int vk_cmd_draw_loop(void *p)
 				.size = 16 * sizeof(float),
 				.pNext = VK_NULL_HANDLE
 			});
-			s_surface_state &= 0xFFu - NALI_S_S_RE;
+			s_state &= 0xFFu - NALI_S_S_RE;
 		}
 
 		uint32_t image_index;
@@ -312,7 +312,7 @@ int vk_cmd_draw_loop(void *p)
 				vkQueueWaitIdle(vkqueue_graphic);
 
 				clock_gettime(CLOCK_MONOTONIC, &delta_end);
-				s_deltra = delta_end.tv_sec + (double)delta_end.tv_nsec / 1e9 - delta_start.tv_sec - (double)delta_start.tv_nsec / 1e9;
+				lc_deltra = delta_end.tv_sec + (double)delta_end.tv_nsec / 1e9 - delta_start.tv_sec - (double)delta_start.tv_nsec / 1e9;
 				// ry += M_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
 				delta_start = delta_end;
 
@@ -322,8 +322,10 @@ int vk_cmd_draw_loop(void *p)
 				// 	vk_cmd_d_fp[l_0]();
 				// }
 
+				nc_get();
+				lcu_update();
+				lcm_update();
 				lcs_loop();
-				s_loop();
 
 				vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
 				{

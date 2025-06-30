@@ -1,0 +1,4 @@
+#ifndef NALI_NETWORK_LINUX_CLIENT_I_H
+#define NALI_NETWORK_LINUX_CLIENT_I_H
+
+#endif

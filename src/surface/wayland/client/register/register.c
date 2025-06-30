@@ -8,12 +8,12 @@ static void wl_registry_listener_global(void* data, struct wl_registry* wl_regis
 	else if (!strcmp(interface, xdg_wm_base_interface.name))
 	{
 		NALI_D_INFO("wl_registry_bind %p", wlc_xdg_wm_base_p = wl_registry_bind(wl_registry, name, &xdg_wm_base_interface, 1))
-		NALI_D_INFO("xdg_wm_base_add_listener %d", xdg_wm_base_add_listener(wlc_xdg_wm_base_p, &wlcxdg_xdg_wm_base_listener, NULL))
+		NALI_D_INFO("xdg_wm_base_add_listener %d", xdg_wm_base_add_listener(wlc_xdg_wm_base_p, &swlcxdg_xdg_wm_base_listener, NULL))
 	}
 	else if (!strcmp(interface, wl_seat_interface.name))
 	{
 		NALI_D_INFO("wl_registry_bind %p", wlc_wl_seat_p = wl_registry_bind(wl_registry, name, &wl_seat_interface, 1))
-		NALI_D_INFO("wl_seat_add_listener %d", wl_seat_add_listener(wlc_wl_seat_p, &wlcs_wl_seat_listener, NULL))
+		NALI_D_INFO("wl_seat_add_listener %d", wl_seat_add_listener(wlc_wl_seat_p, &swlcs_wl_seat_listener, NULL))
 	}
 	else if (!strcmp(interface, wl_shm_interface.name))
 	{
@@ -34,7 +34,7 @@ static void wl_registry_listener_global_remove(void* data, struct wl_registry* w
 {
 }
 
-struct wl_registry_listener wlcr_wl_registry_listener =
+struct wl_registry_listener swlcr_wl_registry_listener =
 {
 	.global = wl_registry_listener_global,
 	.global_remove = wl_registry_listener_global_remove

@@ -27,6 +27,8 @@ extern VkDeviceSize lc_vkdevicesize;
 extern NALI_LB_PT lc_net_bl;
 extern uint8_t lc_net_p[NALI_LB_NET_BL];
 
+extern float lc_deltra;
+
 void lc_set();
 void lc_vk();
 void lc_read();

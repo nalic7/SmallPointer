@@ -12,7 +12,8 @@ void nc_set()
 
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
-	NALI_D_INFO("inet_pton %d", inet_pton(AF_INET, NALI_NC_IP, &server_sockaddr_in.sin_addr))
+	server_sockaddr_in.sin_addr.s_addr = NALI_NC_IP;
+	// NALI_D_INFO("inet_pton %d", inet_pton(AF_INET, NALI_NC_IP, &server_sockaddr_in.sin_addr))
 	NALI_D_LOG("%s", strerror(errno))
 
 	lcu_send();
