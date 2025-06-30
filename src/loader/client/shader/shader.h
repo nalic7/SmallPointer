@@ -61,16 +61,17 @@ extern VkDeviceSize
 
 extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
 extern VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
+extern uint32_t lcs_vkdescriptorset_bl[NALI_V_A_BL];
 
-extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
-extern uint16_t lcs_vkmappedmemoryrange_bl;
+// extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
+// extern uint16_t lcs_vkmappedmemoryrange_bl;
 
 extern VkDescriptorPool lcs_vkdescriptorpool;
 
 void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, VkDeviceSize *v_b_vkdevicesize_p, uint8_t mj);
 
 void lcs_set();
-void lcs_loop();
+// void lcs_loop();
 
 void lcs_vk();
 void lcs_freeVk();

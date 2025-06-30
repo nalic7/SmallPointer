@@ -42,7 +42,7 @@ void lsu_update()
 				if (rt_p[l_1] > NALI_LB_CMFL || rt_p[l_1] < -NALI_LB_CMFL)
 				{
 					ns_p[l_0].c_p[l_1] += NALI_M_NORMALP_I(ns_p[l_0].c_p[l_1] + (int32_t)(rt_p[l_1] / NALI_LB_CMFL), NALI_LB_CIBL);
-					rt_p[l_1] = fmodf(rt_p[l_1], NALI_LB_CMFL);
+					rt_p[l_1] = NALI_M_NORMALP_F(rt_p[l_1], NALI_LB_CMFL);
 				}
 			}
 

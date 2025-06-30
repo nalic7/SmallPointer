@@ -70,6 +70,7 @@ void lsm_update()
 
 void lsm_send(NALI_LB_UT u)
 {
+	//should check in view before send?
 	for (NALI_LB_UT l_0 = 0; l_0 < ns_p[u].ch_bl; ++l_0)
 	{
 		NALI_LB_MIT mi = lsm_i_p[ns_p[u].ch_p[l_0]];
@@ -106,7 +107,7 @@ void lsm_open()
 	{
 		//s0-test world init
 		NALI_LB_CHT ch = 0;
-		lsm_ad_m(ch, 0);
+		lsm_ad_m(ch, NALI_EPOMI0_M);
 		memset(lsm_lb_m_p[lsm_i_p[ch]][lsm_bl_p[lsm_i_p[ch]]].rt_p, 0, sizeof(float) * (3 + 2));
 		//e0-test world init
 

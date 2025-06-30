@@ -28,9 +28,10 @@ VkDeviceSize
 VkDescriptorPool lcs_vkdescriptorpool;
 VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
 VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
+uint32_t lcs_vkdescriptorset_bl[NALI_V_A_BL] = {0};
 
-VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
-uint16_t lcs_vkmappedmemoryrange_bl = 0;
+// VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
+// uint16_t lcs_vkmappedmemoryrange_bl = 0;
 
 static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
@@ -145,7 +146,7 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 
 void lcs_set()
 {
-	lcs_vkmappedmemoryrange_p = malloc(0);
+	// lcs_vkmappedmemoryrange_p = malloc(0);
 
 	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
 	{
@@ -157,15 +158,15 @@ void lcs_set()
 	}
 }
 
-void lcs_loop()
-{
-	if (lcs_vkmappedmemoryrange_bl)
-	{
-		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], lcs_vkmappedmemoryrange_bl, lcs_vkmappedmemoryrange_p);
-		lcs_vkmappedmemoryrange_p = realloc(lcs_vkmappedmemoryrange_p, 0);
-		lcs_vkmappedmemoryrange_bl = 0;
-	}
-}
+// void lcs_loop()
+// {
+// 	if (lcs_vkmappedmemoryrange_bl)
+// 	{
+// 		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], lcs_vkmappedmemoryrange_bl, lcs_vkmappedmemoryrange_p);
+// 		lcs_vkmappedmemoryrange_p = realloc(lcs_vkmappedmemoryrange_p, 0);
+// 		lcs_vkmappedmemoryrange_bl = 0;
+// 	}
+// }
 
 void lcs_vk()
 {
@@ -187,7 +188,7 @@ void lcs_freeVk(uint32_t device)
 		free(lcs_vkdescriptorset_p[l_0]);
 	}
 
-	free(lcs_vkmappedmemoryrange_p);
+	// free(lcs_vkmappedmemoryrange_p);
 }
 
 void lcs_free()

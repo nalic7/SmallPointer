@@ -325,7 +325,7 @@ int vk_cmd_draw_loop(void *p)
 				nc_get();
 				lcu_update();
 				lcm_update();
-				lcs_loop();
+				// lcs_loop();
 
 				vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
 				{
