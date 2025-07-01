@@ -44,7 +44,7 @@
 // 1 2 star0 land0
 
 #define NALI_LB_N_MAX 1
-extern uint8_t lb_ms_p[NALI_LB_N_MAX];
+extern NALI_LB_MT lb_ms_p[NALI_LB_N_MAX];
 extern uint8_t lb_ms_a_p[NALI_LB_N_MAX];
 extern uint8_t *lb_ms_ap_p[NALI_LB_N_MAX];
 extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
@@ -61,10 +61,11 @@ typedef struct
 
 typedef struct
 {
-	NALI_LB_MT m;
+	NALI_LB_MIT update;
+	// NALI_LB_MT m;
+	NALI_LB_MST ms;
 	float rt_p[3 + 2];
 } LB_M;
-
 //s0-net
 
 //s1-key

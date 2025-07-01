@@ -1,28 +1,28 @@
 mtx_t *lb_mtx_t_p = &(mtx_t){};
 
-uint8_t lb_ms_p[NALI_LB_N_MAX] =
+NALI_LB_MT lb_ms_p[NALI_LB_N_MAX] =
 {
-	NALI_EPOMI0_M
+	NALI_EBPOMI0_M
 };
 
 uint8_t lb_ms_a_p[NALI_LB_N_MAX] =
 {
-	NALI_EPOMI0_A
+	NALI_EBPOMI0_A
 };
 
 uint8_t *lb_ms_ap_p[NALI_LB_N_MAX] =
 {
-	e_pomi0_ms_ap_p
+	ebpomi0_ms_ap_p
 };
 
 uint8_t lb_ms_abl_p[NALI_LB_N_MAX] =
 {
-	NALI_EPOMI0_MS_AP_BL
+	NALI_EBPOMI0_MS_AP_BL
 };
 
 VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX] =
 {
-	NALI_EPOMI0_MS_VKDEVICESIZE
+	NALI_EBPOMI0_MS_VKDEVICESIZE
 };
 
 void *lb_cache_p;
