@@ -13,13 +13,12 @@
 #define NALI_LB_MAX_RW 20
 #define NALI_LB_NET_BL 255
 
-//model slot
-#define NALI_LB_MST uint8_t
+//animation
+#define NALI_LB_AT uint8_t
+//animation float
+#define NALI_LB_AFT uint8_t
 
-//model animation
-#define NALI_LB_MAT uint8_t
-//model animation line
-#define NALI_LB_MALT uint8_t
+#define NALI_LB_AN 0xFFu
 
 //model
 #define NALI_LB_MT uint8_t
@@ -28,6 +27,13 @@
 #define NALI_LB_M8BL 256/8
 #define NALI_LB_MIM 0xFFFFu-1
 #define NALI_LB_MIN 0xFFFFu
+
+//model attribute
+#define NALI_LB_MAT uint8_t
+//model max
+#define NALI_LB_MM 0xFFu-1
+#define NALI_LB_MN 0xFFu
+
 //chunk
 #define NALI_LB_CT uint8_t
 #define NALI_LB_C_ST int8_t
@@ -44,11 +50,11 @@
 // 1 2 star0 land0
 
 #define NALI_LB_N_MAX 1
-extern NALI_LB_MT lb_ms_p[NALI_LB_N_MAX];
-extern uint8_t lb_ms_a_p[NALI_LB_N_MAX];
-extern uint8_t *lb_ms_ap_p[NALI_LB_N_MAX];
-extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
-extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
+// extern NALI_LB_MT lb_ms_p[NALI_LB_N_MAX];
+// extern uint8_t lb_ms_a_p[NALI_LB_N_MAX];
+// extern uint8_t *lb_ms_ap_p[NALI_LB_N_MAX];
+// extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
+// extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
 //e0-data
 
 //s0-net
@@ -61,9 +67,12 @@ typedef struct
 
 typedef struct
 {
+	NALI_LB_MT m;
+	NALI_LB_MAT ma;
+	NALI_LB_AT a;
+	NALI_LB_AFT af;
+
 	NALI_LB_MIT update;
-	// NALI_LB_MT m;
-	NALI_LB_MST ms;
 	float rt_p[3 + 2];
 } LB_M;
 //s0-net

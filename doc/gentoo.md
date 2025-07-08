@@ -21,7 +21,7 @@ sys-devel/gcc-14.3.0
 dev-debug/gdb-16.2-r2
 
 app-editors/vscodium-1.101.24242
-dev-util/android-studio-2024.3.2.14
+dev-util/android-studio-2025.1.1.13
 ```
 >Package (Portable)
 ```

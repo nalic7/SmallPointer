@@ -12,22 +12,22 @@ float lcs_float_p[] =
 };
 
 uint8_t
-	**lcs_a_p[NALI_V_A_BL],
-	*lcs_a_bl1_p[NALI_V_A_BL];
+	**lcs_a_p[NALI_LCS_A_BL],
+	*lcs_a_bl1_p[NALI_LCS_A_BL];
 
 NALI_LCS_DSIT
-	lcs_a_bl0_p[NALI_V_A_BL] = {0};
+	lcs_a_bl0_p[NALI_LCS_A_BL] = {0};
 
 VkDeviceSize *lcs_i_p;
 uint32_t *lcs_ic_p;
 
 VkDeviceSize 
-	lcs_a_vkdevicesize_p[NALI_V_A_BL],
-	*lcs_b_vkdevicesize_p[NALI_V_A_BL];
+	lcs_a_vkdevicesize_p[NALI_LCS_A_BL],
+	*lcs_b_vkdevicesize_p[NALI_LCS_A_BL];
 
 VkDescriptorPool lcs_vkdescriptorpool;
 VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
-VkDescriptorSet *lcs_vkdescriptorset_p[NALI_V_A_BL];
+VkDescriptorSet *lcs_vkdescriptorset_p[NALI_LCS_A_BL];
 
 VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
 uint16_t lcs_vkmappedmemoryrange_bl = 0;
@@ -147,7 +147,7 @@ void lcs_set()
 {
 	lcs_vkmappedmemoryrange_p = malloc(0);
 
-	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		lcs_vkdescriptorset_p[l_0] = malloc(0);
 
@@ -186,7 +186,7 @@ void lcs_freeVk(uint32_t device)
 	vkDestroyDescriptorSetLayout(vkdevice, lcs_vkdescriptorsetlayout, VK_NULL_HANDLE);
 	vkDestroyDescriptorPool(vkdevice, lcs_vkdescriptorpool, VK_NULL_HANDLE);
 
-	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		free(lcs_vkdescriptorset_p[l_0]);
 	}
@@ -196,7 +196,7 @@ void lcs_freeVk(uint32_t device)
 
 void lcs_free()
 {
-	for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		for (uint16_t l_1 = 0; l_1 < lcs_a_bl0_p[l_0]; ++l_1)
 		{

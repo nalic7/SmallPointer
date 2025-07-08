@@ -1,5 +1,5 @@
-#ifndef NALI_NETWORK_LINUX_CLIENT_U_H
-#define NALI_NETWORK_LINUX_CLIENT_U_H
+#ifndef NALI_LOADER_CLIENT_U_H
+#define NALI_LOADER_CLIENT_U_H
 
 extern NALI_LB_CHT *lcu_ch_p;
 extern uint8_t lcu_ch_bl;

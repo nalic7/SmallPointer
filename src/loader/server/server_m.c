@@ -145,7 +145,7 @@ void lsm_open()
 		//s0-test world init
 		NALI_LB_CHT ch = 0;
 		NALI_LB_MIT mi = lsm_i_p[ch];
-		lsm_ad_m(ch, NALI_EBPOMI0_M);
+		lsm_ad_m(ch, NALI_EBPOMI0_MS);
 		memset(lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].rt_p, 0, sizeof(float) * (3 + 2));
 		//e0-test world init
 

@@ -26,8 +26,8 @@ static uint32_t **index_p;
 static uint32_t *index_bl_p;
 // static uint8_t **attribute_p;
 // static uint32_t *attribute_bl_p;
-static uint8_t *a_p_array[NALI_V_A_BL];
-static uint32_t a_bl_array[NALI_V_A_BL];
+static uint8_t *a_p_array[NALI_LCS_A_BL];
+static uint32_t a_bl_array[NALI_LCS_A_BL];
 static uint8_t model_il;
 
 static float *rgba_p;
@@ -381,7 +381,7 @@ void lcp_set()
 		lc_vkdevicesize += index_bl_p[l_0];
 	}
 
-	for (uint32_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		lcs_a_vkdevicesize_p[l_0] = lc_vkdevicesize;
 		lc_vkdevicesize += a_bl_array[l_0];
@@ -419,7 +419,7 @@ void lcp_vk()
 		step += index_bl_p[l_0];
 	}
 
-	for (uint32_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+	for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		memcpy(lc_vkbuffer_p + step, a_p_array[l_0], a_bl_array[l_0]);
 		step += a_bl_array[l_0];

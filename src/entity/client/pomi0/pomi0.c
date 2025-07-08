@@ -5,4 +5,5 @@ void ecpomi0_set()
 	uint8_t a = NALI_EBPOMI0_A;
 	uint8_t a_bl = NALI_EBPOMI0_MS_AP_BL;
 	uint8_t *a_p = ebpomi0_ms_ap_p;
+
 }

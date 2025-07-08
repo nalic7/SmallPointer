@@ -1,5 +1,5 @@
-#ifndef NALI_NETWORK_LINUX_SERVER_M_H
-#define NALI_NETWORK_LINUX_SERVER_M_H
+#ifndef NALI_LOADER_SERVER_M_H
+#define NALI_LOADER_SERVER_M_H
 
 extern void (*lsm_fp[NALI_LB_N_MAX])(NALI_LB_MIT mi);
 

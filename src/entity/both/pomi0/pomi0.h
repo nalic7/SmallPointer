@@ -1,6 +1,8 @@
 #ifndef NALI_ENTITY_BOTH_POMI0_H
 #define NALI_ENTITY_BOTH_POMI0_H
 
+#define NALI_EBPOMI0_MS 0
+
 #define NALI_EBPOMI0_A 0
 #define NALI_EBPOMI0_M 0
 

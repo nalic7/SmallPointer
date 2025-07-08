@@ -215,7 +215,7 @@ void freeCmdDraw()
 // {
 // }
 
-// static void (*a_fp[NALI_V_A_BL])() = {c1j1, c1j0};
+// static void (*a_fp[NALI_LCS_A_BL])() = {c1j1, c1j0};
 int vk_cmd_draw_loop(void *p)
 {
 	while (!(s_state & NALI_S_S_CLEAN))
@@ -290,21 +290,22 @@ int vk_cmd_draw_loop(void *p)
 
 				// // mtx_lock(m_mtx_t_draw_p);
 
-				for (uint8_t l_0 = 0; l_0 < NALI_V_A_BL; ++l_0)
+				for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 				{
 					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &lc_vkbuffer, lcs_a_vkdevicesize_p + l_0);
 
 					// a_fp[l_0]();
 					// for (uint8_t l_1 = 0; l_1 < lcm_joint_count_bl; ++l_1)
-					for (NALI_LCS_DSIT l_1 = 0; l_1 < lcs_a_bl0_p[l_0]; ++l_1)
+					for (NALI_LCS_DSIT l_1 = 0; l_1 < lcs_a_bl_p[l_0]; ++l_1)
 					{
 						// vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p + l_1, 0, VK_NULL_HANDLE);
-						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p[l_0] + l_1, 0, VK_NULL_HANDLE);
+						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &lcs___p[lcs__i_p[l_0][l_1]].vkdescriptorset, 0, VK_NULL_HANDLE);
 
-						for (uint8_t l_2 = 0; l_2 < lcs_a_bl1_p[l_0][l_1]; ++l_2)
+						//mix all to one to use address
+						for (NALI_LCS_AIT l_2 = 1; l_2 < lcs___p[lcs__i_p[l_0][l_1]].a_p[0]; ++l_2)
 						{
-							vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, lcs_i_p[lcs_a_p[l_0][l_1][l_2]], VK_INDEX_TYPE_UINT32);
-							vkCmdDrawIndexed(vkcommandbuffer, lcs_ic_p[lcs_a_p[l_0][l_1][l_2]], 1, 0, 0, 0);
+							vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, lcs_i_p[lcs___p[lcs__i_p[l_0][l_1]].a_p[l_2]], VK_INDEX_TYPE_UINT32);
+							vkCmdDrawIndexed(vkcommandbuffer, lcs_ic_p[lcs___p[lcs__i_p[l_0][l_1]].a_p[l_2]], 1, 0, 0, 0);
 						}
 					}
 				}

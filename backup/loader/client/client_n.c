@@ -218,7 +218,7 @@ void lcf_rm_m_c(uint8_t *data_p)
 	mtx_unlock(lc_mtx_t_p);
 }
 
-// static VkDeviceSize *vkdevicesize_p_array[NALI_V_A_BL];
+// static VkDeviceSize *vkdevicesize_p_array[NALI_LCS_A_BL];
 // static void update(uint8_t a, uint16_t lcs_write_fp_bl)
 // {
 // 	// //write flush
