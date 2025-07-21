@@ -25,7 +25,7 @@ void lcu_update()
 	//use timeline
 	for (uint8_t l_0 = 0; l_0 < 3 + 2; ++l_0)
 	{
-		_rt_p[l_0] += (lcu_lb_u.rt_p[l_0] - _rt_p[l_0]) * lc_deltra;
+		_rt_p[l_0] += (lcu_lb_u.rt_p[l_0] - _rt_p[l_0]) * lc_delta;
 	}
 
 	//lcu_lb_u.rt_p

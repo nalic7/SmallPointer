@@ -18,6 +18,18 @@ void d_set()
 	NALI_D_LOG("fopen %p", file_p)
 }
 
+// void d_write(uint8_t data_type, uint8_t *data_p, uint32_t data_bl)
+// {
+// 	mtx_lock(d_mtx_t_p);
+
+// 	fwrite(&data_type, sizeof(data_type), 1, file_p);
+// 	fwrite(data_p, data_bl, 1, file_p);
+
+// 	fflush(file_p);
+
+// 	mtx_unlock(d_mtx_t_p);
+// }
+
 void d_write(const char *format_p, ...)
 {
 	mtx_lock(d_mtx_t_p);
@@ -32,6 +44,8 @@ void d_write(const char *format_p, ...)
 	fwrite(l_c_p, 1, l_0, file_p);
 	fwrite("\n", 1, 1, file_p);
 	// }
+	//force write
+	fflush(file_p);
 	mtx_unlock(d_mtx_t_p);
 }
 

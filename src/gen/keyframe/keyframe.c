@@ -3,7 +3,7 @@ static const char *file_array[] =
 	NALI_F_FACTORY_KEYFRAME "/SuperCutePomi0.bin"
 };
 
-static keyframe **keyframe_p;
+static lckf **keyframe_p;
 static uint8_t *keyframe_bl_p;
 
 void gkf_write()
@@ -12,8 +12,8 @@ void gkf_write()
 	fwrite((uint8_t[]){sizeof(file_array) / sizeof(file_array[0])}, sizeof(uint8_t), 1, file);
 
 	keyframe_bl_p = malloc(sizeof(file_array) / sizeof(file_array[0]));
-	keyframe_p = malloc(sizeof(file_array) / sizeof(file_array[0]) * sizeof(keyframe *));
-	memset(keyframe_p, 0, sizeof(file_array) / sizeof(file_array[0]) * sizeof(keyframe *));
+	keyframe_p = malloc(sizeof(file_array) / sizeof(file_array[0]) * sizeof(lckf *));
+	memset(keyframe_p, 0, sizeof(file_array) / sizeof(file_array[0]) * sizeof(lckf *));
 
 	uint32_t data_bl;
 	uint8_t *data_p;
@@ -26,7 +26,7 @@ void gkf_write()
 		keyframe_bl_p[l_0] = *(uint8_t *)(data_p + step);
 		fwrite(&keyframe_bl_p[l_0], sizeof(uint8_t), 1, file);
 		step += sizeof(uint8_t);
-		keyframe_p[l_0] = malloc(keyframe_bl_p[l_0] * sizeof(keyframe));
+		keyframe_p[l_0] = malloc(keyframe_bl_p[l_0] * sizeof(lckf));
 
 		for (uint32_t l_1 = 0; l_1 < keyframe_bl_p[l_0]; ++l_1)
 		{
@@ -39,9 +39,9 @@ void gkf_write()
 			step += sizeof(uint8_t);
 
 			keyframe_p[l_0][l_1].bone_p = malloc(keyframe_p[l_0][l_1].bone_bl);
-			keyframe_p[l_0][l_1].animation_s_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
-			keyframe_p[l_0][l_1].animation_r_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
-			keyframe_p[l_0][l_1].animation_t_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
+			keyframe_p[l_0][l_1].s_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
+			keyframe_p[l_0][l_1].r_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
+			keyframe_p[l_0][l_1].t_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
 
 			for (uint32_t l_2 = 0; l_2 < keyframe_p[l_0][l_1].bone_bl; ++l_2)
 			{
@@ -49,24 +49,24 @@ void gkf_write()
 				fwrite(&keyframe_p[l_0][l_1].bone_p[l_2], sizeof(uint8_t), 1, file);
 				step += sizeof(uint8_t);
 
-				keyframe_p[l_0][l_1].animation_s_p[l_2] = malloc(sizeof(float) * 3);
-				memcpy(keyframe_p[l_0][l_1].animation_s_p[l_2], data_p + step, sizeof(float) * 3);
-				fwrite(keyframe_p[l_0][l_1].animation_s_p[l_2], sizeof(float), 3, file);
+				keyframe_p[l_0][l_1].s_p[l_2] = malloc(sizeof(float) * 3);
+				memcpy(keyframe_p[l_0][l_1].s_p[l_2], data_p + step, sizeof(float) * 3);
+				fwrite(keyframe_p[l_0][l_1].s_p[l_2], sizeof(float), 3, file);
 				step += sizeof(float) * 3;
 
-				keyframe_p[l_0][l_1].animation_r_p[l_2] = malloc(sizeof(float) * 4);
+				keyframe_p[l_0][l_1].r_p[l_2] = malloc(sizeof(float) * 4);
 				// memcpy(keyframe_p[l_0][l_1].animation_r_p[l_2], data + step, sizeof(float) * 4);
-				keyframe_p[l_0][l_1].animation_r_p[l_2][3] = *(float *)(data_p + step);
-				keyframe_p[l_0][l_1].animation_r_p[l_2][0] = *(float *)(data_p + step + sizeof(float));
-				keyframe_p[l_0][l_1].animation_r_p[l_2][1] = *(float *)(data_p + step + sizeof(float) * 2);
-				keyframe_p[l_0][l_1].animation_r_p[l_2][2] = *(float *)(data_p + step + sizeof(float) * 3);
-				MV4_qi(keyframe_p[l_0][l_1].animation_r_p[l_2], 0)
-				fwrite(keyframe_p[l_0][l_1].animation_r_p[l_2], sizeof(float), 4, file);
+				keyframe_p[l_0][l_1].r_p[l_2][3] = *(float *)(data_p + step);
+				keyframe_p[l_0][l_1].r_p[l_2][0] = *(float *)(data_p + step + sizeof(float));
+				keyframe_p[l_0][l_1].r_p[l_2][1] = *(float *)(data_p + step + sizeof(float) * 2);
+				keyframe_p[l_0][l_1].r_p[l_2][2] = *(float *)(data_p + step + sizeof(float) * 3);
+				MV4_qi(keyframe_p[l_0][l_1].r_p[l_2], 0)
+				fwrite(keyframe_p[l_0][l_1].r_p[l_2], sizeof(float), 4, file);
 				step += sizeof(float) * 4;
 
-				keyframe_p[l_0][l_1].animation_t_p[l_2]= malloc(sizeof(float) * 3);
-				memcpy(keyframe_p[l_0][l_1].animation_t_p[l_2], data_p + step, sizeof(float) * 3);
-				fwrite(keyframe_p[l_0][l_1].animation_t_p[l_2], sizeof(float), 3, file);
+				keyframe_p[l_0][l_1].t_p[l_2]= malloc(sizeof(float) * 3);
+				memcpy(keyframe_p[l_0][l_1].t_p[l_2], data_p + step, sizeof(float) * 3);
+				fwrite(keyframe_p[l_0][l_1].t_p[l_2], sizeof(float), 3, file);
 				step += sizeof(float) * 3;
 			}
 		}

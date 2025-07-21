@@ -9,8 +9,8 @@ Code-GCC [clangd](https://github.com/clangd/vscode-clangd)
 CMake [CMake Tools](https://github.com/microsoft/vscode-cmake-tools)  
 Debug-GDB [CodeLLDB](https://github.com/vadimcn/codelldb)  
 GLSL [Shader validator](https://github.com/antaalt/shader-validator)  
-MD [Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)  
-Vim [Vim](https://github.com/VSCodeVim/Vim)
+MD [Markdown Editor](https://github.com/zaaack/vscode-markdown-editor)
+<!-- Vim [Vim](https://github.com/VSCodeVim/Vim) -->
 >~/.config/VSCodium/User/settings.json
 ```json
 {
@@ -26,25 +26,26 @@ Vim [Vim](https://github.com/VSCodeVim/Vim)
 	{
 		"editor.insertSpaces": true,
 		"editor.tabSize": 2
-	},
-
-	"vim.useSystemClipboard": true,
-	"editor.lineNumbers": "relative",
-	"vim.normalModeKeyBindingsNonRecursive":
-	[
-		{
-			"before": ["g", "r"],
-			"commands": ["editor.action.referenceSearch.trigger"]
-		}
-	],
-	"workbench.activityBar.location": "top",
-	"window.customTitleBarVisibility": "windowed",
-	"editor.cursorSmoothCaretAnimation": "on",
-	"editor.smoothScrolling": true,
-	"workbench.list.smoothScrolling": true,
-	"terminal.integrated.smoothScrolling": true,
+	}
 }
 ```
+<!-- ```json
+	// "vim.useSystemClipboard": true,
+	// "editor.lineNumbers": "relative",
+	// "vim.normalModeKeyBindingsNonRecursive":
+	// [
+	// 	{
+	// 		"before": ["g", "r"],
+	// 		"commands": ["editor.action.referenceSearch.trigger"]
+	// 	}
+	// ],
+	// "workbench.activityBar.location": "top",
+	// "window.customTitleBarVisibility": "windowed",
+	// "editor.cursorSmoothCaretAnimation": "on",
+	// "editor.smoothScrolling": true,
+	// "workbench.list.smoothScrolling": true,
+	// "terminal.integrated.smoothScrolling": true,
+``` -->
 >Compile Shader
 ```bash
 #vulkan SPIR-V
@@ -100,6 +101,10 @@ git clone https://github.com/jkuhlmann/cgltf
 >[vk.h](src/vk/release/vk/vk.h)
 
 >[both.h](src/loader/both/both.h)
+
+>[client.h](src/loader/client/client.h)
+
+>[server.h](src/loader/server/server.h)
 
 >[linux_client.h](src/network/linux/linux_client.h)
 

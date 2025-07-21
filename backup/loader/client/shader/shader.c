@@ -18,7 +18,7 @@ uint8_t
 NALI_LCS_DSIT
 	lcs_a_bl0_p[NALI_LCS_A_BL] = {0};
 
-VkDeviceSize *lcs_i_p;
+VkDeviceSize *lcs_ib_p;
 uint32_t *lcs_ic_p;
 
 VkDeviceSize 
@@ -208,6 +208,6 @@ void lcs_free()
 		free(lcs_b_vkdevicesize_p[l_0]);
 	}
 
-	free(lcs_i_p);
+	free(lcs_ib_p);
 	free(lcs_ic_p);
 }

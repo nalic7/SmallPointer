@@ -249,7 +249,7 @@ void lcp_set()
 	model_il = ia_bl / sizeof(uint32_t);
 
 	// m_ai_index_count_p = malloc(sizeof(uint32_t) * model_il * 2);
-	lcs_i_p = malloc(sizeof(VkDeviceSize) * model_il);
+	lcs_ib_p = malloc(sizeof(VkDeviceSize) * model_il);
 	lcs_ic_p = malloc(sizeof(uint32_t) * model_il);
 	// m_ai_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * model_il);
 
@@ -377,7 +377,7 @@ void lcp_set()
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
-		lcs_i_p[l_0] = lc_vkdevicesize;
+		lcs_ib_p[l_0] = lc_vkdevicesize;
 		lc_vkdevicesize += index_bl_p[l_0];
 	}
 

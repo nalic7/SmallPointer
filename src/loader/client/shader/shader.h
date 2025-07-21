@@ -41,20 +41,25 @@ extern float lcs_float_p[16*2];
 //t1j0u1v1
 #define NALI_LCS_A_BL 2
 
-extern NALI_LCS_DSIT lcs_a_bl_p[NALI_LCS_A_BL];
+// extern NALI_LCS_DSIT lcs_a_bl_p[NALI_LCS_A_BL];
 // uint16_t
 // 	v_a_bl;
 
-extern VkDeviceSize *lcs_i_p;
+extern VkDeviceSize *lcs_ib_p;
 extern uint32_t *lcs_ic_p;
 
-extern VkDeviceSize 
-	lcs_a_vkdevicesize_p[NALI_LCS_A_BL],
-//jN
-//default -> UBOB UBOA
-	*lcs_b_vkdevicesize_p[NALI_LCS_A_BL];
+extern VkDeviceSize lcs_a_vkdevicesize_p[NALI_LCS_A_BL];
+// //jN
+// //default -> UBOB UBOA
+// 	*lcs_b_vkdevicesize_p[NALI_LCS_A_BL];
 
 extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
+extern VkDescriptorPool lcs_vkdescriptorpool;
+
+// extern NALI_LB_MIT *lcs__i_p[NALI_LCS_A_BL];
+
+// extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
+// extern uint16_t lcs_vkmappedmemoryrange_bl;
 
 //a_p[0] size
 //a_p[...]
@@ -69,8 +74,13 @@ typedef struct
 	NALI_LB_MIT mi;
 	uint8_t state;
 
+	uint8_t rt_frame;
+	float _rt_p[3 + 2];
 	float rt_p[3 + 2];
+	uint8_t a_f_frame;
+	float _a_f;
 	float a_f;
+	// NALI_LB_AKT ak;
 } lcs__m;
 #define NALI_LCS_AIT uint8_t
 typedef struct
@@ -78,18 +88,25 @@ typedef struct
 	lcs__m m;
 
 	VkDescriptorSet vkdescriptorset;
-	NALI_LCS_AIT *a_p;
-	VkDeviceSize *vkdevicesize_p;
+	const NALI_LCS_AIT *a_p;
+	uint8_t mab;
+	// VkDeviceSize *vkdevicesize_p;
+	NALI_LB_MIT ds;
 } lcs__;
 extern lcs__ lcs___p[NALI_LB_MIM];
-extern NALI_LB_MIT *lcs__i_p[NALI_LCS_A_BL];
 
-// extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
-// extern uint16_t lcs_vkmappedmemoryrange_bl;
+extern uint32_t lcs_s_bl;
+typedef struct
+{
+	NALI_LB_MIT _;
+	// NALI_LB_MAT ib;
+	// NALI_LB_MAT ic;
+	NALI_LB_MAT i;
+	float d;
+} lcs_s;
+extern lcs_s *lcs_s_p;
 
-extern VkDescriptorPool lcs_vkdescriptorpool;
-
-void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, VkDeviceSize *v_b_vkdevicesize_p, uint8_t mj);
+void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj);
 
 void lcs_set();
 // void lcs_loop();

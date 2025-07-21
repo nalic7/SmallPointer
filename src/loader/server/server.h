@@ -1,6 +1,8 @@
 #ifndef NALI_LOADER_SERVER_H
 #define NALI_LOADER_SERVER_H
 
+#define NALI_LS_MAX_RW 20
+
 extern FILE *ls_file_p;
 
 extern NALI_LB_PT ls_net_bl;

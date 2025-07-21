@@ -73,6 +73,9 @@ if(SERVER)
   list(APPEND SOURCES ${G_SOURCES})
 
   list(APPEND SOURCES src/network/network_server.c)
+
+  file(GLOB_RECURSE G_SOURCES src/entity/server/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
 endif()
 
 if(S_NAME STREQUAL "android")

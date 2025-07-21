@@ -148,8 +148,6 @@
 	#include "loader/client/shader/shader.h"
 	#include "loader/client/client.h"
 	#include "network/network_client.h"
-
-	#include "entity/client/pomi0/pomi0.h"
 #endif
 
 #ifdef C_NALI_SERVER

@@ -1,6 +1,23 @@
 NALI_LCS_DSIT *lc_dsi_p;
 uint8_t *lc_a_p;
 
+//to bypass oit / sort for translucent
+//x1 switch color attribute
+//2 no translucent now
+//3 in shader get current pixel on screen then switch color <- need to check every pixel
+//->sort is easy
+
+//should save gpu memory and less update
+//if Frame-in-Flight
+//more memory need
+//set on lc_vkdevicesize
+//++ only
+//255%N == N-1
+//-> to copy buffer to next frame
+//need to keep update state to next frame
+//still need to flush all?
+//#define NALI_LC_FRAME 4
+//uint8_t frame;
 VkBuffer lc_vkbuffer;
 VkDeviceMemory lc_vkdevicememory;
 void *lc_vkbuffer_p;
@@ -9,7 +26,7 @@ VkDeviceSize lc_vkdevicesize;
 NALI_LB_PT lc_net_bl = 0;
 uint8_t lc_net_p[NALI_LB_NET_BL];
 
-float lc_deltra = 0;
+// float lc_delta = 0;
 
 void lc_set()
 {
@@ -109,7 +126,7 @@ void lc_freeVk(uint32_t device)
 	vkUnmapMemory(vkqd_vkdevice_p[device], lc_vkdevicememory);
 	vkDestroyBuffer(vkdevice, lc_vkbuffer, VK_NULL_HANDLE);
 	vkFreeMemory(vkdevice, lc_vkdevicememory, VK_NULL_HANDLE);
-	lc_vkbuffer_p = NULL;
+	// lc_vkbuffer_p = NULL;
 }
 
 void lc_free()

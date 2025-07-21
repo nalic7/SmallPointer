@@ -4,7 +4,7 @@
 
 // static clock_t frame_start, frame_end;
 static struct timespec frame_start = {0}, frame_end;
-static struct timespec delta_start = {0}, delta_end;
+// static struct timespec delta_start = {0}, delta_end;
 static uint32_t frame;
 // static clock_t frame_time;
 static double frame_time = 0;
@@ -222,6 +222,31 @@ int vk_cmd_draw_loop(void *p)
 	{
 		nc_send();
 
+		// clock_gettime(CLOCK_MONOTONIC, &delta_end);
+		// lc_delta = delta_end.tv_sec + (double)delta_end.tv_nsec / 1e9 - delta_start.tv_sec - (double)delta_start.tv_nsec / 1e9;
+		// // ry += M_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
+		// delta_start = delta_end;
+
+		// for (uint8_t l_0 = 0; l_0 < vk_cmd_d_fp_bl; ++l_0)
+		// {
+		// 	//model add/update
+		// 	vk_cmd_d_fp[l_0]();
+		// }
+
+		nc_get();
+		lcu_update();
+		lcm_update();
+		// lcs_loop();
+
+		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
+		{
+			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+			.memory = lc_vkdevicememory,
+			.offset = 0,
+			.size = 16 * sizeof(float),
+			.pNext = VK_NULL_HANDLE
+		});
+
 		vkWaitForFences(vkdevice, 1, &vkfence, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence);
 
@@ -290,52 +315,35 @@ int vk_cmd_draw_loop(void *p)
 
 				// // mtx_lock(m_mtx_t_draw_p);
 
-				for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
-				{
-					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &lc_vkbuffer, lcs_a_vkdevicesize_p + l_0);
-
-					// a_fp[l_0]();
-					// for (uint8_t l_1 = 0; l_1 < lcm_joint_count_bl; ++l_1)
-					for (NALI_LCS_DSIT l_1 = 0; l_1 < lcs_a_bl_p[l_0]; ++l_1)
-					{
-						// vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p + l_1, 0, VK_NULL_HANDLE);
-						vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &lcs___p[lcs__i_p[l_0][l_1]].vkdescriptorset, 0, VK_NULL_HANDLE);
-
-						//mix all to one to use address
-						for (NALI_LCS_AIT l_2 = 1; l_2 < lcs___p[lcs__i_p[l_0][l_1]].a_p[0]; ++l_2)
-						{
-							vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, lcs_i_p[lcs___p[lcs__i_p[l_0][l_1]].a_p[l_2]], VK_INDEX_TYPE_UINT32);
-							vkCmdDrawIndexed(vkcommandbuffer, lcs_ic_p[lcs___p[lcs__i_p[l_0][l_1]].a_p[l_2]], 1, 0, 0, 0);
-						}
-					}
-				}
-
-				vkQueueWaitIdle(vkqueue_graphic);
-
-				clock_gettime(CLOCK_MONOTONIC, &delta_end);
-				lc_deltra = delta_end.tv_sec + (double)delta_end.tv_nsec / 1e9 - delta_start.tv_sec - (double)delta_start.tv_nsec / 1e9;
-				// ry += M_MIN(0.5F * (delta_end.tv_sec + delta_end.tv_nsec / 1e9 - delta_start.tv_sec - delta_start.tv_nsec / 1e9), 1.0F);
-				delta_start = delta_end;
-
-				// for (uint8_t l_0 = 0; l_0 < vk_cmd_d_fp_bl; ++l_0)
+				// for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 				// {
-				// 	//model add/update
-				// 	vk_cmd_d_fp[l_0]();
+				// 	vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &lc_vkbuffer, lcs_a_vkdevicesize_p + l_0);
+
+				// 	// a_fp[l_0]();
+				// 	// for (uint8_t l_1 = 0; l_1 < lcm_joint_count_bl; ++l_1)
+				// 	for (NALI_LCS_DSIT l_1 = 0; l_1 < lcs_a_bl_p[l_0]; ++l_1)
+				// 	{
+				// 		// vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, lcs_vkdescriptorset_p + l_1, 0, VK_NULL_HANDLE);
+				// 		vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &lcs___p[lcs__i_p[l_0][l_1]].vkdescriptorset, 0, VK_NULL_HANDLE);
+
+				// 		//mix all to one to use address
+				// 		for (NALI_LCS_AIT l_2 = 1; l_2 < lcs___p[lcs__i_p[l_0][l_1]].a_p[0]; ++l_2)
+				// 		{
+				// 			vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, lcs_i_p[lcs___p[lcs__i_p[l_0][l_1]].a_p[l_2]], VK_INDEX_TYPE_UINT32);
+				// 			vkCmdDrawIndexed(vkcommandbuffer, lcs_ic_p[lcs___p[lcs__i_p[l_0][l_1]].a_p[l_2]], 1, 0, 0, 0);
+				// 		}
+				// 	}
 				// }
 
-				nc_get();
-				lcu_update();
-				lcm_update();
-				// lcs_loop();
-
-				vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
+				for (NALI_LCS_DSIT l_0 = 0; l_0 < lcs_s_bl; ++l_0)
 				{
-					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-					.memory = lc_vkdevicememory,
-					.offset = 0,
-					.size = 16 * sizeof(float),
-					.pNext = VK_NULL_HANDLE
-				});
+					lcs__ _ = lcs___p[lcs_s_p[l_0]._];
+					vkCmdBindDescriptorSets(vkcommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &_.vkdescriptorset, 0, VK_NULL_HANDLE);
+					vkCmdBindVertexBuffers(vkcommandbuffer, 0, 1, &lc_vkbuffer, lcs_a_vkdevicesize_p + _.mab);
+
+					vkCmdBindIndexBuffer(vkcommandbuffer, lc_vkbuffer, lcs_ib_p[lcs_s_p[l_0].i], VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(vkcommandbuffer, lcs_ic_p[lcs_s_p[l_0].i], 1, 0, 0, 0);
+				}
 
 			vkCmdEndRenderPass(vkcommandbuffer);
 

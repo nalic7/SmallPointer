@@ -105,7 +105,7 @@ int ls_loop(void *p)
 		ls_send();
 		ns_check();
 
-		if (++tick == NALI_LB_MAX_RW)
+		if (++tick == NALI_LS_MAX_RW)
 		{
 			clock_gettime(CLOCK_MONOTONIC, &tick_end);
 			sleep = tick_end.tv_sec + (double)tick_end.tv_nsec / 1e9 - tick_start.tv_sec - (double)tick_start.tv_nsec / 1e9;

@@ -4,17 +4,18 @@
 typedef struct
 {
 	uint8_t
-		keyframe,
+		keyframe,//debug only
 		bone_bl,
 		*bone_p;
 	float
-		**animation_s_p,
-		**animation_r_p,
-		**animation_t_p;
-} keyframe;
+		**s_p,
+		**r_p,
+		**t_p;
+} lckf;
 
-extern keyframe **lckf_keyframe_p;
-extern uint8_t *lckf_keyframe_bl_p;
+//select keyframe
+extern lckf **lckf_p;
+extern uint8_t *lckf_bl_p;
 
 void lckf_set();
 

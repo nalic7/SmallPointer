@@ -114,26 +114,26 @@ void lsu_read(NALI_LB_UT u)
 	ls_net_bl += sizeof(float) * 2;
 
 	if (k & NALI_LB_K_W)
-		u_t_p[2] = 1.0F / NALI_LB_MAX_RW;
+		u_t_p[2] = 1.0F / NALI_LS_MAX_RW;
 	else if (k & NALI_LB_K_S)
-		u_t_p[2] = -1.0F / NALI_LB_MAX_RW;
+		u_t_p[2] = -1.0F / NALI_LS_MAX_RW;
 	else
 		u_t_p[2] = 0;
 
 	if (k & NALI_LB_K_A)
-		u_t_p[0] = -1.0F / NALI_LB_MAX_RW;
+		u_t_p[0] = -1.0F / NALI_LS_MAX_RW;
 	else if (k & NALI_LB_K_D)
-		u_t_p[0] = 1.0F / NALI_LB_MAX_RW;
+		u_t_p[0] = 1.0F / NALI_LS_MAX_RW;
 	else
 		u_t_p[0] = 0;
 
 	if (k & NALI_LB_K_DIG)
-		ns_p[u].lb_u.rt_p[1] += 1.0F / NALI_LB_MAX_RW;
+		ns_p[u].lb_u.rt_p[1] += 1.0F / NALI_LS_MAX_RW;
 	if (k & NALI_LB_K_JUMP)
-		ns_p[u].lb_u.rt_p[1] -= 1.0F / NALI_LB_MAX_RW;
+		ns_p[u].lb_u.rt_p[1] -= 1.0F / NALI_LS_MAX_RW;
 
-	ns_p[u].lb_u.rt_p[3] += xy_p[1] / NALI_LB_MAX_RW;
-	ns_p[u].lb_u.rt_p[4] += xy_p[0] / NALI_LB_MAX_RW;
+	ns_p[u].lb_u.rt_p[3] += xy_p[1] / NALI_LS_MAX_RW;
+	ns_p[u].lb_u.rt_p[4] += xy_p[0] / NALI_LS_MAX_RW;
 
 	if (ns_p[u].lb_u.rt_p[3] > NALI_M_D2R(90.0F+45))
 	{

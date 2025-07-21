@@ -1,7 +1,7 @@
-void (*lsm_fp[NALI_LB_N_MAX])(NALI_LB_MIT mi) =
-{
-	espomi0_set
-};
+// void (*lsm_fp[NALI_LB_FP_BL])(NALI_LB_MIT mi) =
+// {
+// 	espomi0_set
+// };
 
 NALI_LB_MIT lsm_i_p[NALI_LB_CIBL * NALI_LB_CIBL * NALI_LB_CIBL];
 LB_M **lsm_lb_m_p;
@@ -12,7 +12,7 @@ static NALI_LB_MIT _update = 0;
 static NALI_LB_MIT *_re_update_p;
 static NALI_LB_MIT _re_update_bl = 0;
 
-void lsm_ad_m(NALI_LB_CHT ch, NALI_LB_MST ms)
+void lsm_ad_m(NALI_LB_CHT ch/* , NALI_LB_MST ms */)
 {
 	NALI_LB_MIT mi = lsm_i_p[ch];
 	if (mi != NALI_LB_MIN)
@@ -35,7 +35,7 @@ void lsm_ad_m(NALI_LB_CHT ch, NALI_LB_MST ms)
 	}
 	lsm_lb_m_p[mi] = realloc(lsm_lb_m_p[mi], sizeof(LB_M) * (lsm_bl_p[mi] + 1));
 	// lsm_lb_m_p[mi][lsm_bl_p[mi]].m = lb_ms_p[ms];
-	lsm_fp[ms](mi);
+	// lsm_fp[ms](mi);
 
 	if (_re_update_bl)
 		lsm_lb_m_p[mi][lsm_bl_p[mi]].update = _re_update_p[--_re_update_bl];
@@ -145,8 +145,15 @@ void lsm_open()
 		//s0-test world init
 		NALI_LB_CHT ch = 0;
 		NALI_LB_MIT mi = lsm_i_p[ch];
-		lsm_ad_m(ch, NALI_EBPOMI0_MS);
+		lsm_ad_m(ch/* , NALI_EBPOMI0_MS */);
 		memset(lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].rt_p, 0, sizeof(float) * (3 + 2));
+		//set model attribute
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].m = NALI_EBPOMI0_M;
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].ma = NALI_EBPOMI0_MA;
+		//set animate
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].a = NALI_EBPOMI0_A;
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].af = 0;
+		//ai / math can call in
 		//e0-test world init
 
 		//s0-test rm

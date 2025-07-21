@@ -18,10 +18,10 @@ VIDEO_CARDS="intel nvidia"
 ```
 gui-wm/hyprland-0.49.0
 sys-devel/gcc-14.3.0
-dev-debug/gdb-16.2-r2
+dev-debug/gdb-16.3
 
-app-editors/vscodium-1.101.24242
-dev-util/android-studio-2025.1.1.13
+app-editors/vscodium-1.102.04606
+dev-util/android-studio-2025.1.1.14-r3
 ```
 >Package (Portable)
 ```

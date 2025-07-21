@@ -11,23 +11,25 @@ float lcs_float_p[] =
 	0, 0, 0, 1
 };
 
-NALI_LCS_DSIT lcs_a_bl_p[NALI_LCS_A_BL] = {0};
+// NALI_LCS_DSIT lcs_a_bl_p[NALI_LCS_A_BL] = {0};
 
-VkDeviceSize *lcs_i_p;
+VkDeviceSize *lcs_ib_p;
 uint32_t *lcs_ic_p;
 
-VkDeviceSize 
-	lcs_a_vkdevicesize_p[NALI_LCS_A_BL],
-	*lcs_b_vkdevicesize_p[NALI_LCS_A_BL];
+VkDeviceSize lcs_a_vkdevicesize_p[NALI_LCS_A_BL];
+	// *lcs_b_vkdevicesize_p[NALI_LCS_A_BL];
 
 VkDescriptorPool lcs_vkdescriptorpool;
 VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
 
 lcs__ lcs___p[NALI_LB_MIM];
-NALI_LB_MIT *lcs__i_p[NALI_LCS_A_BL];
+// NALI_LB_MIT *lcs__i_p[NALI_LCS_A_BL];
 
 // VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
 // uint16_t lcs_vkmappedmemoryrange_bl = 0;
+
+uint32_t lcs_s_bl;
+lcs_s *lcs_s_p;
 
 static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
@@ -90,51 +92,57 @@ static void setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p
 	vkdescriptorpoolsize_p[4] = vkdescriptorpoolsize_p[0];
 }
 
-void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, VkDeviceSize *v_b_vkdevicesize_p, uint8_t mj)
+//m -> j
+void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj)
 {
 	//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 	//r-bind
+	//gui / world
 	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = v_b_vkdevicesize_p[0],
+		.offset = sizeof(float) * 16 * 2,
 		.range = sizeof(float) * 16 * 2
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 
 	//n-bind
 	//mj = lcm_joint_count_p[ji]
+	//bone
 	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = v_b_vkdevicesize_p[1],
+		.offset = lcp_vkdevicesize_p[j],
 		.range = mj * sizeof(float) * 16 * 2
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 1, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[1], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
 
 	//r-bind
+	//animate
 	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = v_b_vkdevicesize_p[2],
+		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl + 1] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
 		.range = mj * sizeof(float) * 4 * 3
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 2, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[2], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 
 	//n-bind
+	//src color
 	vkdescriptorbufferinfo_p[3] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = v_b_vkdevicesize_p[3],
+		.offset = NALI_LCP_VP_BL,
 		.range = lcp_rgba_bl
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 3, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[3], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 3);
 
 	//r-bind
+	//mix color
 	vkdescriptorbufferinfo_p[4] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = v_b_vkdevicesize_p[4],
+		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl + 1] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
 		.range = lcp_rgba_bl
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 4, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[4], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 4);
@@ -142,12 +150,13 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 
 void lcs_set()
 {
+	lcs_s_p = malloc(0);
 	// lcs_vkmappedmemoryrange_p = malloc(0);
 
-	for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
-	{
-		lcs_b_vkdevicesize_p[l_0] = malloc(0);
-	}
+	// for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
+	// {
+	// 	lcs_b_vkdevicesize_p[l_0] = malloc(0);
+	// }
 
 	//init unused value
 	for (NALI_LB_MIT l_0 = 0; l_0 < NALI_LB_MIM; ++l_0)
@@ -191,11 +200,12 @@ void lcs_freeVk(uint32_t device)
 
 void lcs_free()
 {
-	for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
-	{
-		free(lcs_b_vkdevicesize_p[l_0]);
-	}
+	free(lcs_s_p);
+	// for (uint8_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
+	// {
+	// 	free(lcs_b_vkdevicesize_p[l_0]);
+	// }
 
-	free(lcs_i_p);
+	free(lcs_ib_p);
 	free(lcs_ic_p);
 }

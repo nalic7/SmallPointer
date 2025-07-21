@@ -24,12 +24,9 @@ void nc_send()
 	sendto(server_fd, lc_net_p, lc_net_bl, 0, (struct sockaddr *)&server_sockaddr_in, server_sockaddr_in_bl);
 }
 
-static ssize_t r;
 void nc_get()
 {
-	r = recvfrom(server_fd, lc_net_p, NALI_LB_NET_BL, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl);
-
-	if (r > 0)
+	if (recvfrom(server_fd, lc_net_p, NALI_LB_NET_BL, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl) > 0)
 	{
 		lc_read();
 	}
