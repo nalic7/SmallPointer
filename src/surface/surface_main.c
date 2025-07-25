@@ -116,13 +116,11 @@ int main()
 	{
 		float extra = max_value - start + end - min;
 
-		NALI_D_LOG("0")
-		NALI_D_LOG("next %f", next = extra * delta)
+		NALI_D_LOG("0 next %f", next = extra * delta)
 	}
 	else
 	{
-		NALI_D_LOG("1")
-		NALI_D_LOG("next %f", next = (end - start) * delta)
+		NALI_D_LOG("1 next %f", next = (end - start) * delta)
 	}
 	//1/delta or frame/sec
 	for (uint32_t rw = 0; rw < 1 / delta; ++rw)

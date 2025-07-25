@@ -86,8 +86,8 @@ void lcm_update()
 			//min k_s
 			//max_value k_e
 			NALI_LB_AKT
-				k_s,
-				k_e;
+				k_s = ?,
+				k_e = ?;
 			if (!_.m.a_f_frame)
 			{
 				float start = _.m.a_f;
@@ -133,33 +133,58 @@ void lcm_update()
 				//ak -> ak  0 -> 2 af+=255*2
 				//af -> af
 				//default a
+				VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl + 1];
 				for (uint8_t l_2 = 0; l_2 < lcp_joint_count_p[_.m.m]; ++l_2)
 				{
-					memcpy(lc_vkbuffer_p + l_2 * sizeof(float) * 4 * 3, ?, sizeof(float) * 4 * 3);
+					memcpy(lc_vkbuffer_p + vkdevicesize + l_2 * sizeof(float) * 4 * 3, mv4_srt_array, sizeof(mv4_srt_array));
 				}
 
-				//apply k_s k_e
-				//NALI_M_LERP
-				lckf lckf = lckf_p[_.m.a][_.m.ak];
-				for (uint8_t l_2 = 0; l_2 < lckf_bl_p[_.m.ak]; ++l_2)
+				lckf lckf_current = lckf_p[_.m.a][l_ak_current];
+				lckf lckf_next = lckf_p[_.m.a][l_ak_next];
+				for (uint8_t l_2 = 0; l_2 < lckf_current.bone_bl; ++l_2)
 				{
-					for (uint8_t l_3 = 0; l_3 < lckf.bone_bl; ++l_3)
+					uint8_t bone = lckf_current.bone_p[l_2];
+					memcpy(lc_vkbuffer_p + vkdevicesize, lckf_current.s_p[l_2], sizeof(float) * 3);
+					memcpy(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4, lckf_current.r_p[l_2], sizeof(float) * 4);
+					memcpy(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2, lckf_current.t_p[l_2], sizeof(float) * 3);
+				}
+				for (uint8_t l_2 = 0; l_2 < lckf_next.bone_bl; ++l_2)
+				{
+					uint8_t bone = lckf_next.bone_p[l_2];
+					for (uint8_t l_3 = 0; l_3 < 3; ++l_3)
 					{
-						uint8_t bone = lckf.bone_p[l_3];
-						lckf.s_p[l_3];
-						lckf.r_p[l_3];
-						lckf.t_p[l_3];
+						NALI_M_LERP(((float *)(lc_vkbuffer_p + vkdevicesize))[l_3], lckf_next.s_p[l_2][l_3], l_a_f);
+						NALI_M_LERP(((float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2))[l_3], lckf_next.t_p[l_2][l_3], l_a_f);
+					}
+
+					for (uint8_t l_3 = 0; l_3 < 4; ++l_3)
+					{
+						NALI_M_LERP(((float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4))[l_3], lckf_next.r_p[l_2][l_3], l_a_f);
 					}
 				}
-				memcpy(lc_vkbuffer_p, ?, ?);
+
+				//apply rt
+				uint8_t head_bone = ?[?];
+				float r_p[4];
+				float w_r_p[4];
+				mv4_q(_.m.rt_p[3], _.m.rt_p[4], 0, r_p);
+				mv4_m(lc_vkbuffer_p + vkdevicesize + head_bone + sizeof(float) * 4, r_p, w_r_p);
+				memcpy(lc_vkbuffer_p + vkdevicesize + head_bone + sizeof(float) * 4, w_r_p, sizeof(float) * 4);
+
+				//apply u_t t
+				//apply NALI_LB_CMFL
+				for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
+				{
+					((float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2))[l_2] += _.m.rt_p[l_2] * ? - lcu_rt_p[l_2] * ?;
+				}
 
 				vkmappedmemoryrange_p = realloc(vkmappedmemoryrange_p, sizeof(VkMappedMemoryRange) * (l_mm_bl + 1));
 				vkmappedmemoryrange_p[l_mm_bl++] = (VkMappedMemoryRange)
 				{
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 					.memory = lc_vkdevicememory,
-					.offset = ?,
-					.size = (? + 63) & ~63,
+					.offset = vkdevicesize + sizeof(float) * 4 * 3 * lckf_current.k_min,
+					.size = (vkdevicesize + sizeof(float) * 4 * 3 * lckf_current.k_max + 63) & ~63,
 					.pNext = VK_NULL_HANDLE
 				};
 			}

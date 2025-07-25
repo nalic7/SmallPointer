@@ -1,5 +1,9 @@
 NALI_LB_CHT *lcu_ch_p;
 uint8_t lcu_ch_bl = 0;
+
+uint8_t lcu_rt_frame;
+float lcu__rt_p[3 + 2];
+float lcu_rt_p[3 + 2];
 LB_U lcu_lb_u;
 
 uint8_t lcu_k = 0;
@@ -17,30 +21,48 @@ static float
 	q1_m4x4_array[16],
 	q2_m4x4_array[16];
 
-//s0-timeline
-static float _rt_p[3 + 2];
-//e0-timeline
 void lcu_update()
 {
-	//use timeline
-	for (uint8_t l_0 = 0; l_0 < 3 + 2; ++l_0)
+	if (!lcu_rt_frame)
 	{
-		_rt_p[l_0] += (lcu_lb_u.rt_p[l_0] - _rt_p[l_0]) * lc_delta;
+		for (uint8_t l_2 = 0; l_2 < 3 + 2; ++l_2)
+		{
+			lcu__rt_p[l_2] = (lcu_lb_u.rt_p[l_2] - lcu_rt_p[l_2]) * NALI_LC_D;
+		}
+	}
+
+	if (++lcu_rt_frame >= NALI_LC_MAX_F)
+	{
+		if (lcu_rt_frame == NALI_LC_MAX_F)
+		{
+			memcpy(lcu_rt_p, lcu_lb_u.rt_p, sizeof(float) * (3 + 2));
+		}
+		else
+		{
+			--lcu_rt_frame;
+		}
+	}
+	else
+	{
+		for (uint8_t l_2 = 0; l_2 < 3 + 2; ++l_2)
+		{
+			lcu_rt_p[l_2] += lcu__rt_p[l_2];
+		}
 	}
 
 	//lcu_lb_u.rt_p
-	lb_u_update(lc_vkbuffer_p, _rt_p[4], q_v4_array, q0_m4x4_array, q1_m4x4_array);
+	lb_u_update(lc_vkbuffer_p, lcu_rt_p[4], q_v4_array, q0_m4x4_array, q1_m4x4_array);
 
-	mv4_q(_rt_p[3], 0, 0, q_v4_array);
+	mv4_q(lcu_rt_p[3], 0, 0, q_v4_array);
 	mv4_q2m(q_v4_array, q0_m4x4_array);
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
 	mm4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
 
 	memcpy(q2_m4x4_array, mm4x4_array, sizeof(mm4x4_array));
 
-	q2_m4x4_array[12] = _rt_p[0];
-	q2_m4x4_array[13] = _rt_p[1];
-	q2_m4x4_array[14] = _rt_p[2];
+	q2_m4x4_array[12] = lcu_rt_p[0];
+	q2_m4x4_array[13] = lcu_rt_p[1];
+	q2_m4x4_array[14] = lcu_rt_p[2];
 	memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
 	mm4x4_m(q2_m4x4_array, q1_m4x4_array, lc_vkbuffer_p);
 	// ((float *)m_vkbuffer_p)[12] = s_tx;

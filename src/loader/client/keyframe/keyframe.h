@@ -6,7 +6,11 @@ typedef struct
 	uint8_t
 		keyframe,//debug only
 		bone_bl,
-		*bone_p;
+		*bone_p,
+
+		//new
+		k_min,
+		k_max;
 	float
 		**s_p,
 		**r_p,

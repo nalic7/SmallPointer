@@ -1,3 +1,10 @@
+const float mv4_srt_array[4 + 4 + 4] =
+{
+	1, 1, 1, 0,
+	0, 0, 0, 1,
+	0, 0, 0, 0
+};
+
 void mv4_q(float x, float y, float z, float w[4])
 {
 	float c1 = cosf(x / 2);
@@ -36,7 +43,7 @@ void mv4_q2m(const float q[4], float w[16])
 	w[10] = 1 - 2 * (x_squared + y_squared);
 }
 
-void m_4_m(const float a[4], const float b[4], float w[4])
+void mv4_m(const float a[4], const float b[4], float w[4])
 {
 	w[0] = a[3]*b[0] + a[0]*b[3] + a[1]*b[2] - a[2]*b[1];
 	w[1] = a[3]*b[1] - a[0]*b[2] + a[1]*b[3] + a[2]*b[0];

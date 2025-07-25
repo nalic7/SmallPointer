@@ -106,9 +106,11 @@ git clone https://github.com/jkuhlmann/cgltf
 
 >[server.h](src/loader/server/server.h)
 
->[linux_client.h](src/network/linux/linux_client.h)
+>[network_client.h](src/network/network_client.h)
 
->[linux_server.h](src/network/linux/linux_server.h)
+>[network_server.h](src/network/network_server.h)
+
+>[network_server.c](src/network/network_server.c)
 
 >[file.h](src/file/file.h)
 

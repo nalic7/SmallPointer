@@ -46,6 +46,29 @@ void lckf_set()
 				memcpy(lckf_p[l_0][l_1].t_p[l_2], NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], sizeof(float) * 3);
 				NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 3;
 			}
+
+			lckf_p[l_0][l_1].k_min = lckf_p[l_0][l_1].bone_p[0];
+			lckf_p[l_0][l_1].k_max = lckf_p[l_0][l_1].bone_p[lckf_p[l_0][l_1].bone_bl - 1];
+			if (l_1 > 0)
+			{
+				if (lckf_p[l_0][l_1 - 1].k_min > lckf_p[l_0][l_1].bone_p[0])
+				{
+					lckf_p[l_0][l_1 - 1].k_min = lckf_p[l_0][l_1].bone_p[0];
+				}
+				if (lckf_p[l_0][l_1 - 1].k_max < lckf_p[l_0][l_1].bone_p[lckf_p[l_0][l_1].bone_bl - 1])
+				{
+					lckf_p[l_0][l_1 - 1].k_max = lckf_p[l_0][l_1].bone_p[lckf_p[l_0][l_1].bone_bl - 1];
+				}
+			}
+		}
+
+		if (lckf_p[l_0][lckf_bl_p[l_0] - 1].k_min > lckf_p[l_0][0].bone_p[0])
+		{
+			lckf_p[l_0][lckf_bl_p[l_0] - 1].k_min = lckf_p[l_0][0].bone_p[0];
+		}
+		if (lckf_p[l_0][lckf_bl_p[l_0] - 1].k_max < lckf_p[l_0][0].bone_p[lckf_p[l_0][0].bone_bl - 1])
+		{
+			lckf_p[l_0][lckf_bl_p[l_0] - 1].k_max = lckf_p[l_0][0].bone_p[lckf_p[l_0][0].bone_bl - 1];
 		}
 	}
 }
