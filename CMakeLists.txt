@@ -63,7 +63,7 @@ if(CLIENT)
   list(APPEND SOURCES src/network/network_client.c)
 
   list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
-  list(APPEND SOURCES src/al/al.c)
+  # list(APPEND SOURCES src/al/al.c)
 endif()
 
 if(SERVER)
@@ -88,17 +88,14 @@ if(S_NAME STREQUAL "android")
   )
 
   if(CLIENT)
-    list(APPEND TID ../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/include)
+    list(APPEND TID ../FFmpeg/android/arm64/include)
     list(APPEND TLL
-      ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libavcodec.so
-      ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libavformat.so
-      ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libavutil.so
+      ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libavcodec.so
+      ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libavformat.so
+      ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libavutil.so
 
-      ${CMAKE_SOURCE_DIR}/../ffmpeg-android-maker/build/ffmpeg/arm64-v8a/lib/libswresample.so
+      ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libswresample.so
     )
-
-    list(APPEND TID ../openal-soft/include)
-    list(APPEND TLL ${CMAKE_SOURCE_DIR}/../openal-soft/build/libopenal.so)
 
     file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
     list(APPEND SOURCES ${G_SOURCES})

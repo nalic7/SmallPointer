@@ -13,7 +13,8 @@
 #define NALI_LB_NET_BL 255
 
 //animation
-#define NALI_LB_AT uint8_t
+#define NALI_LB_AKIT uint8_t
+// #define NALI_LB_AT uint8_t
 //animation key
 #define NALI_LB_AKT uint8_t
 //animation keyframe/float /255
@@ -53,10 +54,13 @@
 #define NALI_LB_MA_BL 1
 extern const uint8_t lb_ma_p[NALI_LB_MA_BL];
 extern const uint8_t *lb_map_p[NALI_LB_MA_BL];
+extern const uint8_t lb_mrb_p[NALI_LB_MA_BL];
 extern const uint8_t lb_mab_p[NALI_LB_MA_BL];
 #define NALI_LB_MDP_BL 4
 extern const float lb_mdp_p[NALI_LB_MDP_BL][3];
-#define NALI_LB_K_BL 4
+//[NALI_LB_AT]
+#define NALI_LB_AK_BL 3
+extern const NALI_LB_AKT lb_ak_p[NALI_LB_AK_BL][3];
 // extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
 // extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
 //e0-data
@@ -74,7 +78,7 @@ typedef struct
 	//m -> j
 	NALI_LB_MT m;
 	NALI_LB_MAT ma;
-	NALI_LB_AT a;
+	NALI_LB_AKIT aki;
 
 	NALI_LB_AFT af;
 	// NALI_LB_AKT ak;

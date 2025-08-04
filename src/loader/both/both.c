@@ -15,6 +15,11 @@ const uint8_t *lb_map_p[NALI_LB_MA_BL] =
 	ebpomi0_ms_ap_p
 };
 
+const uint8_t lb_mrb_p[NALI_LB_MA_BL] =
+{
+	NALI_EBPOMI0_MRB
+};
+
 const uint8_t lb_mab_p[NALI_LB_MA_BL] =
 {
 	NALI_EBPOMI0_MAB
@@ -26,6 +31,19 @@ const float lb_mdp_p[NALI_LB_MDP_BL][3] =
 {
 	{1, 0, 0},
 	{-1, 0, 0}
+};
+
+//a k_s k_e
+const NALI_LB_AKT lb_ak_p[NALI_LB_AK_BL][3] =
+{
+	//loop 2 4 on server
+	//check [0] for a
+	//if < keep ->
+	// {0, 5}
+	{0, 0, 2},
+	{0, 2, 4},
+	//left to 5
+	{0, 4, 5}
 };
 
 // uint8_t lb_ms_abl_p[NALI_LB_N_MAX] =
@@ -134,7 +152,8 @@ void lb_free1()
 	mtx_lock(lb_mtx_t_p);
 	mtx_unlock(lb_mtx_t_p);
 
-	al_clean();
+	//!switch to pipewire
+	// al_clean();
 
 	#ifndef C_NALI_S_ANDROID
 		swlc_clean();

@@ -68,7 +68,7 @@ typedef struct
 {
 	NALI_LB_MT m;
 	NALI_LB_MAT ma;
-	NALI_LB_AT a;
+	NALI_LB_AKIT aki;
 
 	NALI_LB_CHT ch;
 	NALI_LB_MIT mi;

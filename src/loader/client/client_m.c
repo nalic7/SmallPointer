@@ -86,8 +86,9 @@ void lcm_update()
 			//min k_s
 			//max_value k_e
 			NALI_LB_AKT
-				k_s = ?,
-				k_e = ?;
+				a = lb_ak_p[_.m.aki][0],
+				k_s = lb_ak_p[_.m.aki][1],
+				k_e = lb_ak_p[_.m.aki][2];
 			if (!_.m.a_f_frame)
 			{
 				float start = _.m.a_f;
@@ -139,8 +140,8 @@ void lcm_update()
 					memcpy(lc_vkbuffer_p + vkdevicesize + l_2 * sizeof(float) * 4 * 3, mv4_srt_array, sizeof(mv4_srt_array));
 				}
 
-				lckf lckf_current = lckf_p[_.m.a][l_ak_current];
-				lckf lckf_next = lckf_p[_.m.a][l_ak_next];
+				lckf lckf_current = lckf_p[a][l_ak_current];
+				lckf lckf_next = lckf_p[a][l_ak_next];
 				for (uint8_t l_2 = 0; l_2 < lckf_current.bone_bl; ++l_2)
 				{
 					uint8_t bone = lckf_current.bone_p[l_2];
@@ -164,7 +165,7 @@ void lcm_update()
 				}
 
 				//apply rt
-				uint8_t head_bone = ?[?];
+				uint8_t head_bone = lb_mrb_p[_.m.m];
 				float r_p[4];
 				float w_r_p[4];
 				mv4_q(_.m.rt_p[3], _.m.rt_p[4], 0, r_p);
@@ -267,7 +268,8 @@ void lcm_read()
 						_.a_p = lb_map_p[lcm_lb_m_p[l_0][l_1].ma];
 					}
 
-					if (_.m.a != lcm_lb_m_p[l_0][l_1].a)
+					
+					if (lb_ak_p[_.m.aki][0] != lb_ak_p[lcm_lb_m_p[l_0][l_1].aki][0])
 					{
 						_.m.a_f_frame = 0;
 						_.m.a_f = lcm_lb_m_p[l_0][l_1].af / 255.0F;
@@ -336,7 +338,7 @@ void lcm_read()
 					++l_ds_bl;
 				}
 
-				memcpy(lcs___p, lcm_lb_m_p[l_0] + l_1, sizeof(NALI_LB_MT) + sizeof(NALI_LB_MAT) + sizeof(NALI_LB_AT));
+				memcpy(lcs___p, lcm_lb_m_p[l_0] + l_1, sizeof(NALI_LB_MT) + sizeof(NALI_LB_MAT) + sizeof(NALI_LB_AKIT));
 				_.mab = lb_mab_p[lcm_lb_m_p[l_0][l_1].m];
 			}
 

@@ -177,7 +177,8 @@ int main()
 
 		swlc_set();
 		vk_set();
-		al_set();
+		//!switch to pipewire
+		// al_set();
 		lc_vk();
 		lb_free0();
 

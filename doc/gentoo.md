@@ -4,27 +4,40 @@
 >/etc/portage/make.conf
 ```bash
 #OpenRC AMD64
-USE="-policykit drun drm kms dist-kernel -daemon elogind sound-server pipewire-alsa pipewire -pulseaudio -ofono-headset -flatpak dracut efistub grub X xwayland wayland -kde -gnome -systemd -systemd-boot -xfce -gpm -emacs -vlc vulkan vulkan-overlay osmesa opengl mpv zeroconf telephony bluetooth extra ffmpeg hwaccel openal opus vdpau vaapi cuda png jpeg jpeg2k ssh nvenc"
+USE="-llvm -fonts -policykit efistub drun dist-kernel elogind dracut grub -pulseaudio sound-server pipewire-alsa dri drm kms pipewire ffmpeg extra X xwayland wayland osmesa vaapi nvdec nvenc vulkan vulkan-overlay telephony bluetooth gpm jpeg2k opus"
 
 INPUT_DEVICES="wacom libinput"
 
 #AMD_cpu,igpu / NVIDIA_dgpu
-VIDEO_CARDS="amdgpu radeon radeonsi nvidia"
+VIDEO_CARDS="amdgpu radeonsi nvidia"
 
 #Intel_cpu,igpu / NVIDIA_dgpu
 VIDEO_CARDS="intel nvidia"
 ```
->Package
+>Package (Wayland)
 ```
+#low
+gui-wm/tinywl-0.18.1
+
+#full
 gui-wm/hyprland-0.49.0
+```
+>Package (System)
+```
 sys-devel/gcc-14.3.0
 dev-debug/gdb-16.3
-
-app-editors/vscodium-1.102.04606
-dev-util/android-studio-2025.1.1.14-r3
+```
+>Package (Code)
+```
+app-editors/vscodium-1.102.24914
+dev-util/android-studio-2025.1.2.11
 ```
 >Package (Portable)
 ```
 blender-4.4.3
+```
+>Tinywl
+```bash
+tinywl -s "VSCODE_ENABLE_WAYLAND=1 codium --ozone-platform=wayland" > /dev/null 2>&1
 ```
 # [README](../README.md)

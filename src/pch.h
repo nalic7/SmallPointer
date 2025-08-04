@@ -93,10 +93,12 @@
 #ifdef C_NALI_CLIENT
 	#include "surface/surface.h"
 
-	#include <AL/al.h>
-	#include <AL/alc.h>
+	//switch to pipewire linux
+	//switch to AAudio android
+	// #include <AL/al.h>
+	// #include <AL/alc.h>
 
-	#include "al/al.h"
+	// #include "al/al.h"
 
 	#include "vk/release/vk/vk.h"
 	#include "vk/release/queue/device/physical_device/instance/instance.h"
