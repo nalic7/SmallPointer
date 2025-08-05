@@ -166,7 +166,7 @@ void lcs_set()
 		lcs___p[l_0].m.state = 0;
 		// lsm__update_p[l_0].ms = NALI_LB_MSM;
 		lcs___p[l_0].m.m = NALI_LB_MN;
-		lcs___p[l_0].m.a = NALI_LB_AN;
+		lcs___p[l_0].m.aki = NALI_LB_AKIN;
 	}
 }
 

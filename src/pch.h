@@ -50,6 +50,9 @@
 		#define VK_USE_PLATFORM_WAYLAND_KHR
 		#include <vulkan/vulkan.h>
 
+		//pipewire
+		#include <pipewire/pipewire.h>
+
 		#include "surface/wayland/client/client.h"
 		#include "surface/wayland/client/register/register.h"
 		#include "surface/wayland/client/seat/seat.h"
@@ -79,6 +82,8 @@
 
 #include "loader/both/both.h"
 #include "entity/both/pomi0/pomi0.h"
+#include "entity/both/pomi1/pomi1.h"
+#include "entity/both/pomi2/pomi2.h"
 
 #if C_NALI_CLIENT || C_NALI_SERVER
 	#include <errno.h>

@@ -22,22 +22,18 @@ gui-wm/tinywl-0.18.1
 #full
 gui-wm/hyprland-0.49.0
 ```
->Package (System)
+>Package (System/Debug)
 ```
 sys-devel/gcc-14.3.0
 dev-debug/gdb-16.3
 ```
 >Package (Code)
 ```
-app-editors/vscodium-1.102.24914
+app-editors/vim-9.1.0794
 dev-util/android-studio-2025.1.2.11
 ```
 >Package (Portable)
 ```
 blender-4.4.3
-```
->Tinywl
-```bash
-tinywl -s "VSCODE_ENABLE_WAYLAND=1 codium --ozone-platform=wayland" > /dev/null 2>&1
 ```
 # [README](../README.md)

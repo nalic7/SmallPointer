@@ -176,7 +176,7 @@ void lcm_update()
 				//apply NALI_LB_CMFL
 				for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
 				{
-					((float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2))[l_2] += _.m.rt_p[l_2] * ? - lcu_rt_p[l_2] * ?;
+					((float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2))[l_2] += _.m.rt_p[l_2] * lcu_xyz_p[l_0 * 3 * l_2] * NALI_LB_CMFL - lcu_rt_p[l_2];
 				}
 
 				vkmappedmemoryrange_p = realloc(vkmappedmemoryrange_p, sizeof(VkMappedMemoryRange) * (l_mm_bl + 1));
@@ -217,9 +217,12 @@ void lcm_read()
 		NALI_LB_CT l_0x = NALI_M_H3X(lcu_ch_p[l_0], NALI_LB_CIBL);
 		NALI_LB_CT l_0y = NALI_M_H3Y(lcu_ch_p[l_0], NALI_LB_CIBL);
 		NALI_LB_CT l_0z = NALI_M_H3Z(lcu_ch_p[l_0], NALI_LB_CIBL);
-		NALI_LB_CT x = l_0x - l_x;
-		NALI_LB_CT y = l_0y - l_y;
-		NALI_LB_CT z = l_0z - l_z;
+		uint8_t x = l_0x - l_x;
+		uint8_t y = l_0y - l_y;
+		uint8_t z = l_0z - l_z;
+		lcu_xyz_p[l_0 * 3] = x;
+		lcu_xyz_p[l_0 * 3 + 1] = y;
+		lcu_xyz_p[l_0 * 3 + 2] = z;
 		//-1 0 1
 		//3 * 3 * 3
 		uint8_t _mi = NALI_M_H3(x, y, z, 3);
@@ -373,12 +376,13 @@ void lcm_read()
 					{
 						//old near
 						lcs_s_i = l_3;
+						memmove(lcs_s_p, lcs_s_p[l_3], sizeof(float) * l_3 - lcs_s_bl);
 						break;
 					}
-					else
-					{
-						//old far
-					}
+					// else
+					// {
+					// 	//old far
+					// }
 				}
 
 				lcs_s_p[lcs_s_i] = lcs_s;

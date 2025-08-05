@@ -11,7 +11,9 @@ static const uint8_t setting_array[] =
 
 static const char *file_array[] =
 {
-	NALI_F_FACTORY_MODEL "/SuperCutePomi0.glb",
+	//NALI_F_FACTORY_MODEL "/SuperCutePomi0.glb"//main
+	//NALI_F_FACTORY_MODEL "/SuperCutePomi1.glb"
+	NALI_F_FACTORY_MODEL "/SuperCutePomi2.glb",//main for now
 	// NALI_FACTORY "Font.glb"
 };
 

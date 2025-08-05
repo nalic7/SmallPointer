@@ -145,13 +145,13 @@ void lsm_open()
 		//s0-test world init
 		NALI_LB_CHT ch = 0;
 		NALI_LB_MIT mi = lsm_i_p[ch];
-		lsm_ad_m(ch/* , NALI_EBPOMI0_MS */);
+		lsm_ad_m(ch);
 		memset(lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].rt_p, 0, sizeof(float) * (3 + 2));
 		//set model attribute
-		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].m = NALI_EBPOMI0_M;
-		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].ma = NALI_EBPOMI0_MA;
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].m = NALI_EBPOMI2_M;
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].ma = NALI_EBPOMI2_MA;
 		//set animate
-		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].a = NALI_EBPOMI0_A;
+		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].aki = NALI_EBPOMI2_AKI;
 		lsm_lb_m_p[mi][lsm_bl_p[mi] - 1].af = 0;
 		//ai / math can call in
 		//e0-test world init

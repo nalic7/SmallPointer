@@ -1,5 +1,6 @@
 NALI_LB_CHT *lcu_ch_p;
 uint8_t lcu_ch_bl = 0;
+uint8_t *lcu_xyz_p;
 
 uint8_t lcu_rt_frame;
 float lcu__rt_p[3 + 2];
@@ -20,6 +21,12 @@ static float
 	},
 	q1_m4x4_array[16],
 	q2_m4x4_array[16];
+
+void lcu_set()
+{
+	lcu_ch_p = malloc(0);
+	lcu_xyz_p = malloc(0);
+}
 
 void lcu_update()
 {
@@ -91,6 +98,14 @@ void lcu_read()
 	lcu_ch_bl = *(lc_net_p + lc_net_bl);
 	lc_net_bl += sizeof(uint8_t);
 
+	lcu_ch_p = realloc(lcu_ch_p, sizeof(NALI_LB_CHT) * lcu_ch_bl);
+	lcu_xyz_p = realloc(lcu_xyz_p, 3 * lcu_ch_bl);
 	memcpy(lcu_ch_p, lc_net_p + lc_net_bl, sizeof(NALI_LB_CHT) * lcu_ch_bl);
 	lc_net_bl += sizeof(NALI_LB_CHT);
+}
+
+void lcu_free()
+{
+	free(lcu_ch_p);
+	free(lcu_xyz_p);
 }

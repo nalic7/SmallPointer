@@ -1,19 +1,12 @@
 static const char *file_array[] =
 {
-	NALI_F_FACTORY_KEYFRAME "/SuperCutePomi0.bin"
+	NALI_F_FACTORY_KEYFRAME "/SuperCutePomiWalk.bin"
 };
-
-static lckf **keyframe_p;
-static uint8_t *keyframe_bl_p;
 
 void gkf_write()
 {
 	FILE *file = fopen(NALI_F_HOME_ASSET, "ab");
 	fwrite((uint8_t[]){sizeof(file_array) / sizeof(file_array[0])}, sizeof(uint8_t), 1, file);
-
-	keyframe_bl_p = malloc(sizeof(file_array) / sizeof(file_array[0]));
-	keyframe_p = malloc(sizeof(file_array) / sizeof(file_array[0]) * sizeof(lckf *));
-	memset(keyframe_p, 0, sizeof(file_array) / sizeof(file_array[0]) * sizeof(lckf *));
 
 	uint32_t data_bl;
 	uint8_t *data_p;
@@ -23,50 +16,34 @@ void gkf_write()
 		data_p = f_read(file_array[l_0], &data_bl);
 		step = 0;
 
-		keyframe_bl_p[l_0] = *(uint8_t *)(data_p + step);
-		fwrite(&keyframe_bl_p[l_0], sizeof(uint8_t), 1, file);
+		uint8_t keyframe_bl = *(uint8_t *)(data_p + step);
+		fwrite(&keyframe_bl, sizeof(uint8_t), 1, file);
 		step += sizeof(uint8_t);
-		keyframe_p[l_0] = malloc(keyframe_bl_p[l_0] * sizeof(lckf));
 
-		for (uint32_t l_1 = 0; l_1 < keyframe_bl_p[l_0]; ++l_1)
+		for (uint32_t l_1 = 0; l_1 < keyframe_bl; ++l_1)
 		{
-			keyframe_p[l_0][l_1].keyframe = *(uint8_t *)(data_p + step);
-			fwrite(&keyframe_p[l_0][l_1].keyframe, sizeof(uint8_t), 1, file);
+			uint8_t bone_bl = *(uint8_t *)(data_p + step);
+			fwrite(&bone_bl, sizeof(uint8_t), 1, file);
 			step += sizeof(uint8_t);
 
-			keyframe_p[l_0][l_1].bone_bl = *(uint8_t *)(data_p + step);
-			fwrite(&keyframe_p[l_0][l_1].bone_bl, sizeof(uint8_t), 1, file);
-			step += sizeof(uint8_t);
-
-			keyframe_p[l_0][l_1].bone_p = malloc(keyframe_p[l_0][l_1].bone_bl);
-			keyframe_p[l_0][l_1].s_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
-			keyframe_p[l_0][l_1].r_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
-			keyframe_p[l_0][l_1].t_p = malloc(sizeof(float *) * keyframe_p[l_0][l_1].bone_bl);
-
-			for (uint32_t l_2 = 0; l_2 < keyframe_p[l_0][l_1].bone_bl; ++l_2)
+			for (uint32_t l_2 = 0; l_2 < bone_bl; ++l_2)
 			{
-				keyframe_p[l_0][l_1].bone_p[l_2] = *(uint8_t *)(data_p + step);
-				fwrite(&keyframe_p[l_0][l_1].bone_p[l_2], sizeof(uint8_t), 1, file);
+				fwrite(data_p + step, sizeof(uint8_t), 1, file);
 				step += sizeof(uint8_t);
 
-				keyframe_p[l_0][l_1].s_p[l_2] = malloc(sizeof(float) * 3);
-				memcpy(keyframe_p[l_0][l_1].s_p[l_2], data_p + step, sizeof(float) * 3);
-				fwrite(keyframe_p[l_0][l_1].s_p[l_2], sizeof(float), 3, file);
+				fwrite(data_p + step, sizeof(float), 3, file);
 				step += sizeof(float) * 3;
 
-				keyframe_p[l_0][l_1].r_p[l_2] = malloc(sizeof(float) * 4);
-				// memcpy(keyframe_p[l_0][l_1].animation_r_p[l_2], data + step, sizeof(float) * 4);
-				keyframe_p[l_0][l_1].r_p[l_2][3] = *(float *)(data_p + step);
-				keyframe_p[l_0][l_1].r_p[l_2][0] = *(float *)(data_p + step + sizeof(float));
-				keyframe_p[l_0][l_1].r_p[l_2][1] = *(float *)(data_p + step + sizeof(float) * 2);
-				keyframe_p[l_0][l_1].r_p[l_2][2] = *(float *)(data_p + step + sizeof(float) * 3);
-				MV4_qi(keyframe_p[l_0][l_1].r_p[l_2], 0)
-				fwrite(keyframe_p[l_0][l_1].r_p[l_2], sizeof(float), 4, file);
+				float r_p[4];
+				r_p[3] = *(float *)(data_p + step);
+				r_p[0] = *(float *)(data_p + step + sizeof(float));
+				r_p[1] = *(float *)(data_p + step + sizeof(float) * 2);
+				r_p[2] = *(float *)(data_p + step + sizeof(float) * 3);
+				MV4_qi(r_p, 0)
+				fwrite(r_p, sizeof(float), 4, file);
 				step += sizeof(float) * 4;
 
-				keyframe_p[l_0][l_1].t_p[l_2]= malloc(sizeof(float) * 3);
-				memcpy(keyframe_p[l_0][l_1].t_p[l_2], data_p + step, sizeof(float) * 3);
-				fwrite(keyframe_p[l_0][l_1].t_p[l_2], sizeof(float), 3, file);
+				fwrite(data_p + step, sizeof(float), 3, file);
 				step += sizeof(float) * 3;
 			}
 		}

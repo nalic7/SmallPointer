@@ -5,32 +5,42 @@ mtx_t *lb_mtx_t_p = &(mtx_t){};
 // 	NALI_EBPOMI0_M
 // };
 
-const uint8_t lb_ma_p[NALI_LB_MA_BL] =
-{
-	NALI_EBPOMI0_MA
-};
+// const uint8_t lb_ma_p[NALI_LB_MA_BL] =
+// {
+// 	NALI_EBPOMI0_MA,
+// 	NALI_EBPOMI1_MA,
+// 	NALI_EBPOMI2_MA
+// };
 
 const uint8_t *lb_map_p[NALI_LB_MA_BL] =
 {
-	ebpomi0_ms_ap_p
+	ebpomi0_map_p,
+	ebpomi1_map_p,
+	ebpomi2_map_p
 };
 
 const uint8_t lb_mrb_p[NALI_LB_MA_BL] =
 {
-	NALI_EBPOMI0_MRB
+	NALI_EBPOMI0_MRB,
+	NALI_EBPOMI1_MRB,
+	NALI_EBPOMI2_MRB
 };
 
 const uint8_t lb_mab_p[NALI_LB_MA_BL] =
 {
-	NALI_EBPOMI0_MAB
+	NALI_EBPOMI0_MAB,
+	NALI_EBPOMI1_MAB,
+	NALI_EBPOMI2_MAB
 };
 
 //static depth for translucent
 //follow from map ma
 const float lb_mdp_p[NALI_LB_MDP_BL][3] =
 {
-	{1, 0, 0},
-	{-1, 0, 0}
+	{0, 0, 0},
+	{0, 0, 0},
+	{0, 0, 0},
+	{0, 0, 0}
 };
 
 //a k_s k_e

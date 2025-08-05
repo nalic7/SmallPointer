@@ -14,12 +14,12 @@
 
 //animation
 #define NALI_LB_AKIT uint8_t
+#define NALI_LB_AKIN 0xFFu
 // #define NALI_LB_AT uint8_t
 //animation key
 #define NALI_LB_AKT uint8_t
 //animation keyframe/float /255
 #define NALI_LB_AFT uint16_t
-#define NALI_LB_AN 0xFFu
 
 //model
 #define NALI_LB_MT uint8_t
@@ -51,8 +51,8 @@
 // 1 2 star0 land0
 
 // extern NALI_LB_MT lb_ms_p[NALI_LB_N_MAX];
-#define NALI_LB_MA_BL 1
-extern const uint8_t lb_ma_p[NALI_LB_MA_BL];
+#define NALI_LB_MA_BL 3
+// extern const uint8_t lb_ma_p[NALI_LB_MA_BL];
 extern const uint8_t *lb_map_p[NALI_LB_MA_BL];
 extern const uint8_t lb_mrb_p[NALI_LB_MA_BL];
 extern const uint8_t lb_mab_p[NALI_LB_MA_BL];

@@ -4,7 +4,7 @@
 typedef struct
 {
 	uint8_t
-		keyframe,//debug only
+		// keyframe,//debug only
 		bone_bl,
 		*bone_p,
 

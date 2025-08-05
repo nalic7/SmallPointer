@@ -88,6 +88,7 @@ if(S_NAME STREQUAL "android")
   )
 
   if(CLIENT)
+    #ffmpeg
     list(APPEND TID ../FFmpeg/android/arm64/include)
     list(APPEND TLL
       ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libavcodec.so
@@ -97,6 +98,7 @@ if(S_NAME STREQUAL "android")
       ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libswresample.so
     )
 
+    #surface
     file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
     list(APPEND SOURCES ${G_SOURCES})
   endif()
@@ -104,6 +106,7 @@ if(S_NAME STREQUAL "android")
   add_library(${P_NAME} SHARED ${SOURCES})
 else()
   if(CLIENT)
+    #ffmpeg
     list(APPEND TLL
       avcodec
       avformat
@@ -111,8 +114,12 @@ else()
       swresample
     )
 
-    list(APPEND TLL openal)
+    #pipewire
+    list(APPEND TLL pipewire-0.3)
+    list(APPEND TID /usr/include/spa-0.2)
+    list(APPEND TID /usr/include/pipewire-0.3)
 
+    #wayland / surface
     list(APPEND TLL
       wayland-client
       wayland-cursor

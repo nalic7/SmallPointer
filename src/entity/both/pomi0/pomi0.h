@@ -13,9 +13,9 @@
 
 #define NALI_EBPOMI0_MA 0
 #define NALI_EBPOMI0_MAP_BL 5
-extern const uint8_t ebpomi0_ms_ap_p[NALI_EBPOMI0_MAP_BL];
+extern const uint8_t ebpomi0_map_p[NALI_EBPOMI0_MAP_BL];
 
-#define NALI_EBPOMI0_A 0
+#define NALI_EBPOMI0_AKI 0
 
 // #define NALI_EBPOMI0_MS_VKDEVICESIZE sizeof(float) * 16 * 2
 

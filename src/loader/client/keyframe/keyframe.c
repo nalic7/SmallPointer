@@ -18,8 +18,8 @@ void lckf_set()
 
 		for (uint32_t l_1 = 0; l_1 < lckf_bl_p[l_0]; ++l_1)
 		{
-			lckf_p[l_0][l_1].keyframe = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
-			NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
+			// lckf_p[l_0][l_1].keyframe = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
+			// NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
 
 			lckf_p[l_0][l_1].bone_bl = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
 			NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
