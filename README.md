@@ -1,32 +1,13 @@
+# README
+```
+Project that try not to waste resource to render and work
+```
 # [Blend](source/blend)
 # [Shader](source/shader)
 # [Path](doc/path.md)
 # [Gentoo Linux](doc/gentoo.md)
-# README
->Build
-```bash
-# /SmallPointer
-
-#wayland (Linux)
-mkdir lib
-cd lib
-mkdir wayland
-cd wayland
-../SmallPointer/run/wayland
-
-#ffmpeg (Android)
-cd ..
-git clone --branch release/7.1 https://github.com/FFmpeg/FFmpeg.git
-cd FFmpeg
-../SmallPointer/run/ffmpeg-android
-
-#cgltf (Header)
-cd ..
-git clone https://github.com/jkuhlmann/cgltf
-
-#vulkan (Compile shader)
-run/vulkan
-```
+# [Build](doc/build.md)
+# Config
 >[CMakeLists.txt](CMakeLists.txt)
 
 >[vk.h](src/vk/release/vk/vk.h)

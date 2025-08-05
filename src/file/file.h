@@ -19,7 +19,7 @@
 	#define NALI_F_READ_CACHE NALI_F_PACKAGE "c"
 #else
 	#define NALI_F_HOME "../asset/"
-	#define NALI_F_SAVE "../save/"
+	#define NALI_F_SAVE "save/"
 #endif
 
 #define NALI_F_HOME_SOUND NALI_F_HOME "sound/"

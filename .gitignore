@@ -32,7 +32,8 @@
 *.app
 
 lib
-build
+build-debug
+build-release
 .cache
 out
 *.json

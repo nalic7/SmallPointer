@@ -376,7 +376,7 @@ void lcm_read()
 					{
 						//old near
 						lcs_s_i = l_3;
-						memmove(lcs_s_p, lcs_s_p[l_3], sizeof(float) * l_3 - lcs_s_bl);
+						memmove(lcs_s_p, lcs_s_p + l_3, sizeof(float) * (l_3 - lcs_s_bl));
 						break;
 					}
 					// else
