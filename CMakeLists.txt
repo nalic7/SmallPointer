@@ -13,11 +13,6 @@ set(P_NAME SmallPointer)
 
 project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
 
-# ISO C11
-# set(CMAKE_C_STANDARD 11)
-# set(CMAKE_C_STANDARD_REQUIRED On)
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
-
 file(GLOB_RECURSE G_SOURCES src/file/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
@@ -63,7 +58,6 @@ if(CLIENT)
   list(APPEND SOURCES src/network/network_client.c)
 
   list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
-  # list(APPEND SOURCES src/al/al.c)
 endif()
 
 if(SERVER)
@@ -102,7 +96,6 @@ if(S_NAME STREQUAL "android")
     file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
     list(APPEND SOURCES ${G_SOURCES})
   endif()
-
   add_library(${P_NAME} SHARED ${SOURCES})
 else()
   if(CLIENT)
@@ -135,7 +128,6 @@ else()
 
     list(APPEND TID lib/wayland)
   endif()
-
   add_executable(${P_NAME} ${SOURCES})
 endif()
 
@@ -144,88 +136,5 @@ if(TID)
 endif()
 target_link_libraries(${P_NAME} ${TLL})
 target_compile_definitions(${P_NAME} PRIVATE ${TCD})
-# elseif(LWJGL64)
-#   set(JAVA_HOME lib/jdk8u412-b08/)
-
-#   add_library(${P_NAME} SHARED
-#     src/surface/surface.c
-#     src/al/al.c
-#     src/vk/vk.c
-#     src/vk/instance/instance.c
-#     src/vk/instance/debug/debug.c
-#     src/vk/instance/physical_device/physical_device.c
-#     src/vk/instance/physical_device/queue/queue.c
-#     src/vk/instance/device/device.c
-#     src/vk/surface/surface.c
-#     src/vk/swapchain/swapchain.c
-#     src/vk/fence/fence.c
-#     src/vk/semaphore/semaphore.c
-#     src/vk/commandbuffer/commandpool/commandpool.c
-#     src/vk/commandbuffer/commandbuffer.c
-#     src/vk/heap/imageview/image/image.c
-#     src/vk/heap/imageview/imageview.c
-#     src/vk/shadermodule/shadermodule.c
-#     src/lwjgl/lwjgl.c
-#     src/lwjgl/gl/11/GL11.c
-#     src/lwjgl/gl/GL13.c
-#     src/lwjgl/gl/GL14.c
-#     src/lwjgl/gl/GL15.c
-#     src/lwjgl/gl/GL20.c
-#     src/lwjgl/gl/GL30.c
-#     src/lwjgl/gl/GLContext.c
-#     src/lwjgl/linux/LinuxContextImplementation.c
-#     src/lwjgl/linux/LinuxDisplay.c
-#     src/lwjgl/linux/LinuxDisplayPeerInfo.c
-#     src/lwjgl/linux/LinuxEvent.c
-#     src/lwjgl/linux/LinuxKeyboard.c
-#     src/lwjgl/linux/LinuxMouse.c
-#     src/lwjgl/linux/LinuxPeerInfo.c
-#     src/lwjgl/al/AL.c
-#     src/lwjgl/al/AL10.c
-#     src/lwjgl/al/AL11.c
-#     src/lwjgl/al/ALC10.c
-#     src/lwjgl/al/ALC11.c
-#     src/lwjgl/al/EFX10.c
-#   )
-
-#   target_include_directories(${P_NAME} PRIVATE
-#     ${JAVA_HOME}include
-#     ${JAVA_HOME}include/${S_NAME}
-#   )
-
-#   target_link_libraries(${P_NAME}
-#     vulkan
-#     openal
-#     wayland-client
-#   )
-
-#   target_compile_definitions(${P_NAME} PRIVATE PCH_LWJGL64)
-# elseif(NALIGL)
-#   set(JAVA_HOME lib/jdk8u412-b08/)
-
-#   add_library(${P_NAME} SHARED src/gl/nali/glnali.c)
-
-#   target_include_directories(${P_NAME} PRIVATE
-#     ${JAVA_HOME}include
-#     ${JAVA_HOME}include/${S_NAME}
-#   )
-
-#   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIGL)
-# elseif(NALIAL)
-#   set(JAVA_HOME lib/jdk8u412-b08/)
-
-#   add_library(${P_NAME} SHARED src/al/nali/alnali.c)
-
-#   target_include_directories(${P_NAME} PRIVATE
-#     ${JAVA_HOME}include
-#     ${JAVA_HOME}include/${S_NAME}
-#     AL
-#   )
-
-#   target_link_libraries(${P_NAME}
-#     openal
-#   )
-
-#   target_compile_definitions(${P_NAME} PRIVATE PCH_NALIAL)
 
 target_precompile_headers(${P_NAME} PRIVATE src/pch.h)

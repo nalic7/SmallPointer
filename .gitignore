@@ -38,7 +38,7 @@ build-release
 out
 *.json
 
-asset
+assets
 save
 source/model/*.glb
 source/keyframe/*.bin

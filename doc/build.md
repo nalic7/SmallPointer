@@ -46,3 +46,19 @@ cmake --build build-debug -j$(nproc)
 cd build-debug
 gdb SmallPointer
 ```
+>Compile (Android)
+```
+cd ..
+wget https://dl.google.com/android/repository/android-ndk-r27d-linux.zip
+unzip android-ndk-r27d-linux.zip
+rm android-ndk-r27d-linux.zip
+cd SmallPointer
+cmake . \
+  -DCMAKE_TOOLCHAIN_FILE=../android-ndk-r27d/build/cmake/android.toolchain.cmake \
+  -DANDROID_ABI=arm64-v8a \
+  -DANDROID_PLATFORM=android-21 \
+  -B build-android .
+cmake --build build-android
+make
+```
+# [README](../README.md)

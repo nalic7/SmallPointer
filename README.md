@@ -4,7 +4,6 @@ Project that try not to waste resource to render and work
 ```
 # [Blend](source/blend)
 # [Shader](source/shader)
-# [Path](doc/path.md)
 # [Gentoo Linux](doc/gentoo.md)
 # [Build](doc/build.md)
 # Config
