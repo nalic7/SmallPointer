@@ -1,13 +1,13 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.0)
 
-set(S_NAME linux)
-# set(S_NAME android)
+#set(S_NAME linux)
+set(S_NAME android)
 
 set(DEBUG 1)
-set(GEN 1)
+#set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-set(VK_DEBUG 1)
+#set(VK_DEBUG 1)
 
 set(P_NAME SmallPointer)
 
@@ -42,7 +42,6 @@ list(APPEND SOURCES ${G_SOURCES})
 if(CLIENT)
   list(APPEND TCD C_NALI_CLIENT)
 
-  list(APPEND TLL vulkan)
   file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
   list(APPEND SOURCES ${G_SOURCES})
   if (VK_DEBUG)
@@ -82,6 +81,8 @@ if(S_NAME STREQUAL "android")
   )
 
   if(CLIENT)
+    list(APPEND TLL ${CMAKE_SOURCE_DIR}/../android-ndk-r27d/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libvulkan.so)
+
     #ffmpeg
     list(APPEND TID ../FFmpeg/android/arm64/include)
     list(APPEND TLL
@@ -99,6 +100,8 @@ if(S_NAME STREQUAL "android")
   add_library(${P_NAME} SHARED ${SOURCES})
 else()
   if(CLIENT)
+    list(APPEND TLL vulkan)
+
     #ffmpeg
     list(APPEND TLL
       avcodec

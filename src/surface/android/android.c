@@ -12,7 +12,8 @@ static int s1_set(void *p)
 		lc_set();
 
 		vk_set();
-		al_set();
+//!switch to pipewire
+//		al_set();
 		lc_vk();
 		lb_free0();
 	#endif
@@ -195,8 +196,8 @@ void sa_wait()
 
 //		vk_freeDevice();
 //		vk_freeQueue();
-		VK_freeSurface
-		VK_makeSurface
+		vk_freeSurface();
+		vk_makeSurface();
 //		vk_initQueue();
 //		vk_initDevice();
 //		vk_setQueue(vk_device);

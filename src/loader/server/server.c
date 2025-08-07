@@ -52,7 +52,7 @@ void ls_read(NALI_LB_UT u)
 
 void ls_open()
 {
-	NALI_D_INFO("fopen %d", ls_file_p = fopen(NALI_F_SAVE_SPACE, "rb"))
+	NALI_D_INFO("fopen %p", ls_file_p = fopen(NALI_F_SAVE_SPACE, "rb"))
 
 	lsu_open();
 	lsm_open();
@@ -65,7 +65,7 @@ void ls_open()
 
 void ls_save()
 {
-	NALI_D_INFO("fopen %d", ls_file_p = fopen(NALI_F_SAVE_SPACE, "wb"))
+	NALI_D_INFO("fopen %p", ls_file_p = fopen(NALI_F_SAVE_SPACE, "wb"))
 
 	lsu_save();
 	lsm_save();

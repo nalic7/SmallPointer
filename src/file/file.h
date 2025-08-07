@@ -18,7 +18,7 @@
 	#define NALI_F_SAVE NALI_F_PACKAGE "save"
 	#define NALI_F_READ_CACHE NALI_F_PACKAGE "c"
 #else
-	#define NALI_F_HOME "../assets/"
+	#define NALI_F_HOME "../asset/"
 	#define NALI_F_SAVE "save/"
 #endif
 
@@ -27,7 +27,7 @@
 
 // #define NALI_F_HOME_IMAGE NALI_F_HOME "image"
 
-#define NALI_F_HOME_ASSET NALI_F_HOME "assets.bin"
+#define NALI_F_HOME_ASSET NALI_F_HOME "asset.bin"
 #define NALI_F_HOME_VERT NALI_F_HOME "vert.spv"
 #define NALI_F_HOME_FRAG NALI_F_HOME "frag.spv"
 
