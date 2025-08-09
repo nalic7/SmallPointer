@@ -1,7 +1,5 @@
 #!/bin/bash
-# https://ffmpeg.org/documentation.html
-# NDK=/home/nali/Android/Sdk/ndk/29.0.13113456
-NDK=<path_to_ndk>/29.0.13113456
+NDK=../android-ndk-r27d
 API=21
 ARCH=arm64
 CPU=armv8-a

@@ -14,8 +14,8 @@
 #ifdef C_NALI_S_ANDROID
 	#define NALI_F_HOME
 
-	#define NALI_F_PACKAGE "/storage/emulated/0/Android/data/com.nali.scene/"
-	#define NALI_F_SAVE NALI_F_PACKAGE "save"
+	#define NALI_F_PACKAGE "/storage/emulated/0/Android/data/com.nali.smallpointer/"
+	#define NALI_F_SAVE NALI_F_PACKAGE "save/"
 	#define NALI_F_READ_CACHE NALI_F_PACKAGE "c"
 #else
 	#define NALI_F_HOME "../asset/"

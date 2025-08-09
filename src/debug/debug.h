@@ -10,18 +10,18 @@
 #endif
 
 #ifdef C_NALI_DEBUG
-	#ifdef C_NALI_S_ANDROID
+//	#ifdef C_NALI_S_ANDROID
+//		#define NALI_D_INFO(format_p, ...) \
+//			__android_log_print(ANDROID_LOG_DEBUG, "NALI_D_INFO", format_p, ##__VA_ARGS__);
+//	#else
+	#ifdef NALI_D_FILE
 		#define NALI_D_INFO(format_p, ...) \
-			__android_log_print(ANDROID_LOG_DEBUG, "NALI_D_INFO", format_p, ##__VA_ARGS__);
+			d_write(format_p, ##__VA_ARGS__);
 	#else
-		#ifdef NALI_D_FILE
-			#define NALI_D_INFO(format_p, ...) \
-				d_write(format_p, ##__VA_ARGS__);
-		#else
-			#define NALI_D_INFO(format_p, ...) \
-				printf("NALI_D_INFO: " format_p "\n", ##__VA_ARGS__);
-		#endif
+		#define NALI_D_INFO(format_p, ...) \
+			printf("NALI_D_INFO: " format_p "\n", ##__VA_ARGS__);
 	#endif
+//	#endif
 	// fflush(stdout);
 	// exit(EXIT_FAILURE);
 

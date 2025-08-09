@@ -136,7 +136,7 @@ windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned
 ```
 >Tinywl
 ```
-tinywl -s foot > /dev/null 2>&1
+tinywl -s foot &>/dev/null
 ```
 >Package (System/Debug)
 ```

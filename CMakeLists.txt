@@ -1,13 +1,13 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.31)
 
-#set(S_NAME linux)
-set(S_NAME android)
+set(S_NAME linux)
+#set(S_NAME android)
 
 set(DEBUG 1)
-#set(GEN 1)
+set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
-#set(VK_DEBUG 1)
+set(VK_DEBUG 1)
 
 set(P_NAME SmallPointer)
 
