@@ -176,7 +176,7 @@ void lsu_open()
 		for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
 		{
 			//random spawn
-			for (uint8_t l_1 = 0; l_1 < NALI_LB_UM; ++l_1)
+			for (uint8_t l_1 = 0; l_1 < 3; ++l_1)
 			{
 				ns_p[l_0].c_p[l_1] = rand() % NALI_LB_CIBL;
 			}
@@ -190,6 +190,9 @@ void lsu_open()
 			//world / space
 			//-NALI_LB_CFBL 0 NALI_LB_CFBL
 			memset(ns_p[l_0].lb_u.rt_p, 0, sizeof(float) * (3 + 2));
+
+			//!test s
+			memset(ns_p[l_0].c_p, 0, sizeof(NALI_LB_CT) * 3);
 		}
 	}
 }

@@ -48,7 +48,7 @@ void lcm_update()
 	{
 		for (NALI_LB_MIT l_1 = 0; l_1 < lcm_bl_p[l_0]; ++l_1)
 		{
-			lcs__ _ = lcs___p[lcm_lb_m_p[l_0][l_1].update];
+			lcs__ _ = lcs___p[lcm_lb_m_p[l_0][l_1].mi];
 
 			if (!_.m.rt_frame)
 			{
@@ -257,7 +257,7 @@ void lcm_read()
 		//new ds
 		for (NALI_LB_MIT l_1 = 0; l_1 < lcm_bl_p[l_0]; ++l_1)
 		{
-			lcs__ _ = lcs___p[lcm_lb_m_p[l_0][l_1].update];
+			lcs__ _ = lcs___p[lcm_lb_m_p[l_0][l_1].mi];
 			if (_.m.ch != lcu_ch_p[l_0] || _.m.mi != l_1)
 			{
 				_.m.state ^= NALI_LCM__UPDATE_S_AD;
@@ -308,7 +308,7 @@ void lcm_read()
 					vkdescriptorbufferinfo_p = realloc(vkdescriptorbufferinfo_p, (l_ds_bl + 1) * NALI_LCS_D_SIZE * sizeof(VkDescriptorBufferInfo));
 					vkwritedescriptorset_p = realloc(vkwritedescriptorset_p, (l_ds_bl + 1) * NALI_LCS_D_SIZE * sizeof(VkWriteDescriptorSet));
 
-					_m[_mi].ds_p[l_1] = lcm_lb_m_p[l_0][l_1].update;
+					_m[_mi].ds_p[l_1] = lcm_lb_m_p[l_0][l_1].mi;
 					if (!_.m.state)
 					{
 						//new ds

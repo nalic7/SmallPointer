@@ -83,7 +83,7 @@ typedef struct
 	NALI_LB_AFT af;
 	// NALI_LB_AKT ak;
 
-	NALI_LB_MIT update;
+	NALI_LB_MIT mi;
 	float rt_p[3 + 2];
 } LB_M;
 //s0-net
