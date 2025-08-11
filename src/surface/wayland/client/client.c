@@ -129,7 +129,7 @@ static int loop(void* arg)
 		}
 		else
 		{
-			swlcsp_change_cursor(1);
+//			swlcsp_change_cursor(1);
 			r = wl_display_dispatch(wlc_wl_display_client_p);
 		}
 	}
@@ -150,7 +150,7 @@ void swlc_set()
 
 	NALI_D_INFO("wl_registry_add_listener %d", wl_registry_add_listener(wlc_wl_registry_p, &swlcr_wl_registry_listener, NULL))
 	NALI_D_INFO("wl_display_roundtrip %d", wl_display_roundtrip(wlc_wl_display_client_p))
-	swlcsp_init_cursor();
+//	swlcsp_init_cursor();
 
 	// if (!m_wl_compositor)
 	// {

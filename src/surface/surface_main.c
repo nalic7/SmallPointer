@@ -182,7 +182,7 @@ int main()
 		lc_vk();
 		lb_free0();
 
-		swlcsp_pointer = 0;
+//		swlcsp_pointer = 0;
 	#endif
 
 	lb_loop();

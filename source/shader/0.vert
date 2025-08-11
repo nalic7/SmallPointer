@@ -1,6 +1,6 @@
 #version 450
 
-#define NALI_LCP_BONE_BL 22
+#define NALI_LCP_BONE_BL 52
 
 layout(location = 0) in vec3 a_v;
 layout(location = 1) in uint a_c1j1;

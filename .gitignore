@@ -1,49 +1,16 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
 lib
 build-debug
 build-release
 build-android-debug
 build-android-release
 apk
-.cache
-out
-*.json
 
-asset
+asset/asset.bin
+asset/vert.spv
+asset/frag.spv
 save
 source/model/*.glb
 source/keyframe/*.bin
 
 *.blend1
+*.swp

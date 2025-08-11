@@ -4,11 +4,10 @@ uint8_t
 	// lcm_max_j = 0,
 
 	*lcp_joint_count_p,
-	lcp_joint_count_bl;
-
-float
-	**lcp_bp_p,
+	lcp_joint_count_bl,
 	**lcp_a_p;
+
+float **lcp_bp_p;
 
 VkDeviceSize *lcp_vkdevicesize_p;
 //cache
@@ -48,7 +47,7 @@ void lcp_set()
 	m_bone_p = malloc(0);
 
 	lcp_bp_p = malloc(sizeof(float *) * lcp_joint_count_bl);
-	lcp_a_p = malloc(sizeof(float *) * lcp_joint_count_bl);
+	lcp_a_p = malloc(sizeof(uint8_t *) * lcp_joint_count_bl);
 
 	lcp_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * (lcp_joint_count_bl + 2));
 
@@ -331,38 +330,29 @@ void lcp_set()
 	}
 
 	//init data
-	l_step = 0;
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
-		uint8_t l_0_0 = 0;
+		l_step = 0;
 		lcp_a_p[l_0] = malloc(sizeof(float) * 4 * 3 * lcp_joint_count_p[l_0]);
 
 		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
+			//s
 			for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
 			{
 				*(float *)(lcp_a_p[l_0] + l_step + l_2 * sizeof(float)) = 1;
 			}
 
-			//start end
+			//b_s b_e
 			*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = NALI_LB_CACHE_P_BS_P[l_0][l_1] | NALI_LB_CACHE_P_BE_P[l_0][l_1] << 8;
 			l_step += 4 * sizeof(float);
 
+			//r
 			memcpy(lcp_a_p[l_0] + l_step, mm4x4_array + 12, 4 * sizeof(float));
 			l_step += 4 * sizeof(float);
 
-			memset(lcp_a_p[l_0] + l_step, 0, 3 * sizeof(float));
-
-			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
-			{
-				*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
-
-				++l_0_0;
-				if (l_0_0 == 4)
-				{
-					l_0_0 = 0;
-				}
-			}
+			//t
+			memset(lcp_a_p[l_0] + l_step, 0, 4 * sizeof(float));
 			l_step += 4 * sizeof(float);
 		}
 
@@ -371,6 +361,30 @@ void lcp_set()
 	}
 	free(NALI_LB_CACHE_P_BS_P);
 	free(NALI_LB_CACHE_P_BE_P);
+
+	//b
+	l_bone_bl = 0;
+	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
+	{
+		l_step = 0;
+		uint8_t l_0_0 = 0;
+
+		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
+		{
+			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
+			{
+				*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float) + sizeof(float) * 4 * 2) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
+
+				if (++l_0_0 == 4)
+				{
+					l_step += sizeof(float) * 4 * 3;
+					l_0_0 = 0;
+				}
+			}
+		}
+
+		l_bone_bl += lcp_joint_count_p[l_0];
+	}
 
 	//step
 	lc_vkdevicesize = NALI_LCP_VP_BL + lcp_rgba_bl;
