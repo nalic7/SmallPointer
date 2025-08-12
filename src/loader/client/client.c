@@ -71,7 +71,11 @@ void lc_vk()
 	lcs_vk();
 
 	vk_cmd_draw_set();
-	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmd_draw_loop, NULL))
+	#ifdef C_NALI_S_ANDROID
+		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmd_draw_loop, NULL))
+	#else
+		vk_cmd_draw_loop();
+	#endif
 }
 
 static void lc_send()

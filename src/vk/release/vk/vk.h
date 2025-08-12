@@ -4,7 +4,7 @@
 #define NALI_VK_SGPU
 #define NALI_VK_INFO_SC
 
-#define NALI_VK_VERSION VK_API_VERSION_1_3//VK_API_VERSION_1_0 VK_API_VERSION_1_4
+#define NALI_VK_VERSION VK_API_VERSION_1_0//VK_API_VERSION_1_0 VK_API_VERSION_1_4
 
 #define NALI_VK_COLOR_FORMAT_BYTE 4
 #define NALI_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM
@@ -22,6 +22,8 @@
 extern uint32_t vk_device;
 extern uint32_t vk_queue_g;
 extern uint32_t vk_queue_ct;
+
+extern uint8_t vk_non_coherent_atom_size;
 
 void vk_set();
 void vk_free();

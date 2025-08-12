@@ -95,50 +95,50 @@ void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_arr
 	mm4x4_m(q1_m4x4_array, q0_m4x4_array, w_p);
 }
 
-void lb_loop()
-{
-	#if C_NALI_SERVER || C_NALI_CLIENT
-		char *char_p = NULL;
-		size_t size = 0;
-	#endif
-	while (1)
-	{
-		#if C_NALI_SERVER || C_NALI_CLIENT
-			NALI_D_INFO_A("getline %ld", getline(&char_p, &size, stdin))
-		#endif
-
-		#ifdef C_NALI_CLIENT
-			if (!strcmp(char_p, "qc\n"))
-			{
-				lc_free();
-			}
-			else if (!strcmp(char_p, "rc\n"))
-			{
-			}
-		#endif
-
-		#if C_NALI_SERVER
-			if (!strcmp(char_p, "qs\n"))
-			{
-				ls_free();
-			}
-			else if (!strcmp(char_p, "rs\n"))
-			{
-			}
-		#endif
-
-		#if C_NALI_SERVER || C_NALI_CLIENT
-			if (!strcmp(char_p, "q\n"))
-			{
-				lb_free1();
-			}
-
-			free(char_p);
-			char_p = NULL;
-			size = 0;
-		#endif
-	}
-}
+//void lb_loop()
+//{
+//	#if C_NALI_SERVER || C_NALI_CLIENT
+//		char *char_p = NULL;
+//		size_t size = 0;
+//	#endif
+//	while (1)
+//	{
+//		#if C_NALI_SERVER || C_NALI_CLIENT
+//			NALI_D_INFO_A("getline %ld", getline(&char_p, &size, stdin))
+//		#endif
+//
+//		#ifdef C_NALI_CLIENT
+//			if (!strcmp(char_p, "qc\n"))
+//			{
+//				lc_free();
+//			}
+//			else if (!strcmp(char_p, "rc\n"))
+//			{
+//			}
+//		#endif
+//
+//		#if C_NALI_SERVER
+//			if (!strcmp(char_p, "qs\n"))
+//			{
+//				ls_free();
+//			}
+//			else if (!strcmp(char_p, "rs\n"))
+//			{
+//			}
+//		#endif
+//
+//		#if C_NALI_SERVER || C_NALI_CLIENT
+//			if (!strcmp(char_p, "q\n"))
+//			{
+//				lb_free1();
+//			}
+//
+//			free(char_p);
+//			char_p = NULL;
+//			size = 0;
+//		#endif
+//	}
+//}
 
 void lb_free0()
 {

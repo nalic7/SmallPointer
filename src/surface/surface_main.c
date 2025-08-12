@@ -185,5 +185,5 @@ int main()
 //		swlcsp_pointer = 0;
 	#endif
 
-	lb_loop();
+	//lb_loop();
 }

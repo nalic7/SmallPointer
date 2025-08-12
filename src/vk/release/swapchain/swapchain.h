@@ -9,6 +9,8 @@ extern VkImage *vksc_vkswapchainkhr_vkimage_p;
 extern VkImageView *vksc_vkswapchainkhr_vkimageview_p;
 extern VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p;
 
+extern uint8_t vksc_image;
+
 //extern VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
 
 void vksc_make(VkSharingMode vksharingmode);

@@ -4,7 +4,9 @@ VkRenderPass vksc_vkrenderpass;
 
 VkImage *vksc_vkswapchainkhr_vkimage_p;
 VkImageView *vksc_vkswapchainkhr_vkimageview_p;
-VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p = NULL;
+VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p;
+
+uint8_t vksc_image;
 
 //VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
 
@@ -51,6 +53,7 @@ void vksc_make(VkSharingMode vksharingmode)
 
 	VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr;
 	NALI_D_INFO("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, vks_vksurfacekhr, &vksurfacecapabilitieskhr))
+	NALI_D_INFO("vksc_image %d", vksc_image = vksurfacecapabilitieskhr.minImageCount)
 
 //	m_vksurfacetransformflagbitskhr = vksurfacecapabilitieskhr.currentTransform;
 //	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
@@ -200,10 +203,6 @@ void vksc_make(VkSharingMode vksharingmode)
 
 void vksc_free()
 {
-	if (vksc_vkswapchainkhr_vkframebuffer_p == NULL)
-	{
-		return;
-	}
 //	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[vk_device];
 	VkDevice vkdevice = vkqd_vkdevice_p[vk_device];
 
@@ -227,5 +226,4 @@ void vksc_free()
 	free(vksc_vkswapchainkhr_vkimage_p);
 	free(vksc_vkswapchainkhr_vkimageview_p);
 	free(vksc_vkswapchainkhr_vkframebuffer_p);
-	vksc_vkswapchainkhr_vkframebuffer_p = NULL;
 }

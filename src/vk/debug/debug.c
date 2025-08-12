@@ -2,7 +2,7 @@ VkDebugUtilsMessengerEXT vkd_vkdebugutilsmessengerext;
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT *vkdebugutilsmessengercallbackdataext, void *data)
 {
-	NALI_D_INFO_A(">vk_debug: %s", vkdebugutilsmessengercallbackdataext->pMessage)
+	NALI_D_INFO_A("vk_debug %s", vkdebugutilsmessengercallbackdataext->pMessage)
 	return 0;
 }
 

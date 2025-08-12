@@ -135,6 +135,14 @@ void lcm_update()
 				//af -> af
 				//default a
 				VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl + 1];
+				//!apply rgba for now
+				//!didn't apply ds index
+				//!didn't apply default a
+				for (uint8_t l_2 = 0; l_2 < lcp_joint_count_p[_.m.m]; ++l_2)
+				{
+					*(float *)(lc_vkbuffer_p + vkdevicesize + l_2 * sizeof(float)) = 1;
+				}
+
 				for (uint8_t l_2 = 0; l_2 < lcp_joint_count_p[_.m.m]; ++l_2)
 				{
 					memcpy(lc_vkbuffer_p + vkdevicesize + l_2 * sizeof(float) * 4 * 3, mv4_srt_array, sizeof(mv4_srt_array));
@@ -192,7 +200,8 @@ void lcm_update()
 		}
 	}
 
-	vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], l_mm_bl, vkmappedmemoryrange_p);
+	if (l_mm_bl)
+		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], l_mm_bl, vkmappedmemoryrange_p);
 }
 
 void lcm_read()
@@ -395,7 +404,8 @@ void lcm_read()
 		}
 	}
 
-	vkUpdateDescriptorSets(vkdevice, l_ds_bl, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
+	if (l_ds_bl)
+		vkUpdateDescriptorSets(vkdevice, l_ds_bl * NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	// vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], l_mm_bl, vkmappedmemoryrange_p);
 
 	//free vk

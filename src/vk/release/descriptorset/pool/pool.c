@@ -11,7 +11,7 @@ void vkdsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, u
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
 				.poolSizeCount = vkdescriptorpoolsize_size,
 				.pPoolSizes = vkdescriptorpoolsize_p,
-				.maxSets = 1,
+				.maxSets = NALI_LB_MIM,
 
 				.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
 				.pNext = VK_NULL_HANDLE

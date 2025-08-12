@@ -58,7 +58,7 @@ void lsu_update()
 			// NALI_LB_C_ST y = ns_p[l_0].c_p[1] - 1;
 			// NALI_LB_C_ST z = ns_p[l_0].c_p[2] - 1;
 			ns_p[l_0].ch_bl = 1;
-			ns_p[l_0].ch_p = realloc(ns_p[l_0].ch_p, ns_p[l_0].ch_bl);
+			//ns_p[l_0].ch_p = realloc(ns_p[l_0].ch_p, ns_p[l_0].ch_bl);
 			for (uint8_t l_1 = 0; l_1 < 3; ++l_1)
 			{
 				for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
@@ -73,7 +73,7 @@ void lsu_update()
 						if (fabsf(rt_p[3] - NALI_M_XZ2YAW(m_i_p[l_1], m_i_p[l_3])) < NALI_LSU_EPSILON && fabsf(rt_p[4] - NALI_M_XYZ2PITCH(m_i_p[l_1], m_i_p[l_2], m_i_p[l_3])) < NALI_LSU_EPSILON)
 						{
 							++ns_p[l_0].ch_bl;
-							ns_p[l_0].ch_p = realloc(ns_p[l_0].ch_p, ns_p[l_0].ch_bl);
+							//ns_p[l_0].ch_p = realloc(ns_p[l_0].ch_p, ns_p[l_0].ch_bl);
 							// ns_p[l_0].ch_p[ns_p[l_0].ch_bl - 1] = NALI_M_H3(x + l_1, y + l_2, z + l_3, NALI_LB_CIBL);
 							ns_p[l_0].ch_p[ns_p[l_0].ch_bl - 1] = NALI_M_H3
 							(

@@ -10,7 +10,8 @@ typedef struct
 
 	float _rt_p[3 + 2];
 	NALI_LB_CT c_p[3];
-	NALI_LB_CHT *ch_p;
+	//NALI_LB_CHT *ch_p;
+	NALI_LB_CHT ch_p[4];
 	uint8_t ch_bl;
 	LB_U lb_u;
 } NS;

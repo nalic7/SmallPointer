@@ -8,7 +8,7 @@
 #define NALI_EBPOMI2_MAB 0
 
 #define NALI_EBPOMI2_MA 0
-#define NALI_EBPOMI2_MAP_BL 5
+#define NALI_EBPOMI2_MAP_BL 9
 extern const uint8_t ebpomi2_map_p[NALI_EBPOMI2_MAP_BL];
 
 #define NALI_EBPOMI2_AKI 0

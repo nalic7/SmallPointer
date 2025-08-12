@@ -117,7 +117,7 @@ extern void *lb_cache_p;
 
 void lb_set();
 void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_array[16], float q1_m4x4_array[16]);
-void lb_loop();
+//void lb_loop();
 void lb_free0();
 void lb_free1();
 

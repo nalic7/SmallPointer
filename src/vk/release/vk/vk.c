@@ -2,6 +2,8 @@ uint32_t vk_device = 0;
 uint32_t vk_queue_g = 0;
 uint32_t vk_queue_ct = 0;
 
+uint8_t vk_non_coherent_atom_size;
+
 #ifdef C_NALI_DEBUG
 
 static void einfo(uint32_t d)
@@ -81,6 +83,8 @@ static void vkinfo(uint32_t device)
 	//VkSampleCountFlagBits
 	NALI_D_LOG("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
 	NALI_D_LOG("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
+
+	NALI_D_INFO("nonCoherentAtomSize %d", vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
 }
 
 static void dginfo()

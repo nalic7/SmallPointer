@@ -79,22 +79,11 @@ static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayou
 		vkdescriptorsetlayout_p
 	);
 }
-static void setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
-{
-	vkdescriptorpoolsize_p[0] = (VkDescriptorPoolSize)
-	{
-		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-		.descriptorCount = 1
-	};
-	vkdescriptorpoolsize_p[1] = vkdescriptorpoolsize_p[0];
-	vkdescriptorpoolsize_p[2] = vkdescriptorpoolsize_p[0];
-	vkdescriptorpoolsize_p[3] = vkdescriptorpoolsize_p[0];
-	vkdescriptorpoolsize_p[4] = vkdescriptorpoolsize_p[0];
-}
 
 //m -> j
 void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj)
 {
+	//!need switch
 	//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 	//r-bind
 	//gui / world
@@ -143,7 +132,7 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 	{
 		.buffer = lc_vkbuffer,
 		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl + 1] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
-		.range = lcp_rgba_bl
+		.range = sizeof(float) * 4
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 4, VK_NULL_HANDLE, &vkdescriptorbufferinfo_p[4], VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 4);
 }
@@ -182,9 +171,12 @@ void lcs_set()
 
 void lcs_vk()
 {
-	VkDescriptorPoolSize vkdescriptorpoolsize_p[NALI_LCS_D_SIZE];
-	setVkDescriptorPoolSize(vkdescriptorpoolsize_p);
-	vkdsp_make(vk_device, vkdescriptorpoolsize_p, NALI_LCS_D_SIZE, &lcs_vkdescriptorpool);
+	VkDescriptorPoolSize vkdescriptorpoolsize =
+	{
+		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+		.descriptorCount = NALI_LB_MIM * NALI_LCS_D_SIZE
+	};
+	vkdsp_make(vk_device, &vkdescriptorpoolsize, 1, &lcs_vkdescriptorpool);
 	setVkDescriptorSetLayout(&lcs_vkdescriptorsetlayout);
 }
 

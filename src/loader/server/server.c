@@ -122,8 +122,6 @@ int ls_loop(void *p)
 
 	ns_free();
 
-	fclose(ls_file_p);
-
 	lsm_free();
 
 	mtx_unlock(lb_mtx_t_p);

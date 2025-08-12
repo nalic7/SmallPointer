@@ -7,6 +7,10 @@
 // extern mtx_t *m_mtx_t_draw_p;
 
 void vk_cmd_draw_set();
-int vk_cmd_draw_loop(void *p);
+	#ifdef C_NALI_S_ANDROID
+		int vk_cmd_draw_loop(void *p);
+	#else
+		void vk_cmd_draw_loop();
+	#endif
 
 #endif
