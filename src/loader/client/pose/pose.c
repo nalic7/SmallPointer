@@ -91,12 +91,13 @@ void lcp_set()
 	{
 		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
-			memcpy(lcp_bp_p[l_0] + l_1 * 16, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
-			memcpy(lcp_bp_p[l_0] + l_1 * 16 + 16, lcp_bp_p[l_0] + l_1 * 16, sizeof(float) * 16);
-		}
-		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
-		{
-			mm4x4_i(lcp_bp_p[l_0] + l_1 * 16 + 16);
+//			//s0-test
+//			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, mm4x4_array, sizeof(mm4x4_array));
+//			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, mm4x4_array, sizeof(mm4x4_array));
+//			//e0-test
+			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
+			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, lcp_bp_p[l_0] + l_1 * 16 * 2, sizeof(float) * 16);
+			mm4x4_i(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16);
 		}
 		NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 16 * lcp_joint_count_p[l_0];
 		l_bone_bl += lcp_joint_count_p[l_0];
@@ -387,30 +388,19 @@ void lcp_set()
 	}
 
 	//step
-	lc_vkdevicesize = NALI_LCP_VP_BL + lcp_rgba_bl;
+	uint64_t l_address = NALI_LCP_VP_BL + lcp_rgba_bl;
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
-		lcs_ib_p[l_0] = lc_vkdevicesize;
-		lc_vkdevicesize += index_bl_p[l_0];
+		lcs_ib_p[l_0] = l_address;
+		l_address += index_bl_p[l_0];
 	}
 
 	for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
-		lcs_a_vkdevicesize_p[l_0] = lc_vkdevicesize;
-		lc_vkdevicesize += a_bl_array[l_0];
+		lcs_a_vkdevicesize_p[l_0] = l_address;
+		l_address += a_bl_array[l_0];
 	}
-
-	// lcm_vkdevicesize = lc_vkdevicesize;
-
-	// //b
-	// for (uint32_t l_0 = 0; l_0 < lcm_joint_count_bl; ++l_0)
-	// {
-	// 	lc_vkdevicesize += lcm_joint_count_p[l_0] * sizeof(float) * 16 * 2 + lcm_joint_count_p[l_0] * sizeof(float) * 4 * 3;
-	// }
-	lc_vkdevicesize += NALI_LCP_P_BL;
-
-	lc_vkdevicesize = (lc_vkdevicesize + 63) & ~63;
 }
 
 void lcp_vk()
@@ -420,19 +410,26 @@ void lcp_vk()
 	//UBOS gui world
 	memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));
 	step += sizeof(mm4x4_array);
+	memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));
+	step += sizeof(mm4x4_array);
 
+	memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));
+	step += sizeof(mm4x4_array);
 	memset(lc_vkbuffer_p + step, 0, sizeof(float) * 16);
 	step += sizeof(float) * 16;
 
+	//static rgba
 	memcpy(lc_vkbuffer_p + step, rgba_p, lcp_rgba_bl);
 	step += lcp_rgba_bl;
 
+	//ai index
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
 		memcpy(lc_vkbuffer_p + step, index_p[l_0], index_bl_p[l_0]);
 		step += index_bl_p[l_0];
 	}
 
+	//a index
 	for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		memcpy(lc_vkbuffer_p + step, a_p_array[l_0], a_bl_array[l_0]);
@@ -455,7 +452,7 @@ void lcp_vk()
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lc_vkdevicememory,
 		.offset = 0,
-		.size = (step + 63) & ~63,
+		.size = (step + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});
 

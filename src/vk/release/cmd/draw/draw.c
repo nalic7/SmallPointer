@@ -236,6 +236,9 @@ static uint8_t vk_cmd_draw_f = 0;
 	void vk_cmd_draw_loop()
 #endif
 {
+	//wait wayland/surface ready
+	vkDeviceWaitIdle(vkdevice);
+
 	//!test model
 	//s0-test
 	//include gui
@@ -244,47 +247,45 @@ static uint8_t vk_cmd_draw_f = 0;
 	#define NALI_TEST_ma_bl NALI_EBPOMI2_MAP_BL
 	#define NALI_TEST_mab NALI_EBPOMI2_MAB
 	#define NALI_TEST_m NALI_EBPOMI2_M
-	VkWriteDescriptorSet vkwritedescriptorset_p[NALI_TEST_ma_bl * NALI_LCS_D_SIZE];
-	VkDescriptorBufferInfo vkdescriptorbufferinfo_p[NALI_TEST_ma_bl * NALI_LCS_D_SIZE];
+	VkWriteDescriptorSet vkwritedescriptorset_p[NALI_LCS_D_SIZE];
+	VkDescriptorBufferInfo vkdescriptorbufferinfo_p[NALI_LCS_D_SIZE];
+	lcs_s_bl = NALI_TEST_ma_bl;
 	lcs_s_p = realloc(lcs_s_p, sizeof(lcs_s) * NALI_TEST_ma_bl);
+
+	VkDescriptorSet vkdescriptorset;
+	vkds_make(vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, &vkdescriptorset);
+	lcs_setVkWriteDescriptorSet
+	(
+		vkdescriptorset,
+		vkdescriptorbufferinfo_p,
+		vkwritedescriptorset_p,
+		0,
+		NALI_TEST_m < lcp_joint_count_bl ? NALI_TEST_m : 0,
+		NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m]//mj
+	);
+	vkUpdateDescriptorSets(vkdevice, NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
+	lcs___p[0].vkdescriptorset = vkdescriptorset;
 	for (uint8_t l_0 = 0; l_0 < NALI_TEST_ma_bl; ++l_0)
 	{
 		uint8_t ma = ebpomi2_map_p[l_0];
-		lcs_s_p[l_0]._ = l_0;
+		lcs_s_p[l_0]._ = 0;
 		lcs_s_p[l_0].i = ma;
 		lcs___p[l_0].mab = NALI_TEST_mab;
-		vkds_make(vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, &lcs___p[l_0].vkdescriptorset);
-
-		uint8_t mj = NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m];
-		lcs_setVkWriteDescriptorSet
-		(
-			lcs___p[l_0].vkdescriptorset,
-			vkdescriptorbufferinfo_p + l_0 * NALI_LCS_D_SIZE,
-			vkwritedescriptorset_p + l_0 * NALI_LCS_D_SIZE,
-			l_0,
-			NALI_TEST_m < lcp_joint_count_bl ? NALI_TEST_m : 0,
-			mj
-		);
 	}
-	vkUpdateDescriptorSets(vkdevice, NALI_TEST_ma_bl * NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	//a
-	//!!check this
-	//!!check u
 	if (NALI_TEST_m < lcp_joint_count_bl)
 	{
 		VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl + 1];
 		//apply rgba
 		for (uint8_t l_0 = 0; l_0 < 4; ++l_0)
 		{
-			*(float *)(lc_vkbuffer_p + vkdevicesize + l_0 * sizeof(float)) = 1;
+			*(float *)(lc_vkbuffer_p + vkdevicesize + l_0 * sizeof(float)) = 1.0;
 		}
 		vkdevicesize += 4 * sizeof(float);
 		//apply default a
 		memcpy(lc_vkbuffer_p + vkdevicesize, lcp_a_p[NALI_TEST_m], lcp_joint_count_p[NALI_TEST_m] * 4 * 3 * sizeof(float));
 		//apply t
-		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 0 * sizeof(float)) = 0;
-		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 1 * sizeof(float)) = 0;
-		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -1;
+		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
 	}
 	//update m v p later
 	//update buffer
@@ -348,7 +349,7 @@ static uint8_t vk_cmd_draw_f = 0;
 			vkrenderpassbegininfo.renderArea.extent = vksc_vkextent2d;
 			vkrect2d.extent = vksc_vkextent2d;
 
-			MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)lc_vkbuffer_p + 16)
+			MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), s_width / s_height, 0.1F, 100.0F, (float *)lc_vkbuffer_p + 16 * 3)
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
 //				rz = 0.0F;
@@ -361,7 +362,7 @@ static uint8_t vk_cmd_draw_f = 0;
 			{
 				.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 				.memory = lc_vkdevicememory,
-				.offset = 16 * sizeof(float),
+				.offset = 16 * 3 * sizeof(float),
 				.size = 16 * sizeof(float),
 				.pNext = VK_NULL_HANDLE
 			});

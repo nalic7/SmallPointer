@@ -37,11 +37,9 @@ cmake --build build-release -j$(nproc)
 cmake -DCMAKE_BUILD_TYPE=Debug -B build-debug -S .
 cmake --build build-debug -j$(nproc)
 ```
->Debug
+>Debug (Linux)
 ```bash
-cd build-debug
-gdb SmallPointer
-cd ..
+run/debug
 ```
 >Android Tool
 ```bash

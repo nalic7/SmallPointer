@@ -165,6 +165,7 @@ set listchars=tab:>-,trail:·,space:␣
 ```
 dev-util/android-sdk-build-tools-34
 app-arch/zip-3.0-r7
+app-arch/unzip-6.0_p29
 dev-util/android-tools-35.0.2
 ```
 >Package (Portable)

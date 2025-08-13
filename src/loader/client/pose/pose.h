@@ -3,7 +3,6 @@
 
 #define NALI_LCP_BONE_BL 52
 #define NALI_LCP_VP_BL sizeof(float) * 16 * 2 * 2
-#define NALI_LCP_P_BL 1024*1024*4
 
 extern uint32_t
 	lcp_rgba_bl;

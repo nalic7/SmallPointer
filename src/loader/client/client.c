@@ -53,6 +53,7 @@ void lc_vk()
 	VkMemoryRequirements vkmemoryrequirements;
 	//VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
 	//VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+	lc_vkdevicesize = (NALI_LC_P_BL + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1);
 	VK_makeBuffer(vk_device, lc_vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lc_vkbuffer, lc_vkdevicememory, vkmemoryrequirements)
 	NALI_D_INFO("vkMapMemory %d", vkMapMemory(vkqd_vkdevice_p[vk_device], lc_vkdevicememory, 0, lc_vkdevicesize, 0, &lc_vkbuffer_p))
 	lcp_vk();

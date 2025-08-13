@@ -670,7 +670,7 @@ void gm_write()
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
 					cgltf_float *emissive_factor = cgltf_material_p->emissive_factor;
 					if (strstr(cgltf_material_p->name, ".C0."))
-						NALI_D_INFO_A(".C0.")
+						NALI_D_INFO_A("nali_format .C0.")
 
 					++material_fl;
 					material_p = realloc(material_p, sizeof(char *) * material_fl);
@@ -718,12 +718,12 @@ void gm_write()
 										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 										if (!*p)
 										{
-											NALI_D_INFO_A("w2 %f", *p)
+											NALI_D_INFO_A("nali_format w2 %f", *p)
 										}
 									}
 									else
 									{
-										NALI_D_INFO_A("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+										NALI_D_INFO_A("nali_format cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
 									}
 
 									// // // /b\ 1
@@ -738,12 +738,12 @@ void gm_write()
 										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 										if (*p)
 										{
-											NALI_D_INFO_A("w2 %f", *p)
+											NALI_D_INFO_A("nali_format w2 %f", *p)
 										}
 									}
 									else
 									{
-										NALI_D_INFO_A("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+										NALI_D_INFO_A("nali_format cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
 									}
 								}
 							}
@@ -753,7 +753,7 @@ void gm_write()
 							}
 							else
 							{
-								NALI_D_INFO_A("cgltf_attribute_p->type %d", cgltf_attribute_p->type)
+								NALI_D_INFO_A("nali_format cgltf_attribute_p->type %d", cgltf_attribute_p->type)
 							}
 						}
 

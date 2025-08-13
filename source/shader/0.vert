@@ -155,12 +155,15 @@ void main()
 		// l_v = l_m * l_v;
 		// l_v = inverse(l_m) * l_v;
 		// l_v = ubob.bindpose[l_0_0] * ubob.i_bindpose[l_0_0] * l_v;
-		l_v = ubob.pb[l_0_0].bindpose * t2mat4(uboa.pa[l_0_0].t.xyz) * r2mat4(uboa.pa[l_0_0].r) * s2mat4(uboa.pa[l_0_0].s.xyz) * ubob.pb[l_0_0].i_bindpose * l_v;
 		// l_v = ubob.i_bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz) * ubob.bindpose[l_0_0] * l_v;
 		// l_v = inverse(ubob.bindpose[l_0_0] * s2mat4(ubob.s[l_0_0].xyz) * r2mat4(ubob.r[l_0_0]) * t2mat4(ubob.t[l_0_0].xyz)) * ubob.bindpose[l_0_0] * l_v;
+
+		l_v = ubob.pb[l_0_0].bindpose * t2mat4(uboa.pa[l_0_0].t.xyz) * r2mat4(uboa.pa[l_0_0].r) * s2mat4(uboa.pa[l_0_0].s.xyz) * ubob.pb[l_0_0].i_bindpose * l_v;
+		//l_v = ubob.pb[l_0_0].bindpose * ubob.pb[l_0_0].i_bindpose * l_v;
 	}
 
 	gl_Position = ubos.p * ubos.v * l_v;
+	//gl_Position = ubos.p * ubos.v * (l_v + vec4(0, 0, -3, 0));
 	// gl_Position = ubos.p * ubos.v * uboa.m * l_v;
 
 	f_c = a_c1j1 & 0xFFu;

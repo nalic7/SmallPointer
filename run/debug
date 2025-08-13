@@ -1,0 +1,5 @@
+#!/bin/bash
+cmake --build build-debug -j$(nproc)
+cd build-debug
+gdb SmallPointer
+cd ..
