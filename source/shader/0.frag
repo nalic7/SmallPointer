@@ -1,4 +1,4 @@
-#version 450
+#version 420
 
 #define NALI_COLOR_BL 8
 

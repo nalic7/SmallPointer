@@ -12,7 +12,11 @@ void ls_set();
 void ls_read(NALI_LB_UT u);
 void ls_open();
 void ls_save();
-int ls_loop(void *p);
+#ifdef C_NALI_CLIENT
+	int ls_loop(void *p);
+#else
+	void ls_loop();
+#endif
 void ls_free();
 
 #endif

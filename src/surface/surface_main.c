@@ -180,8 +180,7 @@ int main()
 		//!switch to pipewire
 		// al_set();
 		lc_vk();
-		lb_free0();
-
+		thrd_sleep(&(struct timespec){.tv_sec = 60*60, .tv_nsec = 0}, NULL);
 //		swlcsp_pointer = 0;
 	#endif
 

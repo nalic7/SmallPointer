@@ -119,7 +119,7 @@ static int loop(void* arg)
 		swlc_clean();
 		swlc_set();
 	}
-	s_state |= NALI_S_S_RENDER_ABLE;
+	//s_state |= NALI_S_S_RENDER_ABLE;
 
 	while (r > -1 && r != INT_MAX)
 	{
@@ -129,6 +129,9 @@ static int loop(void* arg)
 		}
 		else
 		{
+			//wl_display_dispatch_pending(wlc_wl_display_client_p);
+			//wl_display_flush(wlc_wl_display_client_p);
+
 //			swlcsp_change_cursor(1);
 			r = wl_display_dispatch(wlc_wl_display_client_p);
 		}

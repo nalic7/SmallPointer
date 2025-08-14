@@ -236,21 +236,29 @@ static uint8_t vk_cmd_draw_f = 0;
 	void vk_cmd_draw_loop()
 #endif
 {
-	//wait wayland/surface ready
-	vkDeviceWaitIdle(vkdevice);
+	lb_free0();
+//	//wait wayland ready
+//	//still random wayland crash on startup
+//	#ifndef C_NALI_S_ANDROID
+//		vkDeviceWaitIdle(vkdevice);
+//		//NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 10, .tv_nsec = 0}, NULL))
+//		//vk_freeSurface();
+//		//NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 10, .tv_nsec = 0}, NULL))
+//		//vk_makeSurface();
+//	#endif
 
 	//!test model
 	//s0-test
 	//include gui
 	//!need test loop data
 	//write data
-	#define NALI_TEST_ma_bl NALI_EBPOMI2_MAP_BL
+	#define NALI_TEST_map_p ebpomi2_map_p
 	#define NALI_TEST_mab NALI_EBPOMI2_MAB
 	#define NALI_TEST_m NALI_EBPOMI2_M
 	VkWriteDescriptorSet vkwritedescriptorset_p[NALI_LCS_D_SIZE];
 	VkDescriptorBufferInfo vkdescriptorbufferinfo_p[NALI_LCS_D_SIZE];
-	lcs_s_bl = NALI_TEST_ma_bl;
-	lcs_s_p = realloc(lcs_s_p, sizeof(lcs_s) * NALI_TEST_ma_bl);
+	lcs_s_bl = NALI_TEST_map_p[0];
+	lcs_s_p = realloc(lcs_s_p, sizeof(lcs_s) * NALI_TEST_map_p[0]);
 
 	VkDescriptorSet vkdescriptorset;
 	vkds_make(vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, &vkdescriptorset);
@@ -265,12 +273,12 @@ static uint8_t vk_cmd_draw_f = 0;
 	);
 	vkUpdateDescriptorSets(vkdevice, NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	lcs___p[0].vkdescriptorset = vkdescriptorset;
-	for (uint8_t l_0 = 0; l_0 < NALI_TEST_ma_bl; ++l_0)
+	for (uint8_t l_0 = 1; l_0 < NALI_TEST_map_p[0]; ++l_0)
 	{
-		uint8_t ma = ebpomi2_map_p[l_0];
-		lcs_s_p[l_0]._ = 0;
-		lcs_s_p[l_0].i = ma;
-		lcs___p[l_0].mab = NALI_TEST_mab;
+		uint8_t ma = NALI_TEST_map_p[l_0];
+		lcs_s_p[l_0 - 1]._ = 0;
+		lcs_s_p[l_0 - 1].i = ma;
+		lcs___p[l_0 - 1].mab = NALI_TEST_mab;
 	}
 	//a
 	if (NALI_TEST_m < lcp_joint_count_bl)
@@ -284,8 +292,20 @@ static uint8_t vk_cmd_draw_f = 0;
 		vkdevicesize += 4 * sizeof(float);
 		//apply default a
 		memcpy(lc_vkbuffer_p + vkdevicesize, lcp_a_p[NALI_TEST_m], lcp_joint_count_p[NALI_TEST_m] * 4 * 3 * sizeof(float));
+//		//apply s to mid
+//		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 12) = 0;
+//		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 12 + 1 * sizeof(float)) = 0;
+//		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 12 + 2 * sizeof(float)) = 0;
+//		//apply s to tail
+//		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2) = 0;
+//		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2 + 1 * sizeof(float)) = 0;
+//		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2 + 2 * sizeof(float)) = 0;
+		//apply r
+		mv4_q(0, NALI_M_D2R(-90), 0, lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4);
 		//apply t
-		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
+		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 0 * sizeof(float)) = 1.0;
+		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 1 * sizeof(float)) = -1.0;
+		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
 	}
 	//update m v p later
 	//update buffer

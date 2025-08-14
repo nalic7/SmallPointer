@@ -39,7 +39,7 @@ cmake --build build-debug -j$(nproc)
 ```
 >Debug (Linux)
 ```bash
-run/debug
+run/gdb
 ```
 >Android Tool
 ```bash

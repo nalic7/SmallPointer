@@ -66,16 +66,16 @@ const NALI_LB_AKT lb_ak_p[NALI_LB_AK_BL][3] =
 // 	NALI_EBPOMI0_MS_VKDEVICESIZE
 // };
 
-void *lb_cache_p;
+LB_C *lb_c;
 
 void lb_set()
 {
 	NALI_D_INFO("mtx_init %d", mtx_init(lb_mtx_t_p, mtx_plain))
 
-	lb_cache_p = malloc(NALI_LB_CACHE_P_BL);
-	NALI_LB_CACHE_P_D_BL_P = malloc(sizeof(uint32_t) * 2);
-	NALI_LB_CACHE_P_D_BL_P[1] = 0;
-	NALI_LB_CACHE_P_D_P = f_read(NALI_F_HOME_ASSET, NALI_LB_CACHE_P_D_BL_P);
+	lb_c = malloc(sizeof(LB_C));
+	lb_c->d_bl_p = malloc(sizeof(uint32_t) * 2);
+	lb_c->d_bl_p[1] = 0;
+	lb_c->d_p = f_read(NALI_F_HOME_ASSET, lb_c->d_bl_p);
 }
 
 #define NALI_LB_RZ NALI_M_D2R(180.0F)
@@ -142,9 +142,9 @@ void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_arr
 
 void lb_free0()
 {
-	free(NALI_LB_CACHE_P_D_BL_P);
-	free(NALI_LB_CACHE_P_D_P);
-	free(lb_cache_p);
+	free(lb_c->d_bl_p);
+	free(lb_c->d_p);
+	free(lb_c);
 }
 
 void lb_free1()

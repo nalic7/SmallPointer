@@ -4,25 +4,25 @@ uint8_t *lckf_bl_p;
 
 void lckf_set()
 {
-	uint8_t l_keyframe_bl = *(uint8_t *)NALI_LB_CACHE_P_D_P;
-	NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
+	uint8_t l_keyframe_bl = *(uint8_t *)lb_c->d_p;
+	lb_c->d_bl_p[1] += sizeof(uint8_t);
 	lckf_bl_p = malloc(l_keyframe_bl);
 	lckf_p = malloc(l_keyframe_bl * sizeof(lckf *));
 	memset(lckf_p, 0, l_keyframe_bl * sizeof(lckf *));
 
 	for (uint8_t l_0 = 0; l_0 < l_keyframe_bl; ++l_0)
 	{
-		lckf_bl_p[l_0] = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
-		NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
+		lckf_bl_p[l_0] = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
+		lb_c->d_bl_p[1] += sizeof(uint8_t);
 		lckf_p[l_0] = malloc(lckf_bl_p[l_0] * sizeof(lckf));
 
 		for (uint32_t l_1 = 0; l_1 < lckf_bl_p[l_0]; ++l_1)
 		{
-			// lckf_p[l_0][l_1].keyframe = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
-			// NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
+			// lckf_p[l_0][l_1].keyframe = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
+			// lb_c->d_bl_p[1] += sizeof(uint8_t);
 
-			lckf_p[l_0][l_1].bone_bl = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
-			NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
+			lckf_p[l_0][l_1].bone_bl = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
+			lb_c->d_bl_p[1] += sizeof(uint8_t);
 
 			lckf_p[l_0][l_1].bone_p = malloc(lckf_p[l_0][l_1].bone_bl);
 			lckf_p[l_0][l_1].s_p = malloc(sizeof(float *) * lckf_p[l_0][l_1].bone_bl);
@@ -31,20 +31,20 @@ void lckf_set()
 
 			for (uint32_t l_2 = 0; l_2 < lckf_p[l_0][l_1].bone_bl; ++l_2)
 			{
-				lckf_p[l_0][l_1].bone_p[l_2] = *(uint8_t *)(NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1]);
-				NALI_LB_CACHE_P_D_BL_P[1] += sizeof(uint8_t);
+				lckf_p[l_0][l_1].bone_p[l_2] = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
+				lb_c->d_bl_p[1] += sizeof(uint8_t);
 
 				lckf_p[l_0][l_1].s_p[l_2] = malloc(sizeof(float) * 3);
-				memcpy(lckf_p[l_0][l_1].s_p[l_2], NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], sizeof(float) * 3);
-				NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 3;
+				memcpy(lckf_p[l_0][l_1].s_p[l_2], lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 3);
+				lb_c->d_bl_p[1] += sizeof(float) * 3;
 
 				lckf_p[l_0][l_1].r_p[l_2] = malloc(sizeof(float) * 4);
-				memcpy(lckf_p[l_0][l_1].r_p[l_2], NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], sizeof(float) * 4);
-				NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 4;
+				memcpy(lckf_p[l_0][l_1].r_p[l_2], lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 4);
+				lb_c->d_bl_p[1] += sizeof(float) * 4;
 
 				lckf_p[l_0][l_1].t_p[l_2]= malloc(sizeof(float) * 3);
-				memcpy(lckf_p[l_0][l_1].t_p[l_2], NALI_LB_CACHE_P_D_P + NALI_LB_CACHE_P_D_BL_P[1], sizeof(float) * 3);
-				NALI_LB_CACHE_P_D_BL_P[1] += sizeof(float) * 3;
+				memcpy(lckf_p[l_0][l_1].t_p[l_2], lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 3);
+				lb_c->d_bl_p[1] += sizeof(float) * 3;
 			}
 
 			lckf_p[l_0][l_1].k_min = lckf_p[l_0][l_1].bone_p[0];

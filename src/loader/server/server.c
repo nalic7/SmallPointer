@@ -16,7 +16,11 @@ void ls_set()
 
 	ls_open();
 
-	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
+	#ifdef C_NALI_CLIENT
+		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
+	#else
+		ls_loop();
+	#endif
 }
 
 static void ls_send()
@@ -75,7 +79,11 @@ void ls_save()
 
 static NALI_LB_CT ls_load_bl = 0;
 static NALI_LB_CT *ls_load_p;
-int ls_loop(void *p)
+#ifdef C_NALI_CLIENT
+	int ls_loop(void *p)
+#else
+	void ls_loop()
+#endif
 {
 	//rand_r
 	//use in thread only
@@ -126,7 +134,9 @@ int ls_loop(void *p)
 
 	mtx_unlock(lb_mtx_t_p);
 
-	return 0;
+	#ifdef C_NALI_CLIENT
+		return 0;
+	#endif
 }
 
 void ls_free()

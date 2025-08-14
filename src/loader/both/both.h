@@ -102,14 +102,20 @@ typedef struct
 //e0-net
 
 
-#define NALI_LB_CACHE_P_BL sizeof(void *) * 4
-//client
-#define NALI_LB_CACHE_P_BS_P (((uint8_t ***)lb_cache_p)[0])
-#define NALI_LB_CACHE_P_BE_P (((uint8_t ***)lb_cache_p)[1])
-
-//both
-#define NALI_LB_CACHE_P_D_P (((uint8_t **)lb_cache_p)[2])
-#define NALI_LB_CACHE_P_D_BL_P (((uint32_t **)lb_cache_p)[3])
+typedef struct
+{
+	#ifdef C_NALI_CLIENT
+		uint16_t
+			**bs_p,
+			**be_p;
+		//server
+	#endif
+	#ifdef C_NALI_SERVER
+	#endif
+	uint8_t *d_p;
+	uint32_t *d_bl_p;
+} LB_C;
+extern LB_C *lb_c;
 
 extern mtx_t *lb_mtx_t_p;
 

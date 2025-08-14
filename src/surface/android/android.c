@@ -15,7 +15,6 @@ static int s1_set(void *p)
 //!switch to pipewire
 //		al_set();
 		lc_vk();
-		lb_free0();
 	#endif
 
 	while (1)
