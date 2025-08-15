@@ -221,6 +221,11 @@ void vksc_free()
 	}
 
 	vkDestroyRenderPass(vkdevice, vksc_vkrenderpass, VK_NULL_HANDLE);
+	//!this can't avoid wayland crash on startup
+	#ifndef C_NALI_S_ANDROID
+		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
+	#endif
+	NALI_D_LOG("->vkDestroySwapchainKHR");
 	vkDestroySwapchainKHR(vkdevice, vksc_vkswapchainkhr, VK_NULL_HANDLE);
 
 	free(vksc_vkswapchainkhr_vkimage_p);

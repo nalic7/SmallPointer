@@ -670,7 +670,7 @@ void gm_write()
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
 					cgltf_float *emissive_factor = cgltf_material_p->emissive_factor;
 					if (strstr(cgltf_material_p->name, ".C0."))
-						NALI_D_INFO_A("nali_format .C0.")
+						NALI_D_INFO_A("nali_format %s", cgltf_material_p->name)
 
 					++material_fl;
 					material_p = realloc(material_p, sizeof(char *) * material_fl);
@@ -705,8 +705,13 @@ void gm_write()
 							{
 								if (l_5 == 0)
 								{
+									uint8_t a_j = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+									if (a_j == 0)
+									{
+										NALI_D_INFO_A("nali_format a_j0")
+									}
 									// // /b\ 1
-									mix_array[sizeof(float) * 3 + 1] = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+									mix_array[sizeof(float) * 3 + 1] = a_j;
 								}
 							}
 							else if (cgltf_attribute_p->type == cgltf_attribute_type_weights)

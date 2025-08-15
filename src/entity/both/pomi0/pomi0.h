@@ -9,7 +9,7 @@
 
 #define NALI_EBPOMI0_MRB 31
 
-#define NALI_EBPOMI0_MAB 0
+#define NALI_EBPOMI0_MAB 1
 
 #define NALI_EBPOMI0_MA 0
 #define NALI_EBPOMI0_MAP_BL 5

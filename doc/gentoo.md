@@ -4,7 +4,7 @@
 >/etc/portage/make.conf
 ```bash
 #OpenRC AMD64
-USE="-llvm -fonts -policykit efistub drun dist-kernel elogind dracut grub -pulseaudio sound-server pipewire-alsa dri drm kms pipewire ffmpeg extra X xwayland wayland osmesa vaapi nvdec nvenc vulkan vulkan-overlay telephony bluetooth gpm jpeg2k opus"
+USE="-llvm -fonts -policykit efistub drun dist-kernel elogind dracut grub -pulseaudio sound-server pipewire-alsa dri drm pipewire ffmpeg extra X xwayland wayland osmesa vaapi nvdec nvenc vulkan vulkan-overlay telephony bluetooth gpm jpeg2k opus"
 
 INPUT_DEVICES="wacom libinput"
 
@@ -16,10 +16,6 @@ VIDEO_CARDS="intel nvidia"
 ```
 >Package (Wayland)
 ```
-#low
-gui-wm/tinywl-0.18.1
-
-#full
 gui-wm/hyprland-0.49.0
 ```
 >Hyprland
@@ -91,7 +87,7 @@ $mainMod = SUPER
 bind = $mainMod, f11, fullscreen, 0
 bind = $mainMod, f, fullscreenstate, 2,
 
-bind = $mainMod, Q, exec, foot
+bind = $mainMod, Q, exec, kitty
 bind = $mainMod, C, killactive,
 bind = $mainMod, M, exit,
 bind = $mainMod, V, togglefloating,
@@ -134,10 +130,6 @@ bindm = $mainMod, mouse:273, resizewindow
 windowrule = suppressevent maximize, class:.*
 windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
 ```
->Tinywl
-```
-tinywl -s foot &>/dev/null
-```
 >Package (System/Debug)
 ```
 sys-devel/gcc-14.3.0
@@ -145,15 +137,8 @@ dev-debug/gdb-16.3
 ```
 >Package (Code)
 ```
-gui-apps/foot-1.19.0
+x11-terms/kitty-0.42.2-r1
 app-editors/vim-9.1.0794
-```
->~/.config/foot/foot.ini
-```
-[main]
-font=Monospace:size=12
-[colors]
-background=000000
 ```
 >~/.vimrc
 ```

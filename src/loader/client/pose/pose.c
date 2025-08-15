@@ -243,10 +243,8 @@ void lcp_set()
 
 
 
-	uint32_t ia_bl = *(uint32_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
+	model_il = *(uint32_t *)(lb_c->d_p + lb_c->d_bl_p[1]) / sizeof(uint32_t);
 	lb_c->d_bl_p[1] += sizeof(uint32_t);
-	// model_il = ia_bl / 2 / sizeof(uint32_t);
-	model_il = ia_bl / sizeof(uint32_t);
 
 	// m_ai_index_count_p = malloc(sizeof(uint32_t) * model_il * 2);
 	lcs_ib_p = malloc(sizeof(VkDeviceSize) * model_il);
@@ -255,18 +253,18 @@ void lcp_set()
 
 	index_bl_p = malloc(sizeof(uint32_t) * model_il);
 	// attribute_bl_p = malloc(sizeof(uint32_t) * model_il);
-	uint32_t l_step = 0;
-	while (l_step != ia_bl)
+	uint64_t l_step = 0;
+	while (l_step != model_il)
 	{
 		// index_bl_p[l_step / (sizeof(uint32_t) * 2)] = *(uint32_t *)(data_p + step);
-		index_bl_p[l_step / sizeof(uint32_t)] = *(uint32_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
+		index_bl_p[l_step] = *(uint32_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
 		lb_c->d_bl_p[1] += sizeof(uint32_t);
 
 		// attribute_bl_p[l_step / (sizeof(uint32_t) * 2)] = *(uint32_t *)(data_p + step);
 		// step += sizeof(uint32_t);
 
 		// l_step += sizeof(uint32_t) * 2;
-		l_step += sizeof(uint32_t);
+		++l_step;
 	}
 
 	index_p = malloc(sizeof(uint32_t *) * model_il);
@@ -327,6 +325,14 @@ void lcp_set()
 	{
 		memcpy(a_p_array[1] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)), lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 3 + 2);
 		memset((a_p_array[1] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 2)), 0, 2);
+		//t. s0-test j
+		//memset((a_p_array[1] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 1)), 0, 3);
+		//*(uint8_t *)(a_p_array[1] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)) + (sizeof(float) * 3 + 1)) = 40;
+		//t. e0-test j
+//		if ((lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1) == 0)
+//		{
+//			NALI_D_LOG("nali_buffer c1j1 j0 %d", (lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1))
+//		}
 		lb_c->d_bl_p[1] += sizeof(float) * 3 + 2;
 	}
 
@@ -343,9 +349,10 @@ void lcp_set()
 			{
 				*(float *)(lcp_a_p[l_0] + l_step + l_2 * sizeof(float)) = 1;
 			}
-
 			//b_s b_e
 			*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = lb_c->bs_p[l_0][l_1] | lb_c->be_p[l_0][l_1] << (8 + 8);
+			//!test
+			//*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = 51 | 51 << (8 + 8);
 			l_step += 4 * sizeof(float);
 
 			//r
@@ -354,6 +361,8 @@ void lcp_set()
 
 			//t
 			memset(lcp_a_p[l_0] + l_step, 0, 4 * sizeof(float));
+			//!test
+			*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = 0xFFFFFFFFu;
 			l_step += 4 * sizeof(float);
 		}
 
@@ -375,6 +384,8 @@ void lcp_set()
 			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
 			{
 				*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float) + sizeof(float) * 4 * 2) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
+				//!test
+				//*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float) + sizeof(float) * 4 * 2) |= 51 << l_0_0 * 8;
 
 				if (++l_0_0 == 4)
 				{
@@ -405,7 +416,7 @@ void lcp_set()
 
 void lcp_vk()
 {
-	uint32_t step = 0;
+	uint64_t step = 0;
 
 	//UBOS gui world
 	memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));

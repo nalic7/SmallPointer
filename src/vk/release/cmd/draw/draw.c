@@ -257,7 +257,7 @@ static uint8_t vk_cmd_draw_f = 0;
 	#define NALI_TEST_m NALI_EBPOMI2_M
 	VkWriteDescriptorSet vkwritedescriptorset_p[NALI_LCS_D_SIZE];
 	VkDescriptorBufferInfo vkdescriptorbufferinfo_p[NALI_LCS_D_SIZE];
-	lcs_s_bl = NALI_TEST_map_p[0];
+	lcs_s_bl = NALI_TEST_map_p[0] - 1;
 	lcs_s_p = realloc(lcs_s_p, sizeof(lcs_s) * NALI_TEST_map_p[0]);
 
 	VkDescriptorSet vkdescriptorset;

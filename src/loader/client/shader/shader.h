@@ -3,7 +3,7 @@
 
 #define NALI_LCS_D_SIZE 5
 
-#define LC_setVkVertexInputBindingDescription(name) \
+#define LCS_setVkVertexInputBindingDescription(name) \
 	VkVertexInputBindingDescription name = \
 	{ \
 		.binding = 0, \
@@ -11,7 +11,7 @@
 		.inputRate = VK_VERTEX_INPUT_RATE_VERTEX \
 	};
 
-#define LC_setVkVertexInputAttributeDescription(name) \
+#define LCS_setVkVertexInputAttributeDescription(name) \
 	VkVertexInputAttributeDescription name[] = \
 	{ \
 		(VkVertexInputAttributeDescription) \

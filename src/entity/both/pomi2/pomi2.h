@@ -5,7 +5,7 @@
 
 #define NALI_EBPOMI2_MRB 31
 
-#define NALI_EBPOMI2_MAB 0
+#define NALI_EBPOMI2_MAB 1
 
 #define NALI_EBPOMI2_MA 0
 #define NALI_EBPOMI2_MAP_BL 10
