@@ -300,12 +300,14 @@ static uint8_t vk_cmd_draw_f = 0;
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2) = 0;
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2 + 1 * sizeof(float)) = 0;
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2 + 2 * sizeof(float)) = 0;
+		//apply r to top
+		mv4_q(0, NALI_M_D2R(-45), 0, lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 + 31 * sizeof(float) * 4 * 3);
 		//apply r
-		mv4_q(0, NALI_M_D2R(-90), 0, lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4);
+		mv4_q(0, 0, NALI_M_D2R(-180), lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4);
 		//apply t
 		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 0 * sizeof(float)) = 1.0;
 		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 1 * sizeof(float)) = -1.0;
-		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
+		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
 	}
 	//update m v p later
 	//update buffer
@@ -355,6 +357,9 @@ static uint8_t vk_cmd_draw_f = 0;
 		{
 			vkQueueWaitIdle(vkqueue_graphic);
 
+			//!re-create wl if crash before vk_sc
+			//wait like 1 sec to detect wl crash
+			//but need check data first
 			vksc_free();
 
 			#ifdef C_NALI_S_ANDROID

@@ -136,6 +136,7 @@ static int loop(void* arg)
 			r = wl_display_dispatch(wlc_wl_display_client_p);
 		}
 	}
+	//!re-create wl if crash before vk_sc
 
 	if (r < 0)
 	{

@@ -71,16 +71,24 @@ void lcp_set()
 			lb_c->d_bl_p[1] += sizeof(uint8_t);
 
 			memset(m_bone_p + l_bone_bl + l_1, 0, sizeof(m_bone));
-			m_bone_p[l_bone_bl + l_1].joint_bl = size;
-			m_bone_p[l_bone_bl + l_1].joint_p = malloc(size);
-			memcpy(m_bone_p[l_bone_bl + l_1].joint_p, lb_c->d_p + lb_c->d_bl_p[1], size);
-			lb_c->d_bl_p[1] += size;
-
 			if (l_1 != 0)
 			{
 				lb_c->bs_p[l_0][l_1] = lb_c->be_p[l_0][l_1 - 1];
 			}
-			lb_c->be_p[l_0][l_1] = lb_c->bs_p[l_0][l_1] + size;
+			if (size == 1)
+			{
+				m_bone_p[l_bone_bl + l_1].joint_bl = 0;
+				m_bone_p[l_bone_bl + l_1].joint_p = malloc(0);
+				lb_c->be_p[l_0][l_1] = 0;
+			}
+			else
+			{
+				m_bone_p[l_bone_bl + l_1].joint_bl = size - 2;
+				m_bone_p[l_bone_bl + l_1].joint_p = malloc(size - 2);
+				memcpy(m_bone_p[l_bone_bl + l_1].joint_p, lb_c->d_p + lb_c->d_bl_p[1] + 1, size - 2);
+				lb_c->be_p[l_0][l_1] = lb_c->bs_p[l_0][l_1] + size - 2;
+			}
+			lb_c->d_bl_p[1] += size;
 		}
 
 		l_bone_bl += lcp_joint_count_p[l_0];
@@ -362,7 +370,7 @@ void lcp_set()
 			//t
 			memset(lcp_a_p[l_0] + l_step, 0, 4 * sizeof(float));
 			//!test
-			*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = 0xFFFFFFFFu;
+			//*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = 0xFFFFFFFFu;
 			l_step += 4 * sizeof(float);
 		}
 
@@ -543,6 +551,8 @@ void lcp_free()
 	{
 		free(lcp_bp_p[l_0]);
 		free(lcp_a_p[l_0]);
+
+		free(m_bone_p[l_0].joint_p);
 	}
 	free(lcp_bp_p);
 	free(lcp_a_p);
