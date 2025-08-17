@@ -168,11 +168,11 @@ void main()
 //			l_v *= 0;
 //	}
 	uint l_b = floatBitsToUint(uboa.pa[l_j].s.w);
-	uint l_be = (l_b >> (8+8)) & 0xFFFFu;
-	if (l_be != 0)
+	uint l_bs = l_b & 0xFFFFu;
+	if (l_bs != 0xFFFFu)
 	{
 		l_v = ubob.pb[l_j].bindpose * t2mat4(uboa.pa[l_j].t.xyz) * r2mat4(uboa.pa[l_j].r) * s2mat4(uboa.pa[l_j].s.xyz) * ubob.pb[l_j].i_bindpose * l_v;
-		uint l_bs = l_b & 0xFFFFu;
+		uint l_be = (l_b >> (8+8)) & 0xFFFFu;
 		for (uint l_0 = l_bs; l_0 < l_be; ++l_0)
 		{
 			uint l_0_0 = (floatBitsToUint(uboa.pa[l_0 / 4].t.w) >> l_0 % 4 * 8) & 0xFFu;
@@ -191,7 +191,8 @@ void main()
 			//l_v = ubob.pb[l_0_0].bindpose * ubob.pb[l_0_0].i_bindpose * l_v;
 		}
 	}
-	l_v = ubob.pb[0].bindpose * t2mat4(uboa.pa[0].t.xyz) * r2mat4(uboa.pa[0].r) * s2mat4(uboa.pa[0].s.xyz) * ubob.pb[0].i_bindpose * l_v;
+	//l_v = ubob.pb[0].bindpose * t2mat4(uboa.pa[0].t.xyz) * r2mat4(uboa.pa[0].r) * s2mat4(uboa.pa[0].s.xyz) * ubob.pb[0].i_bindpose * l_v;
+	l_v = t2mat4(uboa.pa[0].t.xyz) * r2mat4(uboa.pa[0].r) * s2mat4(uboa.pa[0].s.xyz) * l_v;
 
 	gl_Position = ubos.p * ubos.v * l_v;
 	//gl_Position = ubos.p * ubos.v * (l_v + vec4(0, 0, -3, 0));

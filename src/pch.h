@@ -282,5 +282,6 @@
 // // #endif
 
 #include "debug/debug.h"
+#include "test.h"
 
 #endif

@@ -283,7 +283,7 @@ static uint8_t vk_cmd_draw_f = 0;
 	//a
 	if (NALI_TEST_m < lcp_joint_count_bl)
 	{
-		VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl + 1];
+		VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl];
 		//apply rgba
 		for (uint8_t l_0 = 0; l_0 < 4; ++l_0)
 		{
@@ -292,6 +292,17 @@ static uint8_t vk_cmd_draw_f = 0;
 		vkdevicesize += 4 * sizeof(float);
 		//apply default a
 		memcpy(lc_vkbuffer_p + vkdevicesize, lcp_a_p[NALI_TEST_m], lcp_joint_count_p[NALI_TEST_m] * 4 * 3 * sizeof(float));
+		//apply a 0
+		uint8_t l_kf_a = 0;
+		uint8_t key = 10;//1
+		lckf l_lckf = lckf_p[l_kf_a][key];
+		for (uint8_t l_0 = 0; l_0 < l_lckf.bone_bl; ++l_0)
+		{
+			memcpy(lc_vkbuffer_p + vkdevicesize + l_lckf.bone_p[l_0] * sizeof(float) * 4 * 3, l_lckf.s_p[l_0], sizeof(float) * 3);
+			memcpy(lc_vkbuffer_p + vkdevicesize + l_lckf.bone_p[l_0] * sizeof(float) * 4 * 3 + sizeof(float) * 4, l_lckf.r_p[l_0], sizeof(float) * 4);
+			memcpy(lc_vkbuffer_p + vkdevicesize + l_lckf.bone_p[l_0] * sizeof(float) * 4 * 3 + sizeof(float) * 4 * 2, l_lckf.t_p[l_0], sizeof(float) * 3);
+		}
+		//mv4_q(NALI_M_D2R(45), 0, 0, lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 + 1 * sizeof(float) * 4 * 3);
 //		//apply s to mid
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 12) = 0;
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 12 + 1 * sizeof(float)) = 0;
@@ -301,9 +312,9 @@ static uint8_t vk_cmd_draw_f = 0;
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2 + 1 * sizeof(float)) = 0;
 //		*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 3 * 2 + 2 * sizeof(float)) = 0;
 		//apply r to top
-		mv4_q(0, NALI_M_D2R(-45), 0, lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 + 31 * sizeof(float) * 4 * 3);
+		//mv4_q(0, NALI_M_D2R(-45), 0, lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 + 31 * sizeof(float) * 4 * 3);
 		//apply r
-		mv4_q(0, 0, NALI_M_D2R(-180), lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4);
+		mv4_q(0, NALI_M_D2R(-45), NALI_M_D2R(-180), lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4);
 		//apply t
 		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 0 * sizeof(float)) = 1.0;
 		//*(float *)(lc_vkbuffer_p + vkdevicesize + sizeof(float) * 4 * 2 + 1 * sizeof(float)) = -1.0;
@@ -316,7 +327,7 @@ static uint8_t vk_cmd_draw_f = 0;
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lc_vkdevicememory,
-		.offset = (lcp_vkdevicesize_p[lcp_joint_count_bl + 1] / vk_non_coherent_atom_size) * vk_non_coherent_atom_size,
+		.offset = (lcp_vkdevicesize_p[lcp_joint_count_bl] / vk_non_coherent_atom_size) * vk_non_coherent_atom_size,
 		.size = ((4 * sizeof(float) + lcp_joint_count_p[NALI_TEST_m] * 4 * 3) * sizeof(float) + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});

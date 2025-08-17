@@ -134,7 +134,7 @@ void lcm_update()
 				//ak -> ak  0 -> 2 af+=255*2
 				//af -> af
 				//default a
-				VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl + 1];
+				VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl];
 				//!apply rgba for now
 				//!didn't apply ds index
 				//!didn't apply default a

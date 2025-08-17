@@ -1,6 +1,7 @@
 #ifndef NALI_VK_H
 #define NALI_VK_H
 
+//disable this to use all gpu
 #define NALI_VK_SGPU
 #define NALI_VK_INFO_SC
 

@@ -1,7 +1,7 @@
 int main()
 {
 	// fp_read(NALI_F_HOME NALI_F_HOME_IMAGE "/0.png", &(long){});
-	#ifdef NALI_D_FILE
+	#ifdef C_NALI_DEBUG
 		d_set();
 	#endif
 
@@ -169,7 +169,7 @@ int main()
 		g_write();
 	#endif
 	lb_set();
-	#if C_NALI_SERVER
+	#ifdef C_NALI_SERVER
 		ls_set();
 	#endif
 	#ifdef C_NALI_CLIENT

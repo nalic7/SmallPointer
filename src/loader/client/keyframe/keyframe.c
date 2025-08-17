@@ -42,7 +42,7 @@ void lckf_set()
 				memcpy(lckf_p[l_0][l_1].r_p[l_2], lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 4);
 				lb_c->d_bl_p[1] += sizeof(float) * 4;
 
-				lckf_p[l_0][l_1].t_p[l_2]= malloc(sizeof(float) * 3);
+				lckf_p[l_0][l_1].t_p[l_2] = malloc(sizeof(float) * 3);
 				memcpy(lckf_p[l_0][l_1].t_p[l_2], lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 3);
 				lb_c->d_bl_p[1] += sizeof(float) * 3;
 			}

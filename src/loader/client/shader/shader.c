@@ -83,10 +83,7 @@ static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayou
 //m -> j
 void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj)
 {
-	//!need switch
-	//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-	//r-bind
-	//gui / world
+	//.i gui/world d
 	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
@@ -95,29 +92,25 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 
-	//n-bind
-	//mj = lcm_joint_count_p[ji]
-	//bone
+	//.i bindpose s 1+
 	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = lcp_vkdevicesize_p[j],
-		.range = mj * sizeof(float) * 16 * 2
+		.offset = lcp_vkdevicesize_p[j] - sizeof(float) * 16 * 2,
+		.range = (mj - 1) * sizeof(float) * 16 * 2
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 1, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 1);
 
-	//r-bind
-	//animate
+	//.i animate d
 	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl + 1] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
+		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
 		.range = mj * sizeof(float) * 4 * 3
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 
-	//n-bind
-	//src color
+	//.i src_color s
 	vkdescriptorbufferinfo_p[3] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
@@ -126,12 +119,11 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBu
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 3, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 3);
 
-	//r-bind
-	//mix color
+	//.i color d
 	vkdescriptorbufferinfo_p[4] = (VkDescriptorBufferInfo)
 	{
 		.buffer = lc_vkbuffer,
-		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl + 1] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
+		.offset = lcp_vkdevicesize_p[lcp_joint_count_bl] + NALI_LCP_BONE_BL * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
 		.range = sizeof(float) * 4
 	};
 	vkds_setVkWriteDescriptorSet(vk_device, 4, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 4);

@@ -3,10 +3,19 @@ cmake_minimum_required(VERSION 3.31)
 set(S_NAME linux)
 #set(S_NAME android)
 
+# skip this for release
+set(TEST 1)
+
+# debug log
 set(DEBUG 1)
+
+# gen asset
 set(GEN 1)
+
 set(CLIENT 1)
-set(SERVER 1)
+#set(SERVER 1)
+
+# vk debug layer
 set(VK_DEBUG 1)
 
 set(P_NAME SmallPointer)
@@ -19,6 +28,10 @@ list(APPEND SOURCES ${G_SOURCES})
 set(TLL m)
 file(GLOB_RECURSE G_SOURCES src/math/*.c)
 list(APPEND SOURCES ${G_SOURCES})
+
+if(TEST)
+  list(APPEND TCD C_NALI_TEST)
+endif()
 
 list(APPEND SOURCES src/debug/debug.c)
 if(DEBUG)

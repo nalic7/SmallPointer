@@ -6,8 +6,8 @@ void vkqdpd_make()
 	#ifdef NALI_VK_SGPU
 		vkqdpd_physical_device = 1;
 	#else
-		NALI_D_INFO("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(vkqdpdi_vkinstance, &m_physical_device, VK_NULL_HANDLE))
-		info("physical_device %d", m_physical_device)
+		NALI_D_INFO("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(vkqdpdi_vkinstance, &vkqdpd_physical_device, VK_NULL_HANDLE))
+		NALI_D_LOG("physical_device %d", vkqdpd_physical_device)
 
 		// if (!physical_device)
 		// {

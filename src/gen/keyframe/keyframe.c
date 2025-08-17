@@ -44,6 +44,10 @@ void gkf_write()
 				step += sizeof(float) * 4;
 
 				fwrite(data_p + step, sizeof(float), 3, file);
+//				r_p[0] = *(float *)(data_p + step);
+//				r_p[1] = *(float *)(data_p + step + sizeof(float));
+//				r_p[2] = *(float *)(data_p + step + sizeof(float) * 2);
+//				fwrite(r_p, sizeof(float), 3, file);
 				step += sizeof(float) * 3;
 			}
 		}

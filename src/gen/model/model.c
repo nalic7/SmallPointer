@@ -102,6 +102,7 @@ static uint8_t *cut_i_p;
 static uint32_t cut_i_bl = 0;
 
 static float *i_bindpose_p;
+static uint32_t i_bindpose_bl = 0;
 
 // static float i_bindpose_array[1024*2];
 // static float global_bindpose_array[1024*2];
@@ -156,7 +157,7 @@ void gm_write()
 		NALI_D_INFO("cgltf_validate %d", cgltf_validate(cgltf_data_p))
 
 		// for (uint32_t l_1 = 0; l_1 < cgltf_data_p->animations_count; ++l_1)
-		cgltf_node *parent_cgltf_node_p = cgltf_data_p->skins[0].joints[0]->parent;
+		//cgltf_node *parent_cgltf_node_p = cgltf_data_p->skins[0].joints[0]->parent;
 
 		// if (setting_array[l_0] & NALI_GEN_READ_SKIN)
 		// {
@@ -432,9 +433,10 @@ void gm_write()
 			// joint_srt_p = realloc(joint_srt_p, joint_srt_bl);
 
 			//s0-test
-			i_bindpose_p = realloc(i_bindpose_p, (bone_bl + cgltf_skin_p->joints_count) * sizeof(float) * 16);
+			i_bindpose_p = realloc(i_bindpose_p, (cgltf_skin_p->joints_count - 1) * sizeof(float) * 16);
 			// memcpy(i_bindpose_array + bone_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset, sizeof(float) * 16 * cgltf_skin_p->joints_count);
-			memcpy(i_bindpose_p + bone_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset, sizeof(float) * 16 * cgltf_skin_p->joints_count);
+			memcpy(i_bindpose_p + i_bindpose_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset + sizeof(float) * 16, sizeof(float) * 16 * (cgltf_skin_p->joints_count - 1));
+			i_bindpose_bl += cgltf_skin_p->joints_count - 1;
 
 			// for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
 			// {
@@ -549,39 +551,35 @@ void gm_write()
 			joint_count_p[joint_count_bl] = cgltf_skin_p->joints_count;
 			joint_count_bl += sizeof(uint8_t);
 
-			// cgltf_node *parent_cgltf_node_p = cgltf_skin_p->joints[0]->parent;
+			//.i use first bone as main with default m4x4
+			cgltf_node *base_cgltf_node_p = cgltf_skin_p->joints[0];
 
 			for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
 			{
 				cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
 
-				// joint_p = realloc(joint_p, joint_bl + sizeof(uint8_t) + sizeof(uint8_t) + cgltf_node_joints_p->children_count);
-
-				// joint_p[joint_bl] = sizeof(uint8_t) + cgltf_node_joints_p->children_count;
-				joint_array[joint_bl + 1] = l_2;
-				joint_bl += 2;
-
-				// for (uint32_t c_0 = 0; c_0 < cgltf_node_joints_p->children_count; ++c_0)
-				uint32_t c_0 = 0;
-				while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != parent_cgltf_node_p)
+				if (l_2 == 0)
 				{
-					for (uint32_t j_1 = 0; j_1 < cgltf_skin_p->joints_count; ++j_1)
-						if (cgltf_node_joints_p == cgltf_skin_p->joints[j_1])
-						{
-							joint_array[joint_bl + c_0] = j_1;
-							break;
-						}
-
-					++c_0;
+					joint_array[joint_bl] = 0;
+					joint_bl += sizeof(uint8_t);
 				}
-				joint_array[joint_bl - 2] = sizeof(uint8_t) + c_0;
-				joint_bl += c_0;
+				else
+				{
+					uint32_t c_0 = 0;
+					while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != base_cgltf_node_p)
+					{
+						for (uint32_t j_1 = 0; j_1 < cgltf_skin_p->joints_count; ++j_1)
+							if (cgltf_node_joints_p == cgltf_skin_p->joints[j_1])
+							{
+								joint_array[joint_bl + c_0 + 1] = j_1;
+								break;
+							}
 
-				// if (max_joint_bl < cgltf_node_joints_p->children_count)
-				// {
-				// 	max_joint_bl = cgltf_node_joints_p->children_count;
-				// }
-				// joint_bl += cgltf_node_joints_p->children_count;
+						++c_0;
+					}
+					joint_array[joint_bl] = c_0;
+					joint_bl += sizeof(uint8_t) + c_0;
+				}
 			}
 
 			bone_bl += cgltf_skin_p->joints_count;
@@ -926,7 +924,7 @@ void gm_write()
 	fwrite(joint_count_p, sizeof(uint8_t), joint_count_bl, file);
 	fwrite(joint_array, sizeof(uint8_t), joint_bl, file);
 	// fwrite(i_bindpose_array, sizeof(float), bone_bl * 16, file);
-	fwrite(i_bindpose_p, sizeof(float), bone_bl * 16, file);
+	fwrite(i_bindpose_p, sizeof(float), i_bindpose_bl * 16, file);
 	// fwrite(global_bindpose_array, sizeof(float), bone_bl * 16, file);
 
 	// //anim

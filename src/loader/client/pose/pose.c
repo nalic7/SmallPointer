@@ -49,7 +49,7 @@ void lcp_set()
 	lcp_bp_p = malloc(sizeof(float *) * lcp_joint_count_bl);
 	lcp_a_p = malloc(sizeof(uint8_t *) * lcp_joint_count_bl);
 
-	lcp_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * (lcp_joint_count_bl + 2));
+	lcp_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * (lcp_joint_count_bl + 1));
 
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
@@ -63,7 +63,7 @@ void lcp_set()
 		lb_c->bs_p[l_0][0] = 0;
 
 		m_bone_p = realloc(m_bone_p, sizeof(m_bone) * (l_bone_bl + lcp_joint_count_p[l_0]));
-		lcp_bp_p[l_0] = malloc(sizeof(float) * 16 * 2 * lcp_joint_count_p[l_0]);
+		lcp_bp_p[l_0] = malloc(sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1));
 
 		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
@@ -75,40 +75,29 @@ void lcp_set()
 			{
 				lb_c->bs_p[l_0][l_1] = lb_c->be_p[l_0][l_1 - 1];
 			}
-			if (size == 1)
-			{
-				m_bone_p[l_bone_bl + l_1].joint_bl = 0;
-				m_bone_p[l_bone_bl + l_1].joint_p = malloc(0);
-				lb_c->be_p[l_0][l_1] = 0;
-			}
-			else
-			{
-				m_bone_p[l_bone_bl + l_1].joint_bl = size - 2;
-				m_bone_p[l_bone_bl + l_1].joint_p = malloc(size - 2);
-				memcpy(m_bone_p[l_bone_bl + l_1].joint_p, lb_c->d_p + lb_c->d_bl_p[1] + 1, size - 2);
-				lb_c->be_p[l_0][l_1] = lb_c->bs_p[l_0][l_1] + size - 2;
-			}
+			m_bone_p[l_bone_bl + l_1].joint_bl = size;
+			m_bone_p[l_bone_bl + l_1].joint_p = malloc(size);
+			memcpy(m_bone_p[l_bone_bl + l_1].joint_p, lb_c->d_p + lb_c->d_bl_p[1], size);
+			lb_c->be_p[l_0][l_1] = lb_c->bs_p[l_0][l_1] + size;
 			lb_c->d_bl_p[1] += size;
 		}
+		lb_c->bs_p[l_0][0] = 0xFFFFu;
 
 		l_bone_bl += lcp_joint_count_p[l_0];
 	}
 
-	l_bone_bl = 0;
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
-		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
+		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0] - 1; ++l_1)
 		{
-//			//s0-test
-//			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, mm4x4_array, sizeof(mm4x4_array));
-//			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, mm4x4_array, sizeof(mm4x4_array));
-//			//e0-test
 			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, lb_c->d_p + lb_c->d_bl_p[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
 			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, lcp_bp_p[l_0] + l_1 * 16 * 2, sizeof(float) * 16);
 			mm4x4_i(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16);
+
+			//memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, mm4x4_array, sizeof(mm4x4_array));
+			//memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, mm4x4_array, sizeof(mm4x4_array));
 		}
-		lb_c->d_bl_p[1] += sizeof(float) * 16 * lcp_joint_count_p[l_0];
-		l_bone_bl += lcp_joint_count_p[l_0];
+		lb_c->d_bl_p[1] += sizeof(float) * 16 * (lcp_joint_count_p[l_0] - 1);
 	}
 
 	// l_bone_bl = 0;
@@ -441,30 +430,35 @@ void lcp_vk()
 	memcpy(lc_vkbuffer_p + step, rgba_p, lcp_rgba_bl);
 	step += lcp_rgba_bl;
 
-	//ai index
+	//.i ai index
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
 		memcpy(lc_vkbuffer_p + step, index_p[l_0], index_bl_p[l_0]);
 		step += index_bl_p[l_0];
 	}
 
-	//a index
+	//.i a index
 	for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
 		memcpy(lc_vkbuffer_p + step, a_p_array[l_0], a_bl_array[l_0]);
 		step += a_bl_array[l_0];
 	}
 
-	//UBOB
-	//use index 0 with limit as default
-	lcp_vkdevicesize_p[lcp_joint_count_bl] = step;
+	//.i UBOB
 	for (uint32_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
 		lcp_vkdevicesize_p[l_0] = step;
-		memcpy(lc_vkbuffer_p + step, lcp_bp_p[l_0], sizeof(float) * 16 * 2 * lcp_joint_count_p[l_0]);
-		step += sizeof(float) * 16 * 2 * lcp_joint_count_p[l_0];
+
+//		memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));
+//		step += sizeof(mm4x4_array);
+//
+//		memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));
+//		step += sizeof(mm4x4_array);
+
+		memcpy(lc_vkbuffer_p + step, lcp_bp_p[l_0], sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1));
+		step += sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1);
 	}
-	lcp_vkdevicesize_p[lcp_joint_count_bl + 1] = step;
+	lcp_vkdevicesize_p[lcp_joint_count_bl] = step;
 
 	vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
 	{
@@ -560,4 +554,6 @@ void lcp_free()
 	free(lcp_joint_count_p);
 
 	free(m_bone_p);
+
+	free(lcp_vkdevicesize_p);
 }

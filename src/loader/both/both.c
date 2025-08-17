@@ -155,12 +155,16 @@ void lb_free1()
 	}
 	s_state |= NALI_S_S_EXIT;
 
-	ls_free();
-	mtx_lock(lb_mtx_t_p);
-	mtx_unlock(lb_mtx_t_p);
-	lc_free();
-	mtx_lock(lb_mtx_t_p);
-	mtx_unlock(lb_mtx_t_p);
+	#ifdef C_NALI_SERVER
+		ls_free();
+		mtx_lock(lb_mtx_t_p);
+		mtx_unlock(lb_mtx_t_p);
+	#endif
+	#ifdef C_NALI_CLIENT
+		lc_free();
+		mtx_lock(lb_mtx_t_p);
+		mtx_unlock(lb_mtx_t_p);
+	#endif
 
 	//!switch to pipewire
 	// al_clean();
