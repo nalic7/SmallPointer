@@ -1,48 +1,46 @@
 #ifndef NALI_LOADER_BOTH_H
 #define NALI_LOADER_BOTH_H
 
-//max connect
+//.c max connect
 #define NALI_LB_UM 1
-//max connect type
+//.c max connect type
 #define NALI_LB_UT uint8_t
-//void user
+//.i void user
 #define NALI_LB_UN 255
 
-//package
+//.i package
 #define NALI_LB_PT uint8_t
 #define NALI_LB_NET_BL 255
 
-//animation
+//.i animation
 #define NALI_LB_AKIT uint8_t
 #define NALI_LB_AKIN 0xFFu
-// #define NALI_LB_AT uint8_t
-//animation key
+//.i animation key
 #define NALI_LB_AKT uint8_t
-//animation keyframe/float /255
+//.i animation keyframe/float /255
 #define NALI_LB_AFT uint16_t
 
-//model
+//.i model
 #define NALI_LB_MT uint8_t
-//model index
+//.i model index
 #define NALI_LB_MIT uint16_t
 #define NALI_LB_M8BL 256/8
 #define NALI_LB_MIM 0xFFFFu-1
 #define NALI_LB_MIN 0xFFFFu
 
-//model attribute
+//.i model attribute
 #define NALI_LB_MAT uint8_t
-//model max
+//.i model max
 #define NALI_LB_MM 0xFFu-1
 #define NALI_LB_MN 0xFFu
 
-//chunk
+//.i chunk
 #define NALI_LB_CT uint8_t
 #define NALI_LB_C_ST int8_t
 #define NALI_LB_CIBL 16
-//xyz
+//.i xyz
 #define NALI_LB_CMFL 1024.0F
-//chunk hash
-//3 key
+//.i chunk hash/3 key
 #define NALI_LB_CHT uint16_t
 
 //s0-data

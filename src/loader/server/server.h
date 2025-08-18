@@ -1,6 +1,7 @@
 #ifndef NALI_LOADER_SERVER_H
 #define NALI_LOADER_SERVER_H
 
+//.c tps/read write time
 #define NALI_LS_MAX_RW 20
 
 extern FILE *ls_file_p;

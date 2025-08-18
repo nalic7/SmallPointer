@@ -1,5 +1,6 @@
 const uint32_t ns_u_p[NALI_LB_UM] =
 {
+	//.c client ip
 	NALI_M_IP(127, 0, 0, 1)
 };
 

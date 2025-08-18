@@ -1,6 +1,7 @@
 #ifndef NALI_NETWORK_LINUX_CLIENT_H
 #define NALI_NETWORK_LINUX_CLIENT_H
 
+//.c connect ip
 #define NALI_NC_IP NALI_M_IP(127, 0, 0, 1)
 
 void nc_set();

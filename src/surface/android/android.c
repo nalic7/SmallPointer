@@ -12,7 +12,7 @@ static int s1_set(void *p)
 		lc_set();
 
 		vk_set();
-//!switch to pipewire
+	//! audio android
 //		al_set();
 		lc_vk();
 	#endif

@@ -191,7 +191,7 @@ void lsu_open()
 			//-NALI_LB_CFBL 0 NALI_LB_CFBL
 			memset(ns_p[l_0].lb_u.rt_p, 0, sizeof(float) * (3 + 2));
 
-			//!test s
+			//! test s
 			memset(ns_p[l_0].c_p, 0, sizeof(NALI_LB_CT) * 3);
 		}
 	}

@@ -250,7 +250,7 @@ void lcp_set()
 
 	index_bl_p = malloc(sizeof(uint32_t) * model_il);
 	// attribute_bl_p = malloc(sizeof(uint32_t) * model_il);
-	uint64_t l_step = 0;
+	uint32_t l_step = 0;
 	while (l_step != model_il)
 	{
 		// index_bl_p[l_step / (sizeof(uint32_t) * 2)] = *(uint32_t *)(data_p + step);
@@ -281,19 +281,19 @@ void lcp_set()
 	rgba_p = malloc(lcp_rgba_bl);
 	memcpy(rgba_p, lb_c->d_p + lb_c->d_bl_p[1], lcp_rgba_bl);
 	lb_c->d_bl_p[1] += lcp_rgba_bl;
-	//apply color
+	//.i pow rgba_p
 	for (uint32_t l_0 = 0; l_0 < lcp_rgba_bl / sizeof(float); ++l_0)
 	{
 		rgba_p[l_0] = pow(rgba_p[l_0], 1.0F / 5.0F);
 	}
 
-	//c1
+	//.i c1
 	uint32_t l_c1_bl = *(uint32_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
 	lb_c->d_bl_p[1] += sizeof(uint32_t);
 
 	a_bl_array[0] = l_c1_bl * (sizeof(float) * 3 + sizeof(uint32_t));
 	a_p_array[0] = malloc(a_bl_array[0]);
-	//c1 a
+	//.i c1 a
 	for (uint32_t l_0 = 0; l_0 < l_c1_bl; ++l_0)
 	{
 		memcpy(a_p_array[0] + l_0 * (sizeof(float) * 3 + sizeof(uint32_t)), lb_c->d_p + lb_c->d_bl_p[1], sizeof(float) * 3 + 1);
@@ -301,10 +301,10 @@ void lcp_set()
 		lb_c->d_bl_p[1] += sizeof(float) * 3 + 1;
 	}
 
-	//c1j1
+	//.i c1j1
 	a_bl_array[1] = lb_c->d_bl_p[0] - lb_c->d_bl_p[1];
 
-	//c1j1 a
+	//.i c1j1 a
 	uint32_t l_c1j1_size = a_bl_array[1] / (sizeof(float) * 3 + 2);
 	a_bl_array[1] += l_c1j1_size * 2;
 	a_p_array[1] = malloc(a_bl_array[1]);
@@ -333,7 +333,7 @@ void lcp_set()
 		lb_c->d_bl_p[1] += sizeof(float) * 3 + 2;
 	}
 
-	//init data
+	//.i set default a
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
 		l_step = 0;
@@ -341,24 +341,24 @@ void lcp_set()
 
 		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
 		{
-			//s
+			//.i s
 			for (uint8_t l_2 = 0; l_2 < 3; ++l_2)
 			{
 				*(float *)(lcp_a_p[l_0] + l_step + l_2 * sizeof(float)) = 1;
 			}
-			//b_s b_e
+			//.i b_s b_e
 			*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = lb_c->bs_p[l_0][l_1] | lb_c->be_p[l_0][l_1] << (8 + 8);
-			//!test
+			//.t bs_p be_p
 			//*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = 51 | 51 << (8 + 8);
 			l_step += 4 * sizeof(float);
 
-			//r
+			//.i r
 			memcpy(lcp_a_p[l_0] + l_step, mm4x4_array + 12, 4 * sizeof(float));
 			l_step += 4 * sizeof(float);
 
-			//t
+			//.i t
 			memset(lcp_a_p[l_0] + l_step, 0, 4 * sizeof(float));
-			//!test
+			//.t a->t vec4
 			//*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float)) = 0xFFFFFFFFu;
 			l_step += 4 * sizeof(float);
 		}
@@ -369,7 +369,7 @@ void lcp_set()
 	free(lb_c->bs_p);
 	free(lb_c->be_p);
 
-	//b
+	//.i b
 	l_bone_bl = 0;
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
@@ -381,7 +381,7 @@ void lcp_set()
 			for (uint8_t l_2 = 0; l_2 < m_bone_p[l_bone_bl + l_1].joint_bl; ++l_2)
 			{
 				*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float) + sizeof(float) * 4 * 2) |= m_bone_p[l_bone_bl + l_1].joint_p[l_2] << l_0_0 * 8;
-				//!test
+				//.t m_bone_p
 				//*(uint32_t *)(lcp_a_p[l_0] + l_step + 3 * sizeof(float) + sizeof(float) * 4 * 2) |= 51 << l_0_0 * 8;
 
 				if (++l_0_0 == 4)
@@ -395,8 +395,8 @@ void lcp_set()
 		l_bone_bl += lcp_joint_count_p[l_0];
 	}
 
-	//step
-	uint64_t l_address = NALI_LCP_VP_BL + lcp_rgba_bl;
+	//.i step
+	uint32_t l_address = NALI_LCP_VP_BL + lcp_rgba_bl;
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
@@ -413,7 +413,7 @@ void lcp_set()
 
 void lcp_vk()
 {
-	uint64_t step = 0;
+	uint32_t step = 0;
 
 	//UBOS gui world
 	memcpy(lc_vkbuffer_p + step, mm4x4_array, sizeof(mm4x4_array));

@@ -153,7 +153,7 @@ void vk_cmd_draw_set()
 		vk_cmd(vkcommandbuffer_p[l_0], &vkcommandbufferbegininfo, vkqueue_graphic);
 		//e0-cmd
 
-		//!need check again
+		//! need check again
 		// //s0-ubo
 		// // lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, &vkdescriptorimageinfo, vkwritedescriptorset_array);
 		// lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, vkwritedescriptorset_array);
@@ -247,10 +247,10 @@ static uint8_t vk_cmd_draw_f = 0;
 //		//vk_makeSurface();
 //	#endif
 
-	//!test model
+	//! test model
 	//s0-test
 	//include gui
-	//!need test loop data
+	//! need test loop data
 	//write data
 	#define NALI_TEST_map_p ebpomi2_map_p
 	#define NALI_TEST_mab NALI_EBPOMI2_MAB
@@ -322,7 +322,7 @@ static uint8_t vk_cmd_draw_f = 0;
 	}
 	//update m v p later
 	//update buffer
-	//!use atom to all flush
+	//! use atom to all flush
 	vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
@@ -345,7 +345,7 @@ static uint8_t vk_cmd_draw_f = 0;
 		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[vk_cmd_draw_f] + 1;
 
 		//p. u m dat
-		//!read data
+		//! read data
 //		nc_send();
 //
 //		// clock_gettime(CLOCK_MONOTONIC, &delta_end);
@@ -368,7 +368,7 @@ static uint8_t vk_cmd_draw_f = 0;
 		{
 			vkQueueWaitIdle(vkqueue_graphic);
 
-			//!re-create wl if crash before vk_sc
+			//! re-create wl if crash before vk_sc
 			//wait like 1 sec to detect wl crash
 			//but need check data first
 			vksc_free();

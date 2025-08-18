@@ -1,4 +1,4 @@
-//select gpu index
+//.c select gpu index
 uint32_t vk_device = 0;
 uint32_t vk_queue_g = 0;
 uint32_t vk_queue_ct = 0;

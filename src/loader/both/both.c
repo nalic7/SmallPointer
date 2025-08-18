@@ -166,7 +166,7 @@ void lb_free1()
 		mtx_unlock(lb_mtx_t_p);
 	#endif
 
-	//!switch to pipewire
+	//! switch to pipewire
 	// al_clean();
 
 	#ifndef C_NALI_S_ANDROID

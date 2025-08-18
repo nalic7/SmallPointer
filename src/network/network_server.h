@@ -1,7 +1,6 @@
 #ifndef NALI_NETWORK_LINUX_SERVER_H
 #define NALI_NETWORK_LINUX_SERVER_H
 
-//user ip
 extern const uint32_t ns_u_p[NALI_LB_UM];
 typedef struct
 {

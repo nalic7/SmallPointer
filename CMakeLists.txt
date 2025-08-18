@@ -1,26 +1,27 @@
 cmake_minimum_required(VERSION 3.31)
 
+#//.c System
 set(S_NAME linux)
 #set(S_NAME android)
 
-# skip this for release
+#//.c skip this for release
 set(TEST 1)
 
-# debug log
+#//.c debug log
 set(DEBUG 1)
 
-# gen asset
+#//.c gen asset/skip this for release
 set(GEN 1)
 
+#//.c runtime
 set(CLIENT 1)
 #set(SERVER 1)
 
-# vk debug layer
+#//.c vk debug layer
 set(VK_DEBUG 1)
 
 set(P_NAME SmallPointer)
-
-project(${P_NAME} VERSION 1.0.0 LANGUAGES C)
+project(${P_NAME} LANGUAGES C)
 
 file(GLOB_RECURSE G_SOURCES src/file/*.c)
 list(APPEND SOURCES ${G_SOURCES})
@@ -87,16 +88,17 @@ endif()
 if(S_NAME STREQUAL "android")
   list(APPEND TCD C_NALI_S_ANDROID)
 
+  #//! audio android
   list(APPEND TLL
     log
     android
-    # OpenSLES
+    #OpenSLES
   )
 
   if(CLIENT)
     list(APPEND TLL ${CMAKE_SOURCE_DIR}/../android-ndk-r27d/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libvulkan.so)
 
-    #ffmpeg
+    #//.i ffmpeg
     list(APPEND TID ../FFmpeg/android/arm64/include)
     list(APPEND TLL
       ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libavcodec.so
@@ -106,7 +108,7 @@ if(S_NAME STREQUAL "android")
       ${CMAKE_SOURCE_DIR}/../FFmpeg/android/arm64/lib/libswresample.so
     )
 
-    #surface
+    #//.i surface
     file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
     list(APPEND SOURCES ${G_SOURCES})
   endif()
@@ -115,7 +117,7 @@ else()
   if(CLIENT)
     list(APPEND TLL vulkan)
 
-    #ffmpeg
+    #//.i ffmpeg
     list(APPEND TLL
       avcodec
       avformat
@@ -123,12 +125,12 @@ else()
       swresample
     )
 
-    #pipewire
+    #//.i pipewire
     list(APPEND TLL pipewire-0.3)
     list(APPEND TID /usr/include/spa-0.2)
     list(APPEND TID /usr/include/pipewire-0.3)
 
-    #wayland / surface
+    #//.i wayland / surface
     list(APPEND TLL
       wayland-client
       wayland-cursor

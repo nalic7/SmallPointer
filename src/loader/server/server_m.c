@@ -78,7 +78,7 @@ void lsm_rm_m(NALI_LB_MIT mi)
 
 void lsm_update()
 {
-	//!ai & path
+	//! ai & path
 }
 
 void lsm_send(NALI_LB_UT u)
@@ -125,7 +125,7 @@ void lsm_open()
 		lsm_m_i_p = malloc(0);
 		lsm_f_mi_p = malloc(0);
 
-		//!test s
+		//! test s
 		//s0-test world init
 		NALI_LB_CHT ch = 0;
 		NALI_LB_MIT mi = lsm_m_bl;

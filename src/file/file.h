@@ -5,6 +5,7 @@
 	#ifdef C_NALI_S_ANDROID
 		#define NALI_FACTORY NALI_F_HOME
 	#else
+		//.c source folder
 		#define NALI_F_FACTORY "../source/"
 		#define NALI_F_FACTORY_MODEL NALI_F_FACTORY "model"
 		#define NALI_F_FACTORY_KEYFRAME NALI_F_FACTORY "keyframe"
@@ -14,6 +15,7 @@
 #ifdef C_NALI_S_ANDROID
 	#define NALI_F_HOME
 
+	//.c package folder
 	#define NALI_F_PACKAGE "/storage/emulated/0/Android/data/com.nali.smallpointer/"
 	#define NALI_F_SAVE NALI_F_PACKAGE "save/"
 	#define NALI_F_READ_CACHE NALI_F_PACKAGE "c"
@@ -22,6 +24,7 @@
 	#define NALI_F_SAVE "save/"
 #endif
 
+//! will clean this
 #define NALI_F_HOME_SOUND NALI_F_HOME "sound/"
 #define NALI_F_HOME_SOUND_BGM NALI_F_HOME_SOUND "bgm.ogg"
 

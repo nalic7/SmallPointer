@@ -11,8 +11,6 @@ static void xdg_toplevel_listener_configure(void* data, struct xdg_toplevel* _xd
 		s_height = height;
 		wl_surface_commit(wlc_wl_surface_p);
 
-		//!this should fix wayland crash on startup
-		//!if not it should crash in other part of wayland
 		if (s_state & NALI_S_S_RENDER_ABLE)
 			s_state |= NALI_S_S_RE;
 	}

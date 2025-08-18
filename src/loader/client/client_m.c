@@ -135,9 +135,10 @@ void lcm_update()
 				//af -> af
 				//default a
 				VkDeviceSize vkdevicesize = lcp_vkdevicesize_p[lcp_joint_count_bl];
-				//!apply rgba for now
-				//!didn't apply ds index
-				//!didn't apply default a
+				//! renew
+				//apply rgba for now
+				//didn't apply ds index
+				//didn't apply default a
 				for (uint8_t l_2 = 0; l_2 < lcp_joint_count_p[_.m.m]; ++l_2)
 				{
 					*(float *)(lc_vkbuffer_p + vkdevicesize + l_2 * sizeof(float)) = 1;

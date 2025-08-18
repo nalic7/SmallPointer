@@ -1,8 +1,11 @@
 #ifndef NALI_LOADER_CLIENT_H
 #define NALI_LOADER_CLIENT_H
 
+//.c max fps/refresh rate
 #define NALI_LC_MAX_F 144.0F
 #define NALI_LC_D 1/NALI_LC_MAX_F
+
+//! will use more vkbuffer
 #define NALI_LC_P_BL 1024*1024*4
 
 extern NALI_LCS_DSIT *lc_dsi_p;

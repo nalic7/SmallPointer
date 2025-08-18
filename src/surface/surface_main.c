@@ -177,7 +177,7 @@ int main()
 
 		swlc_set();
 		vk_set();
-		//!switch to pipewire
+		//! switch to pipewire
 		// al_set();
 		lc_vk();
 		thrd_sleep(&(struct timespec){.tv_sec = 60*60, .tv_nsec = 0}, NULL);
