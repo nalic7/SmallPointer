@@ -3,15 +3,14 @@ cd ..
 rm -rf android-ndk-r27d
 rm -rf cmdline-tools
 rm -rf jdk-24.0.2
-rm -rf platforms
 wget https://dl.google.com/android/repository/android-ndk-r27d-linux.zip
 unzip android-ndk-r27d-linux.zip
 rm android-ndk-r27d-linux.zip
 wget https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip
 unzip commandlinetools-linux-13114758_latest.zip
 rm commandlinetools-linux-13114758_latest.zip
-wget wget https://download.java.net/java/GA/jdk24.0.2/fdc5d0102fe0414db21410ad5834341f/12/GPL/openjdk-24.0.2_linux-x64_bin.tar.gz
+wget https://download.java.net/java/GA/jdk24.0.2/fdc5d0102fe0414db21410ad5834341f/12/GPL/openjdk-24.0.2_linux-x64_bin.tar.gz
 tar -xf openjdk-24.0.2_linux-x64_bin.tar.gz
 rm openjdk-24.0.2_linux-x64_bin.tar.gz
-JAVA_HOME=$(pwd)/jdk-24.0.2 cmdline-tools/bin/sdkmanager "platforms;android-32" --sdk_root=$(pwd)
+JAVA_HOME=$(pwd)/jdk-24.0.2 cmdline-tools/bin/sdkmanager "platforms;android-32" --sdk_root=$(pwd)/cmdline-tools
 cd SmallPointer

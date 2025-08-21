@@ -10,6 +10,8 @@ extern VkImageView *vksc_vkswapchainkhr_vkimageview_p;
 extern VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p;
 
 extern uint8_t vksc_image;
+extern uint8_t vksc_frame;
+extern uint8_t vksc_buffer_frame;
 
 //extern VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
 

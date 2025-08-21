@@ -32,37 +32,20 @@
 
 extern float lcs_float_p[16*2];
 
-//VkDescriptorSet index
-#define NALI_LCS_DSIT uint8_t
-
 //c1j1
 //c1j0
 //t1j1u1v1
 //t1j0u1v1
 #define NALI_LCS_A_BL 2
 
-// extern NALI_LCS_DSIT lcs_a_bl_p[NALI_LCS_A_BL];
-// uint16_t
-// 	v_a_bl;
-
 extern VkDeviceSize *lcs_ib_p;
 extern uint32_t *lcs_ic_p;
 
 extern VkDeviceSize lcs_a_vkdevicesize_p[NALI_LCS_A_BL];
-// //jN
-// //default -> UBOB UBOA
-// 	*lcs_b_vkdevicesize_p[NALI_LCS_A_BL];
 
 extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
 extern VkDescriptorPool lcs_vkdescriptorpool;
 
-// extern NALI_LB_MIT *lcs__i_p[NALI_LCS_A_BL];
-
-// extern VkMappedMemoryRange *lcs_vkmappedmemoryrange_p;
-// extern uint16_t lcs_vkmappedmemoryrange_bl;
-
-//a_p[0] size
-//a_p[...]
 #define NALI_LCM__UPDATE_S_AD 1
 typedef struct
 {

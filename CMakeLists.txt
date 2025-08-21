@@ -3,9 +3,11 @@ cmake_minimum_required(VERSION 3.31)
 #//.c System
 set(S_NAME linux)
 #set(S_NAME android)
+#set(S_NAME mc)
 
 #//.c skip this for release
 set(TEST 1)
+set(TEST_3D 1)
 
 #//.c debug log
 set(DEBUG 1)
@@ -32,6 +34,12 @@ list(APPEND SOURCES ${G_SOURCES})
 
 if(TEST)
   list(APPEND TCD C_NALI_TEST)
+  if(TEST_3D)
+    list(APPEND TCD C_NALI_TEST_3D)
+
+    file(GLOB_RECURSE G_SOURCES src/test/3d/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+  endif()
 endif()
 
 list(APPEND SOURCES src/debug/debug.c)
@@ -56,7 +64,7 @@ list(APPEND SOURCES ${G_SOURCES})
 if(CLIENT)
   list(APPEND TCD C_NALI_CLIENT)
 
-  file(GLOB_RECURSE G_SOURCES src/vk/release/*.c)
+  file(GLOB_RECURSE G_SOURCES src/vk/*.c)
   list(APPEND SOURCES ${G_SOURCES})
   if (VK_DEBUG)
     list(APPEND TCD C_NALI_VK_DEBUG)
@@ -146,7 +154,16 @@ else()
 
     list(APPEND TID lib/wayland)
   endif()
-  add_executable(${P_NAME} ${SOURCES})
+  if(S_NAME STREQUAL "mc")
+    list(APPEND TCD C_NALI_S_MC)
+
+    list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include)
+    list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include/linux)
+
+    add_library(${P_NAME} SHARED ${SOURCES})
+  else()
+    add_executable(${P_NAME} ${SOURCES})
+  endif()
 endif()
 
 if(TID)

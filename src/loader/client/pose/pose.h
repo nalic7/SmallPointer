@@ -1,7 +1,6 @@
 #ifndef NALI_LOADER_CLIENT_POSE_H
 #define NALI_LOADER_CLIENT_POSE_H
 
-#define NALI_LCP_BONE_BL 52
 #define NALI_LCP_VP_BL sizeof(float) * 16 * 2 * 2
 
 extern uint32_t
@@ -16,10 +15,18 @@ extern uint8_t
 
 extern float **lcp_bp_p;
 
+//! lc_vkbuffer
+extern VkBuffer lcp_vkbuffer;
+//! lc_vkdevicememory
+extern VkDeviceMemory lcp_vkdevicememory;
+//! lc_vkbuffer_p
+extern void *lcp_vkbuffer_mp;
+//! lc_vkdevicesize
 extern VkDeviceSize *lcp_vkdevicesize_p;
 
 void lcp_set();
 void lcp_vk();
+void lcp_freeVk(uint32_t device);
 void lcp_free();
 
 #endif

@@ -16,6 +16,10 @@
 		NALI_D_LOG("fopen %p", file_p)
 
 		NALI_D_LOG("_SC_OPEN_MAX %ld", sysconf(_SC_OPEN_MAX))
+
+		char cwd[PATH_MAX];
+		NALI_D_LOG("getcwd %d", getcwd(cwd, sizeof(cwd)))
+		NALI_D_LOG("cwd %s", cwd)
 	}
 
 	// void d_write(uint8_t data_type, uint8_t *data_p, uint32_t data_bl)

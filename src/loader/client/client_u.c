@@ -1,3 +1,5 @@
+//! lcm_vkbuffer_mp
+
 NALI_LB_CHT *lcu_ch_p;
 uint8_t lcu_ch_bl = 0;
 uint8_t *lcu_xyz_p;
@@ -60,36 +62,37 @@ void lcu_update()
 		}
 	}
 
-	if (lcu_state)
-	{
-		//lcu_lb_u.rt_p
-		lb_u_update(lc_vkbuffer_p, lcu_rt_p[4], q_v4_array, q0_m4x4_array, q1_m4x4_array);
-
-		mv4_q(lcu_rt_p[3], 0, 0, q_v4_array);
-		mv4_q2m(q_v4_array, q0_m4x4_array);
-		memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
-		mm4x4_m(q1_m4x4_array, q0_m4x4_array, lc_vkbuffer_p);
-
-		memcpy(q2_m4x4_array, mm4x4_array, sizeof(mm4x4_array));
-
-		q2_m4x4_array[12] = lcu_rt_p[0];
-		q2_m4x4_array[13] = lcu_rt_p[1];
-		q2_m4x4_array[14] = lcu_rt_p[2];
-		memcpy(q1_m4x4_array, lc_vkbuffer_p, sizeof(float) * 16);
-		mm4x4_m(q2_m4x4_array, q1_m4x4_array, lc_vkbuffer_p);
-		// ((float *)m_vkbuffer_p)[12] = s_tx;
-		// ((float *)m_vkbuffer_p)[13] = s_ty;
-		// ((float *)m_vkbuffer_p)[14] = s_tz;
-
-		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
-		{
-			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-			.memory = lc_vkdevicememory,
-			.offset = 0,
-			.size = 16 * sizeof(float),
-			.pNext = VK_NULL_HANDLE
-		});
-	}
+	//! use lcv_vkbuffer
+//	if (lcu_state)
+//	{
+//		//lcu_lb_u.rt_p
+//		lb_u_update(lcm_vkbuffer_mp, lcu_rt_p[4], q_v4_array, q0_m4x4_array, q1_m4x4_array);
+//
+//		mv4_q(lcu_rt_p[3], 0, 0, q_v4_array);
+//		mv4_q2m(q_v4_array, q0_m4x4_array);
+//		memcpy(q1_m4x4_array, lcm_vkbuffer_mp, sizeof(float) * 16);
+//		mm4x4_m(q1_m4x4_array, q0_m4x4_array, lcm_vkbuffer_mp);
+//
+//		memcpy(q2_m4x4_array, mm4x4_array, sizeof(mm4x4_array));
+//
+//		q2_m4x4_array[12] = lcu_rt_p[0];
+//		q2_m4x4_array[13] = lcu_rt_p[1];
+//		q2_m4x4_array[14] = lcu_rt_p[2];
+//		memcpy(q1_m4x4_array, lcm_vkbuffer_mp, sizeof(float) * 16);
+//		mm4x4_m(q2_m4x4_array, q1_m4x4_array, lcm_vkbuffer_mp);
+//		// ((float *)m_vkbuffer_p)[12] = s_tx;
+//		// ((float *)m_vkbuffer_p)[13] = s_ty;
+//		// ((float *)m_vkbuffer_p)[14] = s_tz;
+//
+//		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
+//		{
+//			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+//			.memory = lcp_vkdevicememory,
+//			.offset = 0,
+//			.size = 16 * sizeof(float),
+//			.pNext = VK_NULL_HANDLE
+//		});
+//	}
 }
 
 void lcu_send()

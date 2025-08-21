@@ -11,7 +11,7 @@ cmake --build build-android-release
 ../android-ndk-r27d/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip build-android-release/libSmallPointer.so
 aapt2 link \
   -o build-android-release/smallpointer.apk \
-  -I ../platforms/android-32/android.jar \
+  -I ../cmdline-tools/platforms/android-32/android.jar \
   --manifest AndroidManifest.xml \
   -A asset
 mkdir -p apk/lib/arm64-v8a

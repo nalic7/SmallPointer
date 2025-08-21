@@ -7,6 +7,8 @@ VkImageView *vksc_vkswapchainkhr_vkimageview_p;
 VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p;
 
 uint8_t vksc_image;
+uint8_t vksc_frame = 0;
+uint8_t vksc_buffer_frame = 0;
 
 //VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
 
