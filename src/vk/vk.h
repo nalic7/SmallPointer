@@ -4,7 +4,7 @@
 //.c disable this to use all gpu
 #define NALI_VK_SGPU
 //.c sc info
-#define NALI_VK_INFO_SC
+//#define NALI_VK_INFO_SC
 
 #define NALI_VK_VERSION VK_API_VERSION_1_0//VK_API_VERSION_1_0 VK_API_VERSION_1_4
 

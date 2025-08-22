@@ -12,6 +12,7 @@ extern uint32_t s_height;
 #define NALI_S_S_EXIT 16
 #define NALI_S_S_EXIT_C 32
 #define NALI_S_S_EXIT_S 64
+#define NALI_S_S_VK 128
 extern uint8_t s_state;
 
 #endif

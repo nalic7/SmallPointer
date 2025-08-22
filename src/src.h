@@ -53,14 +53,14 @@
 			#include <pipewire/pipewire.h>
 
 			#include "surface/wayland/client/client.h"
-			#include "surface/wayland/client/register/register.h"
+			#include "surface/wayland/client/registry/registry.h"
 			#include "surface/wayland/client/seat/seat.h"
 			#include "surface/wayland/client/seat/keyboard/keyboard.h"
 			#include "surface/wayland/client/seat/pointer/pointer.h"
 			#include "surface/wayland/client/xdg/surface/surface.h"
 			#include "surface/wayland/client/xdg/toplevel/toplevel.h"
 			#include "surface/wayland/client/xdg/wm_base/wm_base.h"
-			#include "surface/wayland/client/zwp/zwp.h"
+			#include "surface/wayland/client/zwp/pointer/pointer.h"
 			#include "surface/wayland/client/zwp/locked/locked.h"
 			#include "surface/wayland/client/zwp/relative/relative.h"
 		#endif
@@ -99,7 +99,7 @@
 
 		//! audio data to 3d audio
 
-		#include "vk/vk/vk.h"
+		#include "vk/vk.h"
 		#include "vk/queue/device/physical_device/instance/instance.h"
 		#ifdef C_NALI_VK_DEBUG
 			#include "vk/debug/debug.h"

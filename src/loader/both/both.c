@@ -170,7 +170,7 @@ void lb_free1()
 	// al_clean();
 
 	#ifndef C_NALI_S_ANDROID
-		swlc_clean();
+		s_wlc_free();
 	#endif
 
 	mtx_destroy(lb_mtx_t_p);

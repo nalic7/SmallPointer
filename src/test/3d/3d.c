@@ -102,3 +102,8 @@ void t_3d()
 		.pNext = VK_NULL_HANDLE
 	});
 }
+
+void t_3d_buffer()
+{
+	++vksc_buffer_frame;
+}

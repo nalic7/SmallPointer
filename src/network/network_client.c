@@ -5,16 +5,16 @@ static socklen_t server_sockaddr_in_bl = sizeof(server_sockaddr_in);
 void nc_set()
 {
 	NALI_D_INFO("socket %d", server_fd = socket(AF_INET, SOCK_DGRAM, 0))
-	NALI_D_LOG("%s", strerror(errno))
+	//NALI_D_LOG("%s", strerror(errno))
 
 	NALI_D_INFO("fcntl %d", fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK))
-	NALI_D_LOG("%s", strerror(errno))
+	//NALI_D_LOG("%s", strerror(errno))
 
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
 	server_sockaddr_in.sin_addr.s_addr = NALI_NC_IP;
 	// NALI_D_INFO("inet_pton %d", inet_pton(AF_INET, NALI_NC_IP, &server_sockaddr_in.sin_addr))
-	NALI_D_LOG("%s", strerror(errno))
+	//NALI_D_LOG("%s", strerror(errno))
 
 	lcu_send();
 }

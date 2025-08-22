@@ -15,4 +15,3 @@ grep -rnwIA1 . -e '//!'
 ```
 grep -rnwIA1 . -e '//\.t'
 ```
-# [README](../README.md)

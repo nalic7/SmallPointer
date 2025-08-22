@@ -1,15 +1,17 @@
-static void wl_keyboard_listener_keymap(void* data, struct wl_keyboard* wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
+struct wl_keyboard *s_wlc_seat_kb_p;
+
+static void wl_keyboard_listener_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
 {
 	// NALI_D_LOG("wl_keyboard_listener_keymap fd %d", fd)
 }
 
-static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
+static void wl_keyboard_listener_key(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
 {
 	// NALI_D_LOG("wl_keyboard_listener_key key %d", key)
 	if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
 	{
 		if (key == KEY_TAB)
-			swlczwp_setPointer();
+			s_wlc_zwp_set();
 
 		if (key == KEY_W)
 			lcu_k ^= NALI_LB_K_W;
@@ -42,27 +44,27 @@ static void wl_keyboard_listener_key(void* data, struct wl_keyboard* wl_keyboard
 	}
 }
 
-static void wl_keyboard_listener_enter(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, struct wl_surface* surface, struct wl_array* keys)
+static void wl_keyboard_listener_enter(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, struct wl_surface *surface, struct wl_array *keys)
 {
 	// NALI_D_LOG("wl_keyboard_listener_enter")
 }
 
-static void wl_keyboard_listener_leave(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, struct wl_surface* surface)
+static void wl_keyboard_listener_leave(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, struct wl_surface *surface)
 {
 	// NALI_D_LOG("wl_keyboard_listener_leave")
 }
 
-static void wl_keyboard_listener_modifiers(void* data, struct wl_keyboard* wl_keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group)
+static void wl_keyboard_listener_modifiers(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group)
 {
 	// NALI_D_LOG("wl_keyboard_listener_modifiers group %d", group)
 }
 
-static void wl_keyboard_listener_repeat_info(void* data, struct wl_keyboard* wl_keyboard, int32_t rate, int32_t delay)
+static void wl_keyboard_listener_repeat_info(void *data, struct wl_keyboard *wl_keyboard, int32_t rate, int32_t delay)
 {
 	// NALI_D_LOG("wl_keyboard_listener_repeat_info")
 }
 
-struct wl_keyboard_listener swlcsk_wl_keyboard_listener =
+struct wl_keyboard_listener s_wlc_seat_kb_listener =
 {
 	.keymap = wl_keyboard_listener_keymap,
 	.enter = wl_keyboard_listener_enter,
@@ -71,3 +73,8 @@ struct wl_keyboard_listener swlcsk_wl_keyboard_listener =
 	.modifiers = wl_keyboard_listener_modifiers,
 	.repeat_info = wl_keyboard_listener_repeat_info
 };
+
+void s_wlc_seat_kb_free()
+{
+	wl_keyboard_destroy(s_wlc_seat_kb_p);
+}

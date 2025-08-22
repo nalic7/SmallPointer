@@ -1,3 +1,4 @@
+//.i linux
 int main()
 {
 	// fp_read(NALI_F_HOME NALI_F_HOME_IMAGE "/0.png", &(long){});
@@ -175,7 +176,7 @@ int main()
 	#ifdef C_NALI_CLIENT
 		lc_set();
 
-		swlc_set();
+		s_wlc_set();
 		vk_set();
 		//! switch to pipewire
 		// al_set();
@@ -186,35 +187,3 @@ int main()
 
 	//lb_loop();
 }
-
-#ifdef C_NALI_S_MC
-	void JNICALL mc_jvmtiEventClassLoad(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread, jclass klass)
-	{
-//		char *signature;
-//		char *generic;
-//		(*jvmti_env)->GetClassSignature(jvmti_env, klass, &signature, &generic);
-//		NALI_D_LOG("signature %s", signature);
-//		(*jvmti_env)->Deallocate(jvmti_env, (unsigned char*)signature);
-//		(*jvmti_env)->Deallocate(jvmti_env, (unsigned char*)generic);
-	}
-
-	JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved)
-	{
-		#ifdef C_NALI_DEBUG
-			d_set();
-		#endif
-
-		jvmtiEnv *jvmtienv;
-		NALI_D_LOG("getEnv %d", (*vm)->GetEnv(vm, (void**)&jvmtienv, JVMTI_VERSION_1_2));
-
-		jvmtiEventCallbacks jvmtieventcallbacks = {0};
-		jvmtieventcallbacks.ClassLoad = &mc_jvmtiEventClassLoad;
-
-		(*jvmtienv)->SetEventCallbacks(jvmtienv, &jvmtieventcallbacks, sizeof(jvmtieventcallbacks));
-		(*jvmtienv)->SetEventNotificationMode(jvmtienv, JVMTI_ENABLE, JVMTI_EVENT_CLASS_LOAD, NULL);
-
-		//! edit bytecode/switch to opengl
-		//main();
-		return JNI_OK;
-	}
-#endif

@@ -54,4 +54,3 @@ run/android-apk
 adb shell am start -n com.nali.smallpointer/android.app.NativeActivity
 adb shell cat storage/emulated/0/Android/data/com.nali.smallpointer/save/log.dat
 ```
-# [README](../README.md)

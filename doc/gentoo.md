@@ -162,4 +162,3 @@ tar -xf blender-4.5.1-linux-x64.tar.xz
 rm blender-4.5.1-linux-x64.tar.xz
 cd SmallPointer
 ```
-# [README](../README.md)

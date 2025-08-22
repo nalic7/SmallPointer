@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 
-#//.c System
-set(S_NAME linux)
+#//.c System (Linux by default)
 #set(S_NAME android)
 #set(S_NAME mc)
 
@@ -150,8 +149,6 @@ else()
     file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
     list(APPEND SOURCES ${G_SOURCES})
 
-    list(APPEND SOURCES src/surface/surface_main.c)
-
     list(APPEND TID lib/wayland)
   endif()
   if(S_NAME STREQUAL "mc")
@@ -160,8 +157,13 @@ else()
     list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include)
     list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include/linux)
 
+    file(GLOB_RECURSE G_SOURCES src/mc/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+
     add_library(${P_NAME} SHARED ${SOURCES})
   else()
+    list(APPEND SOURCES src/src.c)
+
     add_executable(${P_NAME} ${SOURCES})
   endif()
 endif()
@@ -172,4 +174,4 @@ endif()
 target_link_libraries(${P_NAME} ${TLL})
 target_compile_definitions(${P_NAME} PRIVATE ${TCD})
 
-target_precompile_headers(${P_NAME} PRIVATE src/pch.h)
+target_precompile_headers(${P_NAME} PRIVATE src/src.h)

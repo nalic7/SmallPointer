@@ -240,20 +240,13 @@ void freeCmdDraw()
 	#ifdef C_NALI_TEST_3D
 		t_3d();
 	#endif
+	s_state |= NALI_S_S_VK;
 	while (!(s_state & NALI_S_S_CLEAN))
 	{
-		vkWaitForFences(vkdevice, 1, vkfence_p + vksc_frame, VK_TRUE, UINT64_MAX);
-		vkResetFences(vkdevice, 1, &vkfence_p[vksc_frame]);
-
-		image_vksubmitinfo.pCommandBuffers = &vkcommandbuffer_p[vksc_frame];
-
-		image_vksubmitinfo.pWaitSemaphores = vksemaphore_p[vksc_frame];
-		image_vksubmitinfo.pSignalSemaphores = vksemaphore_p[vksc_frame] + 1;
-
-		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[vksc_frame] + 1;
-
-		//! check data
-		#ifndef C_NALI_TEST_3D
+		#ifdef C_NALI_TEST_3D
+			t_3d_buffer();
+		#else
+			//! check data
 			nc_send();
 
 			// clock_gettime(CLOCK_MONOTONIC, &delta_end);
@@ -272,6 +265,16 @@ void freeCmdDraw()
 			lcm_update();
 			// lcs_loop();
 		#endif
+
+		vkWaitForFences(vkdevice, 1, vkfence_p + vksc_frame, VK_TRUE, UINT64_MAX);
+		vkResetFences(vkdevice, 1, &vkfence_p[vksc_frame]);
+
+		image_vksubmitinfo.pCommandBuffers = &vkcommandbuffer_p[vksc_frame];
+
+		image_vksubmitinfo.pWaitSemaphores = vksemaphore_p[vksc_frame];
+		image_vksubmitinfo.pSignalSemaphores = vksemaphore_p[vksc_frame] + 1;
+
+		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[vksc_frame] + 1;
 
 		if (s_state & NALI_S_S_RE)
 		{

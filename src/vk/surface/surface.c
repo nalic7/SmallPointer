@@ -28,6 +28,7 @@ void vk_makeSurface()
 		while (!(s_state & NALI_S_S_RENDER_ABLE))
 		{
 			NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+			NALI_D_LOG("s_state %d", s_state)
 		}
 		NALI_D_INFO
 		(
@@ -38,8 +39,8 @@ void vk_makeSurface()
 				&(VkWaylandSurfaceCreateInfoKHR)
 				{
 					.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
-					.display = wlc_wl_display_client_p,
-					.surface = wlc_wl_surface_p,
+					.display = s_wlcd_p,
+					.surface = s_wlcs_p,
 					.flags = 0,
 					.pNext = VK_NULL_HANDLE
 				},
