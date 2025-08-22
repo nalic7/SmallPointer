@@ -1,16 +1,20 @@
-struct wl_pointer *s_wlc_seat_p_p;
+struct wl_pointer *s_wlc_seatp_p;
 
-static uint8_t swlcp_pointer = 0;
+uint32_t s_wlcp_serial = 0xFFFFFFFFu;
+
+static uint8_t pointer = 0;
 #define NALI_SWLCP_P_ROTATE 1
 #define NALI_SWLCP_P_MOVE 2
 #define NALI_SWLCP_P_ACT 4
 
 static void wl_pointer_listener_enter(void *data, struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface, wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
+	s_wlcp_serial = serial;
 }
 
 static void wl_pointer_listener_leave(void *data, struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface)
 {
+	s_wlcp_serial = 0xFFFFFFFFu;
 }
 
 static float x = 0, y = 0;
@@ -20,7 +24,7 @@ static void wl_pointer_listener_motion(void *data, struct wl_pointer *wl_pointer
 		l_x = wl_fixed_to_double(surface_x),
 		l_y = wl_fixed_to_double(surface_y);
 	mtx_lock(lb_mtx_t_p);
-	if (swlcp_pointer & NALI_SWLCP_P_ROTATE)
+	if (pointer & NALI_SWLCP_P_ROTATE)
 	{
 		lcu_xy_p[0] = l_x - x;
 		lcu_xy_p[1] = l_y - y;
@@ -41,15 +45,15 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 	{
 		case BTN_LEFT:
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				swlcp_pointer |= NALI_SWLCP_P_ACT;
+				pointer |= NALI_SWLCP_P_ACT;
 			else
-				swlcp_pointer &= 0xFFu - NALI_SWLCP_P_ACT;
+				pointer &= 0xFFu - NALI_SWLCP_P_ACT;
 			break;
 		case BTN_RIGHT:
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				swlcp_pointer |= NALI_SWLCP_P_ROTATE;
+				pointer |= NALI_SWLCP_P_ROTATE;
 			else
-				swlcp_pointer &= 0xFFu - NALI_SWLCP_P_ROTATE;
+				pointer &= 0xFFu - NALI_SWLCP_P_ROTATE;
 			break;
 		case BTN_MIDDLE:
 			mtx_lock(lb_mtx_t_p);
@@ -81,5 +85,5 @@ struct wl_pointer_listener s_wlc_seat_p_listener =
 
 void s_wlc_seat_p_free()
 {
-	wl_pointer_destroy(s_wlc_seat_p_p);
+	wl_pointer_destroy(s_wlc_seatp_p);
 }

@@ -9,8 +9,8 @@ static void wl_seat_listener_capabilities(void *data, struct wl_seat *wl_seat, u
 	}
 	if (capabilities & WL_SEAT_CAPABILITY_POINTER)
 	{
-		NALI_D_INFO("wl_seat_get_pointer %p", s_wlc_seat_p_p = wl_seat_get_pointer(wl_seat))
-		NALI_D_INFO("wl_pointer_add_listener %d", wl_pointer_add_listener(s_wlc_seat_p_p, &s_wlc_seat_p_listener, NULL))
+		NALI_D_INFO("wl_seat_get_pointer %p", s_wlc_seatp_p = wl_seat_get_pointer(wl_seat))
+		NALI_D_INFO("wl_pointer_add_listener %d", wl_pointer_add_listener(s_wlc_seatp_p, &s_wlc_seat_p_listener, NULL))
 	}
 }
 
