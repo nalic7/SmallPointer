@@ -353,7 +353,7 @@ void freeCmdDraw()
 				for (uint32_t l_0 = 0; l_0 < lcs_s_bl; ++l_0)
 				{
 					lcs__ _ = lcs___p[lcs_s_p[l_0]._];
-					vkCmdBindDescriptorSets(vkcommandbuffer_p[vksc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, &_.vkdescriptorset, 0, VK_NULL_HANDLE);
+					vkCmdBindDescriptorSets(vkcommandbuffer_p[vksc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, _.vkdescriptorset_p + vksc_buffer_frame, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
 					vkCmdBindVertexBuffers(vkcommandbuffer_p[vksc_frame], 0, 1, &lcp_vkbuffer, lcs_a_vkdevicesize_p + _.mab);
 

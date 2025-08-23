@@ -46,14 +46,7 @@ const float lb_mdp_p[NALI_LB_MDP_BL][3] =
 //a k_s k_e
 const NALI_LB_AKT lb_ak_p[NALI_LB_AK_BL][3] =
 {
-	//loop 2 4 on server
-	//check [0] for a
-	//if < keep ->
-	// {0, 5}
-	{0, 0, 2},
-	{0, 2, 4},
-	//left to 5
-	{0, 4, 5}
+	{0, 3, 5},
 };
 
 // uint8_t lb_ms_abl_p[NALI_LB_N_MAX] =

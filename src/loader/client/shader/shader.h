@@ -30,8 +30,6 @@
 		} \
 	};
 
-extern float lcs_float_p[16*2];
-
 //c1j1
 //c1j0
 //t1j1u1v1
@@ -70,7 +68,7 @@ typedef struct
 {
 	lcs__m m;
 
-	VkDescriptorSet vkdescriptorset;
+	VkDescriptorSet *vkdescriptorset_p;
 	const NALI_LCS_AIT *a_p;
 	uint8_t mab;
 	// VkDeviceSize *vkdevicesize_p;
@@ -89,7 +87,7 @@ typedef struct
 } lcs_s;
 extern lcs_s *lcs_s_p;
 
-void lcs_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj);
+void lcs_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj);
 
 void lcs_set();
 // void lcs_loop();

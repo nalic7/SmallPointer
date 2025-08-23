@@ -24,7 +24,8 @@
 #define NALI_M_R2D(v) ((v) * 180.0 / M_PI)
 
 //animation
-#define NALI_M_LERP(a, b, t) (a) + ((b) - (a)) * (t)
+//! clean this
+#define NALI_M_LERP(a, b, t) (a) = (a) + ((b) - (a)) * (t)
 
 //hash
 #define NALI_M_H3(x, y, z, m) x * m * m + y * m + z

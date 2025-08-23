@@ -57,7 +57,7 @@ extern const uint8_t lb_mab_p[NALI_LB_MA_BL];
 #define NALI_LB_MDP_BL 4
 extern const float lb_mdp_p[NALI_LB_MDP_BL][3];
 //[NALI_LB_AT]
-#define NALI_LB_AK_BL 3
+#define NALI_LB_AK_BL 1
 extern const NALI_LB_AKT lb_ak_p[NALI_LB_AK_BL][3];
 // extern uint8_t lb_ms_abl_p[NALI_LB_N_MAX];
 // extern VkDeviceSize lb_ms_vkdevicesize_p[NALI_LB_N_MAX];
