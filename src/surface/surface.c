@@ -1,5 +1,5 @@
 uint32_t
-	s_width = 1,
-	s_height = 1;
+	_sf_width = 1,
+	_sf_height = 1;
 
-uint8_t s_state = 0;
+uint8_t _sf_state = 0;

@@ -10,10 +10,10 @@ NS ns_p[NALI_LB_UM];
 void ns_set()
 {
 	NALI_D_INFO("socket %d", server_fd = socket(AF_INET, SOCK_DGRAM, 0))
-	NALI_D_LOG("%s", strerror(errno))
+//	NALI_D_LOG("%s", strerror(errno))
 
 	NALI_D_INFO("fcntl %d", fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK))
-	NALI_D_LOG("%s", strerror(errno))
+//	NALI_D_LOG("%s", strerror(errno))
 
 	struct sockaddr_in server_sockaddr_in;
 	memset(&server_sockaddr_in, 0, sizeof(struct sockaddr_in));
@@ -21,7 +21,7 @@ void ns_set()
 	server_sockaddr_in.sin_addr.s_addr = INADDR_ANY;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
 	NALI_D_INFO("bind %d", bind(server_fd, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)))
-	NALI_D_LOG("%s", strerror(errno))
+//	NALI_D_LOG("%s", strerror(errno))
 }
 
 void ns_send(NALI_LB_UT ui)

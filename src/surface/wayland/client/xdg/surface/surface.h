@@ -1,9 +1,9 @@
-#ifndef NALI_WAYLAND_CLIENT_SURFACE_H
-#define NALI_WAYLAND_CLIENT_SURFACE_H
-	extern struct xdg_surface *s_wlc_xdgs_p;
+#ifndef _SF_WLC_XDG_SF_H
+#define _SF_WLC_XDG_SF_H
+	extern struct xdg_surface *_sf_wlc_xdg_sf_p;
 
-	extern struct xdg_surface_listener s_wlc_xdgs_listener;
+	extern struct xdg_surface_listener _sf_wlc_xdg_sf_listener;
 
-	void s_wlc_xdgs_set();
-	void s_wlc_xdgs_free();
+	void _sf_wlc_xdg_sf_set();
+	void _sf_wlc_xdg_sf_free();
 #endif

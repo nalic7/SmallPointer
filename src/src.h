@@ -29,7 +29,7 @@
 
 			#include <SLES/OpenSLES.h>
 
-			#include "surface/android/android.h"
+			#include "android/android.h"
 			#include <android/configuration.h>
 		#endif
 	#else
@@ -59,7 +59,7 @@
 			#include "surface/wayland/client/seat/pointer/pointer.h"
 			#include "surface/wayland/client/xdg/surface/surface.h"
 			#include "surface/wayland/client/xdg/toplevel/toplevel.h"
-			#include "surface/wayland/client/xdg/wm_base/wm_base.h"
+			#include "surface/wayland/client/xdg/wm/wm.h"
 			#include "surface/wayland/client/zwp/pointer/pointer.h"
 			#include "surface/wayland/client/zwp/locked/locked.h"
 			#include "surface/wayland/client/zwp/relative/relative.h"
@@ -79,7 +79,7 @@
 	#include "ffmpeg/ffmpeg.h"
 	//e0-ffmpeg
 
-	#include "loader/both/both.h"
+	#include "raw/both/both.h"
 	#include "entity/both/pomi0/pomi0.h"
 	#include "entity/both/pomi1/pomi1.h"
 	#include "entity/both/pomi2/pomi2.h"
@@ -99,55 +99,55 @@
 
 		//! audio data to 3d audio
 
-		#include "vk/vk.h"
-		#include "vk/queue/device/physical_device/instance/instance.h"
-		#ifdef C_NALI_VK_DEBUG
-			#include "vk/debug/debug.h"
+		#include "render/vk/vk.h"
+		#include "render/vk/queue/device/physical_device/instance/instance.h"
+		#ifdef C__VK_DEBUG
+			#include "render/vk/debug/debug.h"
 		#endif
-		#include "vk/queue/device/physical_device/physical_device.h"
-		#include "vk/queue/device/device.h"
-		#include "vk/queue/queue.h"
-		#include "vk/surface/surface.h"
-		#include "vk/renderpass.h"
-		#include "vk/framebuffer.h"
-		#include "vk/swapchain/swapchain.h"
-		#include "vk/fence.h"
-		#include "vk/semaphore/semaphore.h"
-		#include "vk/commandbuffer/commandpool/commandpool.h"
-		#include "vk/commandbuffer/commandbuffer.h"
-		#include "vk/buffer/buffer.h"
-		#include "vk/imageview/image.h"
-		#include "vk/imageview/imageview.h"
-		#include "vk/shadermodule/shadermodule.h"
-		#include "vk/sampler.h"
+		#include "render/vk/queue/device/physical_device/physical_device.h"
+		#include "render/vk/queue/device/device.h"
+		#include "render/vk/queue/queue.h"
+		#include "render/vk/surface/surface.h"
+		#include "render/vk/renderpass.h"
+		#include "render/vk/framebuffer.h"
+		#include "render/vk/swapchain/swapchain.h"
+		#include "render/vk/fence.h"
+		#include "render/vk/semaphore/semaphore.h"
+		#include "render/vk/commandbuffer/commandpool/commandpool.h"
+		#include "render/vk/commandbuffer/commandbuffer.h"
+		#include "render/vk/buffer/buffer.h"
+		#include "render/vk/imageview/image.h"
+		#include "render/vk/imageview/imageview.h"
+		#include "render/vk/shadermodule/shadermodule.h"
+		#include "render/vk/sampler.h"
 
-		#include "vk/descriptorset/descriptorset.h"
-		#include "vk/descriptorset/layout/layout.h"
-		#include "vk/descriptorset/pool/pool.h"
+		#include "render/vk/descriptorset/descriptorset.h"
+		#include "render/vk/descriptorset/layout/layout.h"
+		#include "render/vk/descriptorset/pool/pool.h"
 
-		#include "vk/graphicspipeline/pipelinelayout/pipelinelayout.h"
-		#include "vk/graphicspipeline/colorblendstatecreateinfo.h"
-		#include "vk/graphicspipeline/dynamicstatecreateinfo.h"
-		#include "vk/graphicspipeline/inputassemblystatecreateinfo.h"
-		#include "vk/graphicspipeline/multisamplestatecreateinfo.h"
-		#include "vk/graphicspipeline/rasterizationstatecreateinfo.h"
-		#include "vk/graphicspipeline/shaderstagecreateinfo/shaderstagecreateinfo.h"
-		#include "vk/graphicspipeline/vertexinputstatecreateinfo.h"
-		#include "vk/graphicspipeline/viewportstatecreateinfo.h"
-		#include "vk/graphicspipeline/depthstencilstatecreateinfo.h"
-		#include "vk/graphicspipeline/graphicspipeline.h"
+		#include "render/vk/graphicspipeline/pipelinelayout/pipelinelayout.h"
+		#include "render/vk/graphicspipeline/colorblendstatecreateinfo.h"
+		#include "render/vk/graphicspipeline/dynamicstatecreateinfo.h"
+		#include "render/vk/graphicspipeline/inputassemblystatecreateinfo.h"
+		#include "render/vk/graphicspipeline/multisamplestatecreateinfo.h"
+		#include "render/vk/graphicspipeline/rasterizationstatecreateinfo.h"
+		#include "render/vk/graphicspipeline/shaderstagecreateinfo/shaderstagecreateinfo.h"
+		#include "render/vk/graphicspipeline/vertexinputstatecreateinfo.h"
+		#include "render/vk/graphicspipeline/viewportstatecreateinfo.h"
+		#include "render/vk/graphicspipeline/depthstencilstatecreateinfo.h"
+		#include "render/vk/graphicspipeline/graphicspipeline.h"
 
-		#include "vk/cmd/cmd.h"
-		#include "vk/cmd/image/image.h"
-		#include "vk/cmd/draw/draw.h"
+		#include "render/vk/cmd/cmd.h"
+		#include "render/vk/cmd/image/image.h"
+		#include "render/vk/cmd/draw/draw.h"
 
-		#include "loader/client/client_a.h"
-		#include "loader/client/client_u.h"
-		#include "loader/client/client_m.h"
-		#include "loader/client/keyframe/keyframe.h"
-		#include "loader/client/shader/shader.h"
-		#include "loader/client/pose/pose.h"
-		#include "loader/client/client.h"
+		#include "raw/client/clienta.h"
+		#include "raw/client/clientu.h"
+		#include "raw/client/clientm.h"
+		#include "raw/client/keyframe/keyframe.h"
+		#include "raw/client/shader/shader.h"
+		#include "raw/client/pose/pose.h"
+		#include "raw/client/client.h"
 		#include "network/network_client.h"
 	#endif
 
@@ -156,10 +156,10 @@
 		// #include <stdint.h>
 		// #include <sys/epoll.h>
 
-		#include "loader/server/server.h"
-		#include "loader/server/server_a.h"
-		#include "loader/server/server_u.h"
-		#include "loader/server/server_m.h"
+		#include "raw/server/server.h"
+		#include "raw/server/servera.h"
+		#include "raw/server/serveru.h"
+		#include "raw/server/serverm.h"
 		#include "network/network_server.h"
 
 		#include "entity/server/pomi0/pomi0.h"

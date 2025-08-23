@@ -14,12 +14,19 @@ set(DEBUG 1)
 #//.c gen asset/skip this for release
 set(GEN 1)
 
+#//.c surface
+set(WL 1)
+#set(X11 1)
+
+#//.c render
+set(VK 1)
+  #//.c vk debug layer
+  set(VK_DEBUG 1)
+#set(GL 1)
+
 #//.c runtime
 set(CLIENT 1)
 #set(SERVER 1)
-
-#//.c vk debug layer
-set(VK_DEBUG 1)
 
 set(P_NAME SmallPointer)
 project(${P_NAME} LANGUAGES C)
@@ -54,7 +61,7 @@ if(GEN)
   list(APPEND TID ../cgltf)
 endif()
 
-file(GLOB_RECURSE G_SOURCES src/loader/both/*.c)
+file(GLOB_RECURSE G_SOURCES src/raw/both/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
 file(GLOB_RECURSE G_SOURCES src/entity/both/*.c)
@@ -63,16 +70,20 @@ list(APPEND SOURCES ${G_SOURCES})
 if(CLIENT)
   list(APPEND TCD C_NALI_CLIENT)
 
-  file(GLOB_RECURSE G_SOURCES src/vk/*.c)
-  list(APPEND SOURCES ${G_SOURCES})
-  if (VK_DEBUG)
-    list(APPEND TCD C_NALI_VK_DEBUG)
-    list(APPEND SOURCES src/vk/debug/debug.c)
+  if(VK)
+    list(APPEND TCD C_NALI_VK)
+
+    file(GLOB_RECURSE G_SOURCES src/vk/*.c)
+    list(APPEND SOURCES ${G_SOURCES})
+    if (VK_DEBUG)
+      list(APPEND TCD C_NALI_VK_DEBUG)
+      list(APPEND SOURCES src/vk/debug/debug.c)
+    endif()
   endif()
 
   list(APPEND SOURCES src/surface/surface.c)
 
-  file(GLOB_RECURSE G_SOURCES src/loader/client/*.c)
+  file(GLOB_RECURSE G_SOURCES src/raw/client/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
   list(APPEND SOURCES src/network/network_client.c)
@@ -83,7 +94,7 @@ endif()
 if(SERVER)
   list(APPEND TCD C_NALI_SERVER)
 
-  file(GLOB_RECURSE G_SOURCES src/loader/server/*.c)
+  file(GLOB_RECURSE G_SOURCES src/raw/server/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
   list(APPEND SOURCES src/network/network_server.c)
@@ -138,18 +149,22 @@ else()
     list(APPEND TID /usr/include/pipewire-0.3)
 
     #//.i wayland / surface
-    list(APPEND TLL
-      wayland-client
-      wayland-cursor
-    )
+    if(WL)
+      list(APPEND TCD C_NALI_WL)
 
-    file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
+      list(APPEND TLL
+        wayland-client
+        wayland-cursor
+      )
 
-    file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
+      file(GLOB_RECURSE G_SOURCES lib/wayland/*.c)
+      list(APPEND SOURCES ${G_SOURCES})
 
-    list(APPEND TID lib/wayland)
+      file(GLOB_RECURSE G_SOURCES src/surface/wayland/*.c)
+      list(APPEND SOURCES ${G_SOURCES})
+
+      list(APPEND TID lib/wayland)
+    endif()
   endif()
   if(S_NAME STREQUAL "mc")
     list(APPEND TCD C_NALI_S_MC)

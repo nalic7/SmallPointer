@@ -176,7 +176,7 @@ int main()
 	#ifdef C_NALI_CLIENT
 		lc_set();
 
-		s_wlc_set();
+		_sf_wlc_set();
 		vk_set();
 		//! switch to pipewire
 		// al_set();

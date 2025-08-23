@@ -1,4 +1,0 @@
-#ifndef NALI_LOADER_CLIENT_I_H
-#define NALI_LOADER_CLIENT_I_H
-
-#endif

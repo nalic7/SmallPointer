@@ -1,9 +1,9 @@
-#ifndef NALI_WAYLAND_CLIENT_H
-#define NALI_WAYLAND_CLIENT_H
-	extern struct wl_display *s_wlcd_p;
-	extern struct wl_compositor *s_wlcc_p;
-	extern struct wl_surface *s_wlcs_p;
+#ifndef _SF_WLC_H
+#define _SF_WLC_H
+	extern struct wl_display *_sf_wlc_dp_p;
+	extern struct wl_compositor *_sf_wlc_cot_p;
+	extern struct wl_surface *_sf_wlc_sf_p;
 
-	void s_wlc_set();
-	void s_wlc_free();
+	void _sf_wlc_set();
+	void _sf_wlc_free();
 #endif
