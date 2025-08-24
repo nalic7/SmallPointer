@@ -1,6 +1,6 @@
 void *f_read(const char *c_p, uint32_t *bl_p)
 {
-#ifdef C_NALI_S_ANDROID
+#ifdef _CM_ST_ANDROID
 	AAssetManager *aassetmanager_p = sa_anativeactivity_p->assetManager;
 	AAsset *aasset_p = AAssetManager_open(aassetmanager_p, c_p, AASSET_MODE_BUFFER);
 	*bl_p = AAsset_getLength(aasset_p);

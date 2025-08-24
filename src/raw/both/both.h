@@ -102,13 +102,13 @@ typedef struct
 
 typedef struct
 {
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		uint16_t
 			**bs_p,
 			**be_p;
 		//server
 	#endif
-	#ifdef C_NALI_SERVER
+	#ifdef _CM_SERVER
 	#endif
 	uint8_t *d_p;
 	uint32_t *d_bl_p;

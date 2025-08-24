@@ -1,52 +1,50 @@
 # Build
->Start Path
-```bash
-git clone https://github.com/spacecat393/SmallPointer
-cd SmallPointer
-chmod +x run/*
+>Dat2Raw (Gen)
 ```
->Wayland (Linux)
-```bash
-run/wayland
+Export glb to "source/model" without Shape Keys and Animation.
+Run Script KeyFrame and move to "source/keyframe".
 ```
->FFMPEG (Android)
-```bash
-cd ..
-git clone --branch release/7.1 https://github.com/FFmpeg/FFmpeg.git
-cd FFmpeg
-../SmallPointer/run/ffmpeg-android
-cd ../SmallPointer
-```
->cgltf (Header)
+>Gen (Linux)
 ```bash
 cd ..
 git clone https://github.com/jkuhlmann/cgltf
 cd SmallPointer
+run/config
+run/config-gen
+cmake -DCMAKE_BUILD_TYPE=Debug -B build-debug -S .
+run/gdb
 ```
->Vulkan (Compile Shader)
+>Linux
 ```bash
-run/vulkan
+run/lib-wayland
+run/shader-vulkan
+run/config
+run/config-linux
 ```
->Compile (Release)
+>Compile (Linux-Release)
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Release -B build-release -S .
-cmake --build build-release -j$(nproc)
+cmake --build build-release
 ```
->Compile (Debug)
+>Compile (Linux-Debug)
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Debug -B build-debug -S .
-cmake --build build-debug -j$(nproc)
+cmake --build build-debug
 ```
 >Debug (Linux)
 ```bash
 run/gdb
 ```
->Android Tool
+>Android
 ```bash
 run/android-tool
-```
->Compile/Install (Release Android)
-```bash
+cd ..
+git clone --branch release/7.1 https://github.com/FFmpeg/FFmpeg.git
+cd FFmpeg
+../SmallPointer/run/android-ffmpeg
+cd ../SmallPointer
+run/config
+run/config-android
 run/android-apk
 ```
 >Run/Log (Android)

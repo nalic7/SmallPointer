@@ -1,35 +1,33 @@
-#ifndef _VK_IMAGEVIEW_H
-#define _VK_IMAGEVIEW_H
-
-//mipmap 1
-#define VK_makeImageView(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
-	NALI_D_INFO \
-	( \
-		"vkCreateImageView %d", \
-		vkCreateImageView \
+#ifndef _VK_IMV_H
+#define _VK_IMV_H
+	//mipmap 1
+	#define _VK_IMV_MAKE(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
+		NALI_D_INFO \
 		( \
-			vkqd_vkdevice_p[device], \
-			&(VkImageViewCreateInfo) \
-			{ \
-				.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, \
-				.image = vkimage, \
-				.viewType = VK_IMAGE_VIEW_TYPE_2D, \
-				.format = vkformat, \
-				.subresourceRange.aspectMask = vkimageaspectflags, \
-				.subresourceRange.baseMipLevel = 0, \
-				.subresourceRange.levelCount = mipmap, \
-				.subresourceRange.baseArrayLayer = 0, \
-				.subresourceRange.layerCount = 1, \
-				.components.r = VK_COMPONENT_SWIZZLE_IDENTITY, \
-				.components.g = VK_COMPONENT_SWIZZLE_IDENTITY, \
-				.components.b = VK_COMPONENT_SWIZZLE_IDENTITY, \
-				.components.a = VK_COMPONENT_SWIZZLE_IDENTITY, \
-				.flags = 0, \
-				.pNext = VK_NULL_HANDLE \
-			}, \
-			VK_NULL_HANDLE, \
-			vkimageview_p \
-		) \
-	)
-
+			"vkCreateImageView %d", \
+			vkCreateImageView \
+			( \
+				_vkq_dv_p[device], \
+				&(VkImageViewCreateInfo) \
+				{ \
+					.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, \
+					.image = vkimage, \
+					.viewType = VK_IMAGE_VIEW_TYPE_2D, \
+					.format = vkformat, \
+					.subresourceRange.aspectMask = vkimageaspectflags, \
+					.subresourceRange.baseMipLevel = 0, \
+					.subresourceRange.levelCount = mipmap, \
+					.subresourceRange.baseArrayLayer = 0, \
+					.subresourceRange.layerCount = 1, \
+					.components.r = VK_COMPONENT_SWIZZLE_IDENTITY, \
+					.components.g = VK_COMPONENT_SWIZZLE_IDENTITY, \
+					.components.b = VK_COMPONENT_SWIZZLE_IDENTITY, \
+					.components.a = VK_COMPONENT_SWIZZLE_IDENTITY, \
+					.flags = 0, \
+					.pNext = VK_NULL_HANDLE \
+				}, \
+				VK_NULL_HANDLE, \
+				vkimageview_p \
+			) \
+		)
 #endif

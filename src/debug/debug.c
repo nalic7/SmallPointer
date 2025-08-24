@@ -1,4 +1,4 @@
-#ifdef C_NALI_DEBUG
+#ifdef _CM_DEBUG
 	mtx_t *d_mtx_t_p = &(mtx_t){};
 
 	static FILE *file_p;

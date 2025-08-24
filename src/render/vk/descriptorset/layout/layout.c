@@ -1,11 +1,11 @@
-void vkdslo_make(uint32_t device, VkDescriptorSetLayoutBinding *vkdescriptorsetlayoutbinding_p, uint32_t vkdescriptorsetlayoutbinding_size, VkDescriptorSetLayout *vkdescriptorsetlayout_p)
+void _vk_dsps_lo_make(uint32_t device, VkDescriptorSetLayoutBinding *vkdescriptorsetlayoutbinding_p, uint32_t vkdescriptorsetlayoutbinding_size, VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 {
 	NALI_D_INFO
 	(
 		"vkCreateDescriptorSetLayout %d",
 		vkCreateDescriptorSetLayout
 		(
-			vkqd_vkdevice_p[device],
+			_vkq_dv_p[device],
 			&(VkDescriptorSetLayoutCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,

@@ -5,7 +5,7 @@ void vkgplpllo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayou
 		"vkCreatePipelineLayout %d",
 		vkCreatePipelineLayout
 		(
-			vkqd_vkdevice_p[device],
+			_vkq_dv_p[device],
 			&(VkPipelineLayoutCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,

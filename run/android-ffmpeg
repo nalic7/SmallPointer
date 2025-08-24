@@ -32,5 +32,5 @@ STRIP=$TOOLCHAIN/bin/llvm-strip
   --enable-demuxer=ogg \
   --enable-decoder=vorbis
 
-make -j$(nproc)
+make
 make install

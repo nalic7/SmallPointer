@@ -236,7 +236,7 @@
 // 		}
 // 		line = m_nali_g_image_state_uint8_t_p[u / (8/2)] & 2 << (u % (8/2)) * 2;
 
-// 		VK_makeImage
+// 		_VK_IM_MAKE
 // 		(
 // 			vk_device,
 // 			_VK_COLOR_FORMAT,
@@ -256,15 +256,15 @@
 // 			VK_SAMPLE_COUNT_1_BIT,
 // 			&m_nali_g_image_vkimage_p[u]
 // 		)
-// 		VK_genImage(vk_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
+// 		_VK_IM_GEN(vk_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
 // 		vkdevicesize = m_nali_g_image_wh_uint32_t_p[u2] * m_nali_g_image_wh_uint32_t_p[u2_1] * _VK_COLOR_FORMAT_BYTE;
-// 		// vk_mapBuffer(vk_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
+// 		// _VK_BF_MAP(vk_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
 
-// 		VK_makeBuffer(vk_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
-// 		VK_mapBuffer(vk_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
+// 		_VK_BF_MAKE(vk_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
+// 		_VK_BF_MAP(vk_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
 
-// 		VK_makeImageView(vk_device, m_nali_g_image_vkimage_p[u], _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
-// 		VK_makeSampler(vk_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
+// 		_VK_IMV_MAKE(vk_device, m_nali_g_image_vkimage_p[u], _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
+// 		_VK_SP_MAKE(vk_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
 
 // 		// info("&m_nali_g_image_vkbuffer_p[0] %p", &m_nali_g_image_vkbuffer_p[0]);
 // 		// info("&m_nali_g_image_vkbuffer_vkdevicememory_p[0] %p", &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
@@ -274,7 +274,7 @@
 
 // static void clear(uint32_t device)
 // {
-// 	VkDevice vkdevice = vkqd_vkdevice_p[device];
+// 	VkDevice vkdevice = _vkq_dv_p[device];
 
 // 	//s0-image
 // 	for (uint32_t i = 0; i < m_nali_g_max_image; ++i)

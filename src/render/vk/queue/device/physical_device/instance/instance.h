@@ -1,20 +1,11 @@
-#ifndef _VK_INSTANCE_H
-#define _VK_INSTANCE_H
+#ifndef _VKQ_DV_PSCDV_IT_H
+#define _VKQ_DV_PSCDV_IT_H
+	extern VkInstance _vkq_dv_pscdv_it;
 
-extern VkInstance vkqdpdi_vkinstance;
+	#ifdef _CM_DEBUG
+		extern const char *_vkq_dv_pscdv_it_layer_p[1];
+	#endif
 
-// extern const char *vkqdpdi_ppEnabledExtensionNames[
-// #ifdef C__VK_DEBUG
-// 	3
-// #else
-// 	2
-// #endif
-// ];
-#ifdef C__VK_DEBUG
-	extern const char *vkqdpdi_ppEnabledLayerNames[1];
-#endif
-
-void vkqdpdi_make();
-void vkqdpdi_free();
-
+	void _vkq_dv_pscdv_it_make();
+	void _vkq_dv_pscdv_it_free();
 #endif

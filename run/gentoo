@@ -1,0 +1,3 @@
+#!/bin/bash
+emerge -qa gui-wm/hyprland media-libs/vulkan-layers sys-devel/gcc dev-debug/gdb x11-terms/kitty app-editors/vim \
+dev-util/android-sdk-build-tools app-arch/zip app-arch/unzip dev-util/android-tools

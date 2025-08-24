@@ -1,8 +1,8 @@
-VkSurfaceKHR vks_vksurfacekhr = VK_NULL_HANDLE;
+VkSurfaceKHR _vk_sf_khr = VK_NULL_HANDLE;
 
-void vk_makeSurface()
+void _vk_sf_make()
 {
-	#ifdef C_NALI_S_ANDROID
+	#ifdef _CM_ST_ANDROID
 		while (sa_anativewindow_p == NULL)
 		{
 			NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
@@ -12,7 +12,7 @@ void vk_makeSurface()
 			"vkCreateAndroidSurfaceKHR %d",
 			vkCreateAndroidSurfaceKHR
 			(
-				vkqdpdi_vkinstance,
+				_vkq_dv_pscdv_it,
 				&(VkAndroidSurfaceCreateInfoKHR)
 				{
 					.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
@@ -21,7 +21,7 @@ void vk_makeSurface()
 					.pNext = VK_NULL_HANDLE
 				},
 				VK_NULL_HANDLE,
-				&vks_vksurfacekhr
+				&_vk_sf_khr
 			)
 		)
 	#else
@@ -35,7 +35,7 @@ void vk_makeSurface()
 			"vkCreateWaylandSurfaceKHR %d",
 			vkCreateWaylandSurfaceKHR
 			(
-				vkqdpdi_vkinstance,
+				_vkq_dv_pscdv_it,
 				&(VkWaylandSurfaceCreateInfoKHR)
 				{
 					.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
@@ -45,15 +45,14 @@ void vk_makeSurface()
 					.pNext = VK_NULL_HANDLE
 				},
 				VK_NULL_HANDLE,
-				&vks_vksurfacekhr
+				&_vk_sf_khr
 			)
 		)
-		// _sf_state |= NALI_S_S_CONFIG;
 	#endif
 }
 
-void vk_freeSurface()
+void _vk_sf_free()
 {
-	vkDestroySurfaceKHR(vkqdpdi_vkinstance, vks_vksurfacekhr, NULL);
-	vks_vksurfacekhr = VK_NULL_HANDLE;
+	vkDestroySurfaceKHR(_vkq_dv_pscdv_it, _vk_sf_khr, NULL);
+	_vk_sf_khr = VK_NULL_HANDLE;
 }

@@ -1,6 +1,6 @@
 #ifndef NALI_PCH_H
 #define NALI_PCH_H
-	#ifdef C_NALI_S_MC
+	#ifdef _CM_ST_MC
 		#include <jvmti.h>
 	#endif
 
@@ -14,11 +14,11 @@
 
 	#include <string.h>
 
-	#ifdef C_NALI_S_ANDROID
+	#ifdef _CM_ST_ANDROID
 		//#include <jni.h>
 		//#include <jvmti.h>
 
-		#ifdef C_NALI_CLIENT
+		#ifdef _CM_CLIENT
 			#define VK_USE_PLATFORM_ANDROID_KHR
 			#include <vulkan/vulkan.h>
 
@@ -36,7 +36,7 @@
 		#include <stdio.h>
 		#include <stdlib.h>
 
-		#ifdef C_NALI_CLIENT
+		#ifdef _CM_CLIENT
 			// #include <math.h>
 			#include <limits.h>
 
@@ -84,7 +84,7 @@
 	#include "entity/both/pomi1/pomi1.h"
 	#include "entity/both/pomi2/pomi2.h"
 
-	#if C_NALI_CLIENT || C_NALI_SERVER
+	#if _CM_CLIENT || _CM_SERVER
 		#include <errno.h>
 		#include <unistd.h>
 		// #include <arpa/inet.h>
@@ -94,14 +94,14 @@
 		#define NALI_SC_PORT 11111
 	#endif
 
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		#include "surface/surface.h"
 
 		//! audio data to 3d audio
 
 		#include "render/vk/vk.h"
 		#include "render/vk/queue/device/physical_device/instance/instance.h"
-		#ifdef C__VK_DEBUG
+		#ifdef _CM_DEBUG
 			#include "render/vk/debug/debug.h"
 		#endif
 		#include "render/vk/queue/device/physical_device/physical_device.h"
@@ -113,12 +113,12 @@
 		#include "render/vk/swapchain/swapchain.h"
 		#include "render/vk/fence.h"
 		#include "render/vk/semaphore/semaphore.h"
-		#include "render/vk/commandbuffer/commandpool/commandpool.h"
-		#include "render/vk/commandbuffer/commandbuffer.h"
+		#include "render/vk/command/pool/pool.h"
+		#include "render/vk/command/buffer/buffer.h"
 		#include "render/vk/buffer/buffer.h"
 		#include "render/vk/imageview/image.h"
 		#include "render/vk/imageview/imageview.h"
-		#include "render/vk/shadermodule/shadermodule.h"
+		#include "render/vk/shader/shader.h"
 		#include "render/vk/sampler.h"
 
 		#include "render/vk/descriptorset/descriptorset.h"
@@ -137,9 +137,7 @@
 		#include "render/vk/graphicspipeline/depthstencilstatecreateinfo.h"
 		#include "render/vk/graphicspipeline/graphicspipeline.h"
 
-		#include "render/vk/cmd/cmd.h"
-		#include "render/vk/cmd/image/image.h"
-		#include "render/vk/cmd/draw/draw.h"
+		#include "render/vk/command/draw/draw.h"
 
 		#include "raw/client/clienta.h"
 		#include "raw/client/clientu.h"
@@ -151,7 +149,7 @@
 		#include "network/network_client.h"
 	#endif
 
-	#ifdef C_NALI_SERVER
+	#ifdef _CM_SERVER
 		#include <math.h>
 		// #include <stdint.h>
 		// #include <sys/epoll.h>
@@ -172,17 +170,17 @@
 	#include "math/v4/v4.h"
 	// #include "math/str/str.h"
 
-	#ifdef C_NALI_GEN
+	#ifdef _CM_GEN
 		#include "gen/model/model.h"
 		#include "gen/keyframe/keyframe.h"
 		#include "gen/gen.h"
 	#endif
 
 	#include "debug/debug.h"
-	#ifdef C_NALI_TEST
+	#ifdef _CM_TEST
 		#include "test/test.h"
 
-		#ifdef C_NALI_TEST_3D
+		#ifdef _CM_TEST_3D
 			#include "test/3d/3d.h"
 		#endif
 	#endif

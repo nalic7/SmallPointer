@@ -1,6 +1,6 @@
 #ifndef NALI_DEBUG_H
 #define NALI_DEBUG_H
-	#ifdef C_NALI_DEBUG
+	#ifdef _CM_DEBUG
 		extern mtx_t *d_mtx_t_p;
 		void d_set();
 		void d_write(const char *format_p, ...);

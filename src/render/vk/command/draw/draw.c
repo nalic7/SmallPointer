@@ -68,7 +68,7 @@ static VkRect2D vkrect2d =
 //graphic
 static VkFence *vkfence_p;
 //image render
-//[vksc_image][2]
+//[_vk_swc_image][2]
 static VkSemaphore **vksemaphore_p;
 
 static VkSubmitInfo image_vksubmitinfo =
@@ -87,7 +87,7 @@ static VkPresentInfoKHR vkpresentinfokhr =
 	.waitSemaphoreCount = 1,
 
 	.swapchainCount = 1,
-	.pSwapchains = &vksc_vkswapchainkhr,
+	.pSwapchains = &_vk_swc_khr,
 
 	.pResults = VK_NULL_HANDLE,
 	.pNext = VK_NULL_HANDLE
@@ -95,13 +95,13 @@ static VkPresentInfoKHR vkpresentinfokhr =
 //e1-queue
 //e0-draw
 
-void vk_cmd_draw_set()
+void _vk_cmd_set()
 {
 	// vk_cmd_d_fp = malloc(0);
 
 	//s0-share
-	vkdevice = vkqd_vkdevice_p[vk_device];
-	vkqueue_graphic = vkq_vkqueue_p[vk_device][vk_queue_g];
+	vkdevice = _vkq_dv_p[vk_device];
+	vkqueue_graphic = _vkq_p[vk_device][vk_queue_g];
 	//e0-share
 
 	//s0-s
@@ -135,7 +135,7 @@ void vk_cmd_draw_set()
 
 	//s1-s
 	vkgplpllo_make(vk_device, &lcs_vkdescriptorsetlayout, 1, &vkpipelinelayout);
-	vkgpl_make(vk_device, vkpipelineshaderstagecreateinfo_array, vksc_vkrenderpass, vkpipelinelayout, &vkpipeline);
+	vkgpl_make(vk_device, vkpipelineshaderstagecreateinfo_array, _vk_swc_rdp, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -143,13 +143,13 @@ void vk_cmd_draw_set()
 	//e0-s
 
 	//s0-draw
-	vkcommandbuffer_p = malloc(sizeof(VkCommandBuffer) * vksc_image);
-	vkfence_p = malloc(sizeof(VkFence) * vksc_image);
-	vksemaphore_p = malloc(sizeof(VkSemaphore *) * vksc_image);
-	for (uint8_t l_0 = 0; l_0 < vksc_image; ++l_0)
+	vkcommandbuffer_p = malloc(sizeof(VkCommandBuffer) * _vk_swc_image);
+	vkfence_p = malloc(sizeof(VkFence) * _vk_swc_image);
+	vksemaphore_p = malloc(sizeof(VkSemaphore *) * _vk_swc_image);
+	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
 	{
 		//s0-cmd
-		vkcb_make(vk_device, vk_queue_g, vkcommandbuffer_p + l_0, 1);
+		_vk_cm_bf_make(vk_device, vk_queue_g, vkcommandbuffer_p + l_0, 1);
 		vk_cmd(vkcommandbuffer_p[l_0], &vkcommandbufferbegininfo, vkqueue_graphic);
 		//e0-cmd
 
@@ -162,22 +162,22 @@ void vk_cmd_draw_set()
 		// //e1-update
 		// //e0-ubo
 
-		VK_makeFence(vk_device, vkfence_p + l_0)
+		_VKF_MAKE(vk_device, vkfence_p + l_0)
 
 		vksemaphore_p[l_0] = malloc(sizeof(VkSemaphore) * 2);
 		for (uint8_t l_1 = 0; l_1 < 2; ++l_1)
 		{
-			vksp_make(vk_device, vksemaphore_p[l_0] + l_1);
+			_VK_SMP_MAKE(vk_device, vksemaphore_p[l_0] + l_1)
 		}
 	}
 
-	vkrenderpassbegininfo.renderPass = vksc_vkrenderpass;
-	vkrenderpassbegininfo.renderArea.extent = vksc_vkextent2d;
+	vkrenderpassbegininfo.renderPass = _vk_swc_rdp;
+	vkrenderpassbegininfo.renderArea.extent = _vk_swc_et2d;
 
-	vkviewport.width = vksc_vkextent2d.width;
-	vkviewport.height = vksc_vkextent2d.height;
+	vkviewport.width = _vk_swc_et2d.width;
+	vkviewport.height = _vk_swc_et2d.height;
 
-	vkrect2d.extent = vksc_vkextent2d;
+	vkrect2d.extent = _vk_swc_et2d;
 
 	//e0-draw
 
@@ -193,9 +193,9 @@ void freeCmdDraw()
 {
 	NALI_D_INFO("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
-	for (uint8_t l_0 = 0; l_0 < vksc_image; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
 	{
-		vkFreeCommandBuffers(vkdevice, vkcbcp_vkcommandpool_p[vk_device][vk_queue_g], 1, vkcommandbuffer_p + l_0);
+		vkFreeCommandBuffers(vkdevice, _vk_cmp_p[vk_device][vk_queue_g], 1, vkcommandbuffer_p + l_0);
 
 		vkDestroyFence(vkdevice, vkfence_p[l_0], VK_NULL_HANDLE);
 
@@ -212,7 +212,7 @@ void freeCmdDraw()
 	free(vkfence_p);
 	free(vksemaphore_p);
 
-	vk_free();
+	_vk_free();
 
 	lc_freeloop();
 
@@ -229,21 +229,21 @@ void freeCmdDraw()
 // }
 
 // static void (*a_fp[NALI_LCS_A_BL])() = {c1j1, c1j0};
-#ifdef C_NALI_S_ANDROID
-	int vk_cmd_draw_loop(void *p)
+#ifdef _CM_ST_ANDROID
+	int _vk_cmd_loop(void *p)
 #else
-	void vk_cmd_draw_loop()
+	void _vk_cmd_loop()
 #endif
 {
 	lb_free0();
 
-	#ifdef C_NALI_TEST_3D
+	#ifdef _CM_TEST_3D
 		t_3d();
 	#endif
 	_sf_state |= _SF_S_RENDER;
 	while (!(_sf_state & _SF_S_EXIT))
 	{
-		#ifdef C_NALI_TEST_3D
+		#ifdef _CM_TEST_3D
 			t_3d_buffer();
 		#else
 			//! check data
@@ -266,15 +266,15 @@ void freeCmdDraw()
 			// lcs_loop();
 		#endif
 
-		vkWaitForFences(vkdevice, 1, vkfence_p + vksc_frame, VK_TRUE, UINT64_MAX);
-		vkResetFences(vkdevice, 1, &vkfence_p[vksc_frame]);
+		vkWaitForFences(vkdevice, 1, vkfence_p + _vk_swc_frame, VK_TRUE, UINT64_MAX);
+		vkResetFences(vkdevice, 1, &vkfence_p[_vk_swc_frame]);
 
-		image_vksubmitinfo.pCommandBuffers = &vkcommandbuffer_p[vksc_frame];
+		image_vksubmitinfo.pCommandBuffers = &vkcommandbuffer_p[_vk_swc_frame];
 
-		image_vksubmitinfo.pWaitSemaphores = vksemaphore_p[vksc_frame];
-		image_vksubmitinfo.pSignalSemaphores = vksemaphore_p[vksc_frame] + 1;
+		image_vksubmitinfo.pWaitSemaphores = vksemaphore_p[_vk_swc_frame];
+		image_vksubmitinfo.pSignalSemaphores = vksemaphore_p[_vk_swc_frame] + 1;
 
-		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[vksc_frame] + 1;
+		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[_vk_swc_frame] + 1;
 
 		if (_sf_state & _SF_S_RE)
 		{
@@ -282,27 +282,27 @@ void freeCmdDraw()
 
 			//! re-create wl if crash before vk_sc
 			//wait like 1 sec to detect wl crash
-//			#ifndef C_NALI_S_ANDROID
+//			#ifndef _CM_ST_ANDROID
 //				if ()
 //				{
 //					vkDeviceWaitIdle(vkdevice);
-//					vk_freeSurface();
-//					vk_makeSurface();
+//					_vk_sf_free();
+//					_vk_sf_make();
 //				}
 //			#endif
-			vksc_free();
+			_vk_swc_free();
 
-			#ifdef C_NALI_S_ANDROID
+			#ifdef _CM_ST_ANDROID
 				sa_wait();
 			#endif
 
-			vksc_make(vkq_max_queue_surface_p[vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+			_vk_swc_make(_vkq_max_queue_surface_p[vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 
-			vkrenderpassbegininfo.renderPass = vksc_vkrenderpass;
-			vkviewport.width = vksc_vkextent2d.width;
-			vkviewport.height = vksc_vkextent2d.height;
-			vkrenderpassbegininfo.renderArea.extent = vksc_vkextent2d;
-			vkrect2d.extent = vksc_vkextent2d;
+			vkrenderpassbegininfo.renderPass = _vk_swc_rdp;
+			vkviewport.width = _vk_swc_et2d.width;
+			vkviewport.height = _vk_swc_et2d.height;
+			vkrenderpassbegininfo.renderArea.extent = _vk_swc_et2d;
+			vkrect2d.extent = _vk_swc_et2d;
 
 			MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), _sf_width / _sf_height, 0.1F, 100.0F, (float *)lcp_vkbuffer_mp + 16 * 3)
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
@@ -313,7 +313,7 @@ void freeCmdDraw()
 //			{
 //				rz = 180.0F;
 //			}
-			vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
+			vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], 1, &(VkMappedMemoryRange)
 			{
 				.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 				.memory = lcp_vkdevicememory,
@@ -325,27 +325,27 @@ void freeCmdDraw()
 		}
 
 		uint32_t image_index;
-		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, vksc_vkswapchainkhr, UINT64_MAX, vksemaphore_p[vksc_frame][0], VK_NULL_HANDLE, &image_index);
+		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, _vk_swc_khr, UINT64_MAX, vksemaphore_p[_vk_swc_frame][0], VK_NULL_HANDLE, &image_index);
 		if (vkresult != VK_SUCCESS)
 		{
 			//support recreate vkswapchainkhr if need
 			NALI_D_LOG("vkAcquireNextImageKHR %d", vkresult)
 		}
 
-		vkrenderpassbegininfo.framebuffer = vksc_vkswapchainkhr_vkframebuffer_p[image_index];
+		vkrenderpassbegininfo.framebuffer = _vk_swc_fbf_p[image_index];
 		vkpresentinfokhr.pImageIndices = &image_index;
 
-		vkBeginCommandBuffer(vkcommandbuffer_p[vksc_frame], &vkcommandbufferbegininfo);
+		vkBeginCommandBuffer(vkcommandbuffer_p[_vk_swc_frame], &vkcommandbufferbegininfo);
 
-			vkCmdBeginRenderPass(vkcommandbuffer_p[vksc_frame], &vkrenderpassbegininfo, VK_SUBPASS_CONTENTS_INLINE);
+			vkCmdBeginRenderPass(vkcommandbuffer_p[_vk_swc_frame], &vkrenderpassbegininfo, VK_SUBPASS_CONTENTS_INLINE);
 
-				vkCmdBindPipeline(vkcommandbuffer_p[vksc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
+				vkCmdBindPipeline(vkcommandbuffer_p[_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
 
 				//s0-VkDynamicState
 				// if (update)
 				// {
-				vkCmdSetViewport(vkcommandbuffer_p[vksc_frame], 0, 1, &vkviewport);
-				vkCmdSetScissor(vkcommandbuffer_p[vksc_frame], 0, 1, &vkrect2d);
+				vkCmdSetViewport(vkcommandbuffer_p[_vk_swc_frame], 0, 1, &vkviewport);
+				vkCmdSetScissor(vkcommandbuffer_p[_vk_swc_frame], 0, 1, &vkrect2d);
 				// 	update = 0;
 				// }
 				//e0-VkDynamicState
@@ -353,20 +353,20 @@ void freeCmdDraw()
 				for (uint32_t l_0 = 0; l_0 < lcs_s_bl; ++l_0)
 				{
 					lcs__ _ = lcs___p[lcs_s_p[l_0]._];
-					vkCmdBindDescriptorSets(vkcommandbuffer_p[vksc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, _.vkdescriptorset_p + vksc_buffer_frame, 0, VK_NULL_HANDLE);
+					vkCmdBindDescriptorSets(vkcommandbuffer_p[_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, _.vkdescriptorset_p + _vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(vkcommandbuffer_p[vksc_frame], 0, 1, &lcp_vkbuffer, lcs_a_vkdevicesize_p + _.mab);
+					vkCmdBindVertexBuffers(vkcommandbuffer_p[_vk_swc_frame], 0, 1, &lcp_vkbuffer, lcs_a_vkdevicesize_p + _.mab);
 
 					//! use lcv_vkbuffer
-					vkCmdBindIndexBuffer(vkcommandbuffer_p[vksc_frame], lcp_vkbuffer, lcs_ib_p[lcs_s_p[l_0].i], VK_INDEX_TYPE_UINT32);
-					vkCmdDrawIndexed(vkcommandbuffer_p[vksc_frame], lcs_ic_p[lcs_s_p[l_0].i], 1, 0, 0, 0);
+					vkCmdBindIndexBuffer(vkcommandbuffer_p[_vk_swc_frame], lcp_vkbuffer, lcs_ib_p[lcs_s_p[l_0].i], VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(vkcommandbuffer_p[_vk_swc_frame], lcs_ic_p[lcs_s_p[l_0].i], 1, 0, 0, 0);
 				}
 
-			vkCmdEndRenderPass(vkcommandbuffer_p[vksc_frame]);
+			vkCmdEndRenderPass(vkcommandbuffer_p[_vk_swc_frame]);
 
-		vkEndCommandBuffer(vkcommandbuffer_p[vksc_frame]);
+		vkEndCommandBuffer(vkcommandbuffer_p[_vk_swc_frame]);
 
-		vkQueueSubmit(vkqueue_graphic, 1, &image_vksubmitinfo, vkfence_p[vksc_frame]);
+		vkQueueSubmit(vkqueue_graphic, 1, &image_vksubmitinfo, vkfence_p[_vk_swc_frame]);
 		vkQueuePresentKHR(vkqueue_graphic, &vkpresentinfokhr);
 
 		++frame;
@@ -387,17 +387,17 @@ void freeCmdDraw()
 			frame = 0;
 		}
 
-		vksc_frame = (vksc_frame + 1) % vksc_image;
-//		#ifdef C_NALI_S_ANDROID
+		_vk_swc_frame = (_vk_swc_frame + 1) % _vk_swc_image;
+//		#ifdef _CM_ST_ANDROID
 //			sa_wait();
 //		#endif
 	}
 
-//	#ifdef C_NALI_S_ANDROID
+//	#ifdef _CM_ST_ANDROID
 //		m_surface_state &= 0xFFu - _SF_S_EXIT;
 //	#else
 	freeCmdDraw();
-	#ifdef C_NALI_S_ANDROID
+	#ifdef _CM_ST_ANDROID
 		return 0;
 	#endif
 //	#endif

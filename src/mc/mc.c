@@ -1,6 +1,6 @@
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved)
 {
-	#ifdef C_NALI_DEBUG
+	#ifdef _CM_DEBUG
 		d_set();
 	#endif
 

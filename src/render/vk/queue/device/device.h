@@ -1,12 +1,10 @@
-#ifndef _VK_DEVICEQUEUE_H
-#define _VK_DEVICEQUEUE_H
+#ifndef _VKQ_DV_H
+#define _VKQ_DV_H
+	extern const char *_vkq_dv_ets_p[1];
 
-extern const char *vkqd_deviceextensions[1];
+	extern VkDevice *_vkq_dv_p;
 
-extern VkDevice *vkqd_vkdevice_p;
-
-void vkqd_set();
-void vkqd_make(uint32_t device);
-void vkqd_free();
-
+	void _vkq_dv_set();
+	void _vkq_dv_make(uint32_t device);
+	void _vkq_dv_free();
 #endif

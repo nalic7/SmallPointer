@@ -2,29 +2,29 @@ void vkgpl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshad
 {
 	LCS_setVkVertexInputBindingDescription(vkvertexinputbindingdescription)
 	LCS_setVkVertexInputAttributeDescription(vkvertexinputattributedescription_array)
-	VK_setPipelineVertexInputStateCreateInfo(&vkvertexinputbindingdescription, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
+	vk_setPipelineVertexInputStateCreateInfo(&vkvertexinputbindingdescription, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
 
-	VK_setPipelineInputAssemblyStateCreateInfo(vkpipelineinputassemblystatecreateinfo)
+	vk_setPipelineInputAssemblyStateCreateInfo(vkpipelineinputassemblystatecreateinfo)
 
-	VK_setPipelineViewportStateCreateInfo(vkpipelineviewportstatecreateinfo)
+	vk_setPipelineViewportStateCreateInfo(vkpipelineviewportstatecreateinfo)
 
-	VK_setPipelineRasterizationStateCreateInfo(vkpipelinerasterizationstatecreateinfo)
-	VK_setPipelineMultisampleStateCreateInfo(vkpipelinemultisamplestatecreateinfo)
+	vk_setPipelineRasterizationStateCreateInfo(vkpipelinerasterizationstatecreateinfo)
+	vk_setPipelineMultisampleStateCreateInfo(vkpipelinemultisamplestatecreateinfo)
 
-	VK_setVkPipelineColorBlendAttachmentState(vkpipelinecolorblendattachmentstate)
-	VK_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
+	vk_setVkPipelineColorBlendAttachmentState(vkpipelinecolorblendattachmentstate)
+	vk_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
 
-	VK_setVkDynamicState(vkdynamicstate_array)
-	VK_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
+	vk_setVkDynamicState(vkdynamicstate_array)
+	vk_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
 
-	VK_setPipelineDepthStencilStateCreateInfo(vkpipelinedepthstencilstatecreateinfo)
+	vk_setPipelineDepthStencilStateCreateInfo(vkpipelinedepthstencilstatecreateinfo)
 
 	NALI_D_INFO
 	(
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines
 		(
-			vkqd_vkdevice_p[device],
+			_vkq_dv_p[device],
 			VK_NULL_HANDLE,
 			1,
 			&(VkGraphicsPipelineCreateInfo)

@@ -1,8 +1,8 @@
 #ifndef NALI_FILE_H
 #define NALI_FILE_H
 
-#ifdef C_NALI_GEN
-	#ifdef C_NALI_S_ANDROID
+#ifdef _CM_GEN
+	#ifdef _CM_ST_ANDROID
 		#define NALI_FACTORY NALI_F_HOME
 	#else
 		//.c source folder
@@ -12,7 +12,7 @@
 	#endif
 #endif
 
-#ifdef C_NALI_S_ANDROID
+#ifdef _CM_ST_ANDROID
 	#define NALI_F_HOME
 
 	//.c package folder

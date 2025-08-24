@@ -1,7 +1,7 @@
 #ifndef _VK_GRAPHICSPIPELINE_INPUTASSEMBLYSTATECREATEINFO_H
 #define _VK_GRAPHICSPIPELINE_INPUTASSEMBLYSTATECREATEINFO_H
 
-#define VK_setPipelineInputAssemblyStateCreateInfo(name) \
+#define vk_setPipelineInputAssemblyStateCreateInfo(name) \
 	VkPipelineInputAssemblyStateCreateInfo name = \
 	{ \
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO, \

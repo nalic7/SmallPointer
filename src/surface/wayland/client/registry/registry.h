@@ -1,9 +1,9 @@
-#ifndef _SF_WLC_RTR_H
-#define _SF_WLC_RTR_H
-	extern struct wl_registry *_sf_wlc_rtr_p;
+#ifndef _SF_WLC_RGT_H
+#define _SF_WLC_RGT_H
+	extern struct wl_registry *_sf_wlc_rgt_p;
 
-	extern struct wl_registry_listener _sf_wlc_rtr_listener;
+	extern struct wl_registry_listener _sf_wlc_rgt_listener;
 
-	void _sf_wlc_rtr_set();
-	void _sf_wlc_rtr_free();
+	void _sf_wlc_rgt_set();
+	void _sf_wlc_rgt_free();
 #endif

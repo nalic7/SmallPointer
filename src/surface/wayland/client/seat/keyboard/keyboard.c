@@ -1,4 +1,4 @@
-struct wl_keyboard *_sf_wlc_seat_kb_p;
+struct wl_keyboard *_sf_wlcs_kb_p;
 
 static void wl_keyboard_listener_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
 {
@@ -64,7 +64,7 @@ static void wl_keyboard_listener_repeat_info(void *data, struct wl_keyboard *wl_
 	// NALI_D_LOG("wl_keyboard_listener_repeat_info")
 }
 
-struct wl_keyboard_listener _sf_wlc_seat_kb_listener =
+struct wl_keyboard_listener _sf_wlcs_kb_listener =
 {
 	.keymap = wl_keyboard_listener_keymap,
 	.enter = wl_keyboard_listener_enter,
@@ -74,7 +74,7 @@ struct wl_keyboard_listener _sf_wlc_seat_kb_listener =
 	.repeat_info = wl_keyboard_listener_repeat_info
 };
 
-void _sf_wlc_seat_kb_free()
+void _sf_wlcs_kb_free()
 {
-	wl_keyboard_destroy(_sf_wlc_seat_kb_p);
+	wl_keyboard_destroy(_sf_wlcs_kb_p);
 }

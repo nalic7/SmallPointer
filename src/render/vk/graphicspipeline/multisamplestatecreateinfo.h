@@ -1,7 +1,7 @@
 #ifndef _VK_GRAPHICSPIPELINE_MULTISAMPLESTATECREATEINFO_H
 #define _VK_GRAPHICSPIPELINE_MULTISAMPLESTATECREATEINFO_H
 
-#define VK_setPipelineMultisampleStateCreateInfo(name) \
+#define vk_setPipelineMultisampleStateCreateInfo(name) \
 	VkPipelineMultisampleStateCreateInfo name = \
 	{ \
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO, \

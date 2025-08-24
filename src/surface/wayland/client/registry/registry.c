@@ -1,4 +1,4 @@
-struct wl_registry *_sf_wlc_rtr_p;
+struct wl_registry *_sf_wlc_rgt_p;
 
 static void wl_registry_listener_global(void *data, struct wl_registry *wl_registry, uint32_t name, const char *interface, uint32_t version)
 {
@@ -14,8 +14,8 @@ static void wl_registry_listener_global(void *data, struct wl_registry *wl_regis
 	}
 	else if (!strcmp(interface, wl_seat_interface.name))
 	{
-		NALI_D_INFO("wl_registry_bind %p", _sf_wlc_seat_p = wl_registry_bind(wl_registry, name, &wl_seat_interface, 1))
-		NALI_D_INFO("wl_seat_add_listener %d", wl_seat_add_listener(_sf_wlc_seat_p, &_sf_wlc_seat_listener, NULL))
+		NALI_D_INFO("wl_registry_bind %p", _sf_wlcs_p = wl_registry_bind(wl_registry, name, &wl_seat_interface, 1))
+		NALI_D_INFO("wl_seat_add_listener %d", wl_seat_add_listener(_sf_wlcs_p, &_sf_wlcs_listener, NULL))
 	}
 	else if (!strcmp(interface, zwp_pointer_constraints_v1_interface.name))
 	{
@@ -31,19 +31,19 @@ static void wl_registry_listener_global_remove(void *data, struct wl_registry *w
 {
 }
 
-struct wl_registry_listener _sf_wlc_rtr_listener =
+struct wl_registry_listener _sf_wlc_rgt_listener =
 {
 	.global = wl_registry_listener_global,
 	.global_remove = wl_registry_listener_global_remove
 };
 
-void _sf_wlc_rtr_set()
+void _sf_wlc_rgt_set()
 {
-	NALI_D_INFO("wl_display_get_registry %p", _sf_wlc_rtr_p = wl_display_get_registry(_sf_wlc_dp_p))
-	NALI_D_INFO("wl_registry_add_listener %d", wl_registry_add_listener(_sf_wlc_rtr_p, &_sf_wlc_rtr_listener, NULL))
+	NALI_D_INFO("wl_display_get_registry %p", _sf_wlc_rgt_p = wl_display_get_registry(_sf_wlc_dp_p))
+	NALI_D_INFO("wl_registry_add_listener %d", wl_registry_add_listener(_sf_wlc_rgt_p, &_sf_wlc_rgt_listener, NULL))
 }
 
-void _sf_wlc_rtr_free()
+void _sf_wlc_rgt_free()
 {
-	wl_registry_destroy(_sf_wlc_rtr_p);
+	wl_registry_destroy(_sf_wlc_rgt_p);
 }

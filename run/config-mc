@@ -1,0 +1,7 @@
+#!/bin/bash
+F=CMakeLists.txt
+sed -i '/#set(S_NAME mc)/c\set(S_NAME mc)' $F
+sed -i '/set(CLIENT 1)/c\#set(CLIENT 1)' $F
+sed -i '/set(SERVER 1)/c\#set(SERVER 1)' $F
+sed -i '/#set(GL 1)/c\set(GL 1)' $F
+sed -i '/set(DEBUG 1)/c\#set(DEBUG 1)' $F

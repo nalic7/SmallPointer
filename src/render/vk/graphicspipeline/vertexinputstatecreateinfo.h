@@ -1,7 +1,7 @@
 #ifndef _VK_GRAPHICSPIPELINE_VERTEXINPUTSTATECREATEINFO_H
 #define _VK_GRAPHICSPIPELINE_VERTEXINPUTSTATECREATEINFO_H
 
-#define VK_setPipelineVertexInputStateCreateInfo(vkvertexinputbindingdescription_p, vkvertexinputattributedescription_p, vkvertexinputattributedescription_size, name) \
+#define vk_setPipelineVertexInputStateCreateInfo(vkvertexinputbindingdescription_p, vkvertexinputattributedescription_p, vkvertexinputattributedescription_size, name) \
 	VkPipelineVertexInputStateCreateInfo name = \
 	{ \
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO, \

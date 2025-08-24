@@ -1,7 +1,7 @@
 #ifndef _VK_GRAPHICSPIPELINE_DEPTHSTENCILSTATECREATEINFO_H
 #define _VK_GRAPHICSPIPELINE_DEPTHSTENCILSTATECREATEINFO_H
 
-#define VK_setPipelineDepthStencilStateCreateInfo(name) \
+#define vk_setPipelineDepthStencilStateCreateInfo(name) \
 	VkPipelineDepthStencilStateCreateInfo name = \
 	{ \
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO, \

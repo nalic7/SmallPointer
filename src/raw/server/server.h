@@ -13,7 +13,7 @@ void ls_set();
 void ls_read(NALI_LB_UT u);
 void ls_open();
 void ls_save();
-#ifdef C_NALI_CLIENT
+#ifdef _CM_CLIENT
 	int ls_loop(void *p);
 #else
 	void ls_loop();

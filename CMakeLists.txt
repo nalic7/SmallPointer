@@ -1,35 +1,28 @@
 cmake_minimum_required(VERSION 3.31)
 
-#//.c System (Linux by default)
-#set(S_NAME android)
-#set(S_NAME mc)
+#set(ST linux)
+#  set(WL 1)
+#  set(X11 1)
+#  set(DRM 1)
+#set(ST android)
+#set(ST win11)
+#set(ST mc)
 
-#//.c skip this for release
-set(TEST 1)
-set(TEST_3D 1)
-
-#//.c debug log
-set(DEBUG 1)
-
-#//.c gen asset/skip this for release
-set(GEN 1)
-
-#//.c surface
-set(WL 1)
-#set(X11 1)
-
-#//.c render
-set(VK 1)
-  #//.c vk debug layer
-  set(VK_DEBUG 1)
-#set(GL 1)
-
-#//.c runtime
-set(CLIENT 1)
+#set(GEN 1)
+#set(CLIENT 1)
 #set(SERVER 1)
 
-set(P_NAME SmallPointer)
-project(${P_NAME} LANGUAGES C)
+#set(VK 1)
+#  set(VK_DEBUG 1)
+#set(GL 1)
+
+#set(TEST 1)
+#set(TEST_3D 1)
+
+#set(DEBUG 1)
+
+set(PN SmallPointer)
+project(${PN} LANGUAGES C)
 
 file(GLOB_RECURSE G_SOURCES src/file/*.c)
 list(APPEND SOURCES ${G_SOURCES})
@@ -39,9 +32,9 @@ file(GLOB_RECURSE G_SOURCES src/math/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
 if(TEST)
-  list(APPEND TCD C_NALI_TEST)
+  list(APPEND TCD _CM_TEST)
   if(TEST_3D)
-    list(APPEND TCD C_NALI_TEST_3D)
+    list(APPEND TCD _CM_TEST_3D)
 
     file(GLOB_RECURSE G_SOURCES src/test/3d/*.c)
     list(APPEND SOURCES ${G_SOURCES})
@@ -50,11 +43,11 @@ endif()
 
 list(APPEND SOURCES src/debug/debug.c)
 if(DEBUG)
-  list(APPEND TCD C_NALI_DEBUG)
+  list(APPEND TCD CM_DEBUG)
 endif()
 
 if(GEN)
-  list(APPEND TCD C_NALI_GEN)
+  list(APPEND TCD _CM_GEN)
   file(GLOB_RECURSE G_SOURCES src/gen/*.c)
   list(APPEND SOURCES ${G_SOURCES})
 
@@ -68,15 +61,15 @@ file(GLOB_RECURSE G_SOURCES src/entity/both/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
 if(CLIENT)
-  list(APPEND TCD C_NALI_CLIENT)
+  list(APPEND TCD _CM_CLIENT)
 
   if(VK)
-    list(APPEND TCD C_NALI_VK)
+    list(APPEND TCD _CM_VK)
 
     file(GLOB_RECURSE G_SOURCES src/vk/*.c)
     list(APPEND SOURCES ${G_SOURCES})
     if (VK_DEBUG)
-      list(APPEND TCD C_NALI_VK_DEBUG)
+      list(APPEND TCD _CM_VK_DEBUG)
       list(APPEND SOURCES src/vk/debug/debug.c)
     endif()
   endif()
@@ -92,7 +85,7 @@ if(CLIENT)
 endif()
 
 if(SERVER)
-  list(APPEND TCD C_NALI_SERVER)
+  list(APPEND TCD _CM_SERVER)
 
   file(GLOB_RECURSE G_SOURCES src/raw/server/*.c)
   list(APPEND SOURCES ${G_SOURCES})
@@ -103,8 +96,8 @@ if(SERVER)
   list(APPEND SOURCES ${G_SOURCES})
 endif()
 
-if(S_NAME STREQUAL "android")
-  list(APPEND TCD C_NALI_S_ANDROID)
+if(ST STREQUAL "android")
+  list(APPEND TCD _CM_ST_ANDROID)
 
   #//! audio android
   list(APPEND TLL
@@ -130,9 +123,11 @@ if(S_NAME STREQUAL "android")
     file(GLOB_RECURSE G_SOURCES src/surface/android/*.c)
     list(APPEND SOURCES ${G_SOURCES})
   endif()
-  add_library(${P_NAME} SHARED ${SOURCES})
-else()
+  add_library(${PN} SHARED ${SOURCES})
+elseif(ST STREQUAL "linux")
   if(CLIENT)
+    list(APPEND TCD _CM_ST_LINUX)
+
     list(APPEND TLL vulkan)
 
     #//.i ffmpeg
@@ -150,7 +145,7 @@ else()
 
     #//.i wayland / surface
     if(WL)
-      list(APPEND TCD C_NALI_WL)
+      list(APPEND TCD _CM_WL)
 
       list(APPEND TLL
         wayland-client
@@ -166,27 +161,26 @@ else()
       list(APPEND TID lib/wayland)
     endif()
   endif()
-  if(S_NAME STREQUAL "mc")
-    list(APPEND TCD C_NALI_S_MC)
-
-    list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include)
-    list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include/linux)
-
-    file(GLOB_RECURSE G_SOURCES src/mc/*.c)
-    list(APPEND SOURCES ${G_SOURCES})
-
-    add_library(${P_NAME} SHARED ${SOURCES})
-  else()
     list(APPEND SOURCES src/src.c)
 
-    add_executable(${P_NAME} ${SOURCES})
+    add_executable(${PN} ${SOURCES})
   endif()
+elseif(ST STREQUAL "mc")
+  list(APPEND TCD _CM_ST_MC)
+
+  list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include)
+  list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include/linux)
+
+  file(GLOB_RECURSE G_SOURCES src/mc/*.c)
+  list(APPEND SOURCES ${G_SOURCES})
+
+  add_library(${PN} SHARED ${SOURCES})
 endif()
 
 if(TID)
-  target_include_directories(${P_NAME} PRIVATE ${TID})
+  target_include_directories(${PN} PRIVATE ${TID})
 endif()
-target_link_libraries(${P_NAME} ${TLL})
-target_compile_definitions(${P_NAME} PRIVATE ${TCD})
+target_link_libraries(${PN} ${TLL})
+target_compile_definitions(${PN} PRIVATE ${TCD})
 
-target_precompile_headers(${P_NAME} PRIVATE src/src.h)
+target_precompile_headers(${PN} PRIVATE src/src.h)

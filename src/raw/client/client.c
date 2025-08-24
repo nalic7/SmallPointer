@@ -25,11 +25,11 @@ void lc_vk()
 	lcp_vk();
 	lcs_vk();
 
-	vk_cmd_draw_set();
-	#ifdef C_NALI_S_ANDROID
-		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, vk_cmd_draw_loop, NULL))
+	_vk_cmd_set();
+	#ifdef _CM_ST_ANDROID
+		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, _vk_cmd_loop, NULL))
 	#else
-		vk_cmd_draw_loop();
+		_vk_cmd_loop();
 	#endif
 }
 

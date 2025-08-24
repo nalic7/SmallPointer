@@ -16,7 +16,7 @@ void ls_set()
 
 	ls_open();
 
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
 	#else
 		ls_loop();
@@ -79,7 +79,7 @@ void ls_save()
 
 static NALI_LB_CT ls_load_bl = 0;
 static NALI_LB_CT *ls_load_p;
-#ifdef C_NALI_CLIENT
+#ifdef _CM_CLIENT
 	int ls_loop(void *p)
 #else
 	void ls_loop()
@@ -134,7 +134,7 @@ static NALI_LB_CT *ls_load_p;
 
 	mtx_unlock(lb_mtx_t_p);
 
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		return 0;
 	#endif
 }

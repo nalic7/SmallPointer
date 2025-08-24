@@ -1,10 +1,8 @@
-#ifndef _VK_PHYSICAL_DEVICE_H
-#define _VK_PHYSICAL_DEVICE_H
+#ifndef _VKQ_DV_PSCDV_H
+#define _VKQ_DV_PSCDV_H
+	extern uint32_t _vkq_dv_pscdv_bl;
+	extern VkPhysicalDevice *_vkq_dv_pscdv_p;
 
-extern uint32_t vkqdpd_physical_device;
-extern VkPhysicalDevice *vkqdpd_vkphysicaldevice_p;
-
-void vkqdpd_make();
-void vkqdpd_free();
-
+	void _vkq_dv_pscdv_make();
+	void _vkq_dv_pscdv_free();
 #endif

@@ -97,12 +97,12 @@ void lb_free0()
 
 void lb_free1()
 {
-	#ifdef C_NALI_SERVER
+	#ifdef _CM_SERVER
 		ls_free();
 		mtx_lock(lb_mtx_t_p);
 		mtx_unlock(lb_mtx_t_p);
 	#endif
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		lc_free();
 		mtx_lock(lb_mtx_t_p);
 		mtx_unlock(lb_mtx_t_p);
@@ -111,7 +111,7 @@ void lb_free1()
 	//! switch to pipewire
 	// al_clean();
 
-	#ifndef C_NALI_S_ANDROID
+	#ifndef _CM_ST_ANDROID
 		_sf_wlc_free();
 	#endif
 

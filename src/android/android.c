@@ -5,13 +5,13 @@ static float
 static int s1_set(void *p)
 {
 	lb_set();
-	#if C_NALI_SERVER
+	#if _CM_SERVER
 		ls_set();
 	#endif
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		lc_set();
 
-		vk_set();
+		_vk_set();
 	//! audio android
 //		al_set();
 		lc_vk();
@@ -195,8 +195,8 @@ void sa_wait()
 
 //		vk_freeDevice();
 //		vk_freeQueue();
-		vk_freeSurface();
-		vk_makeSurface();
+		_vk_sf_free();
+		_vk_sf_make();
 //		vk_initQueue();
 //		vk_initDevice();
 //		vk_setQueue(vk_device);

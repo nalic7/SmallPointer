@@ -42,7 +42,7 @@ void _sf_wlc_set()
 {
 	NALI_D_INFO("wl_display_connect %p", _sf_wlc_dp_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
 
-	_sf_wlc_rtr_set();
+	_sf_wlc_rgt_set();
 
 	NALI_D_INFO("wl_display_roundtrip %d", wl_display_roundtrip(_sf_wlc_dp_p))
 
@@ -60,7 +60,7 @@ void _sf_wlc_set()
 
 void _sf_wlc_free()
 {
-	_sf_wlc_seat_free();
+	_sf_wlcs_free();
 
 	_sf_wlc_xdg_wmb_free();
 
@@ -72,7 +72,7 @@ void _sf_wlc_free()
 	wl_surface_destroy(_sf_wlc_sf_p);
 	wl_compositor_destroy(_sf_wlc_cot_p);
 
-	_sf_wlc_rtr_free();
+	_sf_wlc_rgt_free();
 
 	wl_display_disconnect(_sf_wlc_dp_p);
 }

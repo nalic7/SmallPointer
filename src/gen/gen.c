@@ -26,6 +26,7 @@
 // static const void config[];
 void g_write()
 {
+	NALI_D_INFO("mkdir %d", mkdir(NALI_F_HOME, S_IRUSR | S_IWUSR | S_IXUSR))
 	remove(NALI_F_HOME_ASSET);
 	gkf_write();
 	gm_write();

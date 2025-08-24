@@ -1,9 +1,7 @@
-#ifndef _VK_SURFACE_H
-#define _VK_SURFACE_H
+#ifndef _VK_SF_H
+#define _VK_SF_H
+	extern VkSurfaceKHR _vk_sf_khr;
 
-extern VkSurfaceKHR vks_vksurfacekhr;
-
-void vk_makeSurface();
-void vk_freeSurface();
-
+	void _vk_sf_make();
+	void _vk_sf_free();
 #endif

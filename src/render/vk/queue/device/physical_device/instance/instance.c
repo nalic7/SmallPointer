@@ -1,30 +1,27 @@
-VkInstance vkqdpdi_vkinstance;
+VkInstance _vkq_dv_pscdv_it;
 
-static const char *ppEnabledExtensionNames[] =
+static const char *extension_p[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
-	#ifdef C_NALI_S_ANDROID
+	#ifdef _CM_ST_ANDROID
 		VK_KHR_ANDROID_SURFACE_EXTENSION_NAME,
 	#else
 		VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
 	#endif
 
-	// VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME,
-	// VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
-
-	#ifdef C__VK_DEBUG
+	#ifdef _CM_DEBUG
 		VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 	#endif
 };
 
-#ifdef C__VK_DEBUG
-	const char *vkqdpdi_ppEnabledLayerNames[] =
+#ifdef _CM_DEBUG
+	const char *_vkq_dv_pscdv_it_layer_p[] =
 	{
 		"VK_LAYER_KHRONOS_validation"
 	};
 #endif
 
-void vkqdpdi_make()
+void _vkq_dv_pscdv_it_make()
 {
 	NALI_D_INFO
 	(
@@ -37,35 +34,35 @@ void vkqdpdi_make()
 				.pApplicationInfo = &(VkApplicationInfo)
 				{
 					.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-					.pApplicationName = "nali",
+					.pApplicationName = VK_NULL_HANDLE,
 					.applicationVersion = VK_MAKE_VERSION(1, 0, 0),
-					.pEngineName = "vk",
+					.pEngineName = VK_NULL_HANDLE,
 					.engineVersion = VK_MAKE_VERSION(1, 0, 0),
 					.apiVersion = _VK_VERSION,
 
 					.pNext = VK_NULL_HANDLE
 				},
-				.enabledExtensionCount = sizeof(ppEnabledExtensionNames) / sizeof(ppEnabledExtensionNames[0]),
-				.ppEnabledExtensionNames = ppEnabledExtensionNames,
+				.enabledExtensionCount = sizeof(extension_p) / sizeof(extension_p[0]),
+				.ppEnabledExtensionNames = extension_p,
 
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE,
 
-				#ifdef C__VK_DEBUG
-					.enabledLayerCount = sizeof(vkqdpdi_ppEnabledLayerNames) / sizeof(vkqdpdi_ppEnabledLayerNames[0]),
-					.ppEnabledLayerNames = vkqdpdi_ppEnabledLayerNames
+				#ifdef _CM_DEBUG
+					.enabledLayerCount = sizeof(_vkq_dv_pscdv_it_layer_p) / sizeof(_vkq_dv_pscdv_it_layer_p[0]),
+					.ppEnabledLayerNames = _vkq_dv_pscdv_it_layer_p
 				#else
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE
 				#endif
 			},
 			VK_NULL_HANDLE,
-			&vkqdpdi_vkinstance
+			&_vkq_dv_pscdv_it
 		)
 	)
 }
 
-void vkqdpdi_free()
+void _vkq_dv_pscdv_it_free()
 {
-	vkDestroyInstance(vkqdpdi_vkinstance, NULL);
+	vkDestroyInstance(_vkq_dv_pscdv_it, NULL);
 }

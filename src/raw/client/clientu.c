@@ -84,7 +84,7 @@ void lcu_update()
 //		// ((float *)m_vkbuffer_p)[13] = s_ty;
 //		// ((float *)m_vkbuffer_p)[14] = s_tz;
 //
-//		vkFlushMappedMemoryRanges(vkqd_vkdevice_p[vk_device], 1, &(VkMappedMemoryRange)
+//		vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], 1, &(VkMappedMemoryRange)
 //		{
 //			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 //			.memory = lcp_vkdevicememory,

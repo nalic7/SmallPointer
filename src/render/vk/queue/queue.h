@@ -1,16 +1,13 @@
-#ifndef _VK_QUEUE_H
-#define _VK_QUEUE_H
+#ifndef _VKQ_H
+#define _VKQ_H
+	extern uint32_t *_vkq_max_queue_p;
+	extern uint32_t *_vkq_max_queue_surface_p;
+	extern uint32_t **_vkq_queue_surface_p;
 
-extern uint32_t *vkq_max_queue_p;
-// extern int32_t **m_queue_p;
-extern uint32_t *vkq_max_queue_surface_p;
-extern uint32_t **vkq_queue_surface_p;
+	extern VkQueue **_vkq_p;
 
-extern VkQueue **vkq_vkqueue_p;
-
-void vkq_set();
-void vkq_setQueue(uint32_t device);
-void vkq_getQueue(uint32_t device);
-void vkq_free();
-
+	void _vkq_set();
+	void _vkq_add(uint32_t device);
+	void _vkq_get(uint32_t device);
+	void _vkq_free();
 #endif

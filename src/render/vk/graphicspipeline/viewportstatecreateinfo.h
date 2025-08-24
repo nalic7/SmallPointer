@@ -5,17 +5,17 @@
 // {
 // 	.x = 0,
 // 	.y = 0,
-// 	.width = vksc_vkextent2d.width,
-// 	.height = vksc_vkextent2d.height,
+// 	.width = _vk_swc_et2d.width,
+// 	.height = _vk_swc_et2d.height,
 // 	.minDepth = 0.0F,
 // 	.maxDepth = 1.0F
 // },
 // .pScissors = &(VkRect2D)
 // {
 // 	.offset = {.x = 0, .y = 0},
-// 	.extent = vksc_vkextent2d
+// 	.extent = _vk_swc_et2d
 // },
-#define VK_setPipelineViewportStateCreateInfo(name) \
+#define vk_setPipelineViewportStateCreateInfo(name) \
 	VkPipelineViewportStateCreateInfo name = \
 	{ \
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO, \

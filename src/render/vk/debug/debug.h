@@ -1,9 +1,5 @@
-#ifndef _VK_DEBUG_H
-#define _VK_DEBUG_H
-
-extern VkDebugUtilsMessengerEXT vkd_vkdebugutilsmessengerext;
-
-void vkd_make();
-void vkd_free();
-
+#ifndef _VK_DB_H
+#define _VK_DB_H
+	void _vk_db_make();
+	void _vk_db_free();
 #endif

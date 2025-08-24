@@ -1,21 +1,17 @@
-#ifndef _VK_SWAPCHAIN_H
-#define _VK_SWAPCHAIN_H
+#ifndef _VK_SWC_H
+#define _VK_SWC_H
+	extern VkSwapchainKHR _vk_swc_khr;
+	extern VkExtent2D _vk_swc_et2d;
+	extern VkRenderPass _vk_swc_rdp;
 
-extern VkSwapchainKHR vksc_vkswapchainkhr;
-extern VkExtent2D vksc_vkextent2d;
-extern VkRenderPass vksc_vkrenderpass;
+	extern VkImage *_vk_swc_im_p;
+	extern VkImageView *_vk_swc_imv_p;
+	extern VkFramebuffer *_vk_swc_fbf_p;
 
-extern VkImage *vksc_vkswapchainkhr_vkimage_p;
-extern VkImageView *vksc_vkswapchainkhr_vkimageview_p;
-extern VkFramebuffer *vksc_vkswapchainkhr_vkframebuffer_p;
+	extern uint8_t _vk_swc_image;
+	extern uint8_t _vk_swc_frame;
+	extern uint8_t _vk_swc_frame_buffer;
 
-extern uint8_t vksc_image;
-extern uint8_t vksc_frame;
-extern uint8_t vksc_buffer_frame;
-
-//extern VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
-
-void vksc_make(VkSharingMode vksharingmode);
-void vksc_free();
-
+	void _vk_swc_make(VkSharingMode vksharingmode);
+	void _vk_swc_free();
 #endif

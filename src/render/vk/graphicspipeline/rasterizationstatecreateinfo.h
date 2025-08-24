@@ -1,7 +1,7 @@
 #ifndef _VK_GRAPHICSPIPELINE_RASTERIZATIONSTATECREATEINFO_H
 #define _VK_GRAPHICSPIPELINE_RASTERIZATIONSTATECREATEINFO_H
 
-#define VK_setPipelineRasterizationStateCreateInfo(name) \
+#define vk_setPipelineRasterizationStateCreateInfo(name) \
 	VkPipelineRasterizationStateCreateInfo name = \
 	{ \
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO, \

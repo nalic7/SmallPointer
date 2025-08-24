@@ -14,9 +14,9 @@ VIDEO_CARDS="amdgpu radeonsi nvidia"
 #Intel_cpu,igpu / NVIDIA_dgpu
 VIDEO_CARDS="intel nvidia"
 ```
->Package (Wayland)
-```
-gui-wm/hyprland-0.49.0
+>Install Package
+```bash
+run/gentoo
 ```
 >Hyprland
 ```
@@ -130,29 +130,12 @@ bindm = SUPER, mouse:273, resizewindow
 windowrule = suppressevent maximize, class:.*
 windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
 ```
->Package (System/Debug)
-```
-sys-devel/gcc-14.3.0
-dev-debug/gdb-16.3
-```
->Package (Code)
-```
-x11-terms/kitty-0.42.2-r1
-app-editors/vim-9.1.0794
-```
 >~/.vimrc
 ```
 set number
 set list
 set listchars=tab:>-,trail:·,space:␣
 autocmd BufRead,BufNewFile CMakeLists.txt setlocal expandtab shiftwidth=2 softtabstop=2
-```
->Package/Debug (Android)
-```
-dev-util/android-sdk-build-tools-34
-app-arch/zip-3.0-r7
-app-arch/unzip-6.0_p29
-dev-util/android-tools-35.0.2
 ```
 >Install Blender
 ```bash

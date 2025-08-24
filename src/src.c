@@ -2,7 +2,7 @@
 int main()
 {
 	// fp_read(NALI_F_HOME NALI_F_HOME_IMAGE "/0.png", &(long){});
-	#ifdef C_NALI_DEBUG
+	#ifdef _CM_DEBUG
 		d_set();
 	#endif
 
@@ -166,18 +166,18 @@ int main()
 //	d_free();
 //	//e0-test
 
-	#ifdef C_NALI_GEN
+	#ifdef _CM_GEN
 		g_write();
 	#endif
 	lb_set();
-	#ifdef C_NALI_SERVER
+	#ifdef _CM_SERVER
 		ls_set();
 	#endif
-	#ifdef C_NALI_CLIENT
+	#ifdef _CM_CLIENT
 		lc_set();
 
 		_sf_wlc_set();
-		vk_set();
+		_vk_set();
 		//! switch to pipewire
 		// al_set();
 		lc_vk();

@@ -1,13 +1,13 @@
-uint32_t vkqdpd_physical_device;
-VkPhysicalDevice *vkqdpd_vkphysicaldevice_p;
+uint32_t _vkq_dv_pscdv_bl;
+VkPhysicalDevice *_vkq_dv_pscdv_p;
 
-void vkqdpd_make()
+void _vkq_dv_pscdv_make()
 {
 	#ifdef _VK_SGPU
-		vkqdpd_physical_device = 1;
+		_vkq_dv_pscdv_bl = 1;
 	#else
-		NALI_D_INFO("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(vkqdpdi_vkinstance, &vkqdpd_physical_device, VK_NULL_HANDLE))
-		NALI_D_LOG("physical_device %d", vkqdpd_physical_device)
+		NALI_D_INFO("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(_vkq_dv_pscdv_it, &_vkq_dv_pscdv_bl, VK_NULL_HANDLE))
+		NALI_D_LOG("physical_device %d", _vkq_dv_pscdv_bl)
 
 		// if (!physical_device)
 		// {
@@ -15,12 +15,12 @@ void vkqdpd_make()
 		// }
 	#endif
 
-	vkqdpd_vkphysicaldevice_p = malloc(sizeof(VkPhysicalDevice) * vkqdpd_physical_device);
+	_vkq_dv_pscdv_p = malloc(sizeof(VkPhysicalDevice) * _vkq_dv_pscdv_bl);
 
-	NALI_D_INFO("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(vkqdpdi_vkinstance, &vkqdpd_physical_device, vkqdpd_vkphysicaldevice_p))
+	NALI_D_INFO("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(_vkq_dv_pscdv_it, &_vkq_dv_pscdv_bl, _vkq_dv_pscdv_p))
 }
 
-void vkqdpd_free()
+void _vkq_dv_pscdv_free()
 {
-	free(vkqdpd_vkphysicaldevice_p);
+	free(_vkq_dv_pscdv_p);
 }

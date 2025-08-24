@@ -1,11 +1,11 @@
-void vkdsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
+void _vk_dspsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
 {
 	NALI_D_INFO
 	(
 		"vkCreateDescriptorPool %d",
 		vkCreateDescriptorPool
 		(
-			vkqd_vkdevice_p[device],
+			_vkq_dv_p[device],
 			&(VkDescriptorPoolCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,

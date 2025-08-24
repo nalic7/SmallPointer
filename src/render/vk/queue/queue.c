@@ -1,41 +1,41 @@
-uint32_t *vkq_max_queue_p;
-uint32_t *vkq_max_queue_surface_p;
+uint32_t *_vkq_max_queue_p;
+uint32_t *_vkq_max_queue_surface_p;
 
-uint32_t **vkq_queue_surface_p = NULL;
-VkQueue **vkq_vkqueue_p;
+uint32_t **_vkq_queue_surface_p = NULL;
+VkQueue **_vkq_p;
 
-void vkq_set()
+void _vkq_set()
 {
-	vkq_max_queue_p = malloc(sizeof(uint32_t) * vkqdpd_physical_device);
-	vkq_max_queue_surface_p = malloc(sizeof(uint32_t) * vkqdpd_physical_device);
+	_vkq_max_queue_p = malloc(sizeof(uint32_t) * _vkq_dv_pscdv_bl);
+	_vkq_max_queue_surface_p = malloc(sizeof(uint32_t) * _vkq_dv_pscdv_bl);
 
-	vkq_queue_surface_p = malloc(sizeof(uint32_t*) * vkqdpd_physical_device);
-	for (uint32_t d = 0; d < vkqdpd_physical_device; ++d)
+	_vkq_queue_surface_p = malloc(sizeof(uint32_t*) * _vkq_dv_pscdv_bl);
+	for (uint32_t d = 0; d < _vkq_dv_pscdv_bl; ++d)
 	{
-		vkq_queue_surface_p[d] = malloc(0);
+		_vkq_queue_surface_p[d] = malloc(0);
 	}
-	vkq_vkqueue_p = malloc(sizeof(VkQueue*) * vkqdpd_physical_device);
+	_vkq_p = malloc(sizeof(VkQueue*) * _vkq_dv_pscdv_bl);
 }
 
-void vkq_setQueue(uint32_t device)
+void _vkq_add(uint32_t device)
 {
-	VkPhysicalDevice vkphysicaldevice = vkqdpd_vkphysicaldevice_p[device];
+	VkPhysicalDevice vkphysicaldevice = _vkq_dv_pscdv_p[device];
 
-	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &vkq_max_queue_p[device], VK_NULL_HANDLE);
+	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &_vkq_max_queue_p[device], VK_NULL_HANDLE);
 
-	VkQueueFamilyProperties *vkqueuefamilyproperties_p = malloc(vkq_max_queue_p[device] * sizeof(VkQueueFamilyProperties));
+	VkQueueFamilyProperties *vkqueuefamilyproperties_p = malloc(_vkq_max_queue_p[device] * sizeof(VkQueueFamilyProperties));
 
-	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &vkq_max_queue_p[device], vkqueuefamilyproperties_p);
+	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &_vkq_max_queue_p[device], vkqueuefamilyproperties_p);
 
-	NALI_D_LOG("max_queue %d", vkq_max_queue_p[device])
+	NALI_D_LOG("max_queue %d", _vkq_max_queue_p[device])
 
-	vkq_max_queue_surface_p[device] = 0;
+	_vkq_max_queue_surface_p[device] = 0;
 
 	VkBool32 surface_support;
-	for (uint32_t i = 0; i < vkq_max_queue_p[device]; i++)
+	for (uint32_t i = 0; i < _vkq_max_queue_p[device]; i++)
 	{
 		VkQueueFamilyProperties vkqueuefamilyproperties = vkqueuefamilyproperties_p[i];
-		NALI_D_INFO("vkGetPhysicalDeviceSurfaceSupportKHR %d", vkGetPhysicalDeviceSurfaceSupportKHR(vkphysicaldevice, i, vks_vksurfacekhr, &surface_support))
+		NALI_D_INFO("vkGetPhysicalDeviceSurfaceSupportKHR %d", vkGetPhysicalDeviceSurfaceSupportKHR(vkphysicaldevice, i, _vk_sf_khr, &surface_support))
 
 		NALI_D_LOG("queue %d vkqueuefamilyproperties.queueFlags %d", i, vkqueuefamilyproperties.queueFlags);
 		if (surface_support)
@@ -49,8 +49,8 @@ void vkq_setQueue(uint32_t device)
 				vk_queue_ct = i;
 			}
 
-			vkq_queue_surface_p[device] = realloc(vkq_queue_surface_p[device], (vkq_max_queue_surface_p[device] + 1) * sizeof(uint32_t));
-			vkq_queue_surface_p[device][vkq_max_queue_surface_p[device]++] = i;
+			_vkq_queue_surface_p[device] = realloc(_vkq_queue_surface_p[device], (_vkq_max_queue_surface_p[device] + 1) * sizeof(uint32_t));
+			_vkq_queue_surface_p[device][_vkq_max_queue_surface_p[device]++] = i;
 			NALI_D_LOG("surface_1 %d", i);
 			// m_queue_render = i;
 		}
@@ -65,7 +65,7 @@ void vkq_setQueue(uint32_t device)
 		// }
 
 		//check image format here
-		#ifdef C_NALI_DEBUG
+		#ifdef _CM_DEBUG
 			VkFormatProperties vkformatproperties;
 			vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, _VK_COLOR_FORMAT, &vkformatproperties);
 			if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
@@ -89,33 +89,33 @@ void vkq_setQueue(uint32_t device)
 		#endif
 	}
 
-	NALI_D_LOG("vkq_max_queue_surface_p[device] %d", vkq_max_queue_surface_p[device])
+	NALI_D_LOG("_vkq_max_queue_surface_p[device] %d", _vkq_max_queue_surface_p[device])
 
 	free(vkqueuefamilyproperties_p);
 }
 
-void vkq_getQueue(uint32_t device)
+void _vkq_get(uint32_t device)
 {
-	uint32_t max_queue = vkq_max_queue_p[device];
-	vkq_vkqueue_p[device] = malloc(max_queue * sizeof(VkQueue));
+	uint32_t max_queue = _vkq_max_queue_p[device];
+	_vkq_p[device] = malloc(max_queue * sizeof(VkQueue));
 
 	for (uint32_t i = 0; i < max_queue; ++i)
 	{
-		vkGetDeviceQueue(vkqd_vkdevice_p[device], i, 0, &vkq_vkqueue_p[device][i]);
+		vkGetDeviceQueue(_vkq_dv_p[device], i, 0, &_vkq_p[device][i]);
 	}
 }
 
-void vkq_free()
+void _vkq_free()
 {
-	for (uint32_t d = 0; d < vkqdpd_physical_device; ++d)
+	for (uint32_t d = 0; d < _vkq_dv_pscdv_bl; ++d)
 	{
-		free(vkq_queue_surface_p[d]);
-		free(vkq_vkqueue_p[d]);
+		free(_vkq_queue_surface_p[d]);
+		free(_vkq_p[d]);
 	}
 
-	free(vkq_max_queue_p);
-	free(vkq_max_queue_surface_p);
+	free(_vkq_max_queue_p);
+	free(_vkq_max_queue_surface_p);
 
-	free(vkq_queue_surface_p);
-	free(vkq_vkqueue_p);
+	free(_vkq_queue_surface_p);
+	free(_vkq_p);
 }
