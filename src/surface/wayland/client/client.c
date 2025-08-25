@@ -8,8 +8,8 @@ static int loop(void *p)
 
 	while (!(_sf_state & _SF_S_RENDER))
 	{
-		NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
-		NALI_D_LOG("_sf_state %d", _sf_state)
+		_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+		_DB_N2L("_sf_state %d", _sf_state)
 	}
 
 	while (r != INT_MAX)
@@ -32,7 +32,7 @@ static int loop(void *p)
 	else
 	{
 		//! re-create wl if crash before vk_sc
-		NALI_D_LOG("wl_display_dispatch %d", r);
+		_DB_N2L("wl_display_dispatch %d", r);
 	}
 
 	return 0;
@@ -40,22 +40,22 @@ static int loop(void *p)
 
 void _sf_wlc_set()
 {
-	NALI_D_INFO("wl_display_connect %p", _sf_wlc_dp_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
+	_DB_R2L("wl_display_connect %p", _sf_wlc_dp_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
 
 	_sf_wlc_rgt_set();
 
-	NALI_D_INFO("wl_display_roundtrip %d", wl_display_roundtrip(_sf_wlc_dp_p))
+	_DB_R2L("wl_display_roundtrip %d", wl_display_roundtrip(_sf_wlc_dp_p))
 
-	NALI_D_INFO("wl_compositor_create_surface %p", _sf_wlc_sf_p = wl_compositor_create_surface(_sf_wlc_cot_p))
+	_DB_R2L("wl_compositor_create_surface %p", _sf_wlc_sf_p = wl_compositor_create_surface(_sf_wlc_cot_p))
 
 	_sf_wlc_xdg_sf_set();
 	_sf_wlc_xdg_tl_set();
 
 	//! need more test
 	wl_surface_commit(_sf_wlc_sf_p);
-	NALI_D_INFO("wl_display_dispatch %d", wl_display_dispatch(_sf_wlc_dp_p));
+	_DB_R2L("wl_display_dispatch %d", wl_display_dispatch(_sf_wlc_dp_p));
 
-	NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, loop, NULL))
+	_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, loop, NULL))
 }
 
 void _sf_wlc_free()

@@ -1,5 +1,6 @@
 #ifndef _VKQ_H
-#define _VKQ_H
+	#define _VKQ_H
+
 	extern uint32_t *_vkq_max_queue_p;
 	extern uint32_t *_vkq_max_queue_surface_p;
 	extern uint32_t **_vkq_queue_surface_p;

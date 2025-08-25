@@ -14,8 +14,8 @@ struct xdg_surface_listener _sf_wlc_xdg_sf_listener =
 
 void _sf_wlc_xdg_sf_set()
 {
-	NALI_D_INFO("xdg_wm_base_get_xdg_surface %p", _sf_wlc_xdg_sf_p = xdg_wm_base_get_xdg_surface(_sf_wlc_xdg_wmb_p, _sf_wlc_sf_p))
-	NALI_D_INFO("xdg_surface_add_listener %d", xdg_surface_add_listener(_sf_wlc_xdg_sf_p, &_sf_wlc_xdg_sf_listener, NULL))
+	_DB_R2L("xdg_wm_base_get_xdg_surface %p", _sf_wlc_xdg_sf_p = xdg_wm_base_get_xdg_surface(_sf_wlc_xdg_wmb_p, _sf_wlc_sf_p))
+	_DB_R2L("xdg_surface_add_listener %d", xdg_surface_add_listener(_sf_wlc_xdg_sf_p, &_sf_wlc_xdg_sf_listener, NULL))
 }
 
 void _sf_wlc_xdg_sf_free()

@@ -1,4 +1,4 @@
-#ifndef NALI_MC_FIELD_H
-#define NALI_MC_FIELD_H
+#ifndef MCF_H
+	#define MCF_H
 
 #endif

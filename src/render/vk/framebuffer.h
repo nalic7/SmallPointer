@@ -1,7 +1,8 @@
 #ifndef _VK_FBF_H
-#define _VK_FBF_H
+	#define _VK_FBF_H
+
 	#define _VK_FBF_MAKE(device, vkimageview_p, vkimageview_size, vkrenderpass, vkframebuffer_p) \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkCreateFramebuffer %d", \
 			vkCreateFramebuffer \

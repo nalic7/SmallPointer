@@ -1,7 +1,8 @@
 #ifndef _VK_RDP_H
-#define _VK_RDP_H
+	#define _VK_RDP_H
+
 	#define _VK_RDP_MAKE(device, vkrenderpass_p) \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkCreateRenderPass %d", \
 			vkCreateRenderPass \

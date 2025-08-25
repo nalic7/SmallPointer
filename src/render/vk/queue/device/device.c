@@ -40,9 +40,9 @@ void _vkq_dv_make(uint32_t device)
 
 	VkPhysicalDeviceFeatures vkphysicaldevicefeatures;
 	vkGetPhysicalDeviceFeatures(vkphysicaldevice, &vkphysicaldevicefeatures);
-	NALI_D_LOG("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
+	_DB_N2L("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
 
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"vkCreateDevice %d",
 		vkCreateDevice

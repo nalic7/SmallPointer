@@ -4,17 +4,17 @@ static socklen_t server_sockaddr_in_bl = sizeof(server_sockaddr_in);
 
 void nc_set()
 {
-	NALI_D_INFO("socket %d", server_fd = socket(AF_INET, SOCK_DGRAM, 0))
-	//NALI_D_LOG("%s", strerror(errno))
+	_DB_R2L("socket %d", server_fd = socket(AF_INET, SOCK_DGRAM, 0))
+	//_DB_N2L("%s", strerror(errno))
 
-	NALI_D_INFO("fcntl %d", fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK))
-	//NALI_D_LOG("%s", strerror(errno))
+	_DB_R2L("fcntl %d", fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK))
+	//_DB_N2L("%s", strerror(errno))
 
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
 	server_sockaddr_in.sin_addr.s_addr = NALI_NC_IP;
-	// NALI_D_INFO("inet_pton %d", inet_pton(AF_INET, NALI_NC_IP, &server_sockaddr_in.sin_addr))
-	//NALI_D_LOG("%s", strerror(errno))
+	// _DB_R2L("inet_pton %d", inet_pton(AF_INET, NALI_NC_IP, &server_sockaddr_in.sin_addr))
+	//_DB_N2L("%s", strerror(errno))
 
 	lcu_send();
 }
@@ -37,7 +37,7 @@ void nc_check()
 {
 	if (errno != errno_temp)
 	{
-		NALI_D_INFO_A("c %d %s", errno, strerror(errno))
+		_DB_W2L("c %d %s", errno, strerror(errno))
 	}
 	errno_temp = errno;
 }

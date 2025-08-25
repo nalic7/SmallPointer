@@ -144,9 +144,9 @@ void lsu_read(NALI_LB_UT u)
 		ns_p[u].lb_u.rt_p[3] = NALI_M_D2R(-90.0F-45);
 	}
 
-	// NALI_D_LOG("0 s_ry %f", s_ry)
+	// _DB_N2L("0 s_ry %f", s_ry)
 	ns_p[u].lb_u.rt_p[4] = NALI_M_NORMALN_F(ns_p[u].lb_u.rt_p[4], NALI_M_D2R(360.0F));
-	// NALI_D_LOG("1 s_ry %f", s_ry)
+	// _DB_N2L("1 s_ry %f", s_ry)
 
 	if (k & NALI_LB_K_REROTATE)
 	{

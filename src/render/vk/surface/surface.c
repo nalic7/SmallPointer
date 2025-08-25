@@ -5,9 +5,9 @@ void _vk_sf_make()
 	#ifdef _CM_ST_ANDROID
 		while (sa_anativewindow_p == NULL)
 		{
-			NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+			_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
 		}
-		NALI_D_INFO
+		_DB_R2L
 		(
 			"vkCreateAndroidSurfaceKHR %d",
 			vkCreateAndroidSurfaceKHR
@@ -27,10 +27,10 @@ void _vk_sf_make()
 	#else
 		while (!(_sf_state & _SF_S_SURFACE))
 		{
-			NALI_D_LOG("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
-			NALI_D_LOG("_sf_state %d", _sf_state)
+			_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+			_DB_N2L("_sf_state %d", _sf_state)
 		}
-		NALI_D_INFO
+		_DB_R2L
 		(
 			"vkCreateWaylandSurfaceKHR %d",
 			vkCreateWaylandSurfaceKHR

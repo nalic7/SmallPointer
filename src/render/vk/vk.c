@@ -11,10 +11,10 @@ uint8_t vk_non_coherent_atom_size;
 		VkPhysicalDevice vkphysicaldevice = _vkq_dv_pscdv_p[d];
 
 		uint32_t extensions = 0;
-		NALI_D_INFO("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE))
+		_DB_R2L("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE))
 
 		VkExtensionProperties *vkextensionproperties_p = malloc(extensions * sizeof(VkExtensionProperties));
-		NALI_D_INFO("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_p))
+		_DB_R2L("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_p))
 
 		uint32_t device_extensions_size = sizeof(_vkq_dv_ets_p) / sizeof(_vkq_dv_ets_p[0]);
 		uint32_t device_extensions = 0;
@@ -29,29 +29,29 @@ uint8_t vk_non_coherent_atom_size;
 				}
 			}
 		}
-		NALI_D_LOG("extensions %d", extensions)
+		_DB_N2L("extensions %d", extensions)
 		for (uint32_t x = 0; x < extensions; ++x)
 		{
 			VkExtensionProperties vkextensionproperties = vkextensionproperties_p[x];
-			NALI_D_LOG("extensionName %s", vkextensionproperties.extensionName)
+			_DB_N2L("extensionName %s", vkextensionproperties.extensionName)
 		}
 
 		free(vkextensionproperties_p);
-		NALI_D_LOG("device_extension_support %d", device_extensions == device_extensions_size)
+		_DB_N2L("device_extension_support %d", device_extensions == device_extensions_size)
 	}
 
 	static void ieinfo()
 	{
 		uint32_t count = 0;
-		NALI_D_INFO("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, VK_NULL_HANDLE))
+		_DB_R2L("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, VK_NULL_HANDLE))
 
 		VkExtensionProperties *vkextensionproperties_p = malloc(sizeof(VkExtensionProperties) * count);
 
-		NALI_D_INFO("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, vkextensionproperties_p))
+		_DB_R2L("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, vkextensionproperties_p))
 
 		for (uint32_t i = 0; i < count; ++i)
 		{
-			NALI_D_LOG("%d %s", i, vkextensionproperties_p[i].extensionName)
+			_DB_N2L("%d %s", i, vkextensionproperties_p[i].extensionName)
 		}
 
 		free(vkextensionproperties_p);
@@ -61,42 +61,42 @@ uint8_t vk_non_coherent_atom_size;
 	{
 		VkPhysicalDeviceProperties vkphysicaldeviceproperties;
 		vkGetPhysicalDeviceProperties(_vkq_dv_pscdv_p[device], &vkphysicaldeviceproperties);
-		NALI_D_LOG("Name %s", vkphysicaldeviceproperties.deviceName)
-		NALI_D_LOG
+		_DB_N2L("Name %s", vkphysicaldeviceproperties.deviceName)
+		_DB_N2L
 		(
 			"Vulkan MAJOR MINOR PATCH %d.%d.%d",
 			VK_VERSION_MAJOR(vkphysicaldeviceproperties.apiVersion),
 			VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 			VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
 		)
-		NALI_D_LOG("maxUniformBufferRange %d", vkphysicaldeviceproperties.limits.maxUniformBufferRange)
-		NALI_D_LOG("maxPerStageDescriptorUniformBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorUniformBuffers)
-		NALI_D_LOG("maxDescriptorSetUniformBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetUniformBuffers)
-		NALI_D_LOG("maxStorageBufferRange %d", vkphysicaldeviceproperties.limits.maxStorageBufferRange)
-		NALI_D_LOG("maxPerStageDescriptorStorageBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorStorageBuffers)
-		NALI_D_LOG("maxDescriptorSetStorageBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetStorageBuffers)
+		_DB_N2L("maxUniformBufferRange %d", vkphysicaldeviceproperties.limits.maxUniformBufferRange)
+		_DB_N2L("maxPerStageDescriptorUniformBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorUniformBuffers)
+		_DB_N2L("maxDescriptorSetUniformBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetUniformBuffers)
+		_DB_N2L("maxStorageBufferRange %d", vkphysicaldeviceproperties.limits.maxStorageBufferRange)
+		_DB_N2L("maxPerStageDescriptorStorageBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorStorageBuffers)
+		_DB_N2L("maxDescriptorSetStorageBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetStorageBuffers)
 
-		NALI_D_LOG("maxPerStageResources %d", vkphysicaldeviceproperties.limits.maxPerStageResources)
+		_DB_N2L("maxPerStageResources %d", vkphysicaldeviceproperties.limits.maxPerStageResources)
 
-		NALI_D_LOG("maxSamplerAnisotropy %f", vkphysicaldeviceproperties.limits.maxSamplerAnisotropy)
+		_DB_N2L("maxSamplerAnisotropy %f", vkphysicaldeviceproperties.limits.maxSamplerAnisotropy)
 
 		//VkSampleCountFlagBits
-		NALI_D_LOG("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
-		NALI_D_LOG("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
+		_DB_N2L("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
+		_DB_N2L("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
 
-		NALI_D_INFO("nonCoherentAtomSize %d", vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
+		_DB_R2L("nonCoherentAtomSize %d", vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
 	}
 
 	static void dginfo()
 	{
 		// uint32_t device_group;
-		// NALI_D_INFO("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(_vkq_dv_pscdv_it, &device_group, 0))
+		// _DB_R2L("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(_vkq_dv_pscdv_it, &device_group, 0))
 		// VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
-		// NALI_D_INFO("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(_vkq_dv_pscdv_it, &device_group, vkphysicaldevicegroupproperties_p))
-		// NALI_D_LOG("device_group %d", device_group)
+		// _DB_R2L("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(_vkq_dv_pscdv_it, &device_group, vkphysicaldevicegroupproperties_p))
+		// _DB_N2L("device_group %d", device_group)
 		// for (uint32_t u = 0; u < device_group; ++u)
 		// {
-		// 	NALI_D_LOG("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
+		// 	_DB_N2L("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
 		// }
 		// free(vkphysicaldevicegroupproperties_p);
 	}
@@ -106,7 +106,7 @@ uint8_t vk_non_coherent_atom_size;
 		// VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
 		// vkGetDeviceGroupPeerMemoryFeatures(_vkq_dv_p[device], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
 		// //VkPeerMemoryFeatureFlagBits
-		// NALI_D_LOG("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
+		// _DB_N2L("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
 	}
 #endif
 
@@ -136,7 +136,7 @@ void _vk_set()
 
 	for (uint32_t d = 0; d < _vkq_dv_pscdv_bl; ++d)
 	{
-		NALI_D_LOG("device %d", d)
+		_DB_N2L("device %d", d)
 		#ifdef _CM_DEBUG
 			einfo(d);
 			vkinfo(d);

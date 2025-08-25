@@ -1,5 +1,6 @@
 #ifndef NALI_PCH_H
-#define NALI_PCH_H
+	#define NALI_PCH_H
+
 	#ifdef _CM_ST_MC
 		#include <jvmti.h>
 	#endif
@@ -112,30 +113,29 @@
 		#include "render/vk/framebuffer.h"
 		#include "render/vk/swapchain/swapchain.h"
 		#include "render/vk/fence.h"
-		#include "render/vk/semaphore/semaphore.h"
+		#include "render/vk/semaphore.h"
 		#include "render/vk/command/pool/pool.h"
 		#include "render/vk/command/buffer/buffer.h"
 		#include "render/vk/buffer/buffer.h"
 		#include "render/vk/imageview/image.h"
 		#include "render/vk/imageview/imageview.h"
-		#include "render/vk/shader/shader.h"
 		#include "render/vk/sampler.h"
 
 		#include "render/vk/descriptorset/descriptorset.h"
 		#include "render/vk/descriptorset/layout/layout.h"
 		#include "render/vk/descriptorset/pool/pool.h"
 
-		#include "render/vk/graphicspipeline/pipelinelayout/pipelinelayout.h"
-		#include "render/vk/graphicspipeline/colorblendstatecreateinfo.h"
-		#include "render/vk/graphicspipeline/dynamicstatecreateinfo.h"
-		#include "render/vk/graphicspipeline/inputassemblystatecreateinfo.h"
-		#include "render/vk/graphicspipeline/multisamplestatecreateinfo.h"
-		#include "render/vk/graphicspipeline/rasterizationstatecreateinfo.h"
-		#include "render/vk/graphicspipeline/shaderstagecreateinfo/shaderstagecreateinfo.h"
-		#include "render/vk/graphicspipeline/vertexinputstatecreateinfo.h"
-		#include "render/vk/graphicspipeline/viewportstatecreateinfo.h"
-		#include "render/vk/graphicspipeline/depthstencilstatecreateinfo.h"
-		#include "render/vk/graphicspipeline/graphicspipeline.h"
+		#include "render/vk/pipeline/layout/layout.h"
+		#include "render/vk/pipeline/color.h"
+		#include "render/vk/pipeline/dynamic.h"
+		#include "render/vk/pipeline/input.h"
+		#include "render/vk/pipeline/multi.h"
+		#include "render/vk/pipeline/rasterization.h"
+		#include "render/vk/pipeline/shader/shader.h"
+		#include "render/vk/pipeline/vertex.h"
+		#include "render/vk/pipeline/viewport.h"
+		#include "render/vk/pipeline/depth.h"
+		#include "render/vk/pipeline/pipeline.h"
 
 		#include "render/vk/command/draw/draw.h"
 

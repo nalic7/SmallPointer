@@ -127,15 +127,15 @@ void _vk_cmd_set()
 	// sprintf(frag_file + frag_name_index, "%u", frag_index);
 	// strcat(frag_file, shader_type);
 
-	// vk_setVkPipelineShaderStageCreateInfo(vk_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	// vk_setVkPipelineShaderStageCreateInfo(vk_device, NALI_F_HOME NALI_F_HOME_SHADER "vert.spv", NALI_F_HOME NALI_F_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	vk_setVkPipelineShaderStageCreateInfo(vk_device, NALI_F_HOME_VERT, NALI_F_HOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// _vk_pl_sd_set(vk_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// _vk_pl_sd_set(vk_device, NALI_F_HOME NALI_F_HOME_SHADER "vert.spv", NALI_F_HOME NALI_F_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	_vk_pl_sd_set(vk_device, NALI_F_HOME_VERT, NALI_F_HOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 	// free(vert_file);
 	// free(frag_file);
 
 	//s1-s
-	vkgplpllo_make(vk_device, &lcs_vkdescriptorsetlayout, 1, &vkpipelinelayout);
-	vkgpl_make(vk_device, vkpipelineshaderstagecreateinfo_array, _vk_swc_rdp, vkpipelinelayout, &vkpipeline);
+	_vk_pl_lo_make(vk_device, &lcs_vkdescriptorsetlayout, 1, &vkpipelinelayout);
+	_vk_pl_make(vk_device, vkpipelineshaderstagecreateinfo_array, _vk_swc_rdp, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -150,10 +150,10 @@ void _vk_cmd_set()
 	{
 		//s0-cmd
 		_vk_cm_bf_make(vk_device, vk_queue_g, vkcommandbuffer_p + l_0, 1);
-		vk_cmd(vkcommandbuffer_p[l_0], &vkcommandbufferbegininfo, vkqueue_graphic);
 		//e0-cmd
 
 		//! need check again
+		//vk_cmd(vkcommandbuffer_p[l_0], &vkcommandbufferbegininfo, vkqueue_graphic);
 		// //s0-ubo
 		// // lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, &vkdescriptorimageinfo, vkwritedescriptorset_array);
 		// lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, vkwritedescriptorset_array);
@@ -182,7 +182,7 @@ void _vk_cmd_set()
 	//e0-draw
 
 	// //s0-mtx
-	// NALI_D_INFO("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
+	// _DB_R2L("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
 	// //e0-mtx
 
 	// // frame_start = time(0);
@@ -191,7 +191,7 @@ void _vk_cmd_set()
 
 void freeCmdDraw()
 {
-	NALI_D_INFO("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
+	_DB_R2L("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 
 	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
 	{
@@ -329,7 +329,7 @@ void freeCmdDraw()
 		if (vkresult != VK_SUCCESS)
 		{
 			//support recreate vkswapchainkhr if need
-			NALI_D_LOG("vkAcquireNextImageKHR %d", vkresult)
+			_DB_N2L("vkAcquireNextImageKHR %d", vkresult)
 		}
 
 		vkrenderpassbegininfo.framebuffer = _vk_swc_fbf_p[image_index];
@@ -381,9 +381,9 @@ void freeCmdDraw()
 			// end = clock();
 			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 			frame_start = frame_end;
-			// NALI_D_LOG("time %ld", frame_time)
-			NALI_D_LOG("time %f", frame_time)
-			NALI_D_LOG("frame %d", frame)
+			// _DB_N2L("time %ld", frame_time)
+			_DB_N2L("time %f", frame_time)
+			_DB_N2L("frame %d", frame)
 			frame = 0;
 		}
 

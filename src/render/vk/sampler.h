@@ -1,5 +1,6 @@
 #ifndef _VK_SP_H
-#define _VK_SP_H
+	#define _VK_SP_H
+
 	//.i mipmap 0
 	#define _VK_SP_MAKE(device, mipmap, line, vksampler_p) \
 		VkSamplerCreateInfo vksamplercreateinfo = \
@@ -32,5 +33,5 @@
 			vksamplercreateinfo.minFilter = VK_FILTER_NEAREST; \
 			vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST; \
 		} \
-		NALI_D_INFO("vkCreateSampler %d", vkCreateSampler(_vkq_dv_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
+		_DB_R2L("vkCreateSampler %d", vkCreateSampler(_vkq_dv_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
 #endif

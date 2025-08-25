@@ -40,8 +40,8 @@ struct xdg_toplevel_listener _sf_wlc_xdg_tl_listener =
 
 void _sf_wlc_xdg_tl_set()
 {
-	NALI_D_INFO("xdg_surface_get_toplevel %p", _sf_wlc_xdg_tl_p = xdg_surface_get_toplevel(_sf_wlc_xdg_sf_p))
-	NALI_D_INFO("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(_sf_wlc_xdg_tl_p, &_sf_wlc_xdg_tl_listener, NULL))
+	_DB_R2L("xdg_surface_get_toplevel %p", _sf_wlc_xdg_tl_p = xdg_surface_get_toplevel(_sf_wlc_xdg_sf_p))
+	_DB_R2L("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(_sf_wlc_xdg_tl_p, &_sf_wlc_xdg_tl_listener, NULL))
 }
 
 void _sf_wlc_xdg_tl_free()

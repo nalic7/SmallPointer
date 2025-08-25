@@ -1,6 +1,6 @@
 #!/bin/bash
 F=CMakeLists.txt
-sed -i '/#set(S_NAME android)/c\set(S_NAME android)' $F
+sed -i '/#set(ST android)/c\set(ST android)' $F
 sed -i '/#set(CLIENT 1)/c\set(CLIENT 1)' $F
 #sed -i '/#set(SERVER 1)/c\set(SERVER 1)' $F
 sed -i '/#set(VK 1)/c\set(VK 1)' $F

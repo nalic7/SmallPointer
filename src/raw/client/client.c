@@ -27,7 +27,7 @@ void lc_vk()
 
 	_vk_cmd_set();
 	#ifdef _CM_ST_ANDROID
-		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, _vk_cmd_loop, NULL))
+		_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, _vk_cmd_loop, NULL))
 	#else
 		_vk_cmd_loop();
 	#endif
@@ -84,5 +84,5 @@ void lc_freeVk(uint32_t device)
 void lc_free()
 {
 	mtx_lock(lb_mtx_t_p);
-	s_state |= _SF_S_EXIT;
+	_sf_state |= _SF_S_EXIT;
 }

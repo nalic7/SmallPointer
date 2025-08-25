@@ -1,5 +1,6 @@
 #ifndef _VKQ_DV_PSCDV_IT_H
-#define _VKQ_DV_PSCDV_IT_H
+	#define _VKQ_DV_PSCDV_IT_H
+
 	extern VkInstance _vkq_dv_pscdv_it;
 
 	#ifdef _CM_DEBUG

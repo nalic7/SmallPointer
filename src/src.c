@@ -3,7 +3,7 @@ int main()
 {
 	// fp_read(NALI_F_HOME NALI_F_HOME_IMAGE "/0.png", &(long){});
 	#ifdef _CM_DEBUG
-		d_set();
+		_db_set();
 	#endif
 
 //	//s0-test
@@ -69,19 +69,19 @@ int main()
 //	// 		float extra = max_value - start + end + 1 - min;
 //
 //	// 		//use extra
-//	// 		NALI_D_LOG("0")
+//	// 		_DB_N2L("0")
 //	// 		next = extra;
 //	// 	}
 //	// 	else
 //	// 	{
-//	// 		NALI_D_LOG("1")
+//	// 		_DB_N2L("1")
 //	// 		next = end - start;
 //	// 	}
 //	// }
 //	// for (uint32_t rw = 0; rw < 4; ++rw)
 //	// {
-//	// 	NALI_D_LOG("x %f", start += next * delta)
-//	// 	NALI_D_LOG("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
+//	// 	_DB_N2L("x %f", start += next * delta)
+//	// 	_DB_N2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
 //	// }
 //	//s2-test0
 //	// for (uint32_t rw = 0; rw < 5; ++rw)
@@ -91,17 +91,17 @@ int main()
 //	// 		float extra = max_value - start + end/*  + 1 */ - min;
 //
 //	// 		//use extra
-//	// 		NALI_D_LOG("rw 0 %d", rw)
-//	// 		NALI_D_LOG("extra 0 %f", extra)
-//	// 		NALI_D_LOG("extra 1 %f", end - start)
-//	// 		NALI_D_LOG("x %f", start += extra * delta)
-//	// 		NALI_D_LOG("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
+//	// 		_DB_N2L("rw 0 %d", rw)
+//	// 		_DB_N2L("extra 0 %f", extra)
+//	// 		_DB_N2L("extra 1 %f", end - start)
+//	// 		_DB_N2L("x %f", start += extra * delta)
+//	// 		_DB_N2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
 //	// 	}
 //	// 	else
 //	// 	{
-//	// 		NALI_D_LOG("rw 1 %d", rw)
-//	// 		NALI_D_LOG("extra 1 %f", end - start)
-//	// 		NALI_D_LOG("x %f", start += (end - start) * delta)
+//	// 		_DB_N2L("rw 1 %d", rw)
+//	// 		_DB_N2L("extra 1 %f", end - start)
+//	// 		_DB_N2L("x %f", start += (end - start) * delta)
 //	// 	}
 //
 //	// 	delta += 0.25;
@@ -117,53 +117,53 @@ int main()
 //	{
 //		float extra = max_value - start + end - min;
 //
-//		NALI_D_LOG("0 next %f", next = extra * delta)
+//		_DB_N2L("0 next %f", next = extra * delta)
 //	}
 //	else
 //	{
-//		NALI_D_LOG("1 next %f", next = (end - start) * delta)
+//		_DB_N2L("1 next %f", next = (end - start) * delta)
 //	}
 //	//1/delta or frame/sec
 //	for (uint32_t rw = 0; rw < 1 / delta; ++rw)
 //	{
-//		NALI_D_LOG("f %d", ++frame)
+//		_DB_N2L("f %d", ++frame)
 //		if (frame == NALI_LC_MAX_F)
 //		{
-//			NALI_D_LOG("x %f", start = end)
+//			_DB_N2L("x %f", start = end)
 //		}
 //		else
 //		{
-//			NALI_D_LOG("x %f", start += next)
+//			_DB_N2L("x %f", start += next)
 //		}
-//		NALI_D_LOG("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
+//		_DB_N2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
 //	}
 //	//e1-keyframe
 //
 //	clock_gettime(CLOCK_MONOTONIC, &time_end);
 //
-//	// // NALI_D_LOG("cos_theta %f", cos_theta)
-//	// // // NALI_D_LOG("angle_rad %f", angle_rad)
+//	// // _DB_N2L("cos_theta %f", cos_theta)
+//	// // // _DB_N2L("angle_rad %f", angle_rad)
 //
-//	// NALI_D_LOG("horizontal angle %f", o_h)
-//	// NALI_D_LOG("horizontal angle (r2d) %f", NALI_M_R2D(o_h))
+//	// _DB_N2L("horizontal angle %f", o_h)
+//	// _DB_N2L("horizontal angle (r2d) %f", NALI_M_R2D(o_h))
 //
-//	// NALI_D_LOG("vertical angle %f", o_v)
-//	// NALI_D_LOG("vertical angle (r2d) %f", NALI_M_R2D(o_v))
+//	// _DB_N2L("vertical angle %f", o_v)
+//	// _DB_N2L("vertical angle (r2d) %f", NALI_M_R2D(o_v))
 //
-//	// NALI_D_LOG("u_hv[0] %f", u_hv[0])
-//	// NALI_D_LOG("u_hv[1] %f", u_hv[1])
-//	// NALI_D_LOG("u_hv[2] %f", u_hv[2])
+//	// _DB_N2L("u_hv[0] %f", u_hv[0])
+//	// _DB_N2L("u_hv[1] %f", u_hv[1])
+//	// _DB_N2L("u_hv[2] %f", u_hv[2])
 //
-//	NALI_D_LOG("time_start_sec %ld", time_start.tv_sec)
-//	NALI_D_LOG("time_start_nsec %ld", time_start.tv_nsec)
+//	_DB_N2L("time_start_sec %ld", time_start.tv_sec)
+//	_DB_N2L("time_start_nsec %ld", time_start.tv_nsec)
 //
-//	NALI_D_LOG("time_end_sec %ld", time_end.tv_sec)
-//	NALI_D_LOG("time_end_nsec %ld", time_end.tv_nsec)
+//	_DB_N2L("time_end_sec %ld", time_end.tv_sec)
+//	_DB_N2L("time_end_nsec %ld", time_end.tv_nsec)
 //
-//	NALI_D_LOG("time_final_sec %f", time_end.tv_sec + (double)time_end.tv_nsec / 1e9 - time_start.tv_sec - (double)time_start.tv_nsec / 1e9)
-//	NALI_D_LOG("time_final_nsec %ld", (time_end.tv_sec - time_start.tv_sec) * 1000000000L + time_end.tv_nsec - time_start.tv_nsec)
+//	_DB_N2L("time_final_sec %f", time_end.tv_sec + (double)time_end.tv_nsec / 1e9 - time_start.tv_sec - (double)time_start.tv_nsec / 1e9)
+//	_DB_N2L("time_final_nsec %ld", (time_end.tv_sec - time_start.tv_sec) * 1000000000L + time_end.tv_nsec - time_start.tv_nsec)
 //
-//	d_free();
+//	_db_free();
 //	//e0-test
 
 	#ifdef _CM_GEN

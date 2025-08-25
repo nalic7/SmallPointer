@@ -1,6 +1,5 @@
-#ifndef NALI_GEN_MODEL_H
-#define NALI_GEN_MODEL_H
+#ifndef G_MD_H
+	#define G_MD_H
 
-void gm_write();
-
+	void g_md_write();
 #endif

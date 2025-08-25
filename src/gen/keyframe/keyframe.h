@@ -1,6 +1,5 @@
-#ifndef NALI_GEN_KEYFRAME_H
-#define NALI_GEN_KEYFRAME_H
+#ifndef G_KF_H
+	#define G_KF_H
 
-void gkf_write();
-
+	void g_kf_write();
 #endif

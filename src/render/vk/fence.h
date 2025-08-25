@@ -1,7 +1,8 @@
 #ifndef _VKF_H
-#define _VKF_H
+	#define _VKF_H
+
 	#define _VKF_MAKE(device, vkfence_p) \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkCreateFence %d", \
 			vkCreateFence \

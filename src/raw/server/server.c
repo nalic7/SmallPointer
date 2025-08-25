@@ -8,7 +8,7 @@ static uint8_t ls_state;
 
 void ls_set()
 {
-	NALI_D_INFO("mkdir %d", mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR))
+	_DB_R2L("mkdir %d", mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR))
 
 	ls_state = NALI_LS_STATE_ON;
 
@@ -17,7 +17,7 @@ void ls_set()
 	ls_open();
 
 	#ifdef _CM_CLIENT
-		NALI_D_INFO("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
+		_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, ls_loop, NULL))
 	#else
 		ls_loop();
 	#endif
@@ -56,7 +56,7 @@ void ls_read(NALI_LB_UT u)
 
 void ls_open()
 {
-	NALI_D_INFO("fopen %p", ls_file_p = fopen(NALI_F_SAVE_SPACE, "rb"))
+	_DB_R2L("fopen %p", ls_file_p = fopen(NALI_F_SAVE_SPACE, "rb"))
 
 	lsu_open();
 	lsm_open();
@@ -69,7 +69,7 @@ void ls_open()
 
 void ls_save()
 {
-	NALI_D_INFO("fopen %p", ls_file_p = fopen(NALI_F_SAVE_SPACE, "wb"))
+	_DB_R2L("fopen %p", ls_file_p = fopen(NALI_F_SAVE_SPACE, "wb"))
 
 	lsu_save();
 	lsm_save();

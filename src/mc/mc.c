@@ -1,11 +1,11 @@
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved)
 {
 	#ifdef _CM_DEBUG
-		d_set();
+		_db_set();
 	#endif
 
 	jvmtiEnv *jvmtienv;
-	NALI_D_LOG("getEnv %d", (*vm)->GetEnv(vm, (void**)&jvmtienv, JVMTI_VERSION_1_2));
+	_DB_N2L("getEnv %d", (*vm)->GetEnv(vm, (void**)&jvmtienv, JVMTI_VERSION_1_2));
 
 	jvmtiEventCallbacks jvmtieventcallbacks = {0};
 	jvmtieventcallbacks.ClassLoad = &mcc_jvmtiEventClassLoad;

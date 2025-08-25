@@ -26,10 +26,10 @@
 // static const void config[];
 void g_write()
 {
-	NALI_D_INFO("mkdir %d", mkdir(NALI_F_HOME, S_IRUSR | S_IWUSR | S_IXUSR))
+	_DB_R2L("mkdir %d", mkdir(NALI_F_HOME, S_IRUSR | S_IWUSR | S_IXUSR))
 	remove(NALI_F_HOME_ASSET);
-	gkf_write();
-	gm_write();
+	g_kf_write();
+	g_md_write();
 
 	// FILE *file = fopen(NALI_F_HOME "pipeline.bin", "wb");
 	// fwrite(pipeline, sizeof(char), sizeof(pipeline), file);

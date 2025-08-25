@@ -142,7 +142,7 @@
 // 	const char image_type[] = ".png";
 // 	const char image_path[] = NALI_F_HOME_IMAGE;
 // 	DIR *dir_p = opendir(image_path);
-// 	NALI_D_LOG("opendir %p", dir_p)
+// 	_DB_N2L("opendir %p", dir_p)
 
 // 	size_t name_index = sizeof(image_path)-1 + 1 + 1;
 // 	char *image_file = malloc(name_index);
@@ -178,7 +178,7 @@
 // 			wh_index = index * 2;
 
 // 			// FILE *file_p = fopen(image_file, "rb");
-// 			// NALI_D_LOG("file_p %p", file_p)
+// 			// _DB_N2L("file_p %p", file_p)
 // 			// png_init_io(png, file_p);
 // 			// png_read_info(png, info);
 

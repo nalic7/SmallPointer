@@ -1,25 +1,25 @@
-void vkgpl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
+void _vk_pl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
 {
 	LCS_setVkVertexInputBindingDescription(vkvertexinputbindingdescription)
 	LCS_setVkVertexInputAttributeDescription(vkvertexinputattributedescription_array)
-	vk_setPipelineVertexInputStateCreateInfo(&vkvertexinputbindingdescription, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
+	_VK_PL_VT_IPSACAIF(&vkvertexinputbindingdescription, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
 
-	vk_setPipelineInputAssemblyStateCreateInfo(vkpipelineinputassemblystatecreateinfo)
+	_VK_PL_IP_AEB_SACAIF(vkpipelineinputassemblystatecreateinfo)
 
-	vk_setPipelineViewportStateCreateInfo(vkpipelineviewportstatecreateinfo)
+	_VK_PL_VP_SACAIF(vkpipelineviewportstatecreateinfo)
 
-	vk_setPipelineRasterizationStateCreateInfo(vkpipelinerasterizationstatecreateinfo)
-	vk_setPipelineMultisampleStateCreateInfo(vkpipelinemultisamplestatecreateinfo)
+	_VK_PL_RTIT_SACAIF(vkpipelinerasterizationstatecreateinfo)
+	_VK_PL_MT_SPSACAIF(vkpipelinemultisamplestatecreateinfo)
 
-	vk_setVkPipelineColorBlendAttachmentState(vkpipelinecolorblendattachmentstate)
-	vk_setPipelineColorBlendStateCreateInfo(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
+	_VK_PL_CL_BATMST(vkpipelinecolorblendattachmentstate)
+	_VK_PL_CL_BSACAIF(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
 
-	vk_setVkDynamicState(vkdynamicstate_array)
-	vk_setPipelineDynamicStateCreateInfo(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
+	_VK_PL_DNM_SET(vkdynamicstate_array)
+	_VK_PL_DNM_SACAIF(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
 
-	vk_setPipelineDepthStencilStateCreateInfo(vkpipelinedepthstencilstatecreateinfo)
+	_VK_PLD_SC_SACAIF(vkpipelinedepthstencilstatecreateinfo)
 
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines

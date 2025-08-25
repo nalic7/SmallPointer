@@ -1,6 +1,6 @@
-void vkgplpllo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p)
+void _vk_pl_lo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p)
 {
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"vkCreatePipelineLayout %d",
 		vkCreatePipelineLayout

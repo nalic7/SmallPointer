@@ -1,4 +1,4 @@
-#ifndef NALI_MC_METHOD_H
-#define NALI_MC_METHOD_H
+#ifndef _MC_MT_H
+	#define _MC_MT_H
 
 #endif

@@ -23,7 +23,7 @@ static const char *extension_p[] =
 
 void _vkq_dv_pscdv_it_make()
 {
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"vkCreateInstance %d",
 		vkCreateInstance

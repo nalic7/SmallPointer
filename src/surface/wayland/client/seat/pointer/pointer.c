@@ -36,7 +36,7 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
 				lcu_k |= NALI_LB_K_REROTATE;
 			else
-				lcu_k &= 0xFFu - NALI_SWLCP_P_ROTATE;
+				lcu_k &= 0xFFu - NALI_LB_K_REROTATE;
 			mtx_unlock(lb_mtx_t_p);
 	}
 }

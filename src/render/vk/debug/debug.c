@@ -2,7 +2,7 @@ static VkDebugUtilsMessengerEXT vkdebugutilsmessengerext;
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT vkdebugutilsmessageseverityflagbitsext, VkDebugUtilsMessageTypeFlagsEXT vkdebugutilsmessagetypeflagsext, const VkDebugUtilsMessengerCallbackDataEXT *vkdebugutilsmessengercallbackdataext, void *data)
 {
-	NALI_D_INFO_A("vk_debug %s", vkdebugutilsmessengercallbackdataext->pMessage)
+	_DB_W2L("vk_debug %s", vkdebugutilsmessengercallbackdataext->pMessage)
 	return 0;
 }
 
@@ -22,7 +22,7 @@ static VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebu
 
 void _vk_db_make()
 {
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"createDebugUtilsMessengerEXT %d",
 		createDebugUtilsMessengerEXT

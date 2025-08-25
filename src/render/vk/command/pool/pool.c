@@ -12,7 +12,7 @@ void _vk_cmp_make(uint32_t device)
 
 	for (uint32_t q = 0; q < max_queue; ++q)
 	{
-		NALI_D_INFO
+		_DB_R2L
 		(
 			"vkCreateCommandPool %d",
 			vkCreateCommandPool

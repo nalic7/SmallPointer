@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 
-#set(ST linux)
-#  set(WL 1)
+set(ST linux)
+  set(WL 1)
 #  set(X11 1)
 #  set(DRM 1)
 #set(ST android)
@@ -9,17 +9,17 @@ cmake_minimum_required(VERSION 3.31)
 #set(ST mc)
 
 #set(GEN 1)
-#set(CLIENT 1)
+set(CLIENT 1)
 #set(SERVER 1)
 
-#set(VK 1)
-#  set(VK_DEBUG 1)
+set(VK 1)
+  set(VK_DEBUG 1)
 #set(GL 1)
 
-#set(TEST 1)
-#set(TEST_3D 1)
+set(TEST 1)
+set(TEST_3D 1)
 
-#set(DEBUG 1)
+set(DEBUG 1)
 
 set(PN SmallPointer)
 project(${PN} LANGUAGES C)
@@ -43,7 +43,7 @@ endif()
 
 list(APPEND SOURCES src/debug/debug.c)
 if(DEBUG)
-  list(APPEND TCD CM_DEBUG)
+  list(APPEND TCD _CM_DEBUG)
 endif()
 
 if(GEN)
@@ -66,11 +66,11 @@ if(CLIENT)
   if(VK)
     list(APPEND TCD _CM_VK)
 
-    file(GLOB_RECURSE G_SOURCES src/vk/*.c)
+    file(GLOB_RECURSE G_SOURCES src/render/vk/*.c)
     list(APPEND SOURCES ${G_SOURCES})
     if (VK_DEBUG)
       list(APPEND TCD _CM_VK_DEBUG)
-      list(APPEND SOURCES src/vk/debug/debug.c)
+      list(APPEND SOURCES src/render/vk/debug/debug.c)
     endif()
   endif()
 
@@ -160,7 +160,6 @@ elseif(ST STREQUAL "linux")
 
       list(APPEND TID lib/wayland)
     endif()
-  endif()
     list(APPEND SOURCES src/src.c)
 
     add_executable(${PN} ${SOURCES})

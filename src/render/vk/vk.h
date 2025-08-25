@@ -1,5 +1,6 @@
 #ifndef _VK_H
-#define _VK_H
+	#define _VK_H
+
 	//.c disable this to use all gpu
 	#define _VK_SGPU
 	//.c sc info

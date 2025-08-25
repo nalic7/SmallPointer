@@ -63,7 +63,7 @@ LB_C *lb_c;
 
 void lb_set()
 {
-	NALI_D_INFO("mtx_init %d", mtx_init(lb_mtx_t_p, mtx_plain))
+	_DB_R2L("mtx_init %d", mtx_init(lb_mtx_t_p, mtx_plain))
 
 	lb_c = malloc(sizeof(LB_C));
 	lb_c->d_bl_p = malloc(sizeof(uint32_t) * 2);
@@ -117,7 +117,7 @@ void lb_free1()
 
 	mtx_destroy(lb_mtx_t_p);
 
-	d_free();
+	_db_free();
 
 	exit(EXIT_SUCCESS);
 }

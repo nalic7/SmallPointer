@@ -4,7 +4,7 @@
 >/etc/portage/make.conf
 ```bash
 #OpenRC AMD64
-USE="-llvm -fonts -policykit efistub drun dist-kernel elogind dracut grub -pulseaudio sound-server pipewire-alsa dri drm pipewire ffmpeg extra X xwayland wayland osmesa vaapi nvdec nvenc vulkan vulkan-overlay telephony bluetooth gpm jpeg2k opus"
+USE="-llvm -fonts -policykit efistub drun dist-kernel elogind dracut grub -pulseaudio sound-server pipewire-alsa dri drm pipewire ffmpeg extra X xwayland wayland osmesa vaapi nvdec nvenc vulkan vulkan-overlay telephony bluetooth -gpm jpeg2k opus"
 
 INPUT_DEVICES="wacom libinput"
 
@@ -132,9 +132,7 @@ windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned
 ```
 >~/.vimrc
 ```
-set number
-set list
-set listchars=tab:>-,trail:·,space:␣
+set number relativenumber list listchars=tab:>-,trail:·,space:▬ clipboard=unnamedplus
 autocmd BufRead,BufNewFile CMakeLists.txt setlocal expandtab shiftwidth=2 softtabstop=2
 ```
 >Install Blender

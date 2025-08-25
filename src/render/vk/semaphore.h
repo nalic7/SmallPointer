@@ -1,7 +1,8 @@
 #ifndef _VK_SMP_H
-#define _VK_SMP_H
+	#define _VK_SMP_H
+
 	#define _VK_SMP_MAKE(device, vksemaphore_p) \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkCreateSemaphore %d", \
 			vkCreateSemaphore \

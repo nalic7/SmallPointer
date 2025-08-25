@@ -1,6 +1,5 @@
-#ifndef NALI_GEN_H
-#define NALI_GEN_H
+#ifndef G_H
+	#define G_H
 
-void g_write();
-
+	void g_write();
 #endif

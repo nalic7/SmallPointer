@@ -1,5 +1,5 @@
 #!/bin/bash
 F=CMakeLists.txt
-sed -i '/#set(S_NAME linux)/c\set(S_NAME linux)' $F
+sed -i '/#set(ST linux)/c\set(ST linux)' $F
 sed -i '/#set(GEN 1)/c\set(GEN 1)' $F
 sed -i '/#set(DEBUG 1)/c\set(DEBUG 1)' $F

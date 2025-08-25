@@ -1,5 +1,6 @@
 #ifndef _SF_H
-#define _SF_H
+	#define _SF_H
+
 	extern uint32_t _sf_width;
 	extern uint32_t _sf_height;
 

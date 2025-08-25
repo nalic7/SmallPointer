@@ -22,7 +22,7 @@ void t_3d()
 			VkMemoryRequirements vkmemoryrequirements;
 			vkdevicesize = (vkdevicesize + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1);
 			_VK_BF_MAKE(vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcm_vkbuffer_p[l_0 + l_1 * _vk_swc_image], lcm_vkdevicememory_p[l_0 + l_1 * _vk_swc_image], vkmemoryrequirements)
-			NALI_D_INFO("vkMapMemory %d", vkMapMemory(vkdevice, lcm_vkdevicememory_p[l_0 + l_1 * _vk_swc_image], 0, vkdevicesize, 0, &lcm_vkbuffer_mp[(l_0 + l_1 * _vk_swc_image)]))
+			_DB_R2L("vkMapMemory %d", vkMapMemory(vkdevice, lcm_vkdevicememory_p[l_0 + l_1 * _vk_swc_image], 0, vkdevicesize, 0, &lcm_vkbuffer_mp[(l_0 + l_1 * _vk_swc_image)]))
 		}
 	}
 
@@ -168,7 +168,7 @@ void t_3d_buffer()
 	t_s_kf += 255 * 4 * frame_time;
 	frame_start = frame_end;
 	t_s_kf = NALI_M_WRAP_F(t_s_kf, k_s * 255, k_e * 255);
-//	NALI_D_LOG("t_s_kf %f", t_s_kf);
+//	_DB_N2L("t_s_kf %f", t_s_kf);
 	double kff = t_s_kf / 255;
 	l_ak_current = kff;
 	kff -= l_ak_current;
@@ -196,9 +196,9 @@ void t_3d_buffer()
 			NALI_M_LERP(((float *)(lcm_vkbuffer_mp[_vk_swc_frame_buffer + NALI_TEST_ds * _vk_swc_image] + 4 * sizeof(float) + l_lckf.bone_p[l_0] * sizeof(float) * 4 * 3 + sizeof(float) * 4))[l_3], l_lckf.r_p[l_0][l_3], kff);
 		}
 	}
-//	NALI_D_LOG("kff %f", kff);
-//	NALI_D_LOG("l_ak_current %d", l_ak_current);
-//	NALI_D_LOG("l_ak_next %d", l_ak_next);
+//	_DB_N2L("kff %f", kff);
+//	_DB_N2L("l_ak_current %d", l_ak_current);
+//	_DB_N2L("l_ak_next %d", l_ak_next);
 
 	vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], 1, &(VkMappedMemoryRange)
 	{

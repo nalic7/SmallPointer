@@ -1,8 +1,9 @@
 #ifndef _VK_IMV_H
-#define _VK_IMV_H
+	#define _VK_IMV_H
+
 	//mipmap 1
 	#define _VK_IMV_MAKE(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkCreateImageView %d", \
 			vkCreateImageView \

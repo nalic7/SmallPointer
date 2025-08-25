@@ -1,6 +1,6 @@
 void _vk_dsps_make(uint32_t device, VkDescriptorPool vkdescriptorpool, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkDescriptorSet *vkdescriptorset_p)
 {
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"vkAllocateDescriptorSets %d",
 		vkAllocateDescriptorSets

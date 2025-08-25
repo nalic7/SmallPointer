@@ -1,5 +1,6 @@
 #ifndef _VK_SWC_H
-#define _VK_SWC_H
+	#define _VK_SWC_H
+
 	extern VkSwapchainKHR _vk_swc_khr;
 	extern VkExtent2D _vk_swc_et2d;
 	extern VkRenderPass _vk_swc_rdp;

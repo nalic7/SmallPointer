@@ -1,10 +1,11 @@
 #ifndef _VK_BF_H
-#define _VK_BF_H
+	#define _VK_BF_H
+
 	uint32_t _vk_bf_type(uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags);
 
 	//VkMemoryRequirements vkmemoryrequirements
 	#define _VK_BF_MAKE(device, vkdevicesize, vkbufferusageflags, vkmemorypropertyflags, vkbuffer, vkdevicememory, vkmemoryrequirements) \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkCreateBuffer %d", \
 			vkCreateBuffer \
@@ -26,7 +27,7 @@
 			) \
 		) \
 		vkGetBufferMemoryRequirements(_vkq_dv_p[device], vkbuffer, &vkmemoryrequirements); \
-		NALI_D_INFO \
+		_DB_R2L \
 		( \
 			"vkAllocateMemory %d", \
 			vkAllocateMemory \
@@ -43,11 +44,11 @@
 				&vkdevicememory \
 			) \
 		) \
-		NALI_D_INFO("vkBindBufferMemory %d", vkBindBufferMemory(_vkq_dv_p[device], vkbuffer, vkdevicememory, 0))
+		_DB_R2L("vkBindBufferMemory %d", vkBindBufferMemory(_vkq_dv_p[device], vkbuffer, vkdevicememory, 0))
 
 	//void *data_p
 	#define _VK_BF_MAP(device, vkdevicesize, buffer_data_p, vkdevicememory_p, data_p) \
-		NALI_D_INFO("vkMapMemory %d", vkMapMemory(_vkq_dv_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
+		_DB_R2L("vkMapMemory %d", vkMapMemory(_vkq_dv_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
 		memcpy(data_p, buffer_data_p, vkdevicesize); \
 		vkUnmapMemory(_vkq_dv_p[device], *vkdevicememory_p);
 #endif

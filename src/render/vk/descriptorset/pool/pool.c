@@ -1,6 +1,6 @@
 void _vk_dspsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
 {
-	NALI_D_INFO
+	_DB_R2L
 	(
 		"vkCreateDescriptorPool %d",
 		vkCreateDescriptorPool

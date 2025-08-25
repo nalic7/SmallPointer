@@ -335,7 +335,7 @@ void lcp_set()
 		//t. e0-test j
 //		if ((lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1) == 0)
 //		{
-//			NALI_D_LOG("nali_buffer c1j1 j0 %d", (lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1))
+//			_DB_N2L("nali_buffer c1j1 j0 %d", (lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1))
 //		}
 		lb_c->d_bl_p[1] += sizeof(float) * 3 + 2;
 	}
@@ -428,7 +428,7 @@ void lcp_vk()
 	VkMemoryRequirements vkmemoryrequirements;
 	vkdevicesize = (vkdevicesize + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1);
 	_VK_BF_MAKE(vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
-	NALI_D_INFO("vkMapMemory %d", vkMapMemory(_vkq_dv_p[vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
+	_DB_R2L("vkMapMemory %d", vkMapMemory(_vkq_dv_p[vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
 
 	vkdevicesize = 0;
 

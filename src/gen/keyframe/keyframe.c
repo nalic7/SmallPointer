@@ -3,7 +3,7 @@ static const char *file_array[] =
 	NALI_F_FACTORY_KEYFRAME "/SuperCutePomiWalk.bin"
 };
 
-void gkf_write()
+void g_kf_write()
 {
 	FILE *file = fopen(NALI_F_HOME_ASSET, "ab");
 	fwrite((uint8_t[]){sizeof(file_array) / sizeof(file_array[0])}, sizeof(uint8_t), 1, file);

@@ -14,21 +14,21 @@ void *f_read(const char *c_p, uint32_t *bl_p)
 	return p;
 #else
 	FILE *file_p = fopen(c_p, "rb");
-	NALI_D_LOG("fopen %p", file_p)
+	_DB_N2L("fopen %p", file_p)
 	return f_read1(file_p, bl_p);
 #endif
 }
 
 void *f_read1(FILE *file_p, uint32_t *bl_p)
 {
-	NALI_D_INFO("fseek %d", fseek(file_p, 0, SEEK_END))
-	NALI_D_INFO("ftell %d", *bl_p = ftell(file_p))
-	NALI_D_INFO("fseek %d", fseek(file_p, 0, SEEK_SET))
+	_DB_R2L("fseek %d", fseek(file_p, 0, SEEK_END))
+	_DB_R2L("ftell %d", *bl_p = ftell(file_p))
+	_DB_R2L("fseek %d", fseek(file_p, 0, SEEK_SET))
 
 	void *p = malloc(*bl_p);
-	NALI_D_INFO("fread %ld", fread(p, *bl_p, 1, file_p))
+	_DB_R2L("fread %ld", fread(p, *bl_p, 1, file_p))
 
-	NALI_D_INFO("fclose %d", fclose(file_p))
+	_DB_R2L("fclose %d", fclose(file_p))
 
 	return p;
 }
