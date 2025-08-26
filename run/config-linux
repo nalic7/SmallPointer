@@ -1,7 +1,26 @@
 #!/bin/bash
 F=CMakeLists.txt
 sed -i '/#set(ST linux)/c\set(ST linux)' $F
-sed -i '/#  set(WL 1)/c\  set(WL 1)' $F
+
+echo '1)DRM'
+echo '2)WL'
+#echo '3)X11'
+read i
+while true; do
+	if [ $i = 1 ]; then
+		sed -i '/#  set(DRM 1)/c\  set(DRM 1)' $F
+		break
+	elif [ $i = 2 ]; then
+		sed -i '/#  set(WL 1)/c\  set(WL 1)' $F
+		break
+	else
+		echo '1)DRM'
+		echo '2)WAYLAND'
+		#echo '3)X11'
+		read i
+	fi
+done
+
 sed -i '/set(CLIENT 1)/c\set(CLIENT 1)' $F
 #sed -i '/#set(SERVER 1)/c\set(SERVER 1)' $F
 sed -i '/#set(VK 1)/c\set(VK 1)' $F

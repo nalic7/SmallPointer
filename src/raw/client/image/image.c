@@ -47,7 +47,7 @@
 // // {
 // // 	vk_makeDescriptorSetLayout
 // // 	(
-// // 		vk_device,
+// // 		_vk_device,
 // // 		(VkDescriptorSetLayoutBinding[])
 // // 		{
 // // 			{
@@ -97,7 +97,7 @@
 // // 		// .range = m_nali_g_ubo_vkdevicesize_p[0]
 // // 		.range = sizeof(nali_v_uniform_float_array)
 // // 	};
-// // 	vk_setVkWriteDescriptorSet(vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
+// // 	vk_setVkWriteDescriptorSet(_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 // // 	*vkdescriptorimageinfo_p = (VkDescriptorImageInfo)
 // // 	{
 // // 		//sampler VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -107,14 +107,14 @@
 // // 		.sampler = m_nali_g_image_vksampler_p[0]
 // // 		// .sampler = VK_NULL_HANDLE
 // // 	};
-// // 	vk_setVkWriteDescriptorSet(vk_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset, vkwritedescriptorset_p + 1);
+// // 	vk_setVkWriteDescriptorSet(_vk_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset, vkwritedescriptorset_p + 1);
 // // 	// *vkdescriptorbufferinfo_p = (VkDescriptorBufferInfo)
 // // 	// {
 // // 	// 	.buffer = ,
 // // 	// 	.offset = 0,
 // // 	// 	.range = 
 // // 	// };
-// // 	// vk_setVkWriteDescriptorSet(vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
+// // 	// vk_setVkWriteDescriptorSet(_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 // // }
 
 // uint16_t m_nali_g_max_image;
@@ -238,7 +238,7 @@
 
 // 		_VK_IM_MAKE
 // 		(
-// 			vk_device,
+// 			_vk_device,
 // 			_VK_COLOR_FORMAT,
 // 			((VkExtent3D)
 // 			{
@@ -256,15 +256,15 @@
 // 			VK_SAMPLE_COUNT_1_BIT,
 // 			&m_nali_g_image_vkimage_p[u]
 // 		)
-// 		_VK_IM_GEN(vk_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
+// 		_VK_IM_GEN(_vk_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
 // 		vkdevicesize = m_nali_g_image_wh_uint32_t_p[u2] * m_nali_g_image_wh_uint32_t_p[u2_1] * _VK_COLOR_FORMAT_BYTE;
-// 		// _VK_BF_MAP(vk_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
+// 		// _VK_BF_MAP(_vk_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
 
-// 		_VK_BF_MAKE(vk_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
-// 		_VK_BF_MAP(vk_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
+// 		_VK_BF_MAKE(_vk_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
+// 		_VK_BF_MAP(_vk_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
 
-// 		_VK_IMV_MAKE(vk_device, m_nali_g_image_vkimage_p[u], _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
-// 		_VK_SP_MAKE(vk_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
+// 		_VK_IMV_MAKE(_vk_device, m_nali_g_image_vkimage_p[u], _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
+// 		_VK_SP_MAKE(_vk_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
 
 // 		// info("&m_nali_g_image_vkbuffer_p[0] %p", &m_nali_g_image_vkbuffer_p[0]);
 // 		// info("&m_nali_g_image_vkbuffer_vkdevicememory_p[0] %p", &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);

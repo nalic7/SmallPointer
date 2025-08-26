@@ -100,8 +100,8 @@ void _vk_cmd_set()
 	// vk_cmd_d_fp = malloc(0);
 
 	//s0-share
-	vkdevice = _vkq_dv_p[vk_device];
-	vkqueue_graphic = _vkq_p[vk_device][vk_queue_g];
+	vkdevice = _vkq_dv_p[_vk_device];
+	vkqueue_graphic = _vkq_p[_vk_device][_vk_queue_g];
 	//e0-share
 
 	//s0-s
@@ -127,15 +127,15 @@ void _vk_cmd_set()
 	// sprintf(frag_file + frag_name_index, "%u", frag_index);
 	// strcat(frag_file, shader_type);
 
-	// _vk_pl_sd_set(vk_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	// _vk_pl_sd_set(vk_device, NALI_F_HOME NALI_F_HOME_SHADER "vert.spv", NALI_F_HOME NALI_F_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	_vk_pl_sd_set(vk_device, NALI_F_HOME_VERT, NALI_F_HOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// _vk_pl_sd_set(_vk_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// _vk_pl_sd_set(_vk_device, NALI_F_HOME NALI_F_HOME_SHADER "vert.spv", NALI_F_HOME NALI_F_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	_vk_pl_sd_set(_vk_device, NALI_F_HOME_VERT, NALI_F_HOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 	// free(vert_file);
 	// free(frag_file);
 
 	//s1-s
-	_vk_pl_lo_make(vk_device, &lcs_vkdescriptorsetlayout, 1, &vkpipelinelayout);
-	_vk_pl_make(vk_device, vkpipelineshaderstagecreateinfo_array, _vk_swc_rdp, vkpipelinelayout, &vkpipeline);
+	_vk_pl_lo_make(_vk_device, &lcs_vkdescriptorsetlayout, 1, &vkpipelinelayout);
+	_vk_pl_make(_vk_device, vkpipelineshaderstagecreateinfo_array, _vk_swc_rdp, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -149,7 +149,7 @@ void _vk_cmd_set()
 	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
 	{
 		//s0-cmd
-		_vk_cm_bf_make(vk_device, vk_queue_g, vkcommandbuffer_p + l_0, 1);
+		_vk_cm_bf_make(_vk_device, _vk_queue_g, vkcommandbuffer_p + l_0, 1);
 		//e0-cmd
 
 		//! need check again
@@ -162,12 +162,12 @@ void _vk_cmd_set()
 		// //e1-update
 		// //e0-ubo
 
-		_VKF_MAKE(vk_device, vkfence_p + l_0)
+		_VKF_MAKE(_vk_device, vkfence_p + l_0)
 
 		vksemaphore_p[l_0] = malloc(sizeof(VkSemaphore) * 2);
 		for (uint8_t l_1 = 0; l_1 < 2; ++l_1)
 		{
-			_VK_SMP_MAKE(vk_device, vksemaphore_p[l_0] + l_1)
+			_VK_SMP_MAKE(_vk_device, vksemaphore_p[l_0] + l_1)
 		}
 	}
 
@@ -195,7 +195,7 @@ void freeCmdDraw()
 
 	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
 	{
-		vkFreeCommandBuffers(vkdevice, _vk_cmp_p[vk_device][vk_queue_g], 1, vkcommandbuffer_p + l_0);
+		vkFreeCommandBuffers(vkdevice, _vk_cmp_p[_vk_device][_vk_queue_g], 1, vkcommandbuffer_p + l_0);
 
 		vkDestroyFence(vkdevice, vkfence_p[l_0], VK_NULL_HANDLE);
 
@@ -227,6 +227,54 @@ void freeCmdDraw()
 // static void c1j0()
 // {
 // }
+
+static void re_sc()
+{
+	vkQueueWaitIdle(vkqueue_graphic);
+
+	//! re-create wl if crash before vk_sc
+	//wait like 1 sec to detect wl crash
+//			#ifndef _CM_ST_ANDROID
+//				if ()
+//				{
+//					vkDeviceWaitIdle(vkdevice);
+//					_vk_sf_free();
+//					_vk_sf_make();
+//				}
+//			#endif
+	_vk_swc_free();
+
+	#ifdef _CM_ST_ANDROID
+		sa_wait();
+	#endif
+
+	_vk_swc_make(_vkq_max_queue_surface_p[_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+
+	vkrenderpassbegininfo.renderPass = _vk_swc_rdp;
+	vkviewport.width = _vk_swc_et2d.width;
+	vkviewport.height = _vk_swc_et2d.height;
+	vkrenderpassbegininfo.renderArea.extent = _vk_swc_et2d;
+	vkrect2d.extent = _vk_swc_et2d;
+
+	MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), _sf_width / _sf_height, 0.1F, 100.0F, (float *)lcp_vkbuffer_mp + 16 * 3)
+//			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
+//			{
+//				rz = 0.0F;
+//			}
+//			else
+//			{
+//				rz = 180.0F;
+//			}
+	vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], 1, &(VkMappedMemoryRange)
+	{
+		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+		.memory = lcp_vkdevicememory,
+		.offset = 16 * 3 * sizeof(float),
+		.size = 16 * sizeof(float),
+		.pNext = VK_NULL_HANDLE
+	});
+	_sf_state &= 0xFFu - _SF_S_RE;
+}
 
 // static void (*a_fp[NALI_LCS_A_BL])() = {c1j1, c1j0};
 #ifdef _CM_ST_ANDROID
@@ -278,50 +326,7 @@ void freeCmdDraw()
 
 		if (_sf_state & _SF_S_RE)
 		{
-			vkQueueWaitIdle(vkqueue_graphic);
-
-			//! re-create wl if crash before vk_sc
-			//wait like 1 sec to detect wl crash
-//			#ifndef _CM_ST_ANDROID
-//				if ()
-//				{
-//					vkDeviceWaitIdle(vkdevice);
-//					_vk_sf_free();
-//					_vk_sf_make();
-//				}
-//			#endif
-			_vk_swc_free();
-
-			#ifdef _CM_ST_ANDROID
-				sa_wait();
-			#endif
-
-			_vk_swc_make(_vkq_max_queue_surface_p[vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
-
-			vkrenderpassbegininfo.renderPass = _vk_swc_rdp;
-			vkviewport.width = _vk_swc_et2d.width;
-			vkviewport.height = _vk_swc_et2d.height;
-			vkrenderpassbegininfo.renderArea.extent = _vk_swc_et2d;
-			vkrect2d.extent = _vk_swc_et2d;
-
-			MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), _sf_width / _sf_height, 0.1F, 100.0F, (float *)lcp_vkbuffer_mp + 16 * 3)
-//			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
-//			{
-//				rz = 0.0F;
-//			}
-//			else
-//			{
-//				rz = 180.0F;
-//			}
-			vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], 1, &(VkMappedMemoryRange)
-			{
-				.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-				.memory = lcp_vkdevicememory,
-				.offset = 16 * 3 * sizeof(float),
-				.size = 16 * sizeof(float),
-				.pNext = VK_NULL_HANDLE
-			});
-			_sf_state &= 0xFFu - _SF_S_RE;
+			re_sc();
 		}
 
 		uint32_t image_index;
@@ -330,6 +335,7 @@ void freeCmdDraw()
 		{
 			//support recreate vkswapchainkhr if need
 			_DB_N2L("vkAcquireNextImageKHR %d", vkresult)
+			re_sc();
 		}
 
 		vkrenderpassbegininfo.framebuffer = _vk_swc_fbf_p[image_index];

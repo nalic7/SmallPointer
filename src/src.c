@@ -1,7 +1,6 @@
 //.i linux
 int main()
 {
-	// fp_read(NALI_F_HOME NALI_F_HOME_IMAGE "/0.png", &(long){});
 	#ifdef _CM_DEBUG
 		_db_set();
 	#endif
@@ -176,14 +175,19 @@ int main()
 	#ifdef _CM_CLIENT
 		lc_set();
 
-		_sf_wlc_set();
-		_vk_set();
+		#ifdef _CM_DRM
+			_lip_set();
+		#endif
+		#ifdef _CM_WL
+			_sf_wlc_set();
+		#endif
+
+		#ifdef _CM_VK
+			_vk_set();
+			lc_vk();
+		#endif
 		//! switch to pipewire
 		// al_set();
-		lc_vk();
 		thrd_sleep(&(struct timespec){.tv_sec = 60*60, .tv_nsec = 0}, NULL);
-//		swlcsp_pointer = 0;
 	#endif
-
-	//lb_loop();
 }

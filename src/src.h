@@ -1,5 +1,5 @@
-#ifndef NALI_PCH_H
-	#define NALI_PCH_H
+#ifndef _SRC_H
+	#define _SRC_H
 
 	#ifdef _CM_ST_MC
 		#include <jvmti.h>
@@ -36,22 +36,32 @@
 	#else
 		#include <stdio.h>
 		#include <stdlib.h>
+		#include <limits.h>
 
-		#ifdef _CM_CLIENT
-			// #include <math.h>
-			#include <limits.h>
+		#include <linux/input-event-codes.h>
+		#include <pipewire/pipewire.h>
 
-			#include <linux/input.h>
+		#ifdef _CM_VK
+			#ifdef _CM_DRM
+				#define VK_USE_PLATFORM_DISPLAY_KHR
+			#endif
 
+			#ifdef _CM_WL
+				#define VK_USE_PLATFORM_WAYLAND_KHR
+			#endif
+			#include <vulkan/vulkan.h>
+		#endif
+
+		#ifdef _CM_DRM
+			#include <libinput.h>
+			#include "libinput/libinput.h"
+		#endif
+
+		#ifdef _CM_WL
 			#include <wayland-cursor.h>
 			#include <xdg-shell.h>
 			#include <pointer-constraints-unstable-v1.h>
 			#include <relative-pointer-unstable-v1.h>
-
-			#define VK_USE_PLATFORM_WAYLAND_KHR
-			#include <vulkan/vulkan.h>
-
-			#include <pipewire/pipewire.h>
 
 			#include "surface/wayland/client/client.h"
 			#include "surface/wayland/client/registry/registry.h"
@@ -64,6 +74,9 @@
 			#include "surface/wayland/client/zwp/pointer/pointer.h"
 			#include "surface/wayland/client/zwp/locked/locked.h"
 			#include "surface/wayland/client/zwp/relative/relative.h"
+		#endif
+
+		#ifdef _CM_CLIENT
 		#endif
 	#endif
 

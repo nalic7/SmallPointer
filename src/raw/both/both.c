@@ -111,7 +111,7 @@ void lb_free1()
 	//! switch to pipewire
 	// al_clean();
 
-	#ifndef _CM_ST_ANDROID
+	#ifdef _CM_WL
 		_sf_wlc_free();
 	#endif
 

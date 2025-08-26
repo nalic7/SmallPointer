@@ -1,9 +1,9 @@
 //.c select gpu index
-uint32_t vk_device = 0;
-uint32_t vk_queue_g = 0;
-uint32_t vk_queue_ct = 0;
+uint32_t _vk_device = 0;
+uint32_t _vk_queue_g = 0;
+uint32_t _vk_queue_ct = 0;
 
-uint8_t vk_non_coherent_atom_size;
+uint8_t _vk_non_coherent_atom_size;
 
 #ifdef _CM_DEBUG
 	static void einfo(uint32_t d)
@@ -84,7 +84,7 @@ uint8_t vk_non_coherent_atom_size;
 		_DB_N2L("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
 		_DB_N2L("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
 
-		_DB_R2L("nonCoherentAtomSize %d", vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
+		_DB_R2L("nonCoherentAtomSize %d", _vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
 	}
 
 	static void dginfo()
@@ -154,12 +154,12 @@ void _vk_set()
 		_vk_cmp_make(d);
 	}
 
-	_vk_swc_make(_vkq_max_queue_surface_p[vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+	_vk_swc_make(_vkq_max_queue_surface_p[_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 }
 
 void _vk_free()
 {
-	lc_freeVk(vk_device);
+	lc_freeVk(_vk_device);
 
 	_vk_cmp_free();
 

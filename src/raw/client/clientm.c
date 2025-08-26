@@ -214,7 +214,7 @@ void lcm_update()
 //	}
 //
 //	if (l_mm_bl)
-//		vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], l_mm_bl, vkmappedmemoryrange_p);
+//		vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], l_mm_bl, vkmappedmemoryrange_p);
 }
 
 //! renew
@@ -227,7 +227,7 @@ void lcm_read()
 //	lcm_bl_p = realloc(lcm_bl_p, sizeof(NALI_LB_MIT) * lcu_ch_bl);
 //	lcm_lb_m_p = realloc(lcm_lb_m_p, sizeof(LB_M *) * lcu_ch_bl);
 //
-//	VkDevice vkdevice = _vkq_dv_p[vk_device];
+//	VkDevice vkdevice = _vkq_dv_p[_vk_device];
 //
 //	memset(_m_state_p, 0, NALI_LCM_M_BL);
 //	NALI_LB_CT l_x = NALI_M_H3X(lcu_ch_p[0], NALI_LB_CIBL);
@@ -335,7 +335,7 @@ void lcm_read()
 //					if (!_.m.state)
 //					{
 //						//new ds
-//						_vk_dsps_make(vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, &_.vkdescriptorset);
+//						_vk_dsps_make(_vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, &_.vkdescriptorset);
 //					}
 //
 //					uint8_t mj = lcm_lb_m_p[l_0][l_1].m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[lcm_lb_m_p[l_0][l_1].m];
@@ -420,7 +420,7 @@ void lcm_read()
 //
 //	if (l_ds_bl)
 //		vkUpdateDescriptorSets(vkdevice, l_ds_bl * NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
-//	// vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], l_mm_bl, vkmappedmemoryrange_p);
+//	// vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], l_mm_bl, vkmappedmemoryrange_p);
 //
 //	//free vk
 //	for (uint8_t l_0 = 0; l_0 < NALI_LCM_M_BL; ++l_0)

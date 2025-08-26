@@ -42,11 +42,11 @@ void _vkq_add(uint32_t device)
 		{
 			if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			{
-				vk_queue_g = i;
+				_vk_queue_g = i;
 			}
 			else if (vkqueuefamilyproperties.queueFlags & (VK_QUEUE_COMPUTE_BIT | VK_QUEUE_TRANSFER_BIT))
 			{
-				vk_queue_ct = i;
+				_vk_queue_ct = i;
 			}
 
 			_vkq_queue_surface_p[device] = realloc(_vkq_queue_surface_p[device], (_vkq_max_queue_surface_p[device] + 1) * sizeof(uint32_t));

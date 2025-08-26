@@ -199,9 +199,9 @@ void sa_wait()
 		_vk_sf_make();
 //		vk_initQueue();
 //		vk_initDevice();
-//		vk_setQueue(vk_device);
-//		vk_makeDevice(vk_device);
-//		vk_getQueue(vk_device);
+//		vk_setQueue(_vk_device);
+//		vk_makeDevice(_vk_device);
+//		vk_getQueue(_vk_device);
 
 //		m_surface_state |= _SF_S_EXIT;
 		_sf_state |= _SF_S_RE;

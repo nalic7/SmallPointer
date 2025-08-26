@@ -5,7 +5,12 @@ static const char *extension_p[] =
 	VK_KHR_SURFACE_EXTENSION_NAME,
 	#ifdef _CM_ST_ANDROID
 		VK_KHR_ANDROID_SURFACE_EXTENSION_NAME,
-	#else
+	#endif
+	#ifdef _CM_DRM
+		VK_KHR_SURFACE_EXTENSION_NAME,
+		VK_KHR_DISPLAY_EXTENSION_NAME,
+	#endif
+	#ifdef _CM_WL
 		VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
 	#endif
 

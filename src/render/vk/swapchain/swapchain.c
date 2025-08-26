@@ -24,8 +24,8 @@ static VkDeviceMemory vkdevicememory_color;
 
 void _vk_swc_make(VkSharingMode vksharingmode)
 {
-	VkPhysicalDevice vkphysicaldevice = _vkq_dv_pscdv_p[vk_device];
-	VkDevice vkdevice = _vkq_dv_p[vk_device];
+	VkPhysicalDevice vkphysicaldevice = _vkq_dv_pscdv_p[_vk_device];
+	VkDevice vkdevice = _vkq_dv_p[_vk_device];
 
 	#ifdef _VK_INFO_SC
 		uint32_t surface_format;
@@ -114,8 +114,8 @@ void _vk_swc_make(VkSharingMode vksharingmode)
 				.presentMode = _VK_PRESENT,
 				.clipped = VK_TRUE,
 
-				.queueFamilyIndexCount = _vkq_max_queue_surface_p[vk_device],
-				.pQueueFamilyIndices = _vkq_queue_surface_p[vk_device],
+				.queueFamilyIndexCount = _vkq_max_queue_surface_p[_vk_device],
+				.pQueueFamilyIndices = _vkq_queue_surface_p[_vk_device],
 
 				.oldSwapchain = VK_NULL_HANDLE,
 
@@ -141,11 +141,11 @@ void _vk_swc_make(VkSharingMode vksharingmode)
 
 	_DB_R2L("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, _vk_swc_khr, &swapchain_image, _vk_swc_im_p))
 
-	_VK_RDP_MAKE(vk_device, &_vk_swc_rdp)
+	_VK_RDP_MAKE(_vk_device, &_vk_swc_rdp)
 
 	_VK_IM_MAKE
 	(
-		vk_device,
+		_vk_device,
 		_VK_DEPTH_FORMAT,
 		((VkExtent3D)
 		{
@@ -161,12 +161,12 @@ void _vk_swc_make(VkSharingMode vksharingmode)
 		&vkimage_depth
 	)
 	VkMemoryRequirements vkmemoryrequirements;
-	_VK_IM_GEN(vk_device, vkimage_depth, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_depth, vkmemoryrequirements)
-	_VK_IMV_MAKE(vk_device, vkimage_depth, _VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &vkimageview_depth)
+	_VK_IM_GEN(_vk_device, vkimage_depth, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_depth, vkmemoryrequirements)
+	_VK_IMV_MAKE(_vk_device, vkimage_depth, _VK_DEPTH_FORMAT, VK_IMAGE_ASPECT_DEPTH_BIT, 1, &vkimageview_depth)
 
 	_VK_IM_MAKE
 	(
-		vk_device,
+		_vk_device,
 		_VK_COLOR_FORMAT,
 		((VkExtent3D)
 		{
@@ -181,15 +181,15 @@ void _vk_swc_make(VkSharingMode vksharingmode)
 		_VK_SAMPLE_C,
 		&vkimage_color
 	)
-	_VK_IM_GEN(vk_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color, vkmemoryrequirements)
-	_VK_IMV_MAKE(vk_device, vkimage_color, _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color)
+	_VK_IM_GEN(_vk_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color, vkmemoryrequirements)
+	_VK_IMV_MAKE(_vk_device, vkimage_color, _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color)
 
 	for (uint32_t i = 0; i < swapchain_image; ++i)
 	{
-		_VK_IMV_MAKE(vk_device, _vk_swc_im_p[i], _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &_vk_swc_imv_p[i])
+		_VK_IMV_MAKE(_vk_device, _vk_swc_im_p[i], _VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &_vk_swc_imv_p[i])
 		_VK_FBF_MAKE
 		(
-			vk_device,
+			_vk_device,
 			((VkImageView[])
 			{
 				vkimageview_color,
@@ -205,8 +205,8 @@ void _vk_swc_make(VkSharingMode vksharingmode)
 
 void _vk_swc_free()
 {
-//	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[vk_device];
-	VkDevice vkdevice = _vkq_dv_p[vk_device];
+//	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[_vk_device];
+	VkDevice vkdevice = _vkq_dv_p[_vk_device];
 
 	vkDestroyImageView(vkdevice, vkimageview_depth, VK_NULL_HANDLE);
 	vkDestroyImage(vkdevice, vkimage_depth, VK_NULL_HANDLE);

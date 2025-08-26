@@ -426,9 +426,9 @@ void lcp_vk()
 	}
 
 	VkMemoryRequirements vkmemoryrequirements;
-	vkdevicesize = (vkdevicesize + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1);
-	_VK_BF_MAKE(vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
-	_DB_R2L("vkMapMemory %d", vkMapMemory(_vkq_dv_p[vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
+	vkdevicesize = (vkdevicesize + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1);
+	_VK_BF_MAKE(_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
+	_DB_R2L("vkMapMemory %d", vkMapMemory(_vkq_dv_p[_vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
 
 	vkdevicesize = 0;
 
@@ -468,12 +468,12 @@ void lcp_vk()
 		vkdevicesize += sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1);
 	}
 
-	vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], 1, &(VkMappedMemoryRange)
+	vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], 1, &(VkMappedMemoryRange)
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lcp_vkdevicememory,
 		.offset = 0,
-		.size = (vkdevicesize + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1),
+		.size = (vkdevicesize + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});
 

@@ -1,6 +1,6 @@
 void t_3d()
 {
-	VkDevice vkdevice = _vkq_dv_p[vk_device];
+	VkDevice vkdevice = _vkq_dv_p[_vk_device];
 	#define NALI_TEST_map_p ebpomi2_map_p
 	#define NALI_TEST_mab NALI_EBPOMI2_MAB
 	#define NALI_TEST_m NALI_EBPOMI2_M
@@ -20,8 +20,8 @@ void t_3d()
 			VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m]);
 
 			VkMemoryRequirements vkmemoryrequirements;
-			vkdevicesize = (vkdevicesize + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1);
-			_VK_BF_MAKE(vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcm_vkbuffer_p[l_0 + l_1 * _vk_swc_image], lcm_vkdevicememory_p[l_0 + l_1 * _vk_swc_image], vkmemoryrequirements)
+			vkdevicesize = (vkdevicesize + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1);
+			_VK_BF_MAKE(_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcm_vkbuffer_p[l_0 + l_1 * _vk_swc_image], lcm_vkdevicememory_p[l_0 + l_1 * _vk_swc_image], vkmemoryrequirements)
 			_DB_R2L("vkMapMemory %d", vkMapMemory(vkdevice, lcm_vkdevicememory_p[l_0 + l_1 * _vk_swc_image], 0, vkdevicesize, 0, &lcm_vkbuffer_mp[(l_0 + l_1 * _vk_swc_image)]))
 		}
 	}
@@ -35,7 +35,7 @@ void t_3d()
 	VkDescriptorSet *vkdescriptorset_p = malloc(sizeof(VkDescriptorSet) * _vk_swc_image * lcm_ds_bl);
 	for (uint8_t l_0 = 0; l_0 < _vk_swc_image * lcm_ds_bl; ++l_0)
 	{
-		_vk_dsps_make(vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, vkdescriptorset_p + l_0);
+		_vk_dsps_make(_vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, vkdescriptorset_p + l_0);
 	}
 	lcs_setVkWriteDescriptorSet
 	(
@@ -103,7 +103,7 @@ void t_3d()
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lcm_vkdevicememory_p[_vk_swc_frame_buffer],
 		.offset = 0,
-		.size = ((sizeof(float) * 4 * 4 * (NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m])) + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1),
+		.size = ((sizeof(float) * 4 * 4 * (NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m])) + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});
 }
@@ -200,12 +200,12 @@ void t_3d_buffer()
 //	_DB_N2L("l_ak_current %d", l_ak_current);
 //	_DB_N2L("l_ak_next %d", l_ak_next);
 
-	vkFlushMappedMemoryRanges(_vkq_dv_p[vk_device], 1, &(VkMappedMemoryRange)
+	vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], 1, &(VkMappedMemoryRange)
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lcm_vkdevicememory_p[_vk_swc_frame_buffer],
 		.offset = 0,
-		.size = ((sizeof(float) * 4 * 4 * (NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m])) + (vk_non_coherent_atom_size - 1)) & ~(vk_non_coherent_atom_size - 1),
+		.size = ((sizeof(float) * 4 * 4 * (NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m])) + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});
 }
