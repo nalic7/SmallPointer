@@ -1,3 +1,9 @@
+//.i vk
+VkDeviceSize r_cep_a_p[NALI_LCS_A_BL];
+VkDeviceSize *r_cep_ai_p;
+uint32_t *r_cep_ai_l_p;
+
+//.i data
 uint32_t lcp_rgba_bl;
 
 uint8_t
@@ -251,8 +257,8 @@ void lcp_set()
 	lb_c->d_bl_p[1] += sizeof(uint32_t);
 
 	// m_ai_index_count_p = malloc(sizeof(uint32_t) * model_il * 2);
-	lcs_ib_p = malloc(sizeof(VkDeviceSize) * model_il);
-	lcs_ic_p = malloc(sizeof(uint32_t) * model_il);
+	r_cep_ai_p = malloc(sizeof(VkDeviceSize) * model_il);
+	r_cep_ai_l_p = malloc(sizeof(uint32_t) * model_il);
 	// m_ai_vkdevicesize_p = malloc(sizeof(VkDeviceSize) * model_il);
 
 	index_bl_p = malloc(sizeof(uint32_t) * model_il);
@@ -279,7 +285,7 @@ void lcp_set()
 		index_p[l_0] = malloc(index_bl_p[l_0]);
 		memcpy(index_p[l_0], lb_c->d_p + lb_c->d_bl_p[1], index_bl_p[l_0]);
 		lb_c->d_bl_p[1] += index_bl_p[l_0];
-		lcs_ic_p[l_0] = index_bl_p[l_0] / sizeof(uint32_t);
+		r_cep_ai_l_p[l_0] = index_bl_p[l_0] / sizeof(uint32_t);
 	}
 
 	lcp_rgba_bl = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
@@ -409,13 +415,13 @@ void lcp_vk()
 
 	for (uint32_t l_0 = 0; l_0 < model_il; ++l_0)
 	{
-		lcs_ib_p[l_0] = vkdevicesize;
+		r_cep_ai_p[l_0] = vkdevicesize;
 		vkdevicesize += index_bl_p[l_0];
 	}
 
 	for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
 	{
-		lcs_a_vkdevicesize_p[l_0] = vkdevicesize;
+		r_cep_a_p[l_0] = vkdevicesize;
 		vkdevicesize += a_bl_array[l_0];
 	}
 
@@ -572,4 +578,7 @@ void lcp_free()
 	free(m_bone_p);
 
 	free(lcp_vkdevicesize_p);
+
+	free(r_cep_ai_p);
+	free(r_cep_ai_l_p);
 }

@@ -4,12 +4,12 @@
 >/etc/portage/make.conf
 ```bash
 #OpenRC AMD64
-USE="-llvm -fonts -policykit efistub drun dist-kernel elogind dracut grub -pulseaudio sound-server pipewire-alsa dri drm pipewire ffmpeg extra X xwayland wayland osmesa vaapi nvdec nvenc vulkan vulkan-overlay telephony bluetooth -gpm jpeg2k opus"
+USE="-llvm -fonts -policykit -pulseaudio sound-server pipewire-alsa pipewire ffmpeg extra drm X xwayland wayland vaapi nvenc nvdec bluetooth -gpm jpeg2k opus"
 
-INPUT_DEVICES="wacom libinput"
+INPUT_DEVICES="libinput"
 
 #AMD_cpu,igpu / NVIDIA_dgpu
-VIDEO_CARDS="amdgpu radeonsi nvidia"
+VIDEO_CARDS="amdgpu radeonsi"
 
 #Intel_cpu,igpu / NVIDIA_dgpu
 VIDEO_CARDS="intel nvidia"
@@ -17,6 +17,30 @@ VIDEO_CARDS="intel nvidia"
 >Install Package
 ```bash
 run/gentoo
+```
+>Check Kernel
+```bash
+eselect kernel list
+file /usr/src/linux
+#device
+lspci -k
+```
+>Compile Kernel
+```bash
+cd /usr/src/linux
+make mrproper
+make defconfig
+make menuconfig
+make
+make modules_install
+cp arch/x86/boot/bzImage /boot/vmlinuz-6.16.3
+grub-mkconfig -o /boot/grub/grub.cfg
+#update kernel
+cp .config /boot/.config-6.16.3
+cp /boot/.config-6.16.3 .config
+make oldconfig
+#reinstall modules
+emerge -a @module-rebuild
 ```
 >Hyprland
 ```

@@ -1,121 +1,7 @@
-VkDeviceSize *lcs_ib_p;
-uint32_t *lcs_ic_p;
-
-VkDeviceSize lcs_a_vkdevicesize_p[NALI_LCS_A_BL];
-
-VkDescriptorPool lcs_vkdescriptorpool;
-VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
-
 lcs__ lcs___p[NALI_LB_MIM];
 
 uint32_t lcs_s_bl;
 lcs_s *lcs_s_p;
-
-static void setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
-{
-	_vk_dsps_lo_make
-	(
-		_vk_device,
-		(VkDescriptorSetLayoutBinding[])
-		{
-			//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			{
-				.binding = 0,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
-			},
-			{
-				.binding = 1,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
-			},
-			{
-				.binding = 2,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_VERTEX_BIT
-			},
-			{
-				.binding = 3,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-			},
-			{
-				.binding = 4,
-				.descriptorCount = 1,
-				.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-				.pImmutableSamplers = VK_NULL_HANDLE,
-				.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-			}
-		},
-		NALI_LCS_D_SIZE,
-		vkdescriptorsetlayout_p
-	);
-}
-
-//m -> j
-void lcs_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj)
-{
-	//.i gui/world d
-	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
-	{
-		.buffer = lcp_vkbuffer,
-		.offset = sizeof(float) * 16 * 2,//0
-		.range = sizeof(float) * 16 * 2
-	};
-
-	//.i bindpose s 1+
-	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
-	{
-		.buffer = lcp_vkbuffer,
-		.offset = lcp_vkdevicesize_p[j] - sizeof(float) * 16 * 2,
-		.range = (mj - 1) * sizeof(float) * 16 * 2
-	};
-
-	//.i src_color s
-	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
-	{
-		.buffer = lcp_vkbuffer,
-		.offset = NALI_LCP_VP_BL,
-		.range = lcp_rgba_bl
-	};
-
-	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
-	{
-		//.i animate d
-		vkdescriptorbufferinfo_p[3 + l_0 * 2] = (VkDescriptorBufferInfo)
-		{
-			.buffer = lcm_vkbuffer_p[l_0 + ds * _vk_swc_image],
-			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
-			.range = mj * sizeof(float) * 4 * 3
-		};
-
-		//.i color d
-		vkdescriptorbufferinfo_p[3 + l_0 * 2 + 1] = (VkDescriptorBufferInfo)
-		{
-			.buffer = lcm_vkbuffer_p[l_0 + ds * _vk_swc_image],
-			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
-			.range = sizeof(float) * 4
-		};
-
-		_vk_dsps_write(_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * NALI_LCS_D_SIZE);
-
-		_vk_dsps_write(_vk_device, 1, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * NALI_LCS_D_SIZE + 1);
-
-		_vk_dsps_write(_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3 + l_0 * 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * NALI_LCS_D_SIZE + 2);
-
-		_vk_dsps_write(_vk_device, 3, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * NALI_LCS_D_SIZE + 3);
-
-		_vk_dsps_write(_vk_device, 4, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3 + l_0 * 2 + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * NALI_LCS_D_SIZE + 4);
-	}
-}
 
 void lcs_set()
 {
@@ -139,29 +25,7 @@ void lcs_set()
 	}
 }
 
-void lcs_vk()
-{
-	VkDescriptorPoolSize vkdescriptorpoolsize =
-	{
-		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-		.descriptorCount = NALI_LB_MIM * NALI_LCS_D_SIZE
-	};
-	_vk_dspsp_make(_vk_device, &vkdescriptorpoolsize, 1, &lcs_vkdescriptorpool);
-	setVkDescriptorSetLayout(&lcs_vkdescriptorsetlayout);
-}
-
-void lcs_freeVk(uint32_t device)
-{
-	VkDevice vkdevice = _vkq_dv_p[device];
-
-	vkDestroyDescriptorSetLayout(vkdevice, lcs_vkdescriptorsetlayout, VK_NULL_HANDLE);
-	vkDestroyDescriptorPool(vkdevice, lcs_vkdescriptorpool, VK_NULL_HANDLE);
-}
-
 void lcs_free()
 {
 	free(lcs_s_p);
-
-	free(lcs_ib_p);
-	free(lcs_ic_p);
 }

@@ -3,7 +3,7 @@
 
 	extern VkInstance _vkq_dv_pscdv_it;
 
-	#ifdef _CM_DEBUG
+	#ifdef _CM_VK_DEBUG
 		extern const char *_vkq_dv_pscdv_it_layer_p[1];
 	#endif
 

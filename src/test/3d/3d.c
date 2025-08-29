@@ -26,7 +26,7 @@ void t_3d()
 		}
 	}
 
-	VkWriteDescriptorSet vkwritedescriptorset_p[NALI_LCS_D_SIZE * _vk_swc_image * lcm_ds_bl];
+	VkWriteDescriptorSet vkwritedescriptorset_p[_RD_VK_DSTSLO_L * _vk_swc_image * lcm_ds_bl];
 	VkDescriptorBufferInfo vkdescriptorbufferinfo_p[3 + 2 * _vk_swc_image * lcm_ds_bl];
 	lcs_s_bl = NALI_TEST_map_p[0] - 1;
 	lcs_s_p = realloc(lcs_s_p, sizeof(lcs_s) * lcs_s_bl);
@@ -35,7 +35,7 @@ void t_3d()
 	VkDescriptorSet *vkdescriptorset_p = malloc(sizeof(VkDescriptorSet) * _vk_swc_image * lcm_ds_bl);
 	for (uint8_t l_0 = 0; l_0 < _vk_swc_image * lcm_ds_bl; ++l_0)
 	{
-		_vk_dsps_make(_vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, vkdescriptorset_p + l_0);
+		_vk_dsps_make(_vk_device, vkdescriptorset_p + l_0);
 	}
 	lcs_setVkWriteDescriptorSet
 	(
@@ -46,7 +46,7 @@ void t_3d()
 		NALI_TEST_m < lcp_joint_count_bl ? NALI_TEST_m : 0,
 		NALI_TEST_m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[NALI_TEST_m]//mj
 	);
-	vkUpdateDescriptorSets(vkdevice, NALI_LCS_D_SIZE * _vk_swc_image * lcm_ds_bl, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
+	vkUpdateDescriptorSets(vkdevice, _RD_VK_DSTSLO_L * _vk_swc_image * lcm_ds_bl, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 	lcs___p[0].vkdescriptorset_p = vkdescriptorset_p;
 	lcs___p[0].mab = NALI_TEST_mab;
 	for (uint8_t l_0 = 1; l_0 < NALI_TEST_map_p[0]; ++l_0)

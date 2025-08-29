@@ -1,5 +1,13 @@
-void _vk_dspsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_p, uint32_t vkdescriptorpoolsize_size, VkDescriptorPool *vkdescriptorpool_p)
+VkDescriptorPool _rd_vk_dstsp;
+
+void _vk_dspsp_make(uint32_t device)
 {
+	VkDescriptorPoolSize vkdescriptorpoolsize =
+	{
+		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+		.descriptorCount = NALI_LB_MIM * _RD_VK_DSTSLO_L
+	};
+
 	_DB_R2L
 	(
 		"vkCreateDescriptorPool %d",
@@ -9,15 +17,20 @@ void _vk_dspsp_make(uint32_t device, VkDescriptorPoolSize *vkdescriptorpoolsize_
 			&(VkDescriptorPoolCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-				.poolSizeCount = vkdescriptorpoolsize_size,
-				.pPoolSizes = vkdescriptorpoolsize_p,
+				.poolSizeCount = 1,
+				.pPoolSizes = &vkdescriptorpoolsize,
 				.maxSets = NALI_LB_MIM,
 
 				.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			vkdescriptorpool_p
+			&_rd_vk_dstsp
 		)
 	)
+}
+
+void _rd_vk_dstsp_free(uint32_t device)
+{
+	vkDestroyDescriptorPool(_vkq_dv_p[device], _rd_vk_dstsp, VK_NULL_HANDLE);
 }

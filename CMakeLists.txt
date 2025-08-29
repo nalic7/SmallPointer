@@ -13,7 +13,7 @@ set(CLIENT 1)
 #set(SERVER 1)
 
 set(VK 1)
-  set(VK_DEBUG 1)
+#  set(VK_DEBUG 1)
 #set(GL 1)
 
 set(TEST 1)
@@ -82,7 +82,7 @@ if(CLIENT)
 
   list(APPEND SOURCES src/network/network_client.c)
 
-  list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
+#  list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
 endif()
 
 if(SERVER)
@@ -144,13 +144,13 @@ elseif(ST STREQUAL "linux")
 
     list(APPEND TLL vulkan)
 
-    #//.i ffmpeg
-    list(APPEND TLL
-      avcodec
-      avformat
-      avutil
-      swresample
-    )
+#    #//.i ffmpeg
+#    list(APPEND TLL
+#      avcodec
+#      avformat
+#      avutil
+#      swresample
+#    )
 
     #//.i pipewire
     list(APPEND TLL pipewire-0.3)

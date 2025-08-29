@@ -1,8 +1,6 @@
 #ifndef RC_SD_H
 #define RC_SD_H
 
-#define NALI_LCS_D_SIZE 5
-
 #define LCS_setVkVertexInputBindingDescription(name) \
 	VkVertexInputBindingDescription name = \
 	{ \
@@ -35,14 +33,6 @@
 //t1j1u1v1
 //t1j0u1v1
 #define NALI_LCS_A_BL 2
-
-extern VkDeviceSize *lcs_ib_p;
-extern uint32_t *lcs_ic_p;
-
-extern VkDeviceSize lcs_a_vkdevicesize_p[NALI_LCS_A_BL];
-
-extern VkDescriptorSetLayout lcs_vkdescriptorsetlayout;
-extern VkDescriptorPool lcs_vkdescriptorpool;
 
 #define NALI_LCM__UPDATE_S_AD 1
 typedef struct
@@ -92,8 +82,6 @@ void lcs_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkDescripto
 void lcs_set();
 // void lcs_loop();
 
-void lcs_vk();
-void lcs_freeVk();
 void lcs_free();
 
 #endif

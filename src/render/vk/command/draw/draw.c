@@ -134,7 +134,7 @@ void _vk_cmd_set()
 	// free(frag_file);
 
 	//s1-s
-	_vk_pl_lo_make(_vk_device, &lcs_vkdescriptorsetlayout, 1, &vkpipelinelayout);
+	_vk_pl_lo_make(_vk_device, &vkpipelinelayout);
 	_vk_pl_make(_vk_device, vkpipelineshaderstagecreateinfo_array, _vk_swc_rdp, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
@@ -361,11 +361,11 @@ static void re_sc()
 					lcs__ _ = lcs___p[lcs_s_p[l_0]._];
 					vkCmdBindDescriptorSets(vkcommandbuffer_p[_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, _.vkdescriptorset_p + _vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(vkcommandbuffer_p[_vk_swc_frame], 0, 1, &lcp_vkbuffer, lcs_a_vkdevicesize_p + _.mab);
+					vkCmdBindVertexBuffers(vkcommandbuffer_p[_vk_swc_frame], 0, 1, &lcp_vkbuffer, r_cep_a_p + _.mab);
 
 					//! use lcv_vkbuffer
-					vkCmdBindIndexBuffer(vkcommandbuffer_p[_vk_swc_frame], lcp_vkbuffer, lcs_ib_p[lcs_s_p[l_0].i], VK_INDEX_TYPE_UINT32);
-					vkCmdDrawIndexed(vkcommandbuffer_p[_vk_swc_frame], lcs_ic_p[lcs_s_p[l_0].i], 1, 0, 0, 0);
+					vkCmdBindIndexBuffer(vkcommandbuffer_p[_vk_swc_frame], lcp_vkbuffer, r_cep_ai_p[lcs_s_p[l_0].i], VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(vkcommandbuffer_p[_vk_swc_frame], r_cep_ai_l_p[lcs_s_p[l_0].i], 1, 0, 0, 0);
 				}
 
 			vkCmdEndRenderPass(vkcommandbuffer_p[_vk_swc_frame]);

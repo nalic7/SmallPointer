@@ -43,6 +43,9 @@
 
 		#ifdef _CM_VK
 			#ifdef _CM_DRM
+//				#include <linux/vt.h>
+//				#include <sys/ioctl.h>
+
 				#define VK_USE_PLATFORM_DISPLAY_KHR
 			#endif
 
@@ -80,18 +83,18 @@
 		#endif
 	#endif
 
-	//s0-ffmpeg
-	#include "libavformat/avformat.h"
-	#include <libavcodec/avcodec.h>
-	// // #include <libavutil/avutil.h>
+//	//s0-ffmpeg
+//	#include "libavformat/avformat.h"
+//	#include <libavcodec/avcodec.h>
+//	// // #include <libavutil/avutil.h>
 
-	#include <libavutil/imgutils.h>
-	// #include <libavutil/avassert.h>
+//	#include <libavutil/imgutils.h>
+//	// #include <libavutil/avassert.h>
 
-	// #include <libswscale/swscale.h>
-	#include <libswresample/swresample.h>
-	#include "ffmpeg/ffmpeg.h"
-	//e0-ffmpeg
+//	// #include <libswscale/swscale.h>
+//	#include <libswresample/swresample.h>
+//	#include "ffmpeg/ffmpeg.h"
+//	//e0-ffmpeg
 
 	#include "raw/both/both.h"
 	#include "entity/both/pomi0/pomi0.h"
@@ -115,7 +118,7 @@
 
 		#include "render/vk/vk.h"
 		#include "render/vk/queue/device/physical_device/instance/instance.h"
-		#ifdef _CM_DEBUG
+		#ifdef _CM_VK_DEBUG
 			#include "render/vk/debug/debug.h"
 		#endif
 		#include "render/vk/queue/device/physical_device/physical_device.h"

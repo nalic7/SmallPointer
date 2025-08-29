@@ -14,6 +14,7 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved)
 	(*jvmtienv)->SetEventNotificationMode(jvmtienv, JVMTI_ENABLE, JVMTI_EVENT_CLASS_LOAD, NULL);
 
 	//! edit bytecode/switch to opengl
+	//! switch wayland opengl/lwjgl3 openal to drm vulkan libinput pipewire
 	//main();
 	return JNI_OK;
 }

@@ -19,7 +19,7 @@ static const char *extension_p[] =
 	#endif
 };
 
-#ifdef _CM_DEBUG
+#ifdef _CM_VK_DEBUG
 	const char *_vkq_dv_pscdv_it_layer_p[] =
 	{
 		"VK_LAYER_KHRONOS_validation"
@@ -53,7 +53,7 @@ void _vkq_dv_pscdv_it_make()
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE,
 
-				#ifdef _CM_DEBUG
+				#ifdef _CM_VK_DEBUG
 					.enabledLayerCount = sizeof(_vkq_dv_pscdv_it_layer_p) / sizeof(_vkq_dv_pscdv_it_layer_p[0]),
 					.ppEnabledLayerNames = _vkq_dv_pscdv_it_layer_p
 				#else

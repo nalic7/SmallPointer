@@ -122,7 +122,7 @@ void _vk_set()
 		dginfo();
 	#endif
 
-	#ifdef _CM_DEBUG
+	#ifdef _CM_VK_DEBUG
 		_vk_db_make();
 	#endif
 
@@ -169,7 +169,7 @@ void _vk_free()
 	_vkq_free();
 	_vkq_dv_pscdv_free();
 
-	#ifdef _CM_DEBUG
+	#ifdef _CM_VK_DEBUG
 		_vk_db_free();
 	#endif
 

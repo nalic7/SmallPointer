@@ -27,9 +27,9 @@ void _vk_sf_make()
 	#else
 		#ifdef _CM_DRM
 			uint32_t display_count = 0;
-			_DB_R2L("vkGetPhysicalDeviceDisplayPropertiesKHR", vkGetPhysicalDeviceDisplayPropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &display_count, VK_NULL_HANDLE))
+			_DB_R2L("vkGetPhysicalDeviceDisplayPropertiesKHR %d", vkGetPhysicalDeviceDisplayPropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &display_count, VK_NULL_HANDLE))
 			VkDisplayPropertiesKHR *vkdisplaypropertieskhr_p = malloc(sizeof(VkDisplayPropertiesKHR) * display_count);
-			_DB_R2L("vkGetPhysicalDeviceDisplayPropertiesKHR", vkGetPhysicalDeviceDisplayPropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &display_count, vkdisplaypropertieskhr_p))
+			_DB_R2L("vkGetPhysicalDeviceDisplayPropertiesKHR %d", vkGetPhysicalDeviceDisplayPropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &display_count, vkdisplaypropertieskhr_p))
 			_DB_N2L("display_count %d", display_count)
 			for (uint32_t l_0 = 0; l_0 < display_count; ++l_0)
 			{
@@ -37,9 +37,9 @@ void _vk_sf_make()
 			}
 
 			uint32_t display_mode_count = 0;
-			_DB_R2L("vkGetDisplayModePropertiesKHR", vkGetDisplayModePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], vkdisplaypropertieskhr_p[0].display, &display_mode_count, VK_NULL_HANDLE))
+			_DB_R2L("vkGetDisplayModePropertiesKHR %d", vkGetDisplayModePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], vkdisplaypropertieskhr_p[0].display, &display_mode_count, VK_NULL_HANDLE))
 			VkDisplayModePropertiesKHR *vkdisplaymodepropertieskhr_p = malloc(sizeof(VkDisplayModePropertiesKHR) * display_mode_count);
-			_DB_R2L("vkGetDisplayModePropertiesKHR", vkGetDisplayModePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], vkdisplaypropertieskhr_p[0].display, &display_mode_count, vkdisplaymodepropertieskhr_p))
+			_DB_R2L("vkGetDisplayModePropertiesKHR %d", vkGetDisplayModePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], vkdisplaypropertieskhr_p[0].display, &display_mode_count, vkdisplaymodepropertieskhr_p))
 			_DB_N2L("display_mode_count %d", display_mode_count)
 			for (uint32_t l_0 = 0; l_0 < display_mode_count; ++l_0)
 			{
@@ -53,9 +53,9 @@ void _vk_sf_make()
 			_sf_state |= _SF_S_RE;
 
 			uint32_t plane_count = 0;
-			_DB_R2L("vkGetPhysicalDeviceDisplayPlanePropertiesKHR", vkGetPhysicalDeviceDisplayPlanePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &plane_count, VK_NULL_HANDLE))
+			_DB_R2L("vkGetPhysicalDeviceDisplayPlanePropertiesKHR %d", vkGetPhysicalDeviceDisplayPlanePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &plane_count, VK_NULL_HANDLE))
 			VkDisplayPlanePropertiesKHR *vkdisplayplanepropertieskhr_p = malloc(sizeof(VkDisplayPlanePropertiesKHR) * plane_count);
-			_DB_R2L("vkGetPhysicalDeviceDisplayPlanePropertiesKHR", vkGetPhysicalDeviceDisplayPlanePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &plane_count, vkdisplayplanepropertieskhr_p))
+			_DB_R2L("vkGetPhysicalDeviceDisplayPlanePropertiesKHR %d", vkGetPhysicalDeviceDisplayPlanePropertiesKHR(_vkq_dv_pscdv_p[_vk_device], &plane_count, vkdisplayplanepropertieskhr_p))
 			_DB_N2L("plane_count %d", plane_count)
 
 			uint32_t plane = UINT32_MAX;

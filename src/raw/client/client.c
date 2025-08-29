@@ -23,7 +23,8 @@ void lc_vk()
 	}
 
 	lcp_vk();
-	lcs_vk();
+	_rd_vk_dsts_lo_make(_vk_device);
+	_vk_dspsp_make(_vk_device);
 
 	_vk_cmd_set();
 	#ifdef _CM_ST_ANDROID
@@ -77,7 +78,8 @@ void lc_freeloop()
 void lc_freeVk(uint32_t device)
 {
 	lcm_freeVk(device);
-	lcs_freeVk(device);
+	_rd_vk_dstsp_free(device);
+	_rd_vk_dsts_lo_free(device);
 	lcp_freeVk(device);
 }
 

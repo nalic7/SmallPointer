@@ -1,24 +1,3 @@
-void _vk_dsps_make(uint32_t device, VkDescriptorPool vkdescriptorpool, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkDescriptorSet *vkdescriptorset_p)
-{
-	_DB_R2L
-	(
-		"vkAllocateDescriptorSets %d",
-		vkAllocateDescriptorSets
-		(
-			_vkq_dv_p[device],
-			&(VkDescriptorSetAllocateInfo)
-			{
-				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-				.descriptorPool = vkdescriptorpool,
-				.descriptorSetCount = vkdescriptorsetlayout_size,
-				.pSetLayouts = vkdescriptorsetlayout_p,
-				.pNext = VK_NULL_HANDLE
-			},
-			vkdescriptorset_p
-		)
-	)
-}
-
 void _vk_dsps_write(uint32_t device, uint32_t bind, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorType vkdescriptortype, VkDescriptorSet vkdescriptorset, VkWriteDescriptorSet *vkwritedescriptorset_p)
 {
 	*vkwritedescriptorset_p = (VkWriteDescriptorSet)
@@ -37,4 +16,81 @@ void _vk_dsps_write(uint32_t device, uint32_t bind, VkDescriptorImageInfo *vkdes
 		.pNext = VK_NULL_HANDLE
 	};
 	// vkUpdateDescriptorSets(_vkq_dv_p[device], 1, &vkwritedescriptorset, 0, VK_NULL_HANDLE);
+}
+
+void lcs_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj)
+{
+	//.i gui/world d
+	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
+	{
+		.buffer = lcp_vkbuffer,
+		.offset = sizeof(float) * 16 * 2,//0
+		.range = sizeof(float) * 16 * 2
+	};
+
+	//.i bindpose s 1+
+	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
+	{
+		.buffer = lcp_vkbuffer,
+		.offset = lcp_vkdevicesize_p[j] - sizeof(float) * 16 * 2,
+		.range = (mj - 1) * sizeof(float) * 16 * 2
+	};
+
+	//.i src_color s
+	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
+	{
+		.buffer = lcp_vkbuffer,
+		.offset = NALI_LCP_VP_BL,
+		.range = lcp_rgba_bl
+	};
+
+	for (uint8_t l_0 = 0; l_0 < _vk_swc_image; ++l_0)
+	{
+		//.i animate d
+		vkdescriptorbufferinfo_p[3 + l_0 * 2] = (VkDescriptorBufferInfo)
+		{
+			.buffer = lcm_vkbuffer_p[l_0 + ds * _vk_swc_image],
+			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
+			.range = mj * sizeof(float) * 4 * 3
+		};
+
+		//.i color d
+		vkdescriptorbufferinfo_p[3 + l_0 * 2 + 1] = (VkDescriptorBufferInfo)
+		{
+			.buffer = lcm_vkbuffer_p[l_0 + ds * _vk_swc_image],
+			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
+			.range = sizeof(float) * 4
+		};
+
+		_vk_dsps_write(_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * _RD_VK_DSTSLO_L);
+
+		_vk_dsps_write(_vk_device, 1, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * _RD_VK_DSTSLO_L + 1);
+
+		_vk_dsps_write(_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3 + l_0 * 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * _RD_VK_DSTSLO_L + 2);
+
+		_vk_dsps_write(_vk_device, 3, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * _RD_VK_DSTSLO_L + 3);
+
+		_vk_dsps_write(_vk_device, 4, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3 + l_0 * 2 + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * _RD_VK_DSTSLO_L + 4);
+	}
+}
+
+void _vk_dsps_make(uint32_t device, VkDescriptorSet *vkdescriptorset_p)
+{
+	_DB_R2L
+	(
+		"vkAllocateDescriptorSets %d",
+		vkAllocateDescriptorSets
+		(
+			_vkq_dv_p[device],
+			&(VkDescriptorSetAllocateInfo)
+			{
+				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+				.descriptorPool = _rd_vk_dstsp,
+				.descriptorSetCount = 1,
+				.pSetLayouts = &_rd_vk_dstslo,
+				.pNext = VK_NULL_HANDLE
+			},
+			vkdescriptorset_p
+		)
+	)
 }

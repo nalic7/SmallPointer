@@ -1,6 +1,8 @@
 #ifndef RB_H
 	#define RB_H
 
+	//.i M2J
+
 	//.c max connect
 	#define NALI_LB_UM 1
 	//.c max connect type

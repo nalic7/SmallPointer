@@ -38,6 +38,8 @@ static int loop(void *p)
 					struct libinput_event_keyboard *_lip_evkb_p = libinput_event_get_keyboard_event(_lip_ev_p);
 					uint32_t key = libinput_event_keyboard_get_key(_lip_evkb_p);
 					_DB_N2L("libinput_event_keyboard_get_key %d", key)
+					if (key == KEY_ESC)
+						lb_free1();
 					break;
 
 				case LIBINPUT_EVENT_POINTER_MOTION:
@@ -51,8 +53,8 @@ static int loop(void *p)
 					_lip_evpt_p = libinput_event_get_pointer_event(_lip_ev_p);
 					uint32_t button = libinput_event_pointer_get_button(_lip_evpt_p);
 					_DB_N2L("libinput_event_pointer_get_button %d", button)
-					if (button == BTN_RIGHT)
-						lb_free1();
+//					if (button == BTN_RIGHT)
+//						lb_free1();
 					break;
 
 				case LIBINPUT_EVENT_TOUCH_UP:

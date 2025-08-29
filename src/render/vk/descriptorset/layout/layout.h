@@ -1,5 +1,10 @@
-#ifndef _VK_DSPS_LO_H
-	#define _VK_DSPS_LO_H
+#ifndef _RD_VK_DSTSLO_H
+	#define _RD_VK_DSTSLO_H
 
-	void _vk_dsps_lo_make(uint32_t device, VkDescriptorSetLayoutBinding *vkdescriptorsetlayoutbinding_p, uint32_t vkdescriptorsetlayoutbinding_size, VkDescriptorSetLayout *vkdescriptorsetlayout_p);
+	#define _RD_VK_DSTSLO_L 5
+
+	extern VkDescriptorSetLayout _rd_vk_dstslo;
+
+	void _rd_vk_dsts_lo_make(uint32_t device);
+	void _rd_vk_dsts_lo_free(uint32_t device);
 #endif

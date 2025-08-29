@@ -177,6 +177,15 @@ int main()
 
 		#ifdef _CM_DRM
 			_lip_set();
+//			int fd = open("/dev/console", O_RDWR);
+//			_DB_N2L("open %d", fd)
+//			if (fd > -1)
+//			{
+//				close(fd);
+//			}
+//			while (1)
+//			{
+//			}
 		#endif
 		#ifdef _CM_WL
 			_sf_wlc_set();

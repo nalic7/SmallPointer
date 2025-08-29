@@ -266,7 +266,7 @@ void lcm_read()
 //			//free vk
 //			for (NALI_LB_MIT l_1 = lcm_bl_p[l_0]; l_1 < _m[_mi].ds_bl; ++l_1)
 //			{
-//				vkFreeDescriptorSets(vkdevice, lcs_vkdescriptorpool, 1, &lcs___p[_m[_mi].ds_p[l_1]].vkdescriptorset);
+//				vkFreeDescriptorSets(vkdevice, _rd_vk_dstsp, 1, &lcs___p[_m[_mi].ds_p[l_1]].vkdescriptorset);
 //				--lcm_ds_bl;
 //
 //				// re_ds_p = realloc(re_ds_p, sizeof(NALI_LB_MIT) * (re_ds_bl + 1));
@@ -328,22 +328,22 @@ void lcm_read()
 //				else
 //				{
 //					_.ds = lcm_ds_bl;
-//					vkdescriptorbufferinfo_p = realloc(vkdescriptorbufferinfo_p, (l_ds_bl + 1) * NALI_LCS_D_SIZE * sizeof(VkDescriptorBufferInfo));
-//					vkwritedescriptorset_p = realloc(vkwritedescriptorset_p, (l_ds_bl + 1) * NALI_LCS_D_SIZE * sizeof(VkWriteDescriptorSet));
+//					vkdescriptorbufferinfo_p = realloc(vkdescriptorbufferinfo_p, (l_ds_bl + 1) * _RD_VK_DSTSLO_L * sizeof(VkDescriptorBufferInfo));
+//					vkwritedescriptorset_p = realloc(vkwritedescriptorset_p, (l_ds_bl + 1) * _RD_VK_DSTSLO_L * sizeof(VkWriteDescriptorSet));
 //
 //					_m[_mi].ds_p[l_1] = lcm_lb_m_p[l_0][l_1].mi;
 //					if (!_.m.state)
 //					{
 //						//new ds
-//						_vk_dsps_make(_vk_device, lcs_vkdescriptorpool, &lcs_vkdescriptorsetlayout, 1, &_.vkdescriptorset);
+//						_vk_dsps_make(_vk_device, _rd_vk_dstsp, &_rd_vk_dstslo, 1, &_.vkdescriptorset);
 //					}
 //
 //					uint8_t mj = lcm_lb_m_p[l_0][l_1].m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[lcm_lb_m_p[l_0][l_1].m];
 //					lcs_setVkWriteDescriptorSet
 //					(
 //						_.vkdescriptorset,
-//						vkdescriptorbufferinfo_p + l_ds_bl * NALI_LCS_D_SIZE,
-//						vkwritedescriptorset_p + l_ds_bl * NALI_LCS_D_SIZE,
+//						vkdescriptorbufferinfo_p + l_ds_bl * _RD_VK_DSTSLO_L,
+//						vkwritedescriptorset_p + l_ds_bl * _RD_VK_DSTSLO_L,
 //						lcm_ds_bl++,
 //						lcm_lb_m_p[l_0][l_1].m < lcp_joint_count_bl ? lcm_lb_m_p[l_0][l_1].m : 0,
 //						(sizeof(float) * 4 + sizeof(float) * 4 * 3) * mj
@@ -419,7 +419,7 @@ void lcm_read()
 //	}
 //
 //	if (l_ds_bl)
-//		vkUpdateDescriptorSets(vkdevice, l_ds_bl * NALI_LCS_D_SIZE, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
+//		vkUpdateDescriptorSets(vkdevice, l_ds_bl * _RD_VK_DSTSLO_L, vkwritedescriptorset_p, 0, VK_NULL_HANDLE);
 //	// vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], l_mm_bl, vkmappedmemoryrange_p);
 //
 //	//free vk
@@ -429,7 +429,7 @@ void lcm_read()
 //		{
 //			for (uint8_t l_1 = 0; l_1 < _m[l_0].ds_bl; ++l_1)
 //			{
-//				vkFreeDescriptorSets(vkdevice, lcs_vkdescriptorpool, 1, &lcs___p[_m[l_0].ds_p[l_1]].vkdescriptorset);
+//				vkFreeDescriptorSets(vkdevice, _rd_vk_dstsp, 1, &lcs___p[_m[l_0].ds_p[l_1]].vkdescriptorset);
 //				--lcm_ds_bl;
 //			}
 //		}

@@ -1,4 +1,4 @@
-void _vk_pl_lo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayout_p, uint32_t vkdescriptorsetlayout_size, VkPipelineLayout *vkpipelinelayout_p)
+void _vk_pl_lo_make(uint32_t device, VkPipelineLayout *vkpipelinelayout_p)
 {
 	_DB_R2L
 	(
@@ -10,8 +10,8 @@ void _vk_pl_lo_make(uint32_t device, VkDescriptorSetLayout *vkdescriptorsetlayou
 			{
 				.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
 
-				.setLayoutCount = vkdescriptorsetlayout_size,
-				.pSetLayouts = vkdescriptorsetlayout_p,
+				.setLayoutCount = 1,
+				.pSetLayouts = &_rd_vk_dstslo,
 
 				.pushConstantRangeCount = 0,
 				.pPushConstantRanges = VK_NULL_HANDLE,
