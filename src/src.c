@@ -5,6 +5,7 @@ int main()
 		_db_set();
 	#endif
 
+	_DB_R2L("signal %d", signal(SIGINT, SIG_IGN))
 //	//s0-test
 //	//if u look to o on x0 y0 z0 to x1 y0 z0 p_h is 90d
 //	float

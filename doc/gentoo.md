@@ -156,7 +156,9 @@ windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned
 ```
 >~/.vimrc
 ```
-set number relativenumber list listchars=tab:>-,trail:·,space:▬ clipboard=unnamedplus
+set number relativenumber list listchars=tab:>-,trail:·,space:_ clipboard=unnamedplus
+highlight SpecialKey guifg=#ff0000 ctermfg=Red
+highlight NonText guifg=#ff0000 ctermfg=Red
 autocmd BufRead,BufNewFile CMakeLists.txt setlocal expandtab shiftwidth=2 softtabstop=2
 ```
 >Install Blender

@@ -13,7 +13,7 @@ set(CLIENT 1)
 #set(SERVER 1)
 
 set(VK 1)
-#  set(VK_DEBUG 1)
+  set(VK_DEBUG 1)
 #set(GL 1)
 
 set(TEST 1)

@@ -24,5 +24,4 @@ done
 sed -i '/set(CLIENT 1)/c\set(CLIENT 1)' $F
 #sed -i '/#set(SERVER 1)/c\set(SERVER 1)' $F
 sed -i '/#set(VK 1)/c\set(VK 1)' $F
-sed -i '/#  set(VK_DEBUG 1)/c\  set(VK_DEBUG 1)' $F
 sed -i '/#set(DEBUG 1)/c\set(DEBUG 1)' $F

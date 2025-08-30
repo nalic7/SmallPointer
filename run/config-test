@@ -1,4 +1,5 @@
 #!/bin/bash
 F=CMakeLists.txt
+sed -i '/#  set(VK_DEBUG 1)/c\  set(VK_DEBUG 1)' $F
 sed -i '/#set(TEST 1)/c\set(TEST 1)' $F
 sed -i '/#set(TEST_3D 1)/c\set(TEST_3D 1)' $F
