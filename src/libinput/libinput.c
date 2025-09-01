@@ -17,12 +17,28 @@ static struct libinput_interface _lip_interface =
 };
 
 static struct libinput *_lip_p;
+static struct udev *_lip_udev_p;
 
-static int loop(void *p)
+static void _lip_free()
+{
+	_DB_R2L("libinput_unref %p", libinput_unref(_lip_p))
+	_DB_R2L("udev_unref %p", udev_unref(_lip_udev_p))
+}
+
+void _lip_set()
+{
+	_DB_R2L("udev_new %p", _lip_udev_p = udev_new())
+
+	_DB_R2L("libinput_udev_create_context %p", _lip_p = libinput_udev_create_context(&_lip_interface, NULL, _lip_udev_p))
+
+	_DB_R2L("libinput_udev_assign_seat %p", libinput_udev_assign_seat(_lip_p, "seat0"))
+}
+
+void _lip_loop()
 {
 	struct libinput_event *_lip_ev_p;
 	//! set state
-	while (1)
+	while (!(_sf_state & _SF_S_EXIT))
 	{
 		libinput_dispatch(_lip_p);
 
@@ -77,25 +93,8 @@ static int loop(void *p)
 					slot = libinput_event_touch_get_slot(_lip_evt_p);
 					_DB_N2L("libinput_event_touch_get_slot %d", slot)
 			}
+			libinput_event_destroy(_lip_ev_p);
 		}
 	}
-	return 0;
-}
-
-void _lip_set()
-{
-	struct udev *udev = udev_new();
-	_DB_N2L("udev_new %d", udev_new)
-
-	_lip_p = libinput_udev_create_context(&_lip_interface, NULL, udev);
-	_DB_N2L("libinput_udev_create_context %p", _lip_p)
-
-	_DB_R2L("libinput_udev_assign_seat %d", libinput_udev_assign_seat(_lip_p, "seat0"))
-
-	_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, loop, NULL))
-}
-
-void _lip_free()
-{
-	//! free
+	_lip_free();
 }

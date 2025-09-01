@@ -1,4 +1,4 @@
-VkInstance _vkq_dv_pscdv_it;
+VkInstance _rd_vkq_dv_pscdv_it;
 
 static const char *extension_p[] =
 {
@@ -20,13 +20,13 @@ static const char *extension_p[] =
 };
 
 #ifdef _CM_VK_DEBUG
-	const char *_vkq_dv_pscdv_it_layer_p[] =
+	const char *_rd_vkq_dv_pscdv_it_layer_p[] =
 	{
 		"VK_LAYER_KHRONOS_validation"
 	};
 #endif
 
-void _vkq_dv_pscdv_it_make()
+void _rd_vkq_dv_pscdv_it_make()
 {
 	_DB_R2L
 	(
@@ -43,7 +43,7 @@ void _vkq_dv_pscdv_it_make()
 					.applicationVersion = VK_MAKE_VERSION(1, 0, 0),
 					.pEngineName = VK_NULL_HANDLE,
 					.engineVersion = VK_MAKE_VERSION(1, 0, 0),
-					.apiVersion = _VK_VERSION,
+					.apiVersion = _RD_VK_VERSION,
 
 					.pNext = VK_NULL_HANDLE
 				},
@@ -54,20 +54,20 @@ void _vkq_dv_pscdv_it_make()
 				.pNext = VK_NULL_HANDLE,
 
 				#ifdef _CM_VK_DEBUG
-					.enabledLayerCount = sizeof(_vkq_dv_pscdv_it_layer_p) / sizeof(_vkq_dv_pscdv_it_layer_p[0]),
-					.ppEnabledLayerNames = _vkq_dv_pscdv_it_layer_p
+					.enabledLayerCount = sizeof(_rd_vkq_dv_pscdv_it_layer_p) / sizeof(_rd_vkq_dv_pscdv_it_layer_p[0]),
+					.ppEnabledLayerNames = _rd_vkq_dv_pscdv_it_layer_p
 				#else
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE
 				#endif
 			},
 			VK_NULL_HANDLE,
-			&_vkq_dv_pscdv_it
+			&_rd_vkq_dv_pscdv_it
 		)
 	)
 }
 
-void _vkq_dv_pscdv_it_free()
+void _rd_vkq_dv_pscdv_it_free()
 {
-	vkDestroyInstance(_vkq_dv_pscdv_it, NULL);
+	vkDestroyInstance(_rd_vkq_dv_pscdv_it, NULL);
 }

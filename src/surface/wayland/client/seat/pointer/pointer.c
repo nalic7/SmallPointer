@@ -34,9 +34,9 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 		case BTN_MIDDLE:
 			mtx_lock(lb_mtx_t_p);
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				lcu_k |= NALI_LB_K_REROTATE;
+				lcu_k |= _RB_K_REROTATE;
 			else
-				lcu_k &= 0xFFu - NALI_LB_K_REROTATE;
+				lcu_k &= 0xFFu - _RB_K_REROTATE;
 			mtx_unlock(lb_mtx_t_p);
 	}
 }

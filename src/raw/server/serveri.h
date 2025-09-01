@@ -1,4 +1,4 @@
-#ifndef RSI_H
-#define RSI_H
+#ifndef _RSI_H
+#define _RSI_H
 
 #endif

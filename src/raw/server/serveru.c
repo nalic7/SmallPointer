@@ -21,7 +21,7 @@ static float
 	uc_t_p[4];
 void lsu_update()
 {
-	for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
+	for (_RB_UT l_0 = 0; l_0 < _RB_UM; ++l_0)
 	{
 		//k
 		lb_u_update(w_p, ns_p[l_0].lb_u.rt_p[4], q_v4_array, q0_m4x4_array, q1_m4x4_array);
@@ -39,10 +39,10 @@ void lsu_update()
 			//offset
 			for (uint8_t l_1 = 0; l_1 < 3; ++l_1)
 			{
-				if (rt_p[l_1] > NALI_LB_CMFL || rt_p[l_1] < -NALI_LB_CMFL)
+				if (rt_p[l_1] > _RB_CMFL || rt_p[l_1] < -_RB_CMFL)
 				{
-					ns_p[l_0].c_p[l_1] += NALI_M_NORMALP_I(ns_p[l_0].c_p[l_1] + (int32_t)(rt_p[l_1] / NALI_LB_CMFL), NALI_LB_CIBL);
-					rt_p[l_1] = NALI_M_NORMALP_F(rt_p[l_1], NALI_LB_CMFL);
+					ns_p[l_0].c_p[l_1] += NALI_M_NORMALP_I(ns_p[l_0].c_p[l_1] + (int32_t)(rt_p[l_1] / _RB_CMFL), _RB_CIBL);
+					rt_p[l_1] = NALI_M_NORMALP_F(rt_p[l_1], _RB_CMFL);
 				}
 			}
 
@@ -54,9 +54,9 @@ void lsu_update()
 			// r2t_p[1] = NALI_M_P2Y(rt_p[4]);
 			// r2t_p[2] = NALI_M_YP2Z(rt_p[3], rt_p[4]);
 			
-			// NALI_LB_C_ST x = ns_p[l_0].c_p[0] - 1;
-			// NALI_LB_C_ST y = ns_p[l_0].c_p[1] - 1;
-			// NALI_LB_C_ST z = ns_p[l_0].c_p[2] - 1;
+			// _RB_C_ST x = ns_p[l_0].c_p[0] - 1;
+			// _RB_C_ST y = ns_p[l_0].c_p[1] - 1;
+			// _RB_C_ST z = ns_p[l_0].c_p[2] - 1;
 			ns_p[l_0].ch_bl = 1;
 			//ns_p[l_0].ch_p = realloc(ns_p[l_0].ch_p, ns_p[l_0].ch_bl);
 			for (uint8_t l_1 = 0; l_1 < 3; ++l_1)
@@ -65,22 +65,22 @@ void lsu_update()
 				{
 					for (uint8_t l_3 = 0; l_3 < 3; ++l_3)
 					{
-						// t_p[0] = NALI_LB_CMFL * NALI_M_NORMALP_I(x + l_1, NALI_LB_CIBL) + NALI_LB_CMFL / 2;
-						// t_p[1] = NALI_LB_CMFL * NALI_M_NORMALP_I(y + l_2, NALI_LB_CIBL) + NALI_LB_CMFL / 2;
-						// t_p[2] = NALI_LB_CMFL * NALI_M_NORMALP_I(z + l_3, NALI_LB_CIBL) + NALI_LB_CMFL / 2;
+						// t_p[0] = _RB_CMFL * NALI_M_NORMALP_I(x + l_1, _RB_CIBL) + _RB_CMFL / 2;
+						// t_p[1] = _RB_CMFL * NALI_M_NORMALP_I(y + l_2, _RB_CIBL) + _RB_CMFL / 2;
+						// t_p[2] = _RB_CMFL * NALI_M_NORMALP_I(z + l_3, _RB_CIBL) + _RB_CMFL / 2;
 						// if (m_ray(t_p, rt_p, r2t_p))
 
 						if (fabsf(rt_p[3] - NALI_M_XZ2YAW(m_i_p[l_1], m_i_p[l_3])) < NALI_LSU_EPSILON && fabsf(rt_p[4] - NALI_M_XYZ2PITCH(m_i_p[l_1], m_i_p[l_2], m_i_p[l_3])) < NALI_LSU_EPSILON)
 						{
 							++ns_p[l_0].ch_bl;
 							//ns_p[l_0].ch_p = realloc(ns_p[l_0].ch_p, ns_p[l_0].ch_bl);
-							// ns_p[l_0].ch_p[ns_p[l_0].ch_bl - 1] = NALI_M_H3(x + l_1, y + l_2, z + l_3, NALI_LB_CIBL);
+							// ns_p[l_0].ch_p[ns_p[l_0].ch_bl - 1] = NALI_M_H3(x + l_1, y + l_2, z + l_3, _RB_CIBL);
 							ns_p[l_0].ch_p[ns_p[l_0].ch_bl - 1] = NALI_M_H3
 							(
-								NALI_M_NORMALP_I(ns_p[l_0].c_p[0] + m_i_p[l_1], NALI_LB_CIBL),
-								NALI_M_NORMALP_I(ns_p[l_0].c_p[1] + m_i_p[l_2], NALI_LB_CIBL),
-								NALI_M_NORMALP_I(ns_p[l_0].c_p[2] + m_i_p[l_3], NALI_LB_CIBL),
-								NALI_LB_CIBL
+								NALI_M_NORMALP_I(ns_p[l_0].c_p[0] + m_i_p[l_1], _RB_CIBL),
+								NALI_M_NORMALP_I(ns_p[l_0].c_p[1] + m_i_p[l_2], _RB_CIBL),
+								NALI_M_NORMALP_I(ns_p[l_0].c_p[2] + m_i_p[l_3], _RB_CIBL),
+								_RB_CIBL
 							);
 						}
 					}
@@ -92,7 +92,7 @@ void lsu_update()
 	}
 }
 
-void lsu_send(NALI_LB_UT u)
+void lsu_send(_RB_UT u)
 {
 	memcpy(ls_net_p + ls_net_bl, &ns_p[u].lb_u, sizeof(LB_U));
 	ls_net_bl += sizeof(LB_U);
@@ -100,12 +100,12 @@ void lsu_send(NALI_LB_UT u)
 	*(ls_net_p + ls_net_bl) = ns_p[u].ch_bl;
 	ls_net_bl += sizeof(uint8_t);
 
-	memcpy(ls_net_p + ls_net_bl, ns_p[u].ch_p, sizeof(NALI_LB_CHT) * ns_p[u].ch_bl);
-	ls_net_bl += sizeof(NALI_LB_CHT) * ns_p[u].ch_bl;
+	memcpy(ls_net_p + ls_net_bl, ns_p[u].ch_p, sizeof(_RB_CHT) * ns_p[u].ch_bl);
+	ls_net_bl += sizeof(_RB_CHT) * ns_p[u].ch_bl;
 }
 
 static float xy_p[2];
-void lsu_read(NALI_LB_UT u)
+void lsu_read(_RB_UT u)
 {
 	uint8_t k = *(ls_net_p + ls_net_bl);
 	ls_net_bl += sizeof(uint8_t);
@@ -113,27 +113,27 @@ void lsu_read(NALI_LB_UT u)
 	memcpy(xy_p, ls_net_p + ls_net_bl, sizeof(float) * 2);
 	ls_net_bl += sizeof(float) * 2;
 
-	if (k & NALI_LB_K_W)
-		u_t_p[2] = 1.0F / NALI_LS_MAX_RW;
-	else if (k & NALI_LB_K_S)
-		u_t_p[2] = -1.0F / NALI_LS_MAX_RW;
+	if (k & _RB_K_W)
+		u_t_p[2] = 1.0F / _RS_MAX_RW;
+	else if (k & _RB_K_S)
+		u_t_p[2] = -1.0F / _RS_MAX_RW;
 	else
 		u_t_p[2] = 0;
 
-	if (k & NALI_LB_K_A)
-		u_t_p[0] = -1.0F / NALI_LS_MAX_RW;
-	else if (k & NALI_LB_K_D)
-		u_t_p[0] = 1.0F / NALI_LS_MAX_RW;
+	if (k & _RB_K_A)
+		u_t_p[0] = -1.0F / _RS_MAX_RW;
+	else if (k & _RB_K_D)
+		u_t_p[0] = 1.0F / _RS_MAX_RW;
 	else
 		u_t_p[0] = 0;
 
-	if (k & NALI_LB_K_DIG)
-		ns_p[u].lb_u.rt_p[1] += 1.0F / NALI_LS_MAX_RW;
-	if (k & NALI_LB_K_JUMP)
-		ns_p[u].lb_u.rt_p[1] -= 1.0F / NALI_LS_MAX_RW;
+	if (k & _RB_K_DIG)
+		ns_p[u].lb_u.rt_p[1] += 1.0F / _RS_MAX_RW;
+	if (k & _RB_K_JUMP)
+		ns_p[u].lb_u.rt_p[1] -= 1.0F / _RS_MAX_RW;
 
-	ns_p[u].lb_u.rt_p[3] += xy_p[1] / NALI_LS_MAX_RW;
-	ns_p[u].lb_u.rt_p[4] += xy_p[0] / NALI_LS_MAX_RW;
+	ns_p[u].lb_u.rt_p[3] += xy_p[1] / _RS_MAX_RW;
+	ns_p[u].lb_u.rt_p[4] += xy_p[0] / _RS_MAX_RW;
 
 	if (ns_p[u].lb_u.rt_p[3] > NALI_M_D2R(90.0F+45))
 	{
@@ -148,7 +148,7 @@ void lsu_read(NALI_LB_UT u)
 	ns_p[u].lb_u.rt_p[4] = NALI_M_NORMALN_F(ns_p[u].lb_u.rt_p[4], NALI_M_D2R(360.0F));
 	// _DB_N2L("1 s_ry %f", s_ry)
 
-	if (k & NALI_LB_K_REROTATE)
+	if (k & _RB_K_REROTATE)
 	{
 		ns_p[u].lb_u.rt_p[3] = 0;
 		ns_p[u].lb_u.rt_p[4] = 0;
@@ -159,50 +159,50 @@ void lsu_open()
 {
 	if (ls_file_p)
 	{
-		for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
+		for (_RB_UT l_0 = 0; l_0 < _RB_UM; ++l_0)
 		{
-			NALI_LB_CHT ch;
-			fread(&ch, sizeof(NALI_LB_CHT), 1, ls_file_p);
-			ns_p[l_0].c_p[0] = NALI_M_H3X(ch, NALI_LB_CIBL);
-			ns_p[l_0].c_p[1] = NALI_M_H3Y(ch, NALI_LB_CIBL);
-			ns_p[l_0].c_p[2] = NALI_M_H3Z(ch, NALI_LB_CIBL);
+			_RB_CHT ch;
+			fread(&ch, sizeof(_RB_CHT), 1, ls_file_p);
+			ns_p[l_0].c_p[0] = NALI_M_H3X(ch, _RB_CIBL);
+			ns_p[l_0].c_p[1] = NALI_M_H3Y(ch, _RB_CIBL);
+			ns_p[l_0].c_p[2] = NALI_M_H3Z(ch, _RB_CIBL);
 			// ns_p[l_0].ch_bl = 1;
-			// fread(ns_p[l_0].ch_p, sizeof(NALI_LB_CHT), 1, ls_file_p);
+			// fread(ns_p[l_0].ch_p, sizeof(_RB_CHT), 1, ls_file_p);
 			fread(ns_p[l_0].lb_u.rt_p, sizeof(float), 5, ls_file_p);
 		}
 	}
 	else
 	{
-		for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
+		for (_RB_UT l_0 = 0; l_0 < _RB_UM; ++l_0)
 		{
 			//random spawn
 			for (uint8_t l_1 = 0; l_1 < 3; ++l_1)
 			{
-				ns_p[l_0].c_p[l_1] = rand() % NALI_LB_CIBL;
+				ns_p[l_0].c_p[l_1] = rand() % _RB_CIBL;
 			}
 			// ns_p[l_0].ch_bl = 1;
-			// ns_p[l_0].ch_p = malloc(sizeof(NALI_LB_CHT));
-			// ns_p[l_0].ch_p[0] = NALI_M_H3(rand() % NALI_LB_CIBL, rand() % NALI_LB_CIBL, rand() % NALI_LB_CIBL, NALI_LB_CIBL);
+			// ns_p[l_0].ch_p = malloc(sizeof(_RB_CHT));
+			// ns_p[l_0].ch_p[0] = NALI_M_H3(rand() % _RB_CIBL, rand() % _RB_CIBL, rand() % _RB_CIBL, _RB_CIBL);
 
 			// s_tx = 0.0F
 			// s_ty = -1.5F
 			// s_tz = -2.0F
 			//world / space
-			//-NALI_LB_CFBL 0 NALI_LB_CFBL
+			//-_RB_CFBL 0 _RB_CFBL
 			memset(ns_p[l_0].lb_u.rt_p, 0, sizeof(float) * (3 + 2));
 
 			//! test s
-			memset(ns_p[l_0].c_p, 0, sizeof(NALI_LB_CT) * 3);
+			memset(ns_p[l_0].c_p, 0, sizeof(_RB_CT) * 3);
 		}
 	}
 }
 
 void lsu_save()
 {
-	for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
+	for (_RB_UT l_0 = 0; l_0 < _RB_UM; ++l_0)
 	{
 		//save only c had u
-		fwrite(ns_p[l_0].ch_p, sizeof(NALI_LB_CHT), 1, ls_file_p);
+		fwrite(ns_p[l_0].ch_p, sizeof(_RB_CHT), 1, ls_file_p);
 		fwrite(ns_p[l_0].lb_u.rt_p, sizeof(float), 5, ls_file_p);
 	}
 }

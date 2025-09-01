@@ -1,6 +1,6 @@
 //! lcm_vkbuffer_mp
 
-NALI_LB_CHT *lcu_ch_p;
+_RB_CHT *lcu_ch_p;
 uint8_t lcu_ch_bl = 0;
 uint8_t *lcu_xyz_p;
 
@@ -38,13 +38,13 @@ void lcu_update()
 	{
 		for (uint8_t l_2 = 0; l_2 < 3 + 2; ++l_2)
 		{
-			lcu__rt_p[l_2] = (lcu_lb_u.rt_p[l_2] - lcu_rt_p[l_2]) * NALI_LC_D;
+			lcu__rt_p[l_2] = (lcu_lb_u.rt_p[l_2] - lcu_rt_p[l_2]) * _RC_D;
 		}
 	}
 
-	if (++lcu_rt_frame >= NALI_LC_MAX_F)
+	if (++lcu_rt_frame >= _RC_MAX_F)
 	{
-		if (lcu_rt_frame == NALI_LC_MAX_F)
+		if (lcu_rt_frame == _RC_MAX_F)
 		{
 			memcpy(lcu_rt_p, lcu_lb_u.rt_p, sizeof(float) * (3 + 2));
 		}
@@ -84,7 +84,7 @@ void lcu_update()
 //		// ((float *)m_vkbuffer_p)[13] = s_ty;
 //		// ((float *)m_vkbuffer_p)[14] = s_tz;
 //
-//		vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], 1, &(VkMappedMemoryRange)
+//		vkFlushMappedMemoryRanges(_rd_vkq_dv_p[_rd_vk_device], 1, &(VkMappedMemoryRange)
 //		{
 //			.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 //			.memory = lcp_vkdevicememory,
@@ -116,10 +116,10 @@ void lcu_read()
 	lcu_ch_bl = *(lc_net_p + lc_net_bl);
 	lc_net_bl += sizeof(uint8_t);
 
-	lcu_ch_p = realloc(lcu_ch_p, sizeof(NALI_LB_CHT) * lcu_ch_bl);
+	lcu_ch_p = realloc(lcu_ch_p, sizeof(_RB_CHT) * lcu_ch_bl);
 	lcu_xyz_p = realloc(lcu_xyz_p, 3 * lcu_ch_bl);
-	memcpy(lcu_ch_p, lc_net_p + lc_net_bl, sizeof(NALI_LB_CHT) * lcu_ch_bl);
-	lc_net_bl += sizeof(NALI_LB_CHT);
+	memcpy(lcu_ch_p, lc_net_p + lc_net_bl, sizeof(_RB_CHT) * lcu_ch_bl);
+	lc_net_bl += sizeof(_RB_CHT);
 }
 
 void lcu_free()

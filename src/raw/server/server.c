@@ -1,16 +1,16 @@
 FILE *ls_file_p;
 
-NALI_LB_PT ls_net_bl;
-uint8_t ls_net_p[NALI_LB_NET_BL];
+_RB_PT ls_net_bl;
+uint8_t ls_net_p[_RB_NET_BL];
 
-#define NALI_LS_STATE_ON 1
+#define _RS_STATE_ON 1
 static uint8_t ls_state;
 
 void ls_set()
 {
 	_DB_R2L("mkdir %d", mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR))
 
-	ls_state = NALI_LS_STATE_ON;
+	ls_state = _RS_STATE_ON;
 
 	ns_set();
 
@@ -27,7 +27,7 @@ static void ls_send()
 {
 	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)ls_net_p);
 
-	for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
+	for (_RB_UT l_0 = 0; l_0 < _RB_UM; ++l_0)
 	{
 		ls_net_bl = sizeof(struct timespec);
 
@@ -40,7 +40,7 @@ static void ls_send()
 
 static struct timespec ls_time = {0};
 static struct timespec l_time;
-void ls_read(NALI_LB_UT u)
+void ls_read(_RB_UT u)
 {
 	l_time = *(struct timespec *)ls_net_p;
 
@@ -77,8 +77,8 @@ void ls_save()
 	fclose(ls_file_p);
 }
 
-static NALI_LB_CT ls_load_bl = 0;
-static NALI_LB_CT *ls_load_p;
+static _RB_CT ls_load_bl = 0;
+static _RB_CT *ls_load_p;
 #ifdef _CM_CLIENT
 	int ls_loop(void *p)
 #else
@@ -93,7 +93,7 @@ static NALI_LB_CT *ls_load_p;
 	struct timespec tick_start, tick_end, tick_sleep = {0};
 	double sleep;
 	clock_gettime(CLOCK_MONOTONIC, &tick_start);
-	while (ls_state & NALI_LS_STATE_ON)
+	while (ls_state & _RS_STATE_ON)
 	{
 		//read file
 		//map
@@ -102,9 +102,9 @@ static NALI_LB_CT *ls_load_p;
 		//sync
 		// lsc_sync_u();
 
-		// for (NALI_LB_CT l_0 = 0; l_0 < ls_load_bl; ++l_0)
+		// for (_RB_CT l_0 = 0; l_0 < ls_load_bl; ++l_0)
 		// {
-		// 	ls_load_p[l_0 * sizeof(NALI_LB_CT) * 3];
+		// 	ls_load_p[l_0 * sizeof(_RB_CT) * 3];
 		// }
 
 		ns_get();
@@ -113,7 +113,7 @@ static NALI_LB_CT *ls_load_p;
 		ls_send();
 		ns_check();
 
-		if (++tick == NALI_LS_MAX_RW)
+		if (++tick == _RS_MAX_RW)
 		{
 			clock_gettime(CLOCK_MONOTONIC, &tick_end);
 			sleep = tick_end.tv_sec + (double)tick_end.tv_nsec / 1e9 - tick_start.tv_sec - (double)tick_start.tv_nsec / 1e9;
@@ -143,5 +143,5 @@ void ls_free()
 {
 	mtx_lock(lb_mtx_t_p);
 
-	ls_state &= 0xFFu - NALI_LS_STATE_ON;
+	ls_state &= 0xFFu - _RS_STATE_ON;
 }

@@ -14,33 +14,33 @@ static void wl_keyboard_listener_key(void *data, struct wl_keyboard *wl_keyboard
 			_sf_wlc_zwp_pc_set();
 
 		if (key == KEY_W)
-			lcu_k ^= NALI_LB_K_W;
+			lcu_k ^= _RB_K_W;
 		if (key == KEY_S)
-			lcu_k ^= NALI_LB_K_S;
+			lcu_k ^= _RB_K_S;
 		if (key == KEY_A)
-			lcu_k ^= NALI_LB_K_A;
+			lcu_k ^= _RB_K_A;
 		if (key == KEY_D)
-			lcu_k ^= NALI_LB_K_D;
+			lcu_k ^= _RB_K_D;
 		if (key == KEY_SPACE)
-			lcu_k ^= NALI_LB_K_JUMP;
+			lcu_k ^= _RB_K_JUMP;
 		if (key == KEY_LEFTCTRL)
-			lcu_k ^= NALI_LB_K_DIG;
+			lcu_k ^= _RB_K_DIG;
 		//KEY_LEFTSHIFT
 	}
 	else
 	{
 		if (key == KEY_W)
-			lcu_k ^= NALI_LB_K_W;
+			lcu_k ^= _RB_K_W;
 		if (key == KEY_S)
-			lcu_k ^= NALI_LB_K_S;
+			lcu_k ^= _RB_K_S;
 		if (key == KEY_A)
-			lcu_k ^= NALI_LB_K_A;
+			lcu_k ^= _RB_K_A;
 		if (key == KEY_D)
-			lcu_k ^= NALI_LB_K_D;
+			lcu_k ^= _RB_K_D;
 		if (key == KEY_SPACE)
-			lcu_k ^= NALI_LB_K_JUMP;
+			lcu_k ^= _RB_K_JUMP;
 		if (key == KEY_LEFTCTRL)
-			lcu_k ^= NALI_LB_K_DIG;
+			lcu_k ^= _RB_K_DIG;
 	}
 }
 

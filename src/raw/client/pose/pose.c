@@ -432,9 +432,9 @@ void lcp_vk()
 	}
 
 	VkMemoryRequirements vkmemoryrequirements;
-	vkdevicesize = (vkdevicesize + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1);
-	_VK_BF_MAKE(_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
-	_DB_R2L("vkMapMemory %d", vkMapMemory(_vkq_dv_p[_vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
+	vkdevicesize = (vkdevicesize + (_rd_vk_non_coherent_atom_size - 1)) & ~(_rd_vk_non_coherent_atom_size - 1);
+	_RD_VK_BF_MAKE(_rd_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
+	_DB_R2L("vkMapMemory %d", vkMapMemory(_rd_vkq_dv_p[_rd_vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
 
 	vkdevicesize = 0;
 
@@ -474,12 +474,12 @@ void lcp_vk()
 		vkdevicesize += sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1);
 	}
 
-	vkFlushMappedMemoryRanges(_vkq_dv_p[_vk_device], 1, &(VkMappedMemoryRange)
+	vkFlushMappedMemoryRanges(_rd_vkq_dv_p[_rd_vk_device], 1, &(VkMappedMemoryRange)
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lcp_vkdevicememory,
 		.offset = 0,
-		.size = (vkdevicesize + (_vk_non_coherent_atom_size - 1)) & ~(_vk_non_coherent_atom_size - 1),
+		.size = (vkdevicesize + (_rd_vk_non_coherent_atom_size - 1)) & ~(_rd_vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});
 
@@ -555,8 +555,8 @@ void lcp_vk()
 
 void lcp_freeVk(uint32_t device)
 {
-	VkDevice vkdevice = _vkq_dv_p[device];
-	vkUnmapMemory(_vkq_dv_p[device], lcp_vkdevicememory);
+	VkDevice vkdevice = _rd_vkq_dv_p[device];
+	vkUnmapMemory(_rd_vkq_dv_p[device], lcp_vkdevicememory);
 	vkDestroyBuffer(vkdevice, lcp_vkbuffer, VK_NULL_HANDLE);
 	vkFreeMemory(vkdevice, lcp_vkdevicememory, VK_NULL_HANDLE);
 }

@@ -1,6 +1,6 @@
-#ifndef _VK_DB_H
-	#define _VK_DB_H
+#ifndef _RD_VK_DB_H
+	#define _RD_VK_DB_H
 
-	void _vk_db_make();
-	void _vk_db_free();
+	void _rd_vk_db_make();
+	void _rd_vk_db_free();
 #endif

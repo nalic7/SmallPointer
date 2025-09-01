@@ -1,14 +1,14 @@
-VkCommandPool **_vk_cmp_p;
+VkCommandPool **_rd_vk_cmp_p;
 
-void _vk_cmp_set()
+void _rd_vk_cmp_set()
 {
-	_vk_cmp_p = malloc(sizeof(VkCommandPool *) * _vkq_dv_pscdv_bl);
+	_rd_vk_cmp_p = malloc(sizeof(VkCommandPool *) * _rd_vkq_dv_pscdv_bl);
 }
 
-void _vk_cmp_make(uint32_t device)
+void _rd_vk_cmp_make(uint32_t device)
 {
-	uint32_t max_queue = _vkq_max_queue_p[device];
-	_vk_cmp_p[device] = malloc(sizeof(VkCommandPool) * max_queue);
+	uint32_t max_queue = _rd_vkq_max_queue_p[device];
+	_rd_vk_cmp_p[device] = malloc(sizeof(VkCommandPool) * max_queue);
 
 	for (uint32_t q = 0; q < max_queue; ++q)
 	{
@@ -17,7 +17,7 @@ void _vk_cmp_make(uint32_t device)
 			"vkCreateCommandPool %d",
 			vkCreateCommandPool
 			(
-				_vkq_dv_p[device],
+				_rd_vkq_dv_p[device],
 				&(VkCommandPoolCreateInfo)
 				{
 					.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
@@ -26,22 +26,22 @@ void _vk_cmp_make(uint32_t device)
 					.pNext = VK_NULL_HANDLE
 				},
 				VK_NULL_HANDLE,
-				&_vk_cmp_p[device][q]
+				&_rd_vk_cmp_p[device][q]
 			)
 		)
 	}
 }
 
-void _vk_cmp_free()
+void _rd_vk_cmp_free()
 {
-	for (uint32_t d = 0; d < _vkq_dv_pscdv_bl; ++d)
+	for (uint32_t d = 0; d < _rd_vkq_dv_pscdv_bl; ++d)
 	{
-		for (uint32_t q = 0; q < _vkq_max_queue_p[d]; ++q)
+		for (uint32_t q = 0; q < _rd_vkq_max_queue_p[d]; ++q)
 		{
-			vkDestroyCommandPool(_vkq_dv_p[d], _vk_cmp_p[d][q], VK_NULL_HANDLE);
+			vkDestroyCommandPool(_rd_vkq_dv_p[d], _rd_vk_cmp_p[d][q], VK_NULL_HANDLE);
 		}
-		free(_vk_cmp_p[d]);
+		free(_rd_vk_cmp_p[d]);
 	}
 
-	free(_vk_cmp_p);
+	free(_rd_vk_cmp_p);
 }

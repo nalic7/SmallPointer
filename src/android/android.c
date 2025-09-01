@@ -11,7 +11,7 @@ static int s1_set(void *p)
 	#ifdef _CM_CLIENT
 		lc_set();
 
-		_vk_set();
+		_rd_vk_set();
 	//! audio android
 //		al_set();
 		lc_vk();
@@ -66,15 +66,15 @@ static int s1_set(void *p)
 						float l_x01 = l_x - x01;
 						float l_y01 = l_y - y01;
 
-						lcu_k |= l_y01 < -2.0F ? NALI_LB_K_W :
-							l_y01 > 2.0F ? NALI_LB_K_S : 0;
-						lcu_k &= l_y01 < -2.0F ? 0xFFu - NALI_LB_K_S :
-							l_y01 > 2.0F ? 0xFFu - NALI_LB_K_W : 0xFFu;
+						lcu_k |= l_y01 < -2.0F ? _RB_K_W :
+							l_y01 > 2.0F ? _RB_K_S : 0;
+						lcu_k &= l_y01 < -2.0F ? 0xFFu - _RB_K_S :
+							l_y01 > 2.0F ? 0xFFu - _RB_K_W : 0xFFu;
 
-						lcu_k |= l_x01 < -2.0F ? NALI_LB_K_A :
-							l_x01 > 2.0F ? NALI_LB_K_D : 0;
-						lcu_k &= l_x01 < -2.0F ? 0xFFu - NALI_LB_K_D :
-							l_x01 > 2.0F ? 0xFFu - NALI_LB_K_A : 0xFFu;
+						lcu_k |= l_x01 < -2.0F ? _RB_K_A :
+							l_x01 > 2.0F ? _RB_K_D : 0;
+						lcu_k &= l_x01 < -2.0F ? 0xFFu - _RB_K_D :
+							l_x01 > 2.0F ? 0xFFu - _RB_K_A : 0xFFu;
 					}
 
 					x01 = l_x;
@@ -195,13 +195,13 @@ void sa_wait()
 
 //		vk_freeDevice();
 //		vk_freeQueue();
-		_vk_sf_free();
-		_vk_sf_make();
+		_rd_vk_sf_free();
+		_rd_vk_sf_make();
 //		vk_initQueue();
 //		vk_initDevice();
-//		vk_setQueue(_vk_device);
-//		vk_makeDevice(_vk_device);
-//		vk_getQueue(_vk_device);
+//		vk_setQueue(_rd_vk_device);
+//		vk_makeDevice(_rd_vk_device);
+//		vk_getQueue(_rd_vk_device);
 
 //		m_surface_state |= _SF_S_EXIT;
 		_sf_state |= _SF_S_RE;

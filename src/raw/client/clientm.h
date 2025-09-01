@@ -1,7 +1,7 @@
-#ifndef RCM_H
+#ifndef _RCM_H
 #define RCM_H
 
-// extern void (*lcm_fp[NALI_LB_N_MAX])();
+// extern void (*lcm_fp[_RB_N_MAX])();
 
 //.i 2p
 extern VkBuffer *lcm_vkbuffer_p;
@@ -9,9 +9,9 @@ extern void **lcm_vkbuffer_mp;
 extern VkDeviceMemory *lcm_vkdevicememory_p;
 
 extern LB_M **lcm_lb_m_p;
-extern NALI_LB_MIT *lcm_bl_p;
+extern _RB_MIT *lcm_bl_p;
 
-extern NALI_LB_MIT lcm_ds_bl;
+extern _RB_MIT lcm_ds_bl;
 
 void lcm_set();
 void lcm_update();

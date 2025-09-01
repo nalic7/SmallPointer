@@ -1,7 +1,7 @@
-#ifndef _VK_PL_VP_H
-	#define _VK_PL_VP_H
+#ifndef _RD_VK_PL_VP_H
+	#define _RD_VK_PL_VP_H
 
-	#define _VK_PL_VP_SACAIF(name) \
+	#define _RD_VK_PL_VP_SACAIF(name) \
 		VkPipelineViewportStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO, \

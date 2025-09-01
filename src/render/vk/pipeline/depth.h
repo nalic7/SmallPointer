@@ -1,7 +1,7 @@
-#ifndef _VK_PLD_H
-	#define _VK_PLD_H
+#ifndef _RD_VK_PLD_H
+	#define _RD_VK_PLD_H
 
-	#define _VK_PLD_SC_SACAIF(name) \
+	#define _RD_VK_PLD_SC_SACAIF(name) \
 		VkPipelineDepthStencilStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO, \

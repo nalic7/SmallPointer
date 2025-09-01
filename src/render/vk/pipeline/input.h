@@ -1,7 +1,7 @@
-#ifndef _VK_PL_IP_H
-	#define _VK_PL_IP_H
+#ifndef _RD_VK_PL_IP_H
+	#define _RD_VK_PL_IP_H
 
-	#define _VK_PL_IP_AEB_SACAIF(name) \
+	#define _RD_VK_PL_IP_AEB_SACAIF(name) \
 		VkPipelineInputAssemblyStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO, \

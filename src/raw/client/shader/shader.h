@@ -1,5 +1,5 @@
-#ifndef RC_SD_H
-#define RC_SD_H
+#ifndef _RC_SD_H
+#define _RC_SD_H
 
 #define LCS_setVkVertexInputBindingDescription(name) \
 	VkVertexInputBindingDescription name = \
@@ -37,12 +37,12 @@
 #define NALI_LCM__UPDATE_S_AD 1
 typedef struct
 {
-	NALI_LB_MT m;
-	NALI_LB_MAT ma;
-	NALI_LB_AKIT aki;
+	_RB_MT m;
+	_RB_MAT ma;
+	_RB_AKIT aki;
 
-	NALI_LB_CHT ch;
-	NALI_LB_MIT mi;
+	_RB_CHT ch;
+	_RB_MIT mi;
 	uint8_t state;
 
 	uint8_t rt_frame;
@@ -51,7 +51,7 @@ typedef struct
 	uint8_t a_f_frame;
 	float _a_f;
 	float a_f;
-	// NALI_LB_AKT ak;
+	// _RB_AKT ak;
 } lcs__m;
 #define NALI_LCS_AIT uint8_t
 typedef struct
@@ -62,22 +62,20 @@ typedef struct
 	const NALI_LCS_AIT *a_p;
 	uint8_t mab;
 	// VkDeviceSize *vkdevicesize_p;
-	NALI_LB_MIT ds;
+	_RB_MIT ds;
 } lcs__;
-extern lcs__ lcs___p[NALI_LB_MIM];
+extern lcs__ lcs___p[_RB_MIM];
 
 extern uint32_t lcs_s_bl;
 typedef struct
 {
-	NALI_LB_MIT _;
-	// NALI_LB_MAT ib;
-	// NALI_LB_MAT ic;
-	NALI_LB_MAT i;
+	_RB_MIT _;
+	// _RB_MAT ib;
+	// _RB_MAT ic;
+	_RB_MAT i;
 	float d;
 } lcs_s;
 extern lcs_s *lcs_s_p;
-
-void lcs_setVkWriteDescriptorSet(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, NALI_LB_MIT ds, uint8_t j, uint8_t mj);
 
 void lcs_set();
 // void lcs_loop();

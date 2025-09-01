@@ -1,11 +1,11 @@
-const uint32_t ns_u_p[NALI_LB_UM] =
+const uint32_t ns_u_p[_RB_UM] =
 {
 	//.c client ip
 	NALI_M_IP(127, 0, 0, 1)
 };
 
 static int server_fd;
-NS ns_p[NALI_LB_UM];
+NS ns_p[_RB_UM];
 
 void ns_set()
 {
@@ -24,7 +24,7 @@ void ns_set()
 //	_DB_N2L("%s", strerror(errno))
 }
 
-void ns_send(NALI_LB_UT ui)
+void ns_send(_RB_UT ui)
 {
 	sendto(server_fd, ls_net_p, ls_net_bl, 0, (struct sockaddr *)&ns_p[ui].client_sockaddr_in, ns_p[ui].client_sockaddr_in_bl);
 }
@@ -34,11 +34,11 @@ static socklen_t client_sockaddr_in_bl = sizeof(client_sockaddr_in);
 static ssize_t r;
 void ns_get()
 {
-	r = recvfrom(server_fd, ls_net_p, NALI_LB_NET_BL, 0, (struct sockaddr*)&client_sockaddr_in, &client_sockaddr_in_bl);
+	r = recvfrom(server_fd, ls_net_p, _RB_NET_BL, 0, (struct sockaddr*)&client_sockaddr_in, &client_sockaddr_in_bl);
 
-	if (r == sizeof(NALI_LB_PT))
+	if (r == sizeof(_RB_PT))
 	{
-		for (NALI_LB_UT l_0 = 0; l_0 < NALI_LB_UM; ++l_0)
+		for (_RB_UT l_0 = 0; l_0 < _RB_UM; ++l_0)
 		{
 			// client_sockaddr_in.sin_port;
 			if (client_sockaddr_in.sin_addr.s_addr == ns_u_p[l_0])

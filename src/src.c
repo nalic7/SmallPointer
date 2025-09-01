@@ -110,7 +110,7 @@ int main()
 //	//this step need stable delta
 //	// delta = 0.25;
 //	// delta = 1/90.0F;
-//	delta = NALI_LC_D;
+//	delta = _RC_D;
 //	float next;
 //	uint8_t frame = 0;
 //	if (start > end)
@@ -127,7 +127,7 @@ int main()
 //	for (uint32_t rw = 0; rw < 1 / delta; ++rw)
 //	{
 //		_DB_N2L("f %d", ++frame)
-//		if (frame == NALI_LC_MAX_F)
+//		if (frame == _RC_MAX_F)
 //		{
 //			_DB_N2L("x %f", start = end)
 //		}
@@ -193,11 +193,14 @@ int main()
 		#endif
 
 		#ifdef _CM_VK
-			_vk_set();
+			_rd_vk_set();
 			lc_vk();
 		#endif
 		//! switch to pipewire
 		// al_set();
-		thrd_sleep(&(struct timespec){.tv_sec = 60*60, .tv_nsec = 0}, NULL);
+		#ifdef _CM_DRM
+			_lip_loop();
+			_db_free();
+		#endif
 	#endif
 }

@@ -1,17 +1,35 @@
 cmake_minimum_required(VERSION 3.31)
 
+#//.i system
 set(ST linux)
-  set(DRM 1)
-#  set(WL 1)
-#  set(X11 1)
 #set(ST android)
 #set(ST win11)
 #set(ST mc)
 
+#//.i surface
+set(DRM 1)
+#set(ANDROID 1)
+#set(WL 1)
+#set(X11 1)
+
+#//.i run
 #set(GEN 1)
 set(CLIENT 1)
 #set(SERVER 1)
 
+#//.i media reader
+set(FFMPEG 1)
+
+#//.i network protocol
+set(UDP 1)
+#set(TCP 1)
+
+#//.i audio
+set(PIPEWIRE 1)
+#set(AAUDIO 1)
+#set(OPENAL 1)
+
+#//.i render
 set(VK 1)
   set(VK_DEBUG 1)
 #set(GL 1)

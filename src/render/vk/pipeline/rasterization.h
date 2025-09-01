@@ -1,7 +1,7 @@
-#ifndef _VK_PL_RTIT_H
-	#define _VK_PL_RTIT_H
+#ifndef _RD_VK_PL_RTIT_H
+	#define _RD_VK_PL_RTIT_H
 
-	#define _VK_PL_RTIT_SACAIF(name) \
+	#define _RD_VK_PL_RTIT_SACAIF(name) \
 		VkPipelineRasterizationStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO, \

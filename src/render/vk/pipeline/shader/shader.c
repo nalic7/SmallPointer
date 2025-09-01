@@ -1,4 +1,4 @@
-void _vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p)
+void _rd_vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p)
 {
 	uint32_t code_b = 0;
 	void *code_p = f_read(vert_p, &code_b);
@@ -7,7 +7,7 @@ void _vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderModule *
 		"vkCreateShaderModule %d",
 		vkCreateShaderModule
 		(
-			_vkq_dv_p[device],
+			_rd_vkq_dv_p[device],
 			&(VkShaderModuleCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
@@ -28,7 +28,7 @@ void _vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderModule *
 		"vkCreateShaderModule %d",
 		vkCreateShaderModule
 		(
-			_vkq_dv_p[device],
+			_rd_vkq_dv_p[device],
 			&(VkShaderModuleCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,

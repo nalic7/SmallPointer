@@ -20,27 +20,36 @@ run/gentoo
 ```
 >Check Kernel
 ```bash
-eselect kernel list
-file /usr/src/linux
-#device
-lspci -k
+ls /usr/src
+ls -l /usr/src/linux
+ls /lib/modules
 ```
 >Compile Kernel
 ```bash
+ln -sfn /usr/src/linux-6.16.4 /usr/src/linux
 cd /usr/src/linux
 make mrproper
 make defconfig
 make menuconfig
 make
 make modules_install
-cp arch/x86/boot/bzImage /boot/vmlinuz-6.16.3
+cp arch/x86/boot/bzImage /boot/vmlinuz-6.16.4
 grub-mkconfig -o /boot/grub/grub.cfg
-#update kernel
-cp .config /boot/.config-6.16.3
-cp /boot/.config-6.16.3 .config
+```
+>Update Kernel
+```bash
+cd /usr/src/linux
+make mrproper
+cp /usr/src/linux-6.16.3/.config /usr/src/linux-6.16.4
 make oldconfig
 #reinstall modules
 emerge -a @module-rebuild
+```
+>Clean Kernel
+```bash
+rm -rf /usr/src/linux-6.16.3
+rm -rf /lib/modules/6.16.3
+rm -rf /boot/vmlinuz-6.16.3
 ```
 >Hyprland
 ```
@@ -156,7 +165,7 @@ windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned
 ```
 >~/.vimrc
 ```
-set number relativenumber list listchars=tab:>-,trail:·,space:_ clipboard=unnamedplus
+set number relativenumber list listchars=tab:>-,trail:·,space:_
 highlight SpecialKey guifg=#ff0000 ctermfg=Red
 highlight NonText guifg=#ff0000 ctermfg=Red
 autocmd BufRead,BufNewFile CMakeLists.txt setlocal expandtab shiftwidth=2 softtabstop=2

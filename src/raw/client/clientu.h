@@ -1,7 +1,7 @@
-#ifndef RCU_H
+#ifndef _RCU_H
 #define RCU_H
 
-extern NALI_LB_CHT *lcu_ch_p;
+extern _RB_CHT *lcu_ch_p;
 extern uint8_t lcu_ch_bl;
 //[3 * 3 * 3][3]
 extern uint8_t *lcu_xyz_p;

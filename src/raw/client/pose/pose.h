@@ -1,4 +1,4 @@
-#ifndef RCP_H
+#ifndef _RCP_H
 #define RCP_H
 
 	#define NALI_LCP_VP_BL sizeof(float) * 16 * 2 * 2

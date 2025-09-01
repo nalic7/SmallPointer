@@ -1,5 +1,5 @@
-#ifndef RC_KF_H
-#define RC_KF_H
+#ifndef _RC_KF_H
+#define _RC_KF_H
 
 typedef struct
 {

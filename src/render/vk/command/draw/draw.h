@@ -1,10 +1,10 @@
-#ifndef _VK_CMD_H
-	#define _VK_CMD_H
+#ifndef _RD_VK_CMD_H
+	#define _RD_VK_CMD_H
 
-	void _vk_cmd_set();
-	#ifdef _CM_ST_ANDROID
-		int _vk_cmd_loop(void *p);
+	void _rd_vk_cmd_set();
+	#ifdef _CM_WL
+		void _rd_vk_cmd_loop();
 	#else
-		void _vk_cmd_loop();
+		int _rd_vk_cmd_loop(void *p);
 	#endif
 #endif

@@ -1,5 +1,5 @@
-NALI_LB_PT lc_net_bl = 0;
-uint8_t lc_net_p[NALI_LB_NET_BL];
+_RB_PT lc_net_bl = 0;
+uint8_t lc_net_p[_RB_NET_BL];
 
 // float lc_delta = 0;
 
@@ -23,14 +23,14 @@ void lc_vk()
 	}
 
 	lcp_vk();
-	_rd_vk_dsts_lo_make(_vk_device);
-	_vk_dspsp_make(_vk_device);
+	_rd_vkw_dsts_lo_make(_rd_vk_device);
+	_rd_vkw_dstsp_make(_rd_vk_device);
 
-	_vk_cmd_set();
-	#ifdef _CM_ST_ANDROID
-		_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, _vk_cmd_loop, NULL))
+	_rd_vk_cmd_set();
+	#ifdef _CM_WL
+		_rd_vk_cmd_loop();
 	#else
-		_vk_cmd_loop();
+		_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, _rd_vk_cmd_loop, NULL))
 	#endif
 }
 
@@ -78,8 +78,8 @@ void lc_freeloop()
 void lc_freeVk(uint32_t device)
 {
 	lcm_freeVk(device);
-	_rd_vk_dstsp_free(device);
-	_rd_vk_dsts_lo_free(device);
+	_rd_vkw_dstsp_free(device);
+	_rd_vkw_dsts_lo_free(device);
 	lcp_freeVk(device);
 }
 

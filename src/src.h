@@ -137,9 +137,10 @@
 		#include "render/vk/imageview/imageview.h"
 		#include "render/vk/sampler.h"
 
-		#include "render/vk/descriptorset/descriptorset.h"
-		#include "render/vk/descriptorset/layout/layout.h"
-		#include "render/vk/descriptorset/pool/pool.h"
+		#include "render/vk/write/write.h"
+		#include "render/vk/write/descriptorset/descriptorset.h"
+		#include "render/vk/write/descriptorset/layout/layout.h"
+		#include "render/vk/write/descriptorset/pool/pool.h"
 
 		#include "render/vk/pipeline/layout/layout.h"
 		#include "render/vk/pipeline/color.h"
