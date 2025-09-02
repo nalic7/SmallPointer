@@ -47,7 +47,7 @@
 // // {
 // // 	vk_makeDescriptorSetLayout
 // // 	(
-// // 		_rd_vk_device,
+// // 		smpt_rd_vk_device,
 // // 		(VkDescriptorSetLayoutBinding[])
 // // 		{
 // // 			{
@@ -97,7 +97,7 @@
 // // 		// .range = m_nali_g_ubo_vkdevicesize_p[0]
 // // 		.range = sizeof(nali_v_uniform_float_array)
 // // 	};
-// // 	vk_setVkWriteDescriptorSet(_rd_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
+// // 	vk_setVkWriteDescriptorSet(smpt_rd_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p);
 // // 	*vkdescriptorimageinfo_p = (VkDescriptorImageInfo)
 // // 	{
 // // 		//sampler VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -107,14 +107,14 @@
 // // 		.sampler = m_nali_g_image_vksampler_p[0]
 // // 		// .sampler = VK_NULL_HANDLE
 // // 	};
-// // 	vk_setVkWriteDescriptorSet(_rd_vk_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset, vkwritedescriptorset_p + 1);
+// // 	vk_setVkWriteDescriptorSet(smpt_rd_vk_device, 1, vkdescriptorimageinfo_p, VK_NULL_HANDLE, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, vkdescriptorset, vkwritedescriptorset_p + 1);
 // // 	// *vkdescriptorbufferinfo_p = (VkDescriptorBufferInfo)
 // // 	// {
 // // 	// 	.buffer = ,
 // // 	// 	.offset = 0,
 // // 	// 	.range = 
 // // 	// };
-// // 	// vk_setVkWriteDescriptorSet(_rd_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
+// // 	// vk_setVkWriteDescriptorSet(smpt_rd_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset, vkwritedescriptorset_p + 2);
 // // }
 
 // uint16_t m_nali_g_max_image;
@@ -142,7 +142,7 @@
 // 	const char image_type[] = ".png";
 // 	const char image_path[] = NALI_F_HOME_IMAGE;
 // 	DIR *dir_p = opendir(image_path);
-// 	_DB_N2L("opendir %p", dir_p)
+// 	SMPT_DB_N2L("opendir %p", dir_p)
 
 // 	size_t name_index = sizeof(image_path)-1 + 1 + 1;
 // 	char *image_file = malloc(name_index);
@@ -178,7 +178,7 @@
 // 			wh_index = index * 2;
 
 // 			// FILE *file_p = fopen(image_file, "rb");
-// 			// _DB_N2L("file_p %p", file_p)
+// 			// SMPT_DB_N2L("file_p %p", file_p)
 // 			// png_init_io(png, file_p);
 // 			// png_read_info(png, info);
 
@@ -236,10 +236,10 @@
 // 		}
 // 		line = m_nali_g_image_state_uint8_t_p[u / (8/2)] & 2 << (u % (8/2)) * 2;
 
-// 		_RD_VK_IM_MAKE
+// 		SMPT_RD_VK_IM_MAKE
 // 		(
-// 			_rd_vk_device,
-// 			_RD_VK_COLOR_FORMAT,
+// 			smpt_rd_vk_device,
+// 			SMPT_RD_VK_COLOR_FORMAT,
 // 			((VkExtent3D)
 // 			{
 // 				.width = m_nali_g_image_wh_uint32_t_p[u2],
@@ -256,15 +256,15 @@
 // 			VK_SAMPLE_COUNT_1_BIT,
 // 			&m_nali_g_image_vkimage_p[u]
 // 		)
-// 		_RD_VK_IM_GEN(_rd_vk_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
-// 		vkdevicesize = m_nali_g_image_wh_uint32_t_p[u2] * m_nali_g_image_wh_uint32_t_p[u2_1] * _RD_VK_COLOR_FORMAT_BYTE;
-// 		// _RD_VK_BF_MAP(_rd_vk_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
+// 		SMPT_RD_VK_IM_GEN(smpt_rd_vk_device, m_nali_g_image_vkimage_p[u], VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &m_nali_g_image_vkimage_vkdevicememory_p[u], vkmemoryrequirements)
+// 		vkdevicesize = m_nali_g_image_wh_uint32_t_p[u2] * m_nali_g_image_wh_uint32_t_p[u2_1] * SMPT_RD_VK_COLOR_FORMAT_BYTE;
+// 		// SMPT_RD_VK_BF_MAP(smpt_rd_vk_device, vkdevicesize, 0, m_nali_g_image_uint8_t_p[0], &m_nali_g_image_vkimage_vkdevicememory_p[0]);
 
-// 		_RD_VK_BF_MAKE(_rd_vk_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
-// 		_RD_VK_BF_MAP(_rd_vk_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
+// 		SMPT_RD_VK_BF_MAKE(smpt_rd_vk_device, vkdevicesize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_nali_g_image_vkbuffer_p[u], m_nali_g_image_vkbuffer_vkdevicememory_p[u], vkmemoryrequirements)
+// 		SMPT_RD_VK_BF_MAP(smpt_rd_vk_device, vkdevicesize, m_nali_g_image_uint8_t_p[u], &m_nali_g_image_vkbuffer_vkdevicememory_p[u], data_p)
 
-// 		_RD_VK_IMV_MAKE(_rd_vk_device, m_nali_g_image_vkimage_p[u], _RD_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
-// 		_RD_VK_SP_MAKE(_rd_vk_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
+// 		SMPT_RD_VK_IMV_MAKE(smpt_rd_vk_device, m_nali_g_image_vkimage_p[u], SMPT_RD_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, mipmap, &m_nali_g_image_vkimageview_p[u])
+// 		SMPT_RD_VK_SP_MAKE(smpt_rd_vk_device, mipmap, line, &m_nali_g_image_vksampler_p[u])
 
 // 		// info("&m_nali_g_image_vkbuffer_p[0] %p", &m_nali_g_image_vkbuffer_p[0]);
 // 		// info("&m_nali_g_image_vkbuffer_vkdevicememory_p[0] %p", &m_nali_g_image_vkbuffer_vkdevicememory_p[0]);
@@ -274,7 +274,7 @@
 
 // static void clear(uint32_t device)
 // {
-// 	VkDevice vkdevice = _rd_vkq_dv_p[device];
+// 	VkDevice vkdevice = smpt_rd_vkq_dv_p[device];
 
 // 	//s0-image
 // 	for (uint32_t i = 0; i < m_nali_g_max_image; ++i)

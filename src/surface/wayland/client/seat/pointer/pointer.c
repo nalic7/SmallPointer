@@ -1,8 +1,8 @@
-struct wl_pointer *_sf_wlcs_pt_p;
+struct wl_pointer *smpt_sf_wlcs_pt_p;
 
 static void wl_pointer_listener_enter(void *data, struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface, wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
-	wl_pointer_set_cursor(_sf_wlcs_pt_p, serial, NULL, 0, 0);
+	wl_pointer_set_cursor(smpt_sf_wlcs_pt_p, serial, NULL, 0, 0);
 }
 
 static void wl_pointer_listener_leave(void *data, struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface)
@@ -34,9 +34,9 @@ static void wl_pointer_listener_button(void *data, struct wl_pointer *wl_pointer
 		case BTN_MIDDLE:
 			mtx_lock(lb_mtx_t_p);
 			if (state == WL_POINTER_BUTTON_STATE_PRESSED)
-				lcu_k |= _RB_K_REROTATE;
+				lcu_k |= SMPTRB_K_REROTATE;
 			else
-				lcu_k &= 0xFFu - _RB_K_REROTATE;
+				lcu_k &= 0xFFu - SMPTRB_K_REROTATE;
 			mtx_unlock(lb_mtx_t_p);
 	}
 }
@@ -50,7 +50,7 @@ static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, 
 	mtx_unlock(lb_mtx_t_p);
 }
 
-struct wl_pointer_listener _sf_wlcs_pt_listener =
+struct wl_pointer_listener smpt_sf_wlcs_pt_listener =
 {
 	.enter = wl_pointer_listener_enter,
 	.leave = wl_pointer_listener_leave,
@@ -59,7 +59,7 @@ struct wl_pointer_listener _sf_wlcs_pt_listener =
 	.axis = wl_pointer_listener_axis,
 };
 
-void _sf_wlcs_pt_free()
+void smpt_sf_wlcs_pt_free()
 {
-	wl_pointer_destroy(_sf_wlcs_pt_p);
+	wl_pointer_destroy(smpt_sf_wlcs_pt_p);
 }

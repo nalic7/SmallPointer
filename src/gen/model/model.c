@@ -152,9 +152,9 @@ void g_md_write()
 	cgltf_data *cgltf_data_p = NULL;
 	for (uint32_t l_0 = 0; l_0 < sizeof(file_array) / sizeof(file_array[0]); ++l_0)
 	{
-		_DB_R2L("cgltf_parse_file %d", cgltf_parse_file(cgltf_options_p, file_array[l_0], &cgltf_data_p))
-		_DB_R2L("cgltf_load_buffers %d", cgltf_load_buffers(cgltf_options_p, cgltf_data_p, file_array[l_0]))
-		_DB_R2L("cgltf_validate %d", cgltf_validate(cgltf_data_p))
+		SMPT_DB_R2L("cgltf_parse_file %d", cgltf_parse_file(cgltf_options_p, file_array[l_0], &cgltf_data_p))
+		SMPT_DB_R2L("cgltf_load_buffers %d", cgltf_load_buffers(cgltf_options_p, cgltf_data_p, file_array[l_0]))
+		SMPT_DB_R2L("cgltf_validate %d", cgltf_validate(cgltf_data_p))
 
 		// for (uint32_t l_1 = 0; l_1 < cgltf_data_p->animations_count; ++l_1)
 		//cgltf_node *parent_cgltf_node_p = cgltf_data_p->skins[0].joints[0]->parent;
@@ -387,7 +387,7 @@ void g_md_write()
 		// 				// NALI_MEMORY_RECOPY(animation_p, p, animation_bl, cgltf_accessor_input_p->count * sizeof(float) * 3)
 		// 				break;
 		// 			default:
-		// 				_DB_W2L("cgltf_animation_channel_p->target_path %d", cgltf_animation_channel_p->target_path)
+		// 				SMPT_DB_W2L("cgltf_animation_channel_p->target_path %d", cgltf_animation_channel_p->target_path)
 		// 		}
 		// 	}
 		// }
@@ -425,7 +425,7 @@ void g_md_write()
 
 			// 	if (cgltf_node_joints_p->has_matrix)
 			// 	{
-			// 		_DB_W2L("%s has_matrix", cgltf_node_joints_p->name);
+			// 		SMPT_DB_W2L("%s has_matrix", cgltf_node_joints_p->name);
 			// 		// cgltf_node_p->matrix;
 			// 	}
 			// }
@@ -477,7 +477,7 @@ void g_md_write()
 			// 		}
 			// 		if (cgltf_node_joints_p->has_matrix)
 			// 		{
-			// 			_DB_W2L("cgltf_node_joints_p->has_matrix");
+			// 			SMPT_DB_W2L("cgltf_node_joints_p->has_matrix");
 			// 		}
 			// 	}
 			// 	while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != parent_cgltf_node_p);
@@ -486,10 +486,10 @@ void g_md_write()
 			// // 	m4x4_m(i_bindpose_array + (bone_bl + l_2) * 16, global_bindpose_array + (bone_bl + l_2) * 16, i_bindpose_array + (bone_bl + l_2) * 16);
 			// // // 	// for (uint8_t l_3 = 0; l_3 < 16; ++l_3)
 			// // // 	// {
-			// // // 	// 	_DB_N2L("%d [%d] %f", bone_bl + l_2, l_3, fabsf((local_bindpose_array + (bone_bl + l_2) * 16)[l_3] - (global_bindpose_array + (bone_bl + l_2) * 16)[l_3]));
+			// // // 	// 	SMPT_DB_N2L("%d [%d] %f", bone_bl + l_2, l_3, fabsf((local_bindpose_array + (bone_bl + l_2) * 16)[l_3] - (global_bindpose_array + (bone_bl + l_2) * 16)[l_3]));
 			// // // 	// }
 
-			// // // 	// _DB_N2L("---");
+			// // // 	// SMPT_DB_N2L("---");
 			// }
 			// memcpy(i_bindpose_array + bone_bl * 16, global_bindpose_array + bone_bl * 16, sizeof(float) * 16 * cgltf_skin_p->joints_count);
 
@@ -523,10 +523,10 @@ void g_md_write()
 			// // // 	m4x4_i(bindpose[l_2_0 + 1]);
 			// // // 	for (uint8_t l_3 = 0; l_3 < 16; ++l_3)
 			// // // 	{
-			// // // 		_DB_N2L("%d [%d] %f", bone_bl + l_2, l_3, fabsf((local_bindpose_array + (bone_bl + l_2) * 16)[l_3] - bindpose[l_2_0 + 1][l_3]));
+			// // // 		SMPT_DB_N2L("%d [%d] %f", bone_bl + l_2, l_3, fabsf((local_bindpose_array + (bone_bl + l_2) * 16)[l_3] - bindpose[l_2_0 + 1][l_3]));
 			// // // 	}
 
-			// // // 	_DB_N2L("---");
+			// // // 	SMPT_DB_N2L("---");
 			// // // }
 			// //e0-test
 
@@ -594,7 +594,7 @@ void g_md_write()
 		// for (uint32_t l_1 = 0; l_1 < 3; ++l_1)
 		{
 			cgltf_mesh *cgltf_mesh_p = &cgltf_data_p->meshes[l_1];
-			_DB_N2L("cgltf_mesh %s", cgltf_mesh_p->name)
+			SMPT_DB_N2L("cgltf_mesh %s", cgltf_mesh_p->name)
 
 			l_index_p = &l_index;
 
@@ -624,7 +624,7 @@ void g_md_write()
 				// 		uint8_t a_bl = cgltf_accessor_p->stride / type_bl;
 				// 		if (a_bl != 1)
 				// 		{
-				// 			_DB_W2L("a_bl>1")
+				// 			SMPT_DB_W2L("a_bl>1")
 				// 		}
 
 				// 		cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
@@ -649,7 +649,7 @@ void g_md_write()
 				// 	}
 				// 	else
 				// 	{
-				// 		_DB_W2L("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+				// 		SMPT_DB_W2L("cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
 				// 	}
 				// }
 
@@ -668,7 +668,7 @@ void g_md_write()
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
 					cgltf_float *emissive_factor = cgltf_material_p->emissive_factor;
 					if (strstr(cgltf_material_p->name, ".C0."))
-						_DB_W2L("nali_format %s", cgltf_material_p->name)
+						SMPT_DB_W2L("nali_format %s", cgltf_material_p->name)
 
 					++material_fl;
 					material_p = realloc(material_p, sizeof(char *) * material_fl);
@@ -706,7 +706,7 @@ void g_md_write()
 									uint8_t a_j = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 									if (a_j == 0)
 									{
-										_DB_W2L("nali_format a_j0")
+										SMPT_DB_W2L("nali_format a_j0")
 									}
 									// // /b\ 1
 									mix_array[sizeof(float) * 3 + 1] = a_j;
@@ -721,12 +721,12 @@ void g_md_write()
 										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 										if (!*p)
 										{
-											_DB_W2L("nali_format w2 %f", *p)
+											SMPT_DB_W2L("nali_format w2 %f", *p)
 										}
 									}
 									else
 									{
-										_DB_W2L("nali_format cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+										SMPT_DB_W2L("nali_format cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
 									}
 
 									// // // /b\ 1
@@ -741,12 +741,12 @@ void g_md_write()
 										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
 										if (*p)
 										{
-											_DB_W2L("nali_format w2 %f", *p)
+											SMPT_DB_W2L("nali_format w2 %f", *p)
 										}
 									}
 									else
 									{
-										_DB_W2L("nali_format cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
+										SMPT_DB_W2L("nali_format cgltf_accessor_p->component_type %d", cgltf_accessor_p->component_type)
 									}
 								}
 							}
@@ -756,7 +756,7 @@ void g_md_write()
 							}
 							else
 							{
-								_DB_W2L("nali_format cgltf_attribute_p->type %d", cgltf_attribute_p->type)
+								SMPT_DB_W2L("nali_format cgltf_attribute_p->type %d", cgltf_attribute_p->type)
 							}
 						}
 
@@ -891,17 +891,17 @@ void g_md_write()
 		cgltf_free(cgltf_data_p);
 	}
 
-	_DB_R2L("material_fl %d", material_fl)
-	// _DB_R2L("max_joint_bl %d", max_joint_bl)
-	_DB_R2L("bone_bl %d", bone_bl)
+	SMPT_DB_R2L("material_fl %d", material_fl)
+	// SMPT_DB_R2L("max_joint_bl %d", max_joint_bl)
+	SMPT_DB_R2L("bone_bl %d", bone_bl)
 
 	// uint32_t l_step = 0;
 	// for (uint8_t l_0 = 0; l_0 < joint_count_bl; ++l_0)
 	// {
-	// 	_DB_R2L("start %d", l_step)
+	// 	SMPT_DB_R2L("start %d", l_step)
 
 	// 	uint8_t l_joint_bl = joint_count_p[l_0];
-	// 	_DB_R2L("%d joint %d", l_0, l_joint_bl)
+	// 	SMPT_DB_R2L("%d joint %d", l_0, l_joint_bl)
 
 	// 	for (uint8_t l_1 = 0; l_1 < l_joint_bl; ++l_1)
 	// 	{
@@ -909,7 +909,7 @@ void g_md_write()
 	// 		l_step += sizeof(uint8_t) + l_bl;
 	// 	}
 
-	// 	_DB_R2L("end %d", l_step)
+	// 	SMPT_DB_R2L("end %d", l_step)
 
 	// 	if (l_joint_bl == max_joint_bl)
 	// 	{
@@ -918,7 +918,7 @@ void g_md_write()
 	// }
 
 	FILE *file = fopen(NALI_F_HOME_ASSET, "ab");
-	_DB_N2L("fopen %p", file)
+	SMPT_DB_N2L("fopen %p", file)
 
 	fwrite(&joint_count_bl, sizeof(uint8_t), 1, file);
 	fwrite(joint_count_p, sizeof(uint8_t), joint_count_bl, file);

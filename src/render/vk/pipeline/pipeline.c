@@ -1,30 +1,30 @@
-void _rd_vk_pl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
+void smpt_rd_vk_pl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p, VkRenderPass vkrenderpass, VkPipelineLayout vkpipelinelayout, VkPipeline *vkpipeline_p)
 {
-	LCS_setVkVertexInputBindingDescription(vkvertexinputbindingdescription)
-	LCS_setVkVertexInputAttributeDescription(vkvertexinputattributedescription_array)
-	_RD_VK_PL_VT_IPSACAIF(&vkvertexinputbindingdescription, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
+	SMPT_RD_VK_PL_VT_IPBIDST(vkvertexinputbindingdescription)
+	SMPT_RD_VK_PL_VT_IPATBDST(vkvertexinputattributedescription_array)
+	SMPT_RD_VK_PL_VT_IPSACAIF(&vkvertexinputbindingdescription, vkvertexinputattributedescription_array, 2, vkpipelinevertexinputstatecreateinfo)
 
-	_RD_VK_PL_IP_AEB_SACAIF(vkpipelineinputassemblystatecreateinfo)
+	SMPT_RD_VK_PL_IP_AEB_SACAIF(vkpipelineinputassemblystatecreateinfo)
 
-	_RD_VK_PL_VP_SACAIF(vkpipelineviewportstatecreateinfo)
+	SMPT_RD_VK_PL_VP_SACAIF(vkpipelineviewportstatecreateinfo)
 
-	_RD_VK_PL_RTIT_SACAIF(vkpipelinerasterizationstatecreateinfo)
-	_RD_VK_PL_MT_SPSACAIF(vkpipelinemultisamplestatecreateinfo)
+	SMPT_RD_VK_PL_RTIT_SACAIF(vkpipelinerasterizationstatecreateinfo)
+	SMPT_RD_VK_PL_MT_SPSACAIF(vkpipelinemultisamplestatecreateinfo)
 
-	_RD_VK_PL_CL_BATMST(vkpipelinecolorblendattachmentstate)
-	_RD_VK_PL_CL_BSACAIF(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
+	SMPT_RD_VK_PL_CL_BATMST(vkpipelinecolorblendattachmentstate)
+	SMPT_RD_VK_PL_CL_BSACAIF(&vkpipelinecolorblendattachmentstate, vkpipelinecolorblendstatecreateinfo)
 
-	_RD_VK_PL_DNM_SET(vkdynamicstate_array)
-	_RD_VK_PL_DNM_SACAIF(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
+	SMPT_RD_VK_PL_DNM_SET(vkdynamicstate_array)
+	SMPT_RD_VK_PL_DNM_SACAIF(vkdynamicstate_array, 2, vkpipelinedynamicstatecreateinfo)
 
-	_RD_VK_PLD_SC_SACAIF(vkpipelinedepthstencilstatecreateinfo)
+	SMPT_RD_VK_PLD_SC_SACAIF(vkpipelinedepthstencilstatecreateinfo)
 
-	_DB_R2L
+	SMPT_DB_R2L
 	(
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines
 		(
-			_rd_vkq_dv_p[device],
+			smpt_rd_vkq_dv_p[device],
 			VK_NULL_HANDLE,
 			1,
 			&(VkGraphicsPipelineCreateInfo)

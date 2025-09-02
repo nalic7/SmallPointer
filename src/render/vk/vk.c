@@ -1,57 +1,57 @@
 //.c select gpu index
-uint32_t _rd_vk_device = 0;
-uint32_t _rd_vk_queue_g = 0;
-uint32_t _rd_vk_queue_ct = 0;
+uint32_t smpt_rd_vk_device = 0;
+uint32_t smpt_rd_vk_queue_g = 0;
+uint32_t smpt_rd_vk_queue_ct = 0;
 
-uint8_t _rd_vk_non_coherent_atom_size;
+uint8_t smpt_rd_vk_non_coherent_atom_size;
 
-#ifdef _CM_DEBUG
+#ifdef SMPT_CM_DEBUG
 	static void einfo(uint32_t d)
 	{
-		VkPhysicalDevice vkphysicaldevice = _rd_vkq_dv_pscdv_p[d];
+		VkPhysicalDevice vkphysicaldevice = smpt_rd_vkq_dv_pscdv_p[d];
 
 		uint32_t extensions = 0;
-		_DB_R2L("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE))
+		SMPT_DB_R2L("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, VK_NULL_HANDLE))
 
 		VkExtensionProperties *vkextensionproperties_p = malloc(extensions * sizeof(VkExtensionProperties));
-		_DB_R2L("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_p))
+		SMPT_DB_R2L("vkEnumerateDeviceExtensionProperties %d", vkEnumerateDeviceExtensionProperties(vkphysicaldevice, VK_NULL_HANDLE, &extensions, vkextensionproperties_p))
 
-		uint32_t device_extensions_size = sizeof(_rd_vkq_dv_ets_p) / sizeof(_rd_vkq_dv_ets_p[0]);
+		uint32_t device_extensions_size = sizeof(smpt_rd_vkq_dv_ets_p) / sizeof(smpt_rd_vkq_dv_ets_p[0]);
 		uint32_t device_extensions = 0;
 		for (uint32_t x = 0; x < extensions; ++x)
 		{
 			VkExtensionProperties vkextensionproperties = vkextensionproperties_p[x];
 			for (uint32_t y = 0; y < device_extensions_size; ++y)
 			{
-				if (!strcmp(_rd_vkq_dv_ets_p[y], vkextensionproperties.extensionName))
+				if (!strcmp(smpt_rd_vkq_dv_ets_p[y], vkextensionproperties.extensionName))
 				{
 					++device_extensions;
 				}
 			}
 		}
-		_DB_N2L("extensions %d", extensions)
+		SMPT_DB_N2L("extensions %d", extensions)
 		for (uint32_t x = 0; x < extensions; ++x)
 		{
 			VkExtensionProperties vkextensionproperties = vkextensionproperties_p[x];
-			_DB_N2L("extensionName %s", vkextensionproperties.extensionName)
+			SMPT_DB_N2L("extensionName %s", vkextensionproperties.extensionName)
 		}
 
 		free(vkextensionproperties_p);
-		_DB_N2L("device_extension_support %d", device_extensions == device_extensions_size)
+		SMPT_DB_N2L("device_extension_support %d", device_extensions == device_extensions_size)
 	}
 
 	static void ieinfo()
 	{
 		uint32_t count = 0;
-		_DB_R2L("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, VK_NULL_HANDLE))
+		SMPT_DB_R2L("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, VK_NULL_HANDLE))
 
 		VkExtensionProperties *vkextensionproperties_p = malloc(sizeof(VkExtensionProperties) * count);
 
-		_DB_R2L("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, vkextensionproperties_p))
+		SMPT_DB_R2L("vkEnumerateInstanceExtensionProperties %d", vkEnumerateInstanceExtensionProperties(VK_NULL_HANDLE, &count, vkextensionproperties_p))
 
 		for (uint32_t i = 0; i < count; ++i)
 		{
-			_DB_N2L("%d %s", i, vkextensionproperties_p[i].extensionName)
+			SMPT_DB_N2L("%d %s", i, vkextensionproperties_p[i].extensionName)
 		}
 
 		free(vkextensionproperties_p);
@@ -60,43 +60,43 @@ uint8_t _rd_vk_non_coherent_atom_size;
 	static void vkinfo(uint32_t device)
 	{
 		VkPhysicalDeviceProperties vkphysicaldeviceproperties;
-		vkGetPhysicalDeviceProperties(_rd_vkq_dv_pscdv_p[device], &vkphysicaldeviceproperties);
-		_DB_N2L("Name %s", vkphysicaldeviceproperties.deviceName)
-		_DB_N2L
+		vkGetPhysicalDeviceProperties(smpt_rd_vkq_dv_pscdv_p[device], &vkphysicaldeviceproperties);
+		SMPT_DB_N2L("Name %s", vkphysicaldeviceproperties.deviceName)
+		SMPT_DB_N2L
 		(
 			"Vulkan MAJOR MINOR PATCH %d.%d.%d",
 			VK_VERSION_MAJOR(vkphysicaldeviceproperties.apiVersion),
 			VK_VERSION_MINOR(vkphysicaldeviceproperties.apiVersion),
 			VK_VERSION_PATCH(vkphysicaldeviceproperties.apiVersion)
 		)
-		_DB_N2L("maxUniformBufferRange %d", vkphysicaldeviceproperties.limits.maxUniformBufferRange)
-		_DB_N2L("maxPerStageDescriptorUniformBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorUniformBuffers)
-		_DB_N2L("maxDescriptorSetUniformBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetUniformBuffers)
-		_DB_N2L("maxStorageBufferRange %d", vkphysicaldeviceproperties.limits.maxStorageBufferRange)
-		_DB_N2L("maxPerStageDescriptorStorageBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorStorageBuffers)
-		_DB_N2L("maxDescriptorSetStorageBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetStorageBuffers)
+		SMPT_DB_N2L("maxUniformBufferRange %d", vkphysicaldeviceproperties.limits.maxUniformBufferRange)
+		SMPT_DB_N2L("maxPerStageDescriptorUniformBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorUniformBuffers)
+		SMPT_DB_N2L("maxDescriptorSetUniformBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetUniformBuffers)
+		SMPT_DB_N2L("maxStorageBufferRange %d", vkphysicaldeviceproperties.limits.maxStorageBufferRange)
+		SMPT_DB_N2L("maxPerStageDescriptorStorageBuffers %d", vkphysicaldeviceproperties.limits.maxPerStageDescriptorStorageBuffers)
+		SMPT_DB_N2L("maxDescriptorSetStorageBuffers %d", vkphysicaldeviceproperties.limits.maxDescriptorSetStorageBuffers)
 
-		_DB_N2L("maxPerStageResources %d", vkphysicaldeviceproperties.limits.maxPerStageResources)
+		SMPT_DB_N2L("maxPerStageResources %d", vkphysicaldeviceproperties.limits.maxPerStageResources)
 
-		_DB_N2L("maxSamplerAnisotropy %f", vkphysicaldeviceproperties.limits.maxSamplerAnisotropy)
+		SMPT_DB_N2L("maxSamplerAnisotropy %f", vkphysicaldeviceproperties.limits.maxSamplerAnisotropy)
 
 		//VkSampleCountFlagBits
-		_DB_N2L("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
-		_DB_N2L("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
+		SMPT_DB_N2L("framebufferColorSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferColorSampleCounts)
+		SMPT_DB_N2L("framebufferDepthSampleCounts %d", vkphysicaldeviceproperties.limits.framebufferDepthSampleCounts)
 
-		_DB_R2L("nonCoherentAtomSize %d", _rd_vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
+		SMPT_DB_R2L("nonCoherentAtomSize %d", smpt_rd_vk_non_coherent_atom_size = vkphysicaldeviceproperties.limits.nonCoherentAtomSize)
 	}
 
 	static void dginfo()
 	{
 		// uint32_t device_group;
-		// _DB_R2L("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(_rd_vkq_dv_pscdv_it, &device_group, 0))
+		// SMPT_DB_R2L("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(smpt_rd_vkq_dv_pscdv_it, &device_group, 0))
 		// VkPhysicalDeviceGroupProperties *vkphysicaldevicegroupproperties_p = malloc(sizeof(VkPhysicalDeviceGroupProperties) * device_group);
-		// _DB_R2L("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(_rd_vkq_dv_pscdv_it, &device_group, vkphysicaldevicegroupproperties_p))
-		// _DB_N2L("device_group %d", device_group)
+		// SMPT_DB_R2L("vkEnumeratePhysicalDeviceGroups %d", vkEnumeratePhysicalDeviceGroups(smpt_rd_vkq_dv_pscdv_it, &device_group, vkphysicaldevicegroupproperties_p))
+		// SMPT_DB_N2L("device_group %d", device_group)
 		// for (uint32_t u = 0; u < device_group; ++u)
 		// {
-		// 	_DB_N2L("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
+		// 	SMPT_DB_N2L("physicalDeviceCount %d", vkphysicaldevicegroupproperties_p[u].physicalDeviceCount)
 		// }
 		// free(vkphysicaldevicegroupproperties_p);
 	}
@@ -104,75 +104,75 @@ uint8_t _rd_vk_non_coherent_atom_size;
 	static void pminfo(uint32_t device)
 	{
 		// VkPeerMemoryFeatureFlags vkpeermemoryfeatureflags;
-		// vkGetDeviceGroupPeerMemoryFeatures(_rd_vkq_dv_p[device], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
+		// vkGetDeviceGroupPeerMemoryFeatures(smpt_rd_vkq_dv_p[device], 0, 1, VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT, &vkpeermemoryfeatureflags);
 		// //VkPeerMemoryFeatureFlagBits
-		// _DB_N2L("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
+		// SMPT_DB_N2L("vkpeermemoryfeatureflags %d", vkpeermemoryfeatureflags)
 	}
 #endif
 
-void _rd_vk_set()
+void smpt_rd_vk_set()
 {
-	#ifdef _CM_DEBUG
+	#ifdef SMPT_CM_DEBUG
 		ieinfo();
 	#endif
 
-	_rd_vkq_dv_pscdv_it_make();
+	smpt_rd_vkq_dv_pscdv_it_make();
 
-	#ifdef _CM_DEBUG
+	#ifdef SMPT_CM_DEBUG
 		dginfo();
 	#endif
 
-	#ifdef _CM_VK_DEBUG
-		_rd_vk_db_make();
+	#ifdef SMPT_CM_VK_DEBUG
+		smpt_rd_vksmpt_db_make();
 	#endif
 
-	_rd_vkq_dv_pscdv_make();
+	smpt_rd_vkq_dv_pscdv_make();
 
-	_rd_vkq_set();
-	_rd_vkq_dv_set();
-	_rd_vk_cmp_set();
+	smpt_rd_vkq_set();
+	smpt_rd_vkq_dv_set();
+	smpt_rd_vk_cmp_set();
 
-	_rd_vk_sf_make();
+	smpt_rd_vk_sf_make();
 
-	for (uint32_t d = 0; d < _rd_vkq_dv_pscdv_bl; ++d)
+	for (uint32_t d = 0; d < smpt_rd_vkq_dv_pscdv_bl; ++d)
 	{
-		_DB_N2L("device %d", d)
-		#ifdef _CM_DEBUG
+		SMPT_DB_N2L("device %d", d)
+		#ifdef SMPT_CM_DEBUG
 			einfo(d);
 			vkinfo(d);
 		#endif
 
-		_rd_vkq_add(d);
-		_rd_vkq_dv_make(d);
+		smpt_rd_vkq_add(d);
+		smpt_rd_vkq_dv_make(d);
 
-		#ifdef _CM_DEBUG
+		#ifdef SMPT_CM_DEBUG
 			pminfo(d);
 		#endif
 
-		_rd_vkq_get(d);
+		smpt_rd_vkq_get(d);
 
-		_rd_vk_cmp_make(d);
+		smpt_rd_vk_cmp_make(d);
 	}
 
-	_rd_vk_swc_make(_rd_vkq_max_queue_surface_p[_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+	smpt_rd_vk_swc_make(smpt_rd_vkq_max_queue_surface_p[smpt_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+
+	lc_vk();
 }
 
-void _rd_vk_free()
+void smpt_rd_vk_free()
 {
-	lc_freeVk(_rd_vk_device);
+	smpt_rd_vk_cmp_free();
 
-	_rd_vk_cmp_free();
+	smpt_rd_vk_swc_free();
 
-	_rd_vk_swc_free();
+	smpt_rd_vkq_dv_free();
+	smpt_rd_vkq_free();
+	smpt_rd_vkq_dv_pscdv_free();
 
-	_rd_vkq_dv_free();
-	_rd_vkq_free();
-	_rd_vkq_dv_pscdv_free();
-
-	#ifdef _CM_VK_DEBUG
-		_rd_vk_db_free();
+	#ifdef SMPT_CM_VK_DEBUG
+		smpt_rd_vksmpt_db_free();
 	#endif
 
-	_rd_vk_sf_free();
-	_rd_vkq_dv_pscdv_it_free();
+	smpt_rd_vk_sf_free();
+	smpt_rd_vkq_dv_pscdv_it_free();
 }

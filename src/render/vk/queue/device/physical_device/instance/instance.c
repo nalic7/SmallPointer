@@ -1,34 +1,34 @@
-VkInstance _rd_vkq_dv_pscdv_it;
+VkInstance smpt_rd_vkq_dv_pscdv_it;
 
 static const char *extension_p[] =
 {
 	VK_KHR_SURFACE_EXTENSION_NAME,
-	#ifdef _CM_ST_ANDROID
+	#ifdef SMPT_CM_ST_ANDROID
 		VK_KHR_ANDROID_SURFACE_EXTENSION_NAME,
 	#endif
-	#ifdef _CM_DRM
+	#ifdef SMPT_CM_DRM
 		VK_KHR_SURFACE_EXTENSION_NAME,
 		VK_KHR_DISPLAY_EXTENSION_NAME,
 	#endif
-	#ifdef _CM_WL
+	#ifdef SMPT_CM_WL
 		VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
 	#endif
 
-	#ifdef _CM_DEBUG
+	#ifdef SMPT_CM_DEBUG
 		VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 	#endif
 };
 
-#ifdef _CM_VK_DEBUG
-	const char *_rd_vkq_dv_pscdv_it_layer_p[] =
+#ifdef SMPT_CM_VK_DEBUG
+	const char *smpt_rd_vkq_dv_pscdv_it_layer_p[] =
 	{
 		"VK_LAYER_KHRONOS_validation"
 	};
 #endif
 
-void _rd_vkq_dv_pscdv_it_make()
+void smpt_rd_vkq_dv_pscdv_it_make()
 {
-	_DB_R2L
+	SMPT_DB_R2L
 	(
 		"vkCreateInstance %d",
 		vkCreateInstance
@@ -43,7 +43,7 @@ void _rd_vkq_dv_pscdv_it_make()
 					.applicationVersion = VK_MAKE_VERSION(1, 0, 0),
 					.pEngineName = VK_NULL_HANDLE,
 					.engineVersion = VK_MAKE_VERSION(1, 0, 0),
-					.apiVersion = _RD_VK_VERSION,
+					.apiVersion = SMPT_RD_VK_VERSION,
 
 					.pNext = VK_NULL_HANDLE
 				},
@@ -53,21 +53,21 @@ void _rd_vkq_dv_pscdv_it_make()
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE,
 
-				#ifdef _CM_VK_DEBUG
-					.enabledLayerCount = sizeof(_rd_vkq_dv_pscdv_it_layer_p) / sizeof(_rd_vkq_dv_pscdv_it_layer_p[0]),
-					.ppEnabledLayerNames = _rd_vkq_dv_pscdv_it_layer_p
+				#ifdef SMPT_CM_VK_DEBUG
+					.enabledLayerCount = sizeof(smpt_rd_vkq_dv_pscdv_it_layer_p) / sizeof(smpt_rd_vkq_dv_pscdv_it_layer_p[0]),
+					.ppEnabledLayerNames = smpt_rd_vkq_dv_pscdv_it_layer_p
 				#else
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE
 				#endif
 			},
 			VK_NULL_HANDLE,
-			&_rd_vkq_dv_pscdv_it
+			&smpt_rd_vkq_dv_pscdv_it
 		)
 	)
 }
 
-void _rd_vkq_dv_pscdv_it_free()
+void smpt_rd_vkq_dv_pscdv_it_free()
 {
-	vkDestroyInstance(_rd_vkq_dv_pscdv_it, NULL);
+	vkDestroyInstance(smpt_rd_vkq_dv_pscdv_it, NULL);
 }

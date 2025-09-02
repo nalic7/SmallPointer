@@ -1,16 +1,16 @@
-_RB_PT lc_net_bl = 0;
-uint8_t lc_net_p[_RB_NET_BL];
+SMPTRB_PT lc_net_bl = 0;
+uint8_t lc_net_p[SMPTRB_NET_BL];
 
 // float lc_delta = 0;
 
 void lc_set()
 {
-	lcs_set();
+	smptr_ce_sd_set();
 	lckf_set();
 	lcp_set();
 
-	lcm_set();
-	nc_set();
+	//! net
+	//nc_set();
 
 	_sf_state |= _SF_S_RAW;
 }
@@ -23,15 +23,11 @@ void lc_vk()
 	}
 
 	lcp_vk();
-	_rd_vkw_dsts_lo_make(_rd_vk_device);
-	_rd_vkw_dstsp_make(_rd_vk_device);
+	smpt_rd_vkw_dsts_lo_make(smpt_rd_vk_device);
+	smpt_rd_vkw_dstsp_make(smpt_rd_vk_device);
 
-	_rd_vk_cmd_set();
-	#ifdef _CM_WL
-		_rd_vk_cmd_loop();
-	#else
-		_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, _rd_vk_cmd_loop, NULL))
-	#endif
+	smpt_rd_vk_cmd_set();
+	SMPT_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, smpt_rd_vk_cmd_loop, NULL))
 }
 
 static void lc_send()
@@ -40,9 +36,11 @@ static void lc_send()
 	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)lc_net_p);
 	lc_net_bl = sizeof(struct timespec);
 
-	lcu_send();
+	//! net
+	//lcu_send();
 
-	nc_send();
+	//! net
+	//nc_send();
 }
 
 static struct timespec lc_time = {0};
@@ -55,36 +53,46 @@ void lc_read()
 	{
 		lc_net_bl = sizeof(struct timespec);
 
-		lcm_re();
+		//! net
+		//lcm_re();
 
-		lcu_read();
-		lcm_read();
+		//! net
+		//lcu_read();
+		//lcm_read();
 
 		lc_time = l_time;
 	}
 }
 
-void lc_freeloop()
+void lc_free(uint32_t device)
 {
-	nc_free();
+	#if SMPT_CM_CLIENT && SMPT_CM_SERVER
+		mtx_lock(lb_mtx_t_p);
+	#endif
 
-	lcm_free();
-	lcp_free();
-	lcs_free();
+	//! net
+	//nc_free();
 
-	mtx_unlock(lb_mtx_t_p);
-}
+	#ifdef SMPT_CM_VK
+		while (!(_sf_state & _SF_S_EXIT_RENDER))
+		{
+			SMPT_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+			SMPT_DB_N2L("_sf_state %d", _sf_state)
+		}
 
-void lc_freeVk(uint32_t device)
-{
-	lcm_freeVk(device);
-	_rd_vkw_dstsp_free(device);
-	_rd_vkw_dsts_lo_free(device);
-	lcp_freeVk(device);
-}
+		SMPT_DB_R2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkq_p[smpt_rd_vk_device][smpt_rd_vk_queue_g]))
 
-void lc_free()
-{
-	mtx_lock(lb_mtx_t_p);
-	_sf_state |= _SF_S_EXIT;
+		smpt_rd_vkw_dstsp_free(device);
+		smpt_rd_vkw_dsts_lo_free(device);
+	#endif
+	smptr_ce_sd_free(device);
+	lcp_free(device);
+
+	#ifdef SMPT_CM_VK
+		smpt_rd_vk_cmd_free();
+	#endif
+
+	#if SMPT_CM_CLIENT && SMPT_CM_SERVER
+		mtx_unlock(lb_mtx_t_p);
+	#endif
 }

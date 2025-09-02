@@ -1,7 +1,7 @@
 #!/bin/bash
 F=CMakeLists.txt
 sed -i '/#set(ST android)/c\set(ST android)' $F
-sed -i '/#set(ANDROID 1)/c\set(ANDROID 1)' $F
+sed -i '/#set(ASURFACE 1)/c\set(ASURFACE 1)' $F
 sed -i '/#set(CLIENT 1)/c\set(CLIENT 1)' $F
 #sed -i '/#set(SERVER 1)/c\set(SERVER 1)' $F
 sed -i '/#set(FFMPEG 1)/c\set(FFMPEG 1)' $F

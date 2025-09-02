@@ -1,6 +1,6 @@
-#ifndef _RD_VK_DB_H
-	#define _RD_VK_DB_H
+#ifndef SMPT_RD_VKSMPT_DB_H
+	#define SMPT_RD_VKSMPT_DB_H
 
-	void _rd_vk_db_make();
-	void _rd_vk_db_free();
+	void smpt_rd_vksmpt_db_make();
+	void smpt_rd_vksmpt_db_free();
 #endif

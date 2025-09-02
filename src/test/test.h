@@ -1,6 +1,6 @@
 #ifndef NALI_TEST_H
 #define NALI_TEST_H
-	#ifdef _CM_TEST
+	#ifdef SMPT_CM_TEST
 		#define NALI_T_P(d_bl, l_bl) \
 			if ((d_bl) >= (l_bl)) \
 			{ \

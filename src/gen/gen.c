@@ -26,7 +26,7 @@
 // static const void config[];
 void g_write()
 {
-	_DB_R2L("mkdir %d", mkdir(NALI_F_HOME, S_IRUSR | S_IWUSR | S_IXUSR))
+	SMPT_DB_R2L("mkdir %d", mkdir(NALI_F_HOME, S_IRUSR | S_IWUSR | S_IXUSR))
 	remove(NALI_F_HOME_ASSET);
 	g_kf_write();
 	g_md_write();

@@ -1,12 +1,12 @@
-#ifndef _RD_VKQ_DV_PSCDV_IT_H
-	#define _RD_VKQ_DV_PSCDV_IT_H
+#ifndef SMPT_RD_VKQ_DV_PSCDV_IT_H
+	#define SMPT_RD_VKQ_DV_PSCDV_IT_H
 
-	extern VkInstance _rd_vkq_dv_pscdv_it;
+	extern VkInstance smpt_rd_vkq_dv_pscdv_it;
 
-	#ifdef _CM_VK_DEBUG
-		extern const char *_rd_vkq_dv_pscdv_it_layer_p[1];
+	#ifdef SMPT_CM_VK_DEBUG
+		extern const char *smpt_rd_vkq_dv_pscdv_it_layer_p[1];
 	#endif
 
-	void _rd_vkq_dv_pscdv_it_make();
-	void _rd_vkq_dv_pscdv_it_free();
+	void smpt_rd_vkq_dv_pscdv_it_make();
+	void smpt_rd_vkq_dv_pscdv_it_free();
 #endif

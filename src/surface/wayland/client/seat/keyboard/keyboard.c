@@ -1,70 +1,70 @@
-struct wl_keyboard *_sf_wlcs_kb_p;
+struct wl_keyboard *smpt_sf_wlcs_kb_p;
 
 static void wl_keyboard_listener_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
 {
-	// _DB_N2L("wl_keyboard_listener_keymap fd %d", fd)
+	// SMPT_DB_N2L("wl_keyboard_listener_keymap fd %d", fd)
 }
 
 static void wl_keyboard_listener_key(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
 {
-	// _DB_N2L("wl_keyboard_listener_key key %d", key)
+	// SMPT_DB_N2L("wl_keyboard_listener_key key %d", key)
 	if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
 	{
 		if (key == KEY_TAB)
-			_sf_wlc_zwp_pc_set();
+			smpt_sf_wlc_zwp_pc_set();
 
 		if (key == KEY_W)
-			lcu_k ^= _RB_K_W;
+			lcu_k ^= SMPTRB_K_W;
 		if (key == KEY_S)
-			lcu_k ^= _RB_K_S;
+			lcu_k ^= SMPTRB_K_S;
 		if (key == KEY_A)
-			lcu_k ^= _RB_K_A;
+			lcu_k ^= SMPTRB_K_A;
 		if (key == KEY_D)
-			lcu_k ^= _RB_K_D;
+			lcu_k ^= SMPTRB_K_D;
 		if (key == KEY_SPACE)
-			lcu_k ^= _RB_K_JUMP;
+			lcu_k ^= SMPTRB_K_JUMP;
 		if (key == KEY_LEFTCTRL)
-			lcu_k ^= _RB_K_DIG;
+			lcu_k ^= SMPTRB_K_DIG;
 		//KEY_LEFTSHIFT
 	}
 	else
 	{
 		if (key == KEY_W)
-			lcu_k ^= _RB_K_W;
+			lcu_k ^= SMPTRB_K_W;
 		if (key == KEY_S)
-			lcu_k ^= _RB_K_S;
+			lcu_k ^= SMPTRB_K_S;
 		if (key == KEY_A)
-			lcu_k ^= _RB_K_A;
+			lcu_k ^= SMPTRB_K_A;
 		if (key == KEY_D)
-			lcu_k ^= _RB_K_D;
+			lcu_k ^= SMPTRB_K_D;
 		if (key == KEY_SPACE)
-			lcu_k ^= _RB_K_JUMP;
+			lcu_k ^= SMPTRB_K_JUMP;
 		if (key == KEY_LEFTCTRL)
-			lcu_k ^= _RB_K_DIG;
+			lcu_k ^= SMPTRB_K_DIG;
 	}
 }
 
 static void wl_keyboard_listener_enter(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, struct wl_surface *surface, struct wl_array *keys)
 {
-	// _DB_N2L("wl_keyboard_listener_enter")
+	// SMPT_DB_N2L("wl_keyboard_listener_enter")
 }
 
 static void wl_keyboard_listener_leave(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, struct wl_surface *surface)
 {
-	// _DB_N2L("wl_keyboard_listener_leave")
+	// SMPT_DB_N2L("wl_keyboard_listener_leave")
 }
 
 static void wl_keyboard_listener_modifiers(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group)
 {
-	// _DB_N2L("wl_keyboard_listener_modifiers group %d", group)
+	// SMPT_DB_N2L("wl_keyboard_listener_modifiers group %d", group)
 }
 
 static void wl_keyboard_listener_repeat_info(void *data, struct wl_keyboard *wl_keyboard, int32_t rate, int32_t delay)
 {
-	// _DB_N2L("wl_keyboard_listener_repeat_info")
+	// SMPT_DB_N2L("wl_keyboard_listener_repeat_info")
 }
 
-struct wl_keyboard_listener _sf_wlcs_kb_listener =
+struct wl_keyboard_listener smpt_sf_wlcs_kb_listener =
 {
 	.keymap = wl_keyboard_listener_keymap,
 	.enter = wl_keyboard_listener_enter,
@@ -74,7 +74,7 @@ struct wl_keyboard_listener _sf_wlcs_kb_listener =
 	.repeat_info = wl_keyboard_listener_repeat_info
 };
 
-void _sf_wlcs_kb_free()
+void smpt_sf_wlcs_kb_free()
 {
-	wl_keyboard_destroy(_sf_wlcs_kb_p);
+	wl_keyboard_destroy(smpt_sf_wlcs_kb_p);
 }

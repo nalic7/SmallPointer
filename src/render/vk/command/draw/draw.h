@@ -1,10 +1,7 @@
-#ifndef _RD_VK_CMD_H
-	#define _RD_VK_CMD_H
+#ifndef SMPT_RD_VK_CMD_H
+	#define SMPT_RD_VK_CMD_H
 
-	void _rd_vk_cmd_set();
-	#ifdef _CM_WL
-		void _rd_vk_cmd_loop();
-	#else
-		int _rd_vk_cmd_loop(void *p);
-	#endif
+	void smpt_rd_vk_cmd_set();
+	int smpt_rd_vk_cmd_loop(void *p);
+	void smpt_rd_vk_cmd_free();
 #endif

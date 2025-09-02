@@ -1,14 +1,14 @@
-#ifndef _RD_VK_IMV_H
-	#define _RD_VK_IMV_H
+#ifndef SMPT_RD_VK_IMV_H
+	#define SMPT_RD_VK_IMV_H
 
 	//mipmap 1
-	#define _RD_VK_IMV_MAKE(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
-		_DB_R2L \
+	#define SMPT_RD_VK_IMV_MAKE(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
+		SMPT_DB_R2L \
 		( \
 			"vkCreateImageView %d", \
 			vkCreateImageView \
 			( \
-				_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dv_p[device], \
 				&(VkImageViewCreateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, \

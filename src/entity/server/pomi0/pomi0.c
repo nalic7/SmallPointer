@@ -1,3 +1,3 @@
-void espomi0_set(_RB_MIT mi)
+void espomi0_set(SMPTRB_MIT mi)
 {
 }

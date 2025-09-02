@@ -341,7 +341,7 @@ void lcp_set()
 		//t. e0-test j
 //		if ((lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1) == 0)
 //		{
-//			_DB_N2L("nali_buffer c1j1 j0 %d", (lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1))
+//			SMPT_DB_N2L("nali_buffer c1j1 j0 %d", (lb_c->d_p + lb_c->d_bl_p[1] + sizeof(float) * 3 + 1))
 //		}
 		lb_c->d_bl_p[1] += sizeof(float) * 3 + 2;
 	}
@@ -432,9 +432,9 @@ void lcp_vk()
 	}
 
 	VkMemoryRequirements vkmemoryrequirements;
-	vkdevicesize = (vkdevicesize + (_rd_vk_non_coherent_atom_size - 1)) & ~(_rd_vk_non_coherent_atom_size - 1);
-	_RD_VK_BF_MAKE(_rd_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
-	_DB_R2L("vkMapMemory %d", vkMapMemory(_rd_vkq_dv_p[_rd_vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
+	vkdevicesize = (vkdevicesize + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1);
+	SMPT_RD_VK_BF_MAKE(smpt_rd_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, lcp_vkbuffer, lcp_vkdevicememory, vkmemoryrequirements)
+	SMPT_DB_R2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dv_p[smpt_rd_vk_device], lcp_vkdevicememory, 0, vkdevicesize, 0, &lcp_vkbuffer_mp))
 
 	vkdevicesize = 0;
 
@@ -474,12 +474,12 @@ void lcp_vk()
 		vkdevicesize += sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1);
 	}
 
-	vkFlushMappedMemoryRanges(_rd_vkq_dv_p[_rd_vk_device], 1, &(VkMappedMemoryRange)
+	vkFlushMappedMemoryRanges(smpt_rd_vkq_dv_p[smpt_rd_vk_device], 1, &(VkMappedMemoryRange)
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 		.memory = lcp_vkdevicememory,
 		.offset = 0,
-		.size = (vkdevicesize + (_rd_vk_non_coherent_atom_size - 1)) & ~(_rd_vk_non_coherent_atom_size - 1),
+		.size = (vkdevicesize + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1),
 		.pNext = VK_NULL_HANDLE
 	});
 
@@ -553,16 +553,15 @@ void lcp_vk()
 	//e0-ssboa default
 }
 
-void lcp_freeVk(uint32_t device)
+void lcp_free(uint32_t device)
 {
-	VkDevice vkdevice = _rd_vkq_dv_p[device];
-	vkUnmapMemory(_rd_vkq_dv_p[device], lcp_vkdevicememory);
-	vkDestroyBuffer(vkdevice, lcp_vkbuffer, VK_NULL_HANDLE);
-	vkFreeMemory(vkdevice, lcp_vkdevicememory, VK_NULL_HANDLE);
-}
+	#ifdef SMPT_CM_VK
+		VkDevice vkdevice = smpt_rd_vkq_dv_p[device];
+		vkUnmapMemory(smpt_rd_vkq_dv_p[device], lcp_vkdevicememory);
+		vkDestroyBuffer(vkdevice, lcp_vkbuffer, VK_NULL_HANDLE);
+		vkFreeMemory(vkdevice, lcp_vkdevicememory, VK_NULL_HANDLE);
+	#endif
 
-void lcp_free()
-{
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
 		free(lcp_bp_p[l_0]);

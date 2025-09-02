@@ -1,5 +1,11 @@
-#ifndef _RCP_H
-#define RCP_H
+#ifndef _RC_MD_H
+#define _RC_MD_H
+
+	//c1j1
+	//c1j0
+	//t1j1u1v1
+	//t1j0u1v1
+	#define NALI_LCS_A_BL 2
 
 	#define NALI_LCP_VP_BL sizeof(float) * 16 * 2 * 2
 	extern VkDeviceSize r_cep_a_p[NALI_LCS_A_BL];
@@ -29,6 +35,5 @@
 
 	void lcp_set();
 	void lcp_vk();
-	void lcp_freeVk(uint32_t device);
-	void lcp_free();
+	void lcp_free(uint32_t device);
 #endif

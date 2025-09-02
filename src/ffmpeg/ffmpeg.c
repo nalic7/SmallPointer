@@ -7,49 +7,49 @@ static AVPacket avpacket;
 
 void ffmpeg_read(const char *filename)
 {
-	_DB_R2L("avformat_network_init %d", avformat_network_init())
+	SMPT_DB_R2L("avformat_network_init %d", avformat_network_init())
 
-	#ifdef _CM_ST_ANDROID
+	#ifdef SMPT_CM_ST_ANDROID
 		uint32_t data_bl;
 		uint8_t *data_p = f_read(filename, &data_bl);
 		FILE *file_p = fopen(NALI_F_READ_CACHE, "wb");
 		fwrite(data_p, data_bl, 1, file_p);
 		fclose(file_p);
 		free(data_p);
-		_DB_R2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, NALI_F_READ_CACHE, NULL, NULL))
+		SMPT_DB_R2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, NALI_F_READ_CACHE, NULL, NULL))
 	#else
-		_DB_R2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, filename, NULL, NULL))
+		SMPT_DB_R2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, filename, NULL, NULL))
 	#endif
 
-	#ifdef _CM_ST_ANDROID
+	#ifdef SMPT_CM_ST_ANDROID
 		remove(NALI_F_READ_CACHE);
 	#endif
 
-	_DB_R2L("avformat_find_stream_info %d", avformat_find_stream_info(avformatcontext_p, NULL))
+	SMPT_DB_R2L("avformat_find_stream_info %d", avformat_find_stream_info(avformatcontext_p, NULL))
 
-	_DB_R2L("av_frame_alloc %p", avframe_p = av_frame_alloc())
+	SMPT_DB_R2L("av_frame_alloc %p", avframe_p = av_frame_alloc())
 }
 
 uint8_t *ffmpeg_png(uint32_t *width_p, uint32_t *height_p)
 {
 	int video_stream_index;
 	const AVCodec *avcodec_p;
-	_DB_R2L("av_find_best_stream %d", video_stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0))
+	SMPT_DB_R2L("av_find_best_stream %d", video_stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0))
 
-	_DB_R2L("avcodec_find_decoder %p", avcodec_p = avcodec_find_decoder(avformatcontext_p->streams[video_stream_index]->codecpar->codec_id))
+	SMPT_DB_R2L("avcodec_find_decoder %p", avcodec_p = avcodec_find_decoder(avformatcontext_p->streams[video_stream_index]->codecpar->codec_id))
 
-	_DB_R2L("avcodec_alloc_context3 %p", avcodeccontext_p = avcodec_alloc_context3(avcodec_p))
+	SMPT_DB_R2L("avcodec_alloc_context3 %p", avcodeccontext_p = avcodec_alloc_context3(avcodec_p))
 
-	_DB_R2L("avcodec_parameters_to_context %d", avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[video_stream_index]->codecpar))
+	SMPT_DB_R2L("avcodec_parameters_to_context %d", avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[video_stream_index]->codecpar))
 
-	_DB_R2L("avcodec_open2 %d", avcodec_open2(avcodeccontext_p, avcodec_p, NULL))
+	SMPT_DB_R2L("avcodec_open2 %d", avcodec_open2(avcodeccontext_p, avcodec_p, NULL))
 
 
-	_DB_R2L("av_read_frame %d", av_read_frame(avformatcontext_p, &avpacket))
+	SMPT_DB_R2L("av_read_frame %d", av_read_frame(avformatcontext_p, &avpacket))
 
-	_DB_R2L("avcodec_send_packet %d", avcodec_send_packet(avcodeccontext_p, &avpacket))
+	SMPT_DB_R2L("avcodec_send_packet %d", avcodec_send_packet(avcodeccontext_p, &avpacket))
 
-	_DB_R2L("avcodec_receive_frame %d", avcodec_receive_frame(avcodeccontext_p, avframe_p))
+	SMPT_DB_R2L("avcodec_receive_frame %d", avcodec_receive_frame(avcodeccontext_p, avframe_p))
 
 	*width_p = avframe_p->width;
 	*height_p = avframe_p->height;
@@ -58,7 +58,7 @@ uint8_t *ffmpeg_png(uint32_t *width_p, uint32_t *height_p)
 
 	int num_bytes = av_image_get_buffer_size(AV_PIX_FMT_RGBA, avframe_p->width, avframe_p->height, 1);
 	uint8_t *data_p = (uint8_t *)malloc(num_bytes);
-	_DB_R2L("av_image_copy_to_buffer %d", av_image_copy_to_buffer(data_p, num_bytes, (const uint8_t * const *)avframe_p->data, avframe_p->linesize, AV_PIX_FMT_RGBA, avframe_p->width, avframe_p->height, 1))
+	SMPT_DB_R2L("av_image_copy_to_buffer %d", av_image_copy_to_buffer(data_p, num_bytes, (const uint8_t * const *)avframe_p->data, avframe_p->linesize, AV_PIX_FMT_RGBA, avframe_p->width, avframe_p->height, 1))
 
 	// data_p[0] = 255;
 	// data_p[1] = 0;
@@ -74,7 +74,7 @@ uint8_t *ffmpeg_ogg(int *sample_rate_p, int *nb_channels_p, uint32_t *data_bl)
 {
 	int stream_index;
 	const AVCodec *avcodec_p = NULL;
-	_DB_R2L("av_find_best_stream %d", stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_AUDIO, -1, -1, &avcodec_p, 0))
+	SMPT_DB_R2L("av_find_best_stream %d", stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_AUDIO, -1, -1, &avcodec_p, 0))
 
 	avcodeccontext_p = avcodec_alloc_context3(avcodec_p);
     avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[stream_index]->codecpar);

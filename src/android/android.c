@@ -5,13 +5,13 @@ static float
 static int s1_set(void *p)
 {
 	lb_set();
-	#if _CM_SERVER
+	#if SMPT_CM_SERVER
 		ls_set();
 	#endif
-	#ifdef _CM_CLIENT
+	#ifdef SMPT_CM_CLIENT
 		lc_set();
 
-		_rd_vk_set();
+		smpt_rd_vk_set();
 	//! audio android
 //		al_set();
 		lc_vk();
@@ -31,7 +31,7 @@ static int s1_set(void *p)
 				size_t pointer_count = AMotionEvent_getPointerCount(ainputevent_p);
 //				if (pointer_count == 1)
 //				{
-//					_DB_N2L("AINPUT_EVENT_TYPE_MOTION")
+//					SMPT_DB_N2L("AINPUT_EVENT_TYPE_MOTION")
 				int32_t action = AMotionEvent_getAction(ainputevent_p);
 				int32_t actionType = action & AMOTION_EVENT_ACTION_MASK;
 
@@ -66,15 +66,15 @@ static int s1_set(void *p)
 						float l_x01 = l_x - x01;
 						float l_y01 = l_y - y01;
 
-						lcu_k |= l_y01 < -2.0F ? _RB_K_W :
-							l_y01 > 2.0F ? _RB_K_S : 0;
-						lcu_k &= l_y01 < -2.0F ? 0xFFu - _RB_K_S :
-							l_y01 > 2.0F ? 0xFFu - _RB_K_W : 0xFFu;
+						lcu_k |= l_y01 < -2.0F ? SMPTRB_K_W :
+							l_y01 > 2.0F ? SMPTRB_K_S : 0;
+						lcu_k &= l_y01 < -2.0F ? 0xFFu - SMPTRB_K_S :
+							l_y01 > 2.0F ? 0xFFu - SMPTRB_K_W : 0xFFu;
 
-						lcu_k |= l_x01 < -2.0F ? _RB_K_A :
-							l_x01 > 2.0F ? _RB_K_D : 0;
-						lcu_k &= l_x01 < -2.0F ? 0xFFu - _RB_K_D :
-							l_x01 > 2.0F ? 0xFFu - _RB_K_A : 0xFFu;
+						lcu_k |= l_x01 < -2.0F ? SMPTRB_K_A :
+							l_x01 > 2.0F ? SMPTRB_K_D : 0;
+						lcu_k &= l_x01 < -2.0F ? 0xFFu - SMPTRB_K_D :
+							l_x01 > 2.0F ? 0xFFu - SMPTRB_K_A : 0xFFu;
 					}
 
 					x01 = l_x;
@@ -99,7 +99,7 @@ static uint8_t a_state = 0;
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
-	_DB_N2L("window %p", window)
+	SMPT_DB_N2L("window %p", window)
 	_sf_width = ANativeWindow_getWidth(window);
 	_sf_height = ANativeWindow_getHeight(window);
 	sa_anativewindow_p = window;
@@ -107,7 +107,7 @@ static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* wind
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
 {
-	_DB_N2L("window resize")
+	SMPT_DB_N2L("window resize")
 	_sf_width = ANativeWindow_getWidth(window);
 	_sf_height = ANativeWindow_getHeight(window);
 	_sf_state |= _SF_S_RE;
@@ -115,21 +115,21 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
-	_DB_N2L("window 0")
+	SMPT_DB_N2L("window 0")
 	sa_anativewindow_p = NULL;
 	_sf_state |= _SF_S_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
 //{
-//	_DB_N2L("onConfigurationChanged")
+//	SMPT_DB_N2L("onConfigurationChanged")
 //
 //	AConfiguration *aconfiguration_p = AConfiguration_new();
 //	AConfiguration_fromAssetManager(aconfiguration_p, activity->assetManager);
 //
 //	orientation = AConfiguration_getOrientation(aconfiguration_p);
 //
-//	_DB_N2L("orientation %d", orientation)
+//	SMPT_DB_N2L("orientation %d", orientation)
 ////	if (orientation == ACONFIGURATION_ORIENTATION_PORT)
 ////	{
 ////	}
@@ -156,15 +156,15 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
 	#ifdef NALI_D_FILE
-		_db_set();
+		smpt_db_set();
 	#endif
 
-	_DB_N2L("ANativeActivity_onCreate")
+	SMPT_DB_N2L("ANativeActivity_onCreate")
 	if (!(a_state & A_STATE_READY))
 	{
 		a_state |= A_STATE_READY;
-		_DB_N2L("scene")
-		_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, s1_set, NULL))
+		SMPT_DB_N2L("scene")
+		SMPT_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, s1_set, NULL))
 	}
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
@@ -175,7 +175,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	sa_anativeactivity_p = activity;
 
 //	SLObjectItf slobjectitf;
-//	_DB_R2L("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
+//	SMPT_DB_R2L("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
 }
 
 void sa_wait()
@@ -195,13 +195,13 @@ void sa_wait()
 
 //		vk_freeDevice();
 //		vk_freeQueue();
-		_rd_vk_sf_free();
-		_rd_vk_sf_make();
+		smpt_rd_vk_sf_free();
+		smpt_rd_vk_sf_make();
 //		vk_initQueue();
 //		vk_initDevice();
-//		vk_setQueue(_rd_vk_device);
-//		vk_makeDevice(_rd_vk_device);
-//		vk_getQueue(_rd_vk_device);
+//		vk_setQueue(smpt_rd_vk_device);
+//		vk_makeDevice(smpt_rd_vk_device);
+//		vk_getQueue(smpt_rd_vk_device);
 
 //		m_surface_state |= _SF_S_EXIT;
 		_sf_state |= _SF_S_RE;

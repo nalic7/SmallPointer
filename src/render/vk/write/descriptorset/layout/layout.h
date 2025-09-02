@@ -1,10 +1,10 @@
-#ifndef _RD_VKW_DSTSLO_H
-	#define _RD_VKW_DSTSLO_H
+#ifndef SMPT_RD_VKW_DSTSLO_H
+	#define SMPT_RD_VKW_DSTSLO_H
 
-	#define _RD_VKW_DSTSLO_L 5
+	#define SMPT_RD_VKW_DSTSLO_L 5
 
-	extern VkDescriptorSetLayout _rd_vkw_dsts_lo;
+	extern VkDescriptorSetLayout smpt_rd_vkw_dsts_lo;
 
-	void _rd_vkw_dsts_lo_make(uint32_t device);
-	void _rd_vkw_dsts_lo_free(uint32_t device);
+	void smpt_rd_vkw_dsts_lo_make(uint32_t device);
+	void smpt_rd_vkw_dsts_lo_free(uint32_t device);
 #endif

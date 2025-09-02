@@ -1,13 +1,13 @@
-#ifndef _RD_VKF_H
-	#define _RD_VKF_H
+#ifndef SMPT_RD_VKF_H
+	#define SMPT_RD_VKF_H
 
-	#define _RD_VKF_MAKE(device, vkfence_p) \
-		_DB_R2L \
+	#define SMPT_RD_VKF_MAKE(device, vkfence_p) \
+		SMPT_DB_R2L \
 		( \
 			"vkCreateFence %d", \
 			vkCreateFence \
 			( \
-				_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dv_p[device], \
 				&(VkFenceCreateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO, \

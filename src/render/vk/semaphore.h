@@ -1,13 +1,13 @@
-#ifndef _RD_VK_SMP_H
-	#define _RD_VK_SMP_H
+#ifndef SMPT_RD_VK_SMP_H
+	#define SMPT_RD_VK_SMP_H
 
-	#define _RD_VK_SMP_MAKE(device, vksemaphore_p) \
-		_DB_R2L \
+	#define SMPT_RD_VK_SMP_MAKE(device, vksemaphore_p) \
+		SMPT_DB_R2L \
 		( \
 			"vkCreateSemaphore %d", \
 			vkCreateSemaphore \
 			( \
-				_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dv_p[device], \
 				&(VkSemaphoreCreateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO, \

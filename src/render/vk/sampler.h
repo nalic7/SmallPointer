@@ -1,8 +1,8 @@
-#ifndef _RD_VK_SP_H
-	#define _RD_VK_SP_H
+#ifndef SMPT_RD_VK_SP_H
+	#define SMPT_RD_VK_SP_H
 
 	//.i mipmap 0
-	#define _RD_VK_SP_MAKE(device, mipmap, line, vksampler_p) \
+	#define SMPT_RD_VK_SP_MAKE(device, mipmap, line, vksampler_p) \
 		VkSamplerCreateInfo vksamplercreateinfo = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO, \
@@ -13,8 +13,8 @@
 			.unnormalizedCoordinates = VK_FALSE, \
 			.compareEnable = VK_FALSE, \
 			.compareOp = VK_COMPARE_OP_ALWAYS, \
-			.anisotropyEnable = _RD_VK_MAX_SAMPLER_ANISOTROPY == 0 ? VK_FALSE : VK_TRUE, \
-			.maxAnisotropy = _RD_VK_MAX_SAMPLER_ANISOTROPY, \
+			.anisotropyEnable = SMPT_RD_VK_MAX_SAMPLER_ANISOTROPY == 0 ? VK_FALSE : VK_TRUE, \
+			.maxAnisotropy = SMPT_RD_VK_MAX_SAMPLER_ANISOTROPY, \
 			.mipLodBias = 0, \
 			.minLod = 0, \
 			.maxLod = mipmap, \
@@ -33,5 +33,5 @@
 			vksamplercreateinfo.minFilter = VK_FILTER_NEAREST; \
 			vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST; \
 		} \
-		_DB_R2L("vkCreateSampler %d", vkCreateSampler(_rd_vkq_dv_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
+		SMPT_DB_R2L("vkCreateSampler %d", vkCreateSampler(smpt_rd_vkq_dv_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
 #endif

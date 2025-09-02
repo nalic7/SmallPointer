@@ -1,14 +1,14 @@
 #ifndef F_H
 	#define F_H
 
-	#ifdef _CM_GEN
+	#ifdef SMPT_CM_GEN
 		//.c source folder
 		#define NALI_F_FACTORY "../source/"
 		#define NALI_F_FACTORY_MODEL NALI_F_FACTORY "model"
 		#define NALI_F_FACTORY_KEYFRAME NALI_F_FACTORY "keyframe"
 	#endif
 
-	#ifdef _CM_ST_ANDROID
+	#ifdef SMPT_CM_ST_ANDROID
 		#define NALI_F_HOME
 
 		//.c package folder
