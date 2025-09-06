@@ -241,11 +241,10 @@ int smpt_rd_vk_cmd_loop(void *p)
 {
 	lb_free0();
 
-	smpt_ar_set();
 	_sf_state |= _SF_S_RENDER;
 	while (!(_sf_state & _SF_S_EXIT))
 	{
-		smpt_ar_loop();
+		smptr_cemMread();
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);

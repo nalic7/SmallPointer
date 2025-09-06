@@ -1,15 +1,15 @@
-SMPTRB_PT lc_net_bl = 0;
-uint8_t lc_net_p[SMPTRB_NET_BL];
+SMPTRB_PT smptr_ceLnet = 0;
+uint8_t smptr_cePnet[SMPTRB_NET_BL];
 
 // float lc_delta = 0;
 
 void lc_set()
 {
-	smptr_ce_sd_set();
 	lckf_set();
 	lcp_set();
 
 	//! net
+	smptr_cemMset();
 	//nc_set();
 
 	_sf_state |= _SF_S_RAW;
@@ -33,8 +33,8 @@ void lc_vk()
 static void lc_send()
 {
 	//! won't send time
-	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)lc_net_p);
-	lc_net_bl = sizeof(struct timespec);
+	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)smptr_cePnet);
+	smptr_ceLnet = sizeof(struct timespec);
 
 	//! net
 	//lcu_send();
@@ -47,11 +47,11 @@ static struct timespec lc_time = {0};
 static struct timespec l_time;
 void lc_read()
 {
-	l_time = *(struct timespec *)lc_net_p;
+	l_time = *(struct timespec *)smptr_cePnet;
 
 	if ((l_time.tv_sec > lc_time.tv_sec) || (l_time.tv_sec == lc_time.tv_sec && l_time.tv_nsec > lc_time.tv_nsec))
 	{
-		lc_net_bl = sizeof(struct timespec);
+		smptr_ceLnet = sizeof(struct timespec);
 
 		//! net
 		//lcm_re();
@@ -72,8 +72,11 @@ void lc_free(uint32_t device)
 
 	//! net
 	//nc_free();
+	smptr_cemMfree();
 
 	#ifdef SMPT_CM_VK
+		smpt_rd_vk_cmd_free();
+
 		while (!(_sf_state & _SF_S_EXIT_RENDER))
 		{
 			SMPT_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
@@ -85,12 +88,7 @@ void lc_free(uint32_t device)
 		smpt_rd_vkw_dstsp_free(device);
 		smpt_rd_vkw_dsts_lo_free(device);
 	#endif
-	smptr_ce_sd_free(device);
 	lcp_free(device);
-
-	#ifdef SMPT_CM_VK
-		smpt_rd_vk_cmd_free();
-	#endif
 
 	#if SMPT_CM_CLIENT && SMPT_CM_SERVER
 		mtx_unlock(lb_mtx_t_p);

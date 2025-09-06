@@ -11,7 +11,7 @@ void nc_set()
 	//SMPT_DB_N2L("%s", strerror(errno))
 
 	server_sockaddr_in.sin_family = AF_INET;
-	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
+	server_sockaddr_in.sin_port = htons(SMPTuPORT);
 	server_sockaddr_in.sin_addr.s_addr = NALI_NC_IP;
 	// SMPT_DB_R2L("inet_pton %d", inet_pton(AF_INET, NALI_NC_IP, &server_sockaddr_in.sin_addr))
 	//SMPT_DB_N2L("%s", strerror(errno))
@@ -21,12 +21,12 @@ void nc_set()
 
 void nc_send()
 {
-	sendto(server_fd, lc_net_p, lc_net_bl, 0, (struct sockaddr *)&server_sockaddr_in, server_sockaddr_in_bl);
+	sendto(server_fd, smptr_cePnet, smptr_ceLnet, 0, (struct sockaddr *)&server_sockaddr_in, server_sockaddr_in_bl);
 }
 
 void nc_get()
 {
-	if (recvfrom(server_fd, lc_net_p, SMPTRB_NET_BL, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl) > 0)
+	if (recvfrom(server_fd, smptr_cePnet, SMPTRB_NET_BL, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl) > 0)
 	{
 		lc_read();
 	}

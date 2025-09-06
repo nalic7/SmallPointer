@@ -1,4 +1,4 @@
-lckf **lckf_p;
+struct lckf **lckf_p;
 uint8_t *lckf_bl_p;
 // static uint8_t lckf_keyframe_bl;
 
@@ -7,14 +7,14 @@ void lckf_set()
 	uint8_t l_keyframe_bl = *(uint8_t *)lb_c->d_p;
 	lb_c->d_bl_p[1] += sizeof(uint8_t);
 	lckf_bl_p = malloc(l_keyframe_bl);
-	lckf_p = malloc(l_keyframe_bl * sizeof(lckf *));
-	memset(lckf_p, 0, l_keyframe_bl * sizeof(lckf *));
+	lckf_p = malloc(l_keyframe_bl * sizeof(struct lckf *));
+	memset(lckf_p, 0, l_keyframe_bl * sizeof(struct lckf *));
 
 	for (uint8_t l_0 = 0; l_0 < l_keyframe_bl; ++l_0)
 	{
 		lckf_bl_p[l_0] = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
 		lb_c->d_bl_p[1] += sizeof(uint8_t);
-		lckf_p[l_0] = malloc(lckf_bl_p[l_0] * sizeof(lckf));
+		lckf_p[l_0] = malloc(lckf_bl_p[l_0] * sizeof(struct lckf));
 
 		for (uint32_t l_1 = 0; l_1 < lckf_bl_p[l_0]; ++l_1)
 		{

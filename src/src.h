@@ -1,5 +1,5 @@
-#ifndef SMPT_H
-	#define SMPT_H
+#ifndef hSMPT
+	#define hSMPT
 
 	#ifdef SMPT_CM_ST_MC
 		//#include <jni.h>
@@ -17,14 +17,6 @@
 	#include <string.h>
 
 	#include "raw/raw.h"
-	#include "raw/both/both.h"
-	#include "entity/both/pomi0/pomi0.h"
-	#include "entity/both/pomi1/pomi1.h"
-	#include "entity/both/pomi2/pomi2.h"
-
-	//! area
-	#include "area/area.h"
-	#include "area/model/model.h"
 
 	#ifdef SMPT_CM_VK
 		#ifdef SMPT_CM_DRM
@@ -168,14 +160,16 @@
 //		#include <arpa/inet.h>
 //		#include <sys/socket.h>
 		#include <netinet/in.h>
-		#define NALI_SC_PORT 11111
+		//.c port
+		#define SMPTuPORT 11111
 	#endif
 
 	#ifdef SMPT_CM_CLIENT
 		#include "raw/client/keyframe/keyframe.h"
-		#include "raw/client/shader/shader.h"
 		#include "raw/client/model/model.h"
 		#include "raw/client/client.h"
+		#include "raw/client/clientu.h"
+		#include "raw/client/clientm.h"
 
 		#ifdef SMPT_CM_UDP
 			#include "network/udp/client/client.h"
@@ -183,19 +177,15 @@
 	#endif
 
 	#ifdef SMPT_CM_SERVER
-		//#include <stdint.h>
-		//#include <sys/epoll.h>
-
 		#include "raw/server/server.h"
-		#include "raw/server/servera.h"
 		#include "raw/server/serveru.h"
 		#include "raw/server/serverm.h"
-
-		#include "entity/server/pomi0/pomi0.h"
 
 		#ifdef SMPT_CM_UDP
 			#include "network/udp/server/server.h"
 		#endif
+		//#include <stdint.h>
+		//#include <sys/epoll.h>
 	#endif
 
 	#include "file/file.h"

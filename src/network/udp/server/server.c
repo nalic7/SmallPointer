@@ -19,7 +19,7 @@ void ns_set()
 	memset(&server_sockaddr_in, 0, sizeof(struct sockaddr_in));
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_addr.s_addr = INADDR_ANY;
-	server_sockaddr_in.sin_port = htons(NALI_SC_PORT);
+	server_sockaddr_in.sin_port = htons(SMPTuPORT);
 	SMPT_DB_R2L("bind %d", bind(server_fd, (struct sockaddr*)&server_sockaddr_in, sizeof(server_sockaddr_in)))
 //	SMPT_DB_N2L("%s", strerror(errno))
 }

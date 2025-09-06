@@ -54,10 +54,6 @@ set(TLL m)
 file(GLOB_RECURSE G_SOURCES src/math/*.c)
 list(APPEND SOURCES ${G_SOURCES})
 
-#//! area
-file(GLOB_RECURSE G_SOURCES src/area/*.c)
-list(APPEND SOURCES ${G_SOURCES})
-
 if(TEST)
   list(APPEND TCD SMPT_CM_TEST)
 endif()
@@ -77,11 +73,7 @@ if(GEN)
   list(APPEND TID ../cgltf)
 endif()
 
-file(GLOB_RECURSE G_SOURCES src/raw/both/*.c)
-list(APPEND SOURCES ${G_SOURCES})
-
-file(GLOB_RECURSE G_SOURCES src/entity/both/*.c)
-list(APPEND SOURCES ${G_SOURCES})
+list(APPEND SOURCES src/raw/raw.c)
 
 if(DRM OR ASURFACE OR WL OR X11)
   list(APPEND SOURCES src/surface/surface.c)

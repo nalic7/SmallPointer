@@ -2,7 +2,7 @@
 #define NALI_NETWORK_LINUX_SERVER_H
 
 extern const uint32_t ns_u_p[SMPTRB_UM];
-typedef struct
+struct NS
 {
 	struct sockaddr_in client_sockaddr_in;
 	socklen_t client_sockaddr_in_bl;
@@ -13,8 +13,8 @@ typedef struct
 	SMPTRB_CHT ch_p[4];
 	uint8_t ch_bl;
 	LB_U lb_u;
-} NS;
-extern NS ns_p[SMPTRB_UM];
+};
+extern struct NS ns_p[SMPTRB_UM];
 
 void ns_set();
 void ns_send(SMPTRB_UT ui);

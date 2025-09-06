@@ -1,7 +1,7 @@
 #ifndef _RC_KF_H
 #define _RC_KF_H
 
-typedef struct
+struct lckf
 {
 	uint8_t
 		// keyframe,//debug only
@@ -15,10 +15,10 @@ typedef struct
 		**s_p,
 		**r_p,
 		**t_p;
-} lckf;
+};
 
 //select keyframe
-extern lckf **lckf_p;
+extern struct lckf **lckf_p;
 extern uint8_t *lckf_bl_p;
 
 void lckf_set();

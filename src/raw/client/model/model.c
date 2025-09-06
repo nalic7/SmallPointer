@@ -25,14 +25,14 @@ VkDeviceSize *lcp_vkdevicesize_p;
 //x1 switch color attribute
 //x2 in shader get current pixel on screen then switch color <- need to check every pixel
 
-typedef struct
+struct m_bone
 {
 	uint8_t
 		*joint_p,
 		joint_bl;
-} m_bone;
+};
 
-static m_bone *m_bone_p;
+static struct m_bone *m_bone_p;
 
 static uint32_t **index_p;
 static uint32_t *index_bl_p;
@@ -75,7 +75,7 @@ void lcp_set()
 		lb_c->be_p[l_0] = malloc(sizeof(uint16_t) * lcp_joint_count_p[l_0]);
 		lb_c->bs_p[l_0][0] = 0;
 
-		m_bone_p = realloc(m_bone_p, sizeof(m_bone) * (l_bone_bl + lcp_joint_count_p[l_0]));
+		m_bone_p = realloc(m_bone_p, sizeof(struct m_bone) * (l_bone_bl + lcp_joint_count_p[l_0]));
 		lcp_bp_p[l_0] = malloc(sizeof(float) * 16 * 2 * (lcp_joint_count_p[l_0] - 1));
 
 		for (uint8_t l_1 = 0; l_1 < lcp_joint_count_p[l_0]; ++l_1)
@@ -83,7 +83,7 @@ void lcp_set()
 			uint8_t size = *(uint8_t *)(lb_c->d_p + lb_c->d_bl_p[1]);
 			lb_c->d_bl_p[1] += sizeof(uint8_t);
 
-			memset(m_bone_p + l_bone_bl + l_1, 0, sizeof(m_bone));
+			memset(m_bone_p + l_bone_bl + l_1, 0, sizeof(struct m_bone));
 			if (l_1 != 0)
 			{
 				lb_c->bs_p[l_0][l_1] = lb_c->be_p[l_0][l_1 - 1];

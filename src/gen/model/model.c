@@ -19,33 +19,9 @@ static const char *file_array[] =
 
 static const char *mesh_out[] =
 {
-	//s0-0
-	"FE0000.000",//0
-	"FE0000.001",//1
-
-	"FE0001.000",//2
-	"FE0001.001",//3
-
-	"FE00.000",//4
-	"FE00.001",//5
-
-	"FE01.000",//6
-	"FE01.001",//7
-	"FE01.002",//8
-	"FE01.003",//9
-
-	"FE0.000",//10
-	"FE0.001",//11
-
-	"FE1",//12
-
-	"M1.000",//13
-	"M1.001",//14
-
-	"M0",//15
-
-	"IShovel"//16
-	//e0-0
+	#define X(v, n, b) n,
+		SMPTRnMA
+	#undef X
 };
 
 static uint8_t mesh_id_array[sizeof(mesh_out) / sizeof(mesh_out[0])];
