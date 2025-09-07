@@ -22,6 +22,14 @@
 	#endif
 
 	//.i model
+	#define SMPTRtM uint8_t
+	#define SMPTRtMA uint8_t
+	#define SMPTRtMB uint8_t
+	#define SMPTRtMI uint16_t
+	#define SMPTRmMI (0xFFFFu - 1)
+	#define SMPTRtMK uint8_t
+	#define SMPTRtMT uint16_t
+	#define SMPTRtMD float
 	#define SMPTRnMA \
 		X(FE0000_000, "FE0000.000", 1) \
 		X(FE0000_001, "FE0000.001", 1) \
@@ -42,9 +50,9 @@
 		X(IShovel, "IShovel", 1)
 
 	#define SMPTRnM \
-		X(POMI_PAPI, "SuperCutePomi2.glb") \
-		X(POMI_TEA, "SuperCutePomi1.glb") \
-		X(POMI_CAFE, "SuperCutePomi0.glb")
+		X(POMI_PAPI, "SuperCutePomi2.glb", 1) \
+		X(POMI_TEA, "SuperCutePomi1.glb", 1) \
+		X(POMI_CAFE, "SuperCutePomi0.glb", 1)
 
 	enum SMPTReMA
 	{
@@ -56,19 +64,14 @@
 
 	enum SMPTReM
 	{
-		#define X(v, n) SMPTReM_##v,
+		#define X(v, n, b) SMPTReM_##v,
 			SMPTRnM
 		#undef X
+		SMPTReMc
 	};
 
-	extern const SMPTRtMB smptrPmb[SMPTReMAc];
+	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
 
-	#define SMPTRtM uint8_t
-	#define SMPTRtMA uint8_t
-	#define SMPTRtMB uint8_t
-	#define SMPTRtMI uint16_t
-	#define SMPTRtMK uint8_t
-	#define SMPTRtMT uint16_t
 	struct SMPTRsM
 	{
 		//.i client always get same size as server

@@ -8,9 +8,10 @@ void lc_set()
 	lckf_set();
 	lcp_set();
 
-	//! net
 	smptr_cemMset();
-	//nc_set();
+	#ifndef SMPT_CM_RAW
+		nc_set();
+	#endif
 
 	_sf_state |= _SF_S_RAW;
 }
@@ -70,13 +71,11 @@ void lc_free(uint32_t device)
 		mtx_lock(lb_mtx_t_p);
 	#endif
 
-	//! net
-	//nc_free();
-	smptr_cemMfree();
+	#ifndef SMPT_CM_RAW
+		nc_free();
+	#endif
 
 	#ifdef SMPT_CM_VK
-		smpt_rd_vk_cmd_free();
-
 		while (!(_sf_state & _SF_S_EXIT_RENDER))
 		{
 			SMPT_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
@@ -85,10 +84,13 @@ void lc_free(uint32_t device)
 
 		SMPT_DB_R2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkq_p[smpt_rd_vk_device][smpt_rd_vk_queue_g]))
 
+		smptr_cemMfree();
 		smpt_rd_vkw_dstsp_free(device);
 		smpt_rd_vkw_dsts_lo_free(device);
+
+		lcp_free(device);
+		smpt_rd_vk_cmd_free();
 	#endif
-	lcp_free(device);
 
 	#if SMPT_CM_CLIENT && SMPT_CM_SERVER
 		mtx_unlock(lb_mtx_t_p);

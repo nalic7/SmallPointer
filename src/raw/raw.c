@@ -1,7 +1,10 @@
-const SMPTRtMB smptrPmb[SMPTReMAc]
+const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc] =
 {
 	#define X(v, n, b) b,
 		SMPTRnMA
+	#undef X
+	#define X(v, n, b) b,
+		SMPTRnM
 	#undef X
 };
 

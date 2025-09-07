@@ -242,9 +242,11 @@ int smpt_rd_vk_cmd_loop(void *p)
 	lb_free0();
 
 	_sf_state |= _SF_S_RENDER;
+	smptr_cemMread();
 	while (!(_sf_state & _SF_S_EXIT))
 	{
-		smptr_cemMread();
+		//! read
+//		smptr_cemMread();
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);
@@ -288,16 +290,22 @@ int smpt_rd_vk_cmd_loop(void *p)
 				// }
 				//e0-VkDynamicState
 
-				for (uint32_t l_0 = 0; l_0 < smptr_ce_sd_sti_l; ++l_0)
+//				SMPT_DB_N2L("smptr_cemLm1 %d", smptr_cemLm1)
+				for (uint32_t l_0 = 0; l_0 < smptr_cemLm1; ++l_0)
 				{
-					SMPTRB_MAT ma = smptr_ce_sd_sti_p[l_0].ma;
-					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_ce_sd_st_p[smptr_ce_sd_sti_p[l_0].mi].vkdescriptorset_p + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
+					struct SMPTR_CEMsM1 m1 = smptr_cemPm1[l_0];
+					SMPTRtMA a = m1.a;
+//					SMPT_DB_N2L("m1.i * smpt_rd_vk_swc_image %d", m1.i * smpt_rd_vk_swc_image)
+//					SMPT_DB_N2L("m1.i %d", m1.i)
+//					SMPT_DB_N2L("smpt_rd_vk_swc_frame_buffer %d", smpt_rd_vk_swc_frame_buffer)
+//					SMPT_DB_N2L("smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
+					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &lcp_vkbuffer, r_cep_a_p + smptr_ce_sd_sti_p[l_0].mab);
+					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &lcp_vkbuffer, r_cep_a_p + m1.b);
 
 					//! use lcv_vkbuffer
-					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], lcp_vkbuffer, r_cep_ai_p[ma], VK_INDEX_TYPE_UINT32);
-					vkCmdDrawIndexed(vkcommandbuffer_p[smpt_rd_vk_swc_frame], r_cep_ai_l_p[ma], 1, 0, 0, 0);
+					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], lcp_vkbuffer, r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(vkcommandbuffer_p[smpt_rd_vk_swc_frame], r_cep_ai_l_p[a], 1, 0, 0, 0);
 				}
 
 			vkCmdEndRenderPass(vkcommandbuffer_p[smpt_rd_vk_swc_frame]);
