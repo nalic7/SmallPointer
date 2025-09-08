@@ -40,9 +40,9 @@ void smpt_rd_vkq_dv_make(uint32_t device)
 
 	VkPhysicalDeviceFeatures vkphysicaldevicefeatures;
 	vkGetPhysicalDeviceFeatures(vkphysicaldevice, &vkphysicaldevicefeatures);
-	SMPT_DB_N2L("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
+	SMPT_DBmN2L("vkphysicaldevicefeatures.samplerAnisotropy %d", vkphysicaldevicefeatures.samplerAnisotropy)
 
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkCreateDevice %d",
 		vkCreateDevice

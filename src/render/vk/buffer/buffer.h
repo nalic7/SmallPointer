@@ -5,7 +5,7 @@
 
 	//VkMemoryRequirements vkmemoryrequirements
 	#define SMPT_RD_VK_BF_MAKE(device, vkdevicesize, vkbufferusageflags, vkmemorypropertyflags, vkbuffer, vkdevicememory, vkmemoryrequirements) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateBuffer %d", \
 			vkCreateBuffer \
@@ -27,7 +27,7 @@
 			) \
 		) \
 		vkGetBufferMemoryRequirements(smpt_rd_vkq_dv_p[device], vkbuffer, &vkmemoryrequirements); \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkAllocateMemory %d", \
 			vkAllocateMemory \
@@ -44,11 +44,11 @@
 				&vkdevicememory \
 			) \
 		) \
-		SMPT_DB_R2L("vkBindBufferMemory %d", vkBindBufferMemory(smpt_rd_vkq_dv_p[device], vkbuffer, vkdevicememory, 0))
+		SMPT_DBmR2L("vkBindBufferMemory %d", vkBindBufferMemory(smpt_rd_vkq_dv_p[device], vkbuffer, vkdevicememory, 0))
 
 	//void *data_p
 	#define SMPT_RD_VK_BF_MAP(device, vkdevicesize, buffer_data_p, vkdevicememory_p, data_p) \
-		SMPT_DB_R2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dv_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
+		SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dv_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
 		memcpy(data_p, buffer_data_p, vkdevicesize); \
 		vkUnmapMemory(smpt_rd_vkq_dv_p[device], *vkdevicememory_p);
 #endif

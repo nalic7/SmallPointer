@@ -2,10 +2,10 @@
 int main()
 {
 	#ifdef SMPT_CM_DEBUG
-		smpt_db_set();
+		smpt_dbMset();
 	#endif
 
-	SMPT_DB_R2L("signal %d", signal(SIGINT, SIG_IGN))
+	SMPT_DBmR2L("signal %d", signal(SIGINT, SIG_IGN))
 //	//s0-test
 //	//if u look to o on x0 y0 z0 to x1 y0 z0 p_h is 90d
 //	float
@@ -69,19 +69,19 @@ int main()
 //	// 		float extra = max_value - start + end + 1 - min;
 //
 //	// 		//use extra
-//	// 		SMPT_DB_N2L("0")
+//	// 		SMPT_DBmN2L("0")
 //	// 		next = extra;
 //	// 	}
 //	// 	else
 //	// 	{
-//	// 		SMPT_DB_N2L("1")
+//	// 		SMPT_DBmN2L("1")
 //	// 		next = end - start;
 //	// 	}
 //	// }
 //	// for (uint32_t rw = 0; rw < 4; ++rw)
 //	// {
-//	// 	SMPT_DB_N2L("x %f", start += next * delta)
-//	// 	SMPT_DB_N2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
+//	// 	SMPT_DBmN2L("x %f", start += next * delta)
+//	// 	SMPT_DBmN2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
 //	// }
 //	//s2-test0
 //	// for (uint32_t rw = 0; rw < 5; ++rw)
@@ -91,17 +91,17 @@ int main()
 //	// 		float extra = max_value - start + end/*  + 1 */ - min;
 //
 //	// 		//use extra
-//	// 		SMPT_DB_N2L("rw 0 %d", rw)
-//	// 		SMPT_DB_N2L("extra 0 %f", extra)
-//	// 		SMPT_DB_N2L("extra 1 %f", end - start)
-//	// 		SMPT_DB_N2L("x %f", start += extra * delta)
-//	// 		SMPT_DB_N2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
+//	// 		SMPT_DBmN2L("rw 0 %d", rw)
+//	// 		SMPT_DBmN2L("extra 0 %f", extra)
+//	// 		SMPT_DBmN2L("extra 1 %f", end - start)
+//	// 		SMPT_DBmN2L("x %f", start += extra * delta)
+//	// 		SMPT_DBmN2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
 //	// 	}
 //	// 	else
 //	// 	{
-//	// 		SMPT_DB_N2L("rw 1 %d", rw)
-//	// 		SMPT_DB_N2L("extra 1 %f", end - start)
-//	// 		SMPT_DB_N2L("x %f", start += (end - start) * delta)
+//	// 		SMPT_DBmN2L("rw 1 %d", rw)
+//	// 		SMPT_DBmN2L("extra 1 %f", end - start)
+//	// 		SMPT_DBmN2L("x %f", start += (end - start) * delta)
 //	// 	}
 //
 //	// 	delta += 0.25;
@@ -117,51 +117,51 @@ int main()
 //	{
 //		float extra = max_value - start + end - min;
 //
-//		SMPT_DB_N2L("0 next %f", next = extra * delta)
+//		SMPT_DBmN2L("0 next %f", next = extra * delta)
 //	}
 //	else
 //	{
-//		SMPT_DB_N2L("1 next %f", next = (end - start) * delta)
+//		SMPT_DBmN2L("1 next %f", next = (end - start) * delta)
 //	}
 //	//1/delta or frame/sec
 //	for (uint32_t rw = 0; rw < 1 / delta; ++rw)
 //	{
-//		SMPT_DB_N2L("f %d", ++frame)
+//		SMPT_DBmN2L("f %d", ++frame)
 //		if (frame == _RC_MAX_F)
 //		{
-//			SMPT_DB_N2L("x %f", start = end)
+//			SMPT_DBmN2L("x %f", start = end)
 //		}
 //		else
 //		{
-//			SMPT_DB_N2L("x %f", start += next)
+//			SMPT_DBmN2L("x %f", start += next)
 //		}
-//		SMPT_DB_N2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
+//		SMPT_DBmN2L("x -> %f", start = NALI_M_WRAP_F(start, min, max_value))
 //	}
 //	//e1-keyframe
 //
 //	clock_gettime(CLOCK_MONOTONIC, &time_end);
 //
-//	// // SMPT_DB_N2L("cos_theta %f", cos_theta)
-//	// // // SMPT_DB_N2L("angle_rad %f", angle_rad)
+//	// // SMPT_DBmN2L("cos_theta %f", cos_theta)
+//	// // // SMPT_DBmN2L("angle_rad %f", angle_rad)
 //
-//	// SMPT_DB_N2L("horizontal angle %f", o_h)
-//	// SMPT_DB_N2L("horizontal angle (r2d) %f", NALI_M_R2D(o_h))
+//	// SMPT_DBmN2L("horizontal angle %f", o_h)
+//	// SMPT_DBmN2L("horizontal angle (r2d) %f", NALI_M_R2D(o_h))
 //
-//	// SMPT_DB_N2L("vertical angle %f", o_v)
-//	// SMPT_DB_N2L("vertical angle (r2d) %f", NALI_M_R2D(o_v))
+//	// SMPT_DBmN2L("vertical angle %f", o_v)
+//	// SMPT_DBmN2L("vertical angle (r2d) %f", NALI_M_R2D(o_v))
 //
-//	// SMPT_DB_N2L("u_hv[0] %f", u_hv[0])
-//	// SMPT_DB_N2L("u_hv[1] %f", u_hv[1])
-//	// SMPT_DB_N2L("u_hv[2] %f", u_hv[2])
+//	// SMPT_DBmN2L("u_hv[0] %f", u_hv[0])
+//	// SMPT_DBmN2L("u_hv[1] %f", u_hv[1])
+//	// SMPT_DBmN2L("u_hv[2] %f", u_hv[2])
 //
-//	SMPT_DB_N2L("time_start_sec %ld", time_start.tv_sec)
-//	SMPT_DB_N2L("time_start_nsec %ld", time_start.tv_nsec)
+//	SMPT_DBmN2L("time_start_sec %ld", time_start.tv_sec)
+//	SMPT_DBmN2L("time_start_nsec %ld", time_start.tv_nsec)
 //
-//	SMPT_DB_N2L("time_end_sec %ld", time_end.tv_sec)
-//	SMPT_DB_N2L("time_end_nsec %ld", time_end.tv_nsec)
+//	SMPT_DBmN2L("time_end_sec %ld", time_end.tv_sec)
+//	SMPT_DBmN2L("time_end_nsec %ld", time_end.tv_nsec)
 //
-//	SMPT_DB_N2L("time_final_sec %f", time_end.tv_sec + (double)time_end.tv_nsec / 1e9 - time_start.tv_sec - (double)time_start.tv_nsec / 1e9)
-//	SMPT_DB_N2L("time_final_nsec %ld", (time_end.tv_sec - time_start.tv_sec) * 1000000000L + time_end.tv_nsec - time_start.tv_nsec)
+//	SMPT_DBmN2L("time_final_sec %f", time_end.tv_sec + (double)time_end.tv_nsec / 1e9 - time_start.tv_sec - (double)time_start.tv_nsec / 1e9)
+//	SMPT_DBmN2L("time_final_nsec %ld", (time_end.tv_sec - time_start.tv_sec) * 1000000000L + time_end.tv_nsec - time_start.tv_nsec)
 //
 //	smpt_db_free();
 //	//e0-test
@@ -171,13 +171,13 @@ int main()
 	#endif
 	lb_set();
 	#ifdef SMPT_CM_SERVER
-		ls_set();
+		smptr_svMset();
 	#endif
 	#ifdef SMPT_CM_CLIENT
 		lc_set();
 
 		#ifdef SMPT_CM_LIBINPUT
-			_lip_set();
+			smpt_lipMset();
 		#endif
 
 		#ifdef SMPT_CM_WL
@@ -192,9 +192,10 @@ int main()
 		// al_set();
 		//! test with wl
 		#ifdef SMPT_CM_LIBINPUT
-			_lip_loop();
+			smpt_lipMloop();
 		#endif
 
-		smpt_db_free();
+		SMPT_DBmR2L("tcflush %d", tcflush(STDIN_FILENO, TCIFLUSH))
+		smpt_dbMfree();
 	#endif
 }

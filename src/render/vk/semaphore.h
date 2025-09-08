@@ -2,7 +2,7 @@
 	#define SMPT_RD_VK_SMP_H
 
 	#define SMPT_RD_VK_SMP_MAKE(device, vksemaphore_p) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateSemaphore %d", \
 			vkCreateSemaphore \

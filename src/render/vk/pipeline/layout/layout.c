@@ -1,6 +1,6 @@
 void smpt_rd_vk_pl_lo_make(uint32_t device, VkPipelineLayout *vkpipelinelayout_p)
 {
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkCreatePipelineLayout %d",
 		vkCreatePipelineLayout

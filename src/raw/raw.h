@@ -23,6 +23,7 @@
 
 	//.i model
 	#define SMPTRtM uint8_t
+	#define SMPTRvM 0xFFFFu
 	#define SMPTRtMA uint8_t
 	#define SMPTRtMB uint8_t
 	#define SMPTRtMI uint16_t
@@ -77,7 +78,6 @@
 		//.i client always get same size as server
 		//.i server can return norender to client
 		//.i i
-		SMPTRtMI ii;
 		SMPTRtM m;
 		//.i a
 		SMPTRtMK k;
@@ -88,6 +88,9 @@
 	};
 	extern struct SMPTRsM *smptrPm;
 	extern SMPTRtM smptrLm;
+
+	//.c server read/write
+	#define SMPTRBuRW 20
 
 	//.c max connect
 	#define SMPTRB_UM 1

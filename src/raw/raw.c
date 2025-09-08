@@ -19,8 +19,10 @@ struct LB_C *lb_c;
 
 void lb_set()
 {
+	smptrPm = malloc(0);
+
 	#if SMPT_CM_CLIENT && SMPT_CM_SERVER
-		SMPT_DB_R2L("mtx_init %d", mtx_init(lb_mtx_t_p, mtx_plain))
+		SMPT_DBmR2L("mtx_init %d", mtx_init(lb_mtx_t_p, mtx_plain))
 	#endif
 
 	lb_c = malloc(sizeof(struct LB_C));
@@ -59,12 +61,13 @@ void lb_free1()
 	#endif
 
 	#ifdef SMPT_CM_SERVER
-		ls_free();
+		smptr_svMfree();
 	#endif
 
 	#ifdef SMPT_CM_CLIENT
 		lc_free(smpt_rd_vk_device);
 	#endif
+	free(smptrPm);
 
 	//! switch to pipewire
 	// al_clean();

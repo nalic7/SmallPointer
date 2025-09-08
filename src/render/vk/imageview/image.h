@@ -6,7 +6,7 @@
 	vkimagetiling VK_IMAGE_TILING_OPTIMAL
 	vkimagelayout VK_IMAGE_LAYOUT_UNDEFINED*/
 	#define SMPT_RD_VK_IM_MAKE(device, vkformat, vkextent3d, mipmap, vkimagetiling, vkimageusageflags, vkimagelayout, vksamplecountflagbits, vkimage_p) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateImage %d", \
 			vkCreateImage \
@@ -38,7 +38,7 @@
 	//vkmemoryrequirements f
 	#define SMPT_RD_VK_IM_GEN(device, vkimage, vkmemorypropertyflags, vkdevicememory_p, vkmemoryrequirements) \
 		vkGetImageMemoryRequirements(smpt_rd_vkq_dv_p[device], vkimage, &vkmemoryrequirements); \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkAllocateMemory %d", \
 			vkAllocateMemory \
@@ -55,5 +55,5 @@
 				vkdevicememory_p \
 			) \
 		) \
-		SMPT_DB_R2L("vkBindImageMemory %d", vkBindImageMemory(smpt_rd_vkq_dv_p[device], vkimage, *vkdevicememory_p, 0))
+		SMPT_DBmR2L("vkBindImageMemory %d", vkBindImageMemory(smpt_rd_vkq_dv_p[device], vkimage, *vkdevicememory_p, 0))
 #endif

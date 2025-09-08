@@ -1,12 +1,13 @@
-#ifndef NALI_TEST_H
-#define NALI_TEST_H
+#ifndef SMPThT
+	#define SMPThT
+
 	#ifdef SMPT_CM_TEST
-		#define NALI_T_P(d_bl, l_bl) \
+		#define SMPTTmP(d_bl, l_bl) \
 			if ((d_bl) >= (l_bl)) \
 			{ \
 				exit(EXIT_FAILURE); \
 			}
 	#else
-		#define NALI_T_P(d_bl, l_bl)
+		#define SMPTTmP(d_bl, l_bl)
 	#endif
 #endif

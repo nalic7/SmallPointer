@@ -89,6 +89,8 @@
 
 		#include <linux/input-event-codes.h>
 
+		#include <termios.h>
+
 		#ifdef SMPT_CM_PIPEWIRE
 			#include <pipewire/pipewire.h>
 			//! audio data to 3d audio

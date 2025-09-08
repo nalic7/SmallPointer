@@ -16,8 +16,8 @@ struct xdg_surface_listener smpt_sf_wlc_xdg_sf_listener =
 
 void smpt_sf_wlc_xdg_sf_set()
 {
-	SMPT_DB_R2L("xdg_wm_base_get_xdg_surface %p", smpt_sf_wlc_xdg_sf_p = xdg_wm_base_get_xdg_surface(smpt_sf_wlc_xdg_wmb_p, smpt_sf_wlc_sf_p))
-	SMPT_DB_R2L("xdg_surface_add_listener %d", xdg_surface_add_listener(smpt_sf_wlc_xdg_sf_p, &smpt_sf_wlc_xdg_sf_listener, NULL))
+	SMPT_DBmR2L("xdg_wm_base_get_xdg_surface %p", smpt_sf_wlc_xdg_sf_p = xdg_wm_base_get_xdg_surface(smpt_sf_wlc_xdg_wmb_p, smpt_sf_wlc_sf_p))
+	SMPT_DBmR2L("xdg_surface_add_listener %d", xdg_surface_add_listener(smpt_sf_wlc_xdg_sf_p, &smpt_sf_wlc_xdg_sf_listener, NULL))
 }
 
 void smpt_sf_wlc_xdg_sf_free()

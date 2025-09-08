@@ -13,7 +13,7 @@ set(DRM 1)
 #set(X11 1)
 
 #//.i run
-#set(GEN 1)
+set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
 

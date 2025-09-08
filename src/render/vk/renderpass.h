@@ -2,7 +2,7 @@
 	#define SMPT_RD_VK_RDP_H
 
 	#define SMPT_RD_VK_RDP_MAKE(device, vkrenderpass_p) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateRenderPass %d", \
 			vkCreateRenderPass \

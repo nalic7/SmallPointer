@@ -1,5 +1,5 @@
-#ifndef SMPTR_CEMh
-	#define SMPTR_CEMh
+#ifndef SMPTRhCEM
+	#define SMPTRhCEM
 
 	#ifdef SMPT_CM_VK
 		extern VkDescriptorSet *smptr_cemPvkdescriptorset;

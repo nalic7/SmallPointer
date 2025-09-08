@@ -2,7 +2,7 @@
 	#define SMPT_RD_VK_FBF_H
 
 	#define SMPT_RD_VK_FBF_MAKE(device, vkimageview_p, vkimageview_size, vkrenderpass, vkframebuffer_p) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateFramebuffer %d", \
 			vkCreateFramebuffer \

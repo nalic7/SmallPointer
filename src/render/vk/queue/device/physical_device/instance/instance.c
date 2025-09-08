@@ -28,7 +28,7 @@ static const char *extension_p[] =
 
 void smpt_rd_vkq_dv_pscdv_it_make()
 {
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkCreateInstance %d",
 		vkCreateInstance

@@ -3,7 +3,7 @@ void JNICALL mcc_jvmtiEventClassLoad(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthre
 //		char *signature;
 //		char *generic;
 //		(*jvmti_env)->GetClassSignature(jvmti_env, klass, &signature, &generic);
-//		SMPT_DB_N2L("signature %s", signature);
+//		SMPT_DBmN2L("signature %s", signature);
 //		(*jvmti_env)->Deallocate(jvmti_env, (unsigned char*)signature);
 //		(*jvmti_env)->Deallocate(jvmti_env, (unsigned char*)generic);
 }

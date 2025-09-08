@@ -33,5 +33,5 @@
 			vksamplercreateinfo.minFilter = VK_FILTER_NEAREST; \
 			vksamplercreateinfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST; \
 		} \
-		SMPT_DB_R2L("vkCreateSampler %d", vkCreateSampler(smpt_rd_vkq_dv_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
+		SMPT_DBmR2L("vkCreateSampler %d", vkCreateSampler(smpt_rd_vkq_dv_p[device], &vksamplercreateinfo, VK_NULL_HANDLE, vksampler_p))
 #endif

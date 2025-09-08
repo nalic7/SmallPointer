@@ -1,6 +1,6 @@
 void smpt_rd_vkw_dsts_make(uint32_t device, VkDescriptorSet *vkdescriptorset_p)
 {
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkAllocateDescriptorSets %d",
 		vkAllocateDescriptorSets

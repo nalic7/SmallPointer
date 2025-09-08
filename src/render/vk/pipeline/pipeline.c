@@ -19,7 +19,7 @@ void smpt_rd_vk_pl_make(uint32_t device, VkPipelineShaderStageCreateInfo *vkpipe
 
 	SMPT_RD_VK_PLD_SC_SACAIF(vkpipelinedepthstencilstatecreateinfo)
 
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkCreateGraphicsPipelines %d",
 		vkCreateGraphicsPipelines

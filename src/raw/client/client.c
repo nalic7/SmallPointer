@@ -28,7 +28,7 @@ void lc_vk()
 	smpt_rd_vkw_dstsp_make(smpt_rd_vk_device);
 
 	smpt_rd_vk_cmd_set();
-	SMPT_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, smpt_rd_vk_cmd_loop, NULL))
+	SMPT_DBmR2L("thrd_create %d", thrd_create(&(thrd_t){}, smpt_rd_vk_cmd_loop, NULL))
 }
 
 static void lc_send()
@@ -44,25 +44,26 @@ static void lc_send()
 	//nc_send();
 }
 
-static struct timespec lc_time = {0};
-static struct timespec l_time;
-void lc_read()
+#ifndef SMPT_CM_RAW
+	static struct timespec lc_time = {0};
+	static struct timespec l_time;
+#endif
+void smptr_ceMread()
 {
-	l_time = *(struct timespec *)smptr_cePnet;
+	#ifdef SMPT_CM_RAW
+		smptr_cemMread();
+	#else
+		l_time = *(struct timespec *)smptr_cePnet;
 
-	if ((l_time.tv_sec > lc_time.tv_sec) || (l_time.tv_sec == lc_time.tv_sec && l_time.tv_nsec > lc_time.tv_nsec))
-	{
-		smptr_ceLnet = sizeof(struct timespec);
+		if ((l_time.tv_sec > lc_time.tv_sec) || (l_time.tv_sec == lc_time.tv_sec && l_time.tv_nsec > lc_time.tv_nsec))
+		{
+			smptr_ceLnet = sizeof(struct timespec);
 
-		//! net
-		//lcm_re();
+			smptr_cemMread();
 
-		//! net
-		//lcu_read();
-		//lcm_read();
-
-		lc_time = l_time;
-	}
+			lc_time = l_time;
+		}
+	#endif
 }
 
 void lc_free(uint32_t device)
@@ -78,11 +79,11 @@ void lc_free(uint32_t device)
 	#ifdef SMPT_CM_VK
 		while (!(_sf_state & _SF_S_EXIT_RENDER))
 		{
-			SMPT_DB_N2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
-			SMPT_DB_N2L("_sf_state %d", _sf_state)
+			SMPT_DBmN2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+			SMPT_DBmN2L("_sf_state %d", _sf_state)
 		}
 
-		SMPT_DB_R2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkq_p[smpt_rd_vk_device][smpt_rd_vk_queue_g]))
+		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkq_p[smpt_rd_vk_device][smpt_rd_vk_queue_g]))
 
 		smptr_cemMfree();
 		smpt_rd_vkw_dstsp_free(device);

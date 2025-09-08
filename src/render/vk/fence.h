@@ -2,7 +2,7 @@
 	#define SMPT_RD_VKF_H
 
 	#define SMPT_RD_VKF_MAKE(device, vkfence_p) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateFence %d", \
 			vkCreateFence \

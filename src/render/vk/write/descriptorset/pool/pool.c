@@ -8,7 +8,7 @@ void smpt_rd_vkw_dstsp_make(uint32_t device)
 		.descriptorCount = SMPTRB_MIM * SMPT_RD_VKW_DSTSLO_L
 	};
 
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkCreateDescriptorPool %d",
 		vkCreateDescriptorPool

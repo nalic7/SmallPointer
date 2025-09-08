@@ -1,6 +1,6 @@
 void smpt_rd_vk_cm_bf_make(uint32_t device, uint32_t graphic, VkCommandBuffer *vkcommandbuffer_p, uint32_t size)
 {
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkAllocateCommandBuffers %d",
 		vkAllocateCommandBuffers

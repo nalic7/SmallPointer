@@ -1,5 +1,5 @@
-#ifndef F_H
-	#define F_H
+#ifndef SMPThF
+	#define SMPThF
 
 	#ifdef SMPT_CM_GEN
 		//.c source folder

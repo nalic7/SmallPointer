@@ -37,8 +37,8 @@ struct xdg_toplevel_listener smpt_sf_wlc_xdg_tl_listener =
 
 void smpt_sf_wlc_xdg_tl_set()
 {
-	SMPT_DB_R2L("xdg_surface_get_toplevel %p", smpt_sf_wlc_xdg_tl_p = xdg_surface_get_toplevel(smpt_sf_wlc_xdg_sf_p))
-	SMPT_DB_R2L("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(smpt_sf_wlc_xdg_tl_p, &smpt_sf_wlc_xdg_tl_listener, NULL))
+	SMPT_DBmR2L("xdg_surface_get_toplevel %p", smpt_sf_wlc_xdg_tl_p = xdg_surface_get_toplevel(smpt_sf_wlc_xdg_sf_p))
+	SMPT_DBmR2L("xdg_toplevel_add_listener %d", xdg_toplevel_add_listener(smpt_sf_wlc_xdg_tl_p, &smpt_sf_wlc_xdg_tl_listener, NULL))
 }
 
 void smpt_sf_wlc_xdg_tl_free()

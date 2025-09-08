@@ -2,7 +2,7 @@ VkDescriptorSetLayout smpt_rd_vkw_dsts_lo;
 
 void smpt_rd_vkw_dsts_lo_make(uint32_t device)
 {
-	SMPT_DB_R2L
+	SMPT_DBmR2L
 	(
 		"vkCreateDescriptorSetLayout %d",
 		vkCreateDescriptorSetLayout

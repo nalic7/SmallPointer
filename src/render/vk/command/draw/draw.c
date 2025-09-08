@@ -182,7 +182,7 @@ void smpt_rd_vk_cmd_set()
 	//e0-draw
 
 	// //s0-mtx
-	// SMPT_DB_R2L("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
+	// SMPT_DBmR2L("mtx_init %d", mtx_init(m_mtx_t_draw_p, mtx_plain))
 	// //e0-mtx
 
 	// // frame_start = time(0);
@@ -242,11 +242,9 @@ int smpt_rd_vk_cmd_loop(void *p)
 	lb_free0();
 
 	_sf_state |= _SF_S_RENDER;
-	smptr_cemMread();
 	while (!(_sf_state & _SF_S_EXIT))
 	{
-		//! read
-//		smptr_cemMread();
+		smptr_ceMread();
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);
@@ -268,7 +266,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 		if (vkresult != VK_SUCCESS)
 		{
 			//support recreate vkswapchainkhr if need
-			SMPT_DB_N2L("vkAcquireNextImageKHR %d", vkresult)
+			SMPT_DBmN2L("vkAcquireNextImageKHR %d", vkresult)
 			re_sc();
 		}
 
@@ -290,15 +288,15 @@ int smpt_rd_vk_cmd_loop(void *p)
 				// }
 				//e0-VkDynamicState
 
-//				SMPT_DB_N2L("smptr_cemLm1 %d", smptr_cemLm1)
+//				SMPT_DBmN2L("smptr_cemLm1 %d", smptr_cemLm1)
 				for (uint32_t l_0 = 0; l_0 < smptr_cemLm1; ++l_0)
 				{
 					struct SMPTR_CEMsM1 m1 = smptr_cemPm1[l_0];
 					SMPTRtMA a = m1.a;
-//					SMPT_DB_N2L("m1.i * smpt_rd_vk_swc_image %d", m1.i * smpt_rd_vk_swc_image)
-//					SMPT_DB_N2L("m1.i %d", m1.i)
-//					SMPT_DB_N2L("smpt_rd_vk_swc_frame_buffer %d", smpt_rd_vk_swc_frame_buffer)
-//					SMPT_DB_N2L("smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
+//					SMPT_DBmN2L("m1.i * smpt_rd_vk_swc_image %d", m1.i * smpt_rd_vk_swc_image)
+//					SMPT_DBmN2L("m1.i %d", m1.i)
+//					SMPT_DBmN2L("smpt_rd_vk_swc_frame_buffer %d", smpt_rd_vk_swc_frame_buffer)
+//					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
 					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
 					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &lcp_vkbuffer, r_cep_a_p + m1.b);
@@ -327,9 +325,9 @@ int smpt_rd_vk_cmd_loop(void *p)
 			// end = clock();
 			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 			frame_start = frame_end;
-			// SMPT_DB_N2L("time %ld", frame_time)
-			SMPT_DB_N2L("time %f", frame_time)
-			SMPT_DB_N2L("frame %d", frame)
+			// SMPT_DBmN2L("time %ld", frame_time)
+			SMPT_DBmN2L("time %f", frame_time)
+			SMPT_DBmN2L("frame %d", frame)
 			frame = 0;
 		}
 

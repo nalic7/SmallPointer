@@ -1,7 +1,7 @@
 #!/bin/bash
 emerge -qa \
 	sys-kernel/vanilla-sources sys-kernel/linux-firmware \
-	x11-drivers/nvidia-drivers \
+	sys-firmware/nvidia-firmware \
 	sys-devel/gcc dev-debug/gdb \
 	media-libs/vulkan-layers \
 	gui-wm/hyprland x11-terms/kitty \

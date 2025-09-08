@@ -12,7 +12,7 @@ void smpt_rd_vk_cmp_make(uint32_t device)
 
 	for (uint32_t q = 0; q < max_queue; ++q)
 	{
-		SMPT_DB_R2L
+		SMPT_DBmR2L
 		(
 			"vkCreateCommandPool %d",
 			vkCreateCommandPool

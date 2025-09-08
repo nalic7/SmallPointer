@@ -1,6 +1,6 @@
-#ifndef _LIP_H
-	#define _LIP_H
+#ifndef SMPThLIP
+	#define SMPThLIP
 
-	void _lip_set();
-	void _lip_loop();
+	void smpt_lipMset();
+	void smpt_lipMloop();
 #endif

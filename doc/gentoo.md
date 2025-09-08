@@ -4,15 +4,15 @@
 >/etc/portage/make.conf
 ```bash
 #OpenRC AMD64
-USE="-llvm -fonts -policykit -pulseaudio sound-server pipewire-alsa pipewire ffmpeg extra drm X xwayland wayland vaapi nvenc nvdec bluetooth -gpm jpeg2k opus"
+USE="-fonts -policykit -pulseaudio sound-server pipewire-alsa pipewire ffmpeg extra drm X xwayland wayland vaapi bluetooth -gpm jpeg2k opus"
 
 INPUT_DEVICES="libinput"
 
 #AMD_cpu,igpu / NVIDIA_dgpu
-VIDEO_CARDS="amdgpu radeonsi"
+VIDEO_CARDS="amdgpu radeonsi nouveau nvk zink"
 
 #Intel_cpu,igpu / NVIDIA_dgpu
-VIDEO_CARDS="intel nvidia"
+VIDEO_CARDS="intel nvidia nouveau nvk zink"
 ```
 >Install Package
 ```bash
@@ -23,33 +23,34 @@ run/gentoo
 ls /usr/src
 ls -l /usr/src/linux
 ls /lib/modules
-```
->Compile Kernel
-```bash
-ln -sfn /usr/src/linux-6.16.4 /usr/src/linux
 cd /usr/src/linux
+```
+>Set/Default Kernel
+```bash
+ln -sfn /usr/src/linux-6.16.5 /usr/src/linux
 make mrproper
 make defconfig
 make menuconfig
-make
-make modules_install
-cp arch/x86/boot/bzImage /boot/vmlinuz-6.16.4
-grub-mkconfig -o /boot/grub/grub.cfg
 ```
 >Update Kernel
 ```bash
-cd /usr/src/linux
 make mrproper
-cp /usr/src/linux-6.16.3/.config /usr/src/linux-6.16.4
+cp /usr/src/linux-6.16.4/.config /usr/src/linux-6.16.5
 make oldconfig
-#reinstall modules
+```
+>Compile/Reinstall Kernel/Modules
+```bash
+make
+make modules_install
+cp arch/x86/boot/bzImage /boot/vmlinuz-6.16.5
+grub-mkconfig -o /boot/grub/grub.cfg
 emerge -a @module-rebuild
 ```
 >Clean Kernel
 ```bash
-rm -rf /usr/src/linux-6.16.3
-rm -rf /lib/modules/6.16.3
-rm -rf /boot/vmlinuz-6.16.3
+rm -rf /usr/src/linux-6.16.4
+rm -rf /lib/modules/6.16.4
+rm /boot/vmlinuz-6.16.4
 ```
 >Hyprland
 ```

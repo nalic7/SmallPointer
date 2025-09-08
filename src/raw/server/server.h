@@ -1,7 +1,8 @@
 #ifndef SMPTRhSV
 	#define SMPTRhSV
 
-	void ls_set();
-	void ls_read();
-	void ls_free();
+	void smptr_svMset();
+	void smptr_svMread();
+	int smptr_svMloop(void *P);
+	void smptr_svMfree();
 #endif

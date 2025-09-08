@@ -1,9 +1,9 @@
 //void vk_cmd(VkCommandBuffer vkcommandbuffer, VkCommandBufferBeginInfo *vkcommandbufferbegininfo_p, VkQueue vkqueue_graphic)
 //{
-//	// SMPT_DB_R2L("vkBeginCommandBuffer %d", vkBeginCommandBuffer(vkcommandbuffer, vkcommandbufferbegininfo_p))
+//	// SMPT_DBmR2L("vkBeginCommandBuffer %d", vkBeginCommandBuffer(vkcommandbuffer, vkcommandbufferbegininfo_p))
 //	// vk_cmdImage(vkcommandbuffer, vkqueue_graphic);
-//	// SMPT_DB_R2L("vkEndCommandBuffer %d", vkEndCommandBuffer(vkcommandbuffer))
-//	// SMPT_DB_R2L
+//	// SMPT_DBmR2L("vkEndCommandBuffer %d", vkEndCommandBuffer(vkcommandbuffer))
+//	// SMPT_DBmR2L
 //	// (
 //	// 	"vkQueueSubmit %d",
 //	// 	vkQueueSubmit
@@ -29,7 +29,7 @@
 //	// 		VK_NULL_HANDLE
 //	// 	)
 //	// )
-//	// SMPT_DB_R2L("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
+//	// SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 //
 //	// //s0-freeImage
 //	// VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];

@@ -31,7 +31,7 @@ static int s1_set(void *p)
 				size_t pointer_count = AMotionEvent_getPointerCount(ainputevent_p);
 //				if (pointer_count == 1)
 //				{
-//					SMPT_DB_N2L("AINPUT_EVENT_TYPE_MOTION")
+//					SMPT_DBmN2L("AINPUT_EVENT_TYPE_MOTION")
 				int32_t action = AMotionEvent_getAction(ainputevent_p);
 				int32_t actionType = action & AMOTION_EVENT_ACTION_MASK;
 
@@ -99,7 +99,7 @@ static uint8_t a_state = 0;
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
-	SMPT_DB_N2L("window %p", window)
+	SMPT_DBmN2L("window %p", window)
 	_sf_width = ANativeWindow_getWidth(window);
 	_sf_height = ANativeWindow_getHeight(window);
 	sa_anativewindow_p = window;
@@ -107,7 +107,7 @@ static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* wind
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
 {
-	SMPT_DB_N2L("window resize")
+	SMPT_DBmN2L("window resize")
 	_sf_width = ANativeWindow_getWidth(window);
 	_sf_height = ANativeWindow_getHeight(window);
 	_sf_state |= _SF_S_RE;
@@ -115,21 +115,21 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
-	SMPT_DB_N2L("window 0")
+	SMPT_DBmN2L("window 0")
 	sa_anativewindow_p = NULL;
 	_sf_state |= _SF_S_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
 //{
-//	SMPT_DB_N2L("onConfigurationChanged")
+//	SMPT_DBmN2L("onConfigurationChanged")
 //
 //	AConfiguration *aconfiguration_p = AConfiguration_new();
 //	AConfiguration_fromAssetManager(aconfiguration_p, activity->assetManager);
 //
 //	orientation = AConfiguration_getOrientation(aconfiguration_p);
 //
-//	SMPT_DB_N2L("orientation %d", orientation)
+//	SMPT_DBmN2L("orientation %d", orientation)
 ////	if (orientation == ACONFIGURATION_ORIENTATION_PORT)
 ////	{
 ////	}
@@ -159,12 +159,12 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 		smpt_db_set();
 	#endif
 
-	SMPT_DB_N2L("ANativeActivity_onCreate")
+	SMPT_DBmN2L("ANativeActivity_onCreate")
 	if (!(a_state & A_STATE_READY))
 	{
 		a_state |= A_STATE_READY;
-		SMPT_DB_N2L("scene")
-		SMPT_DB_R2L("thrd_create %d", thrd_create(&(thrd_t){}, s1_set, NULL))
+		SMPT_DBmN2L("scene")
+		SMPT_DBmR2L("thrd_create %d", thrd_create(&(thrd_t){}, s1_set, NULL))
 	}
 	activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
 	activity->callbacks->onNativeWindowResized = onNativeWindowResized;
@@ -175,7 +175,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	sa_anativeactivity_p = activity;
 
 //	SLObjectItf slobjectitf;
-//	SMPT_DB_R2L("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
+//	SMPT_DBmR2L("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
 }
 
 void sa_wait()

@@ -9,5 +9,6 @@
 	#define _SF_S_RAW 4
 	#define _SF_S_RENDER 8
 	#define _SF_S_EXIT_RENDER 16
+	#define _SF_S_EXIT_SERVER 32
 	extern uint8_t _sf_state;
 #endif

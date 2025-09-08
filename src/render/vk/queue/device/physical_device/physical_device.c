@@ -3,12 +3,12 @@ VkPhysicalDevice *smpt_rd_vkq_dv_pscdv_p;
 
 void smpt_rd_vkq_dv_pscdv_make()
 {
-	SMPT_DB_R2L("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(smpt_rd_vkq_dv_pscdv_it, &smpt_rd_vkq_dv_pscdv_bl, VK_NULL_HANDLE))
-	SMPT_DB_N2L("physical_device %d", smpt_rd_vkq_dv_pscdv_bl)
+	SMPT_DBmR2L("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(smpt_rd_vkq_dv_pscdv_it, &smpt_rd_vkq_dv_pscdv_bl, VK_NULL_HANDLE))
+	SMPT_DBmN2L("physical_device %d", smpt_rd_vkq_dv_pscdv_bl)
 
 	smpt_rd_vkq_dv_pscdv_p = malloc(sizeof(VkPhysicalDevice) * smpt_rd_vkq_dv_pscdv_bl);
 
-	SMPT_DB_R2L("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(smpt_rd_vkq_dv_pscdv_it, &smpt_rd_vkq_dv_pscdv_bl, smpt_rd_vkq_dv_pscdv_p))
+	SMPT_DBmR2L("vkEnumeratePhysicalDevices %d", vkEnumeratePhysicalDevices(smpt_rd_vkq_dv_pscdv_it, &smpt_rd_vkq_dv_pscdv_bl, smpt_rd_vkq_dv_pscdv_p))
 }
 
 void smpt_rd_vkq_dv_pscdv_free()

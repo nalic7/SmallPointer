@@ -3,7 +3,7 @@
 
 	//mipmap 1
 	#define SMPT_RD_VK_IMV_MAKE(device, vkimage, vkformat, vkimageaspectflags, mipmap, vkimageview_p) \
-		SMPT_DB_R2L \
+		SMPT_DBmR2L \
 		( \
 			"vkCreateImageView %d", \
 			vkCreateImageView \

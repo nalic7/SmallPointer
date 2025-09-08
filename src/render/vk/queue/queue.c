@@ -27,7 +27,7 @@ void smpt_rd_vkq_add(uint32_t device)
 
 	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &smpt_rd_vkq_max_queue_p[device], vkqueuefamilyproperties_p);
 
-	SMPT_DB_N2L("max_queue %d", smpt_rd_vkq_max_queue_p[device])
+	SMPT_DBmN2L("max_queue %d", smpt_rd_vkq_max_queue_p[device])
 
 	smpt_rd_vkq_max_queue_surface_p[device] = 0;
 
@@ -35,9 +35,9 @@ void smpt_rd_vkq_add(uint32_t device)
 	for (uint32_t i = 0; i < smpt_rd_vkq_max_queue_p[device]; i++)
 	{
 		VkQueueFamilyProperties vkqueuefamilyproperties = vkqueuefamilyproperties_p[i];
-		SMPT_DB_R2L("vkGetPhysicalDeviceSurfaceSupportKHR %d", vkGetPhysicalDeviceSurfaceSupportKHR(vkphysicaldevice, i, smpt_rd_vk_sf_khr, &surface_support))
+		SMPT_DBmR2L("vkGetPhysicalDeviceSurfaceSupportKHR %d", vkGetPhysicalDeviceSurfaceSupportKHR(vkphysicaldevice, i, smpt_rd_vk_sf_khr, &surface_support))
 
-		SMPT_DB_N2L("queue %d vkqueuefamilyproperties.queueFlags %d", i, vkqueuefamilyproperties.queueFlags);
+		SMPT_DBmN2L("queue %d vkqueuefamilyproperties.queueFlags %d", i, vkqueuefamilyproperties.queueFlags);
 		if (surface_support)
 		{
 			if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_GRAPHICS_BIT)
@@ -51,12 +51,12 @@ void smpt_rd_vkq_add(uint32_t device)
 
 			smpt_rd_vkq_queue_surface_p[device] = realloc(smpt_rd_vkq_queue_surface_p[device], (smpt_rd_vkq_max_queue_surface_p[device] + 1) * sizeof(uint32_t));
 			smpt_rd_vkq_queue_surface_p[device][smpt_rd_vkq_max_queue_surface_p[device]++] = i;
-			SMPT_DB_N2L("surface_1 %d", i);
+			SMPT_DBmN2L("surface_1 %d", i);
 			// m_queue_render = i;
 		}
 		else
 		{
-			SMPT_DB_N2L("surface_0 %d", i);
+			SMPT_DBmN2L("surface_0 %d", i);
 		}
 
 		// if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_TRANSFER_BIT)
@@ -70,26 +70,26 @@ void smpt_rd_vkq_add(uint32_t device)
 			vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, SMPT_RD_VK_COLOR_FORMAT, &vkformatproperties);
 			if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
 			{
-				SMPT_DB_N2L("_VK_COLOR_FORMAT VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
+				SMPT_DBmN2L("_VK_COLOR_FORMAT VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
 			}
 			if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
 			{
-				SMPT_DB_N2L("_VK_COLOR_FORMAT VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
+				SMPT_DBmN2L("_VK_COLOR_FORMAT VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
 			}
 
 			vkGetPhysicalDeviceFormatProperties(vkphysicaldevice, SMPT_RD_VK_DEPTH_FORMAT, &vkformatproperties);
 			if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
 			{
-				SMPT_DB_N2L("_VK_DEPTH_FORMAT VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
+				SMPT_DBmN2L("_VK_DEPTH_FORMAT VK_FORMAT_FEATURE_BLIT_SRC_BIT %d", i)
 			}
 			if (vkformatproperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)
 			{
-				SMPT_DB_N2L("_VK_DEPTH_FORMAT VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
+				SMPT_DBmN2L("_VK_DEPTH_FORMAT VK_FORMAT_FEATURE_BLIT_DST_BIT %d", i)
 			}
 		#endif
 	}
 
-	SMPT_DB_N2L("_vkq_max_queue_surface_p[device] %d", smpt_rd_vkq_max_queue_surface_p[device])
+	SMPT_DBmN2L("_vkq_max_queue_surface_p[device] %d", smpt_rd_vkq_max_queue_surface_p[device])
 
 	free(vkqueuefamilyproperties_p);
 }

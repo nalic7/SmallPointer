@@ -12,6 +12,6 @@
 
 	void lc_set();
 	void lc_vk();
-	void lc_read();
+	void smptr_ceMread();
 	void lc_free(uint32_t device);
 #endif
