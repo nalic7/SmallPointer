@@ -1,26 +1,6 @@
 #ifndef SMPTRh
 	#define SMPTRh
 
-	#define SMPTRtM uint16_t
-
-	#ifdef SMPT_CM_RAW
-		#if defined(SMPT_CM_CLIENT) && defined(SMPT_CM_SERVER)
-		#else
-			#ifdef SMPT_CM_CLIENT
-			#endif
-			#ifdef SMPT_CM_SERVER
-			#endif
-		#endif
-	#elif defined(SMPT_CM_UDP)
-		#if defined(SMPT_CM_CLIENT) && defined(SMPT_CM_SERVER)
-		#else
-			#ifdef SMPT_CM_CLIENT
-			#endif
-			#ifdef SMPT_CM_SERVER
-			#endif
-		#endif
-	#endif
-
 	//.i model
 	#define SMPTRtM uint8_t
 	#define SMPTRvM 0xFFFFu
@@ -90,7 +70,12 @@
 	extern SMPTRtM smptrLm;
 
 	//.c server read/write
-	#define SMPTRBuRW 20
+	#define SMPTRuRW 20
+
+	//.i package
+	#define SMPTRtNET uint8_t
+	#define SMPTRlNET 255
+
 
 	//.c max connect
 	#define SMPTRB_UM 1
@@ -98,10 +83,6 @@
 	#define SMPTRB_UT uint8_t
 	//.i void user
 	#define SMPTRB_UN 255
-
-	//.i package
-	#define SMPTRB_PT uint8_t
-	#define SMPTRB_NET_BL 255
 
 	//.i animation
 	#define SMPTRB_AKIT uint8_t
@@ -134,7 +115,7 @@
 	//.i chunk hash/3 key
 	#define SMPTRB_CHT uint16_t
 
-	struct LB_C
+	struct SMPTRsCACHE
 	{
 		#ifdef SMPT_CM_CLIENT
 			uint16_t
@@ -146,11 +127,7 @@
 		uint8_t *d_p;
 		uint32_t *d_bl_p;
 	};
-	extern struct LB_C *lb_c;
-
-	#if SMPT_CM_CLIENT && SMPT_CM_SERVER
-		extern mtx_t *lb_mtx_t_p;
-	#endif
+	extern struct SMPTRsCACHE *smptrPcache;
 
 	void lb_set();
 	void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_array[16], float q1_m4x4_array[16]);

@@ -250,12 +250,12 @@ void g_md_write()
 		// 				joint_head_array[j / 8 + j_next / 8] |= 1 << (j_next % 8);
 
 		// 				memcpy(l_q, cgltf_animation_channel_p->target_node->rotation, sizeof(float) * 4);
-		// 				MV4_qi(l_q, 0)
+		// 				SMPTM_V4mQI(l_q, 0)
 		// 				for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
 		// 				{
-		// 					// MV4_qi(p, l_4 * 4)
+		// 					// SMPTM_V4mQI(p, l_4 * 4)
 		// 					m_v4_m(l_q, p + l_4 * 4, q + l_4 * 4);
-		// 					MV4_qi(q, l_4 * 4)
+		// 					SMPTM_V4mQI(q, l_4 * 4)
 		// 				}
 		// 				// for (uint32_t l_4 = 0; l_4 < cgltf_accessor_input_p->count; ++l_4)
 		// 				// {
@@ -730,9 +730,9 @@ void g_md_write()
 							else if (cgltf_attribute_p->type == cgltf_attribute_type_position)
 							{
 								//.i apply rotate z -180
-								if (l_5 == 0 || l_5 == 1)
-									*(float *)(mix_array + l_5 * type_bl) = -*(float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
-								else
+//								if (l_5 == 0 || l_5 == 1)
+//									*(float *)(mix_array + l_5 * type_bl) = -*(float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+//								else
 									memcpy(mix_array + l_5 * type_bl, v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl, type_bl);
 							}
 							else

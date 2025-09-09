@@ -9,12 +9,11 @@ static int s1_set(void *p)
 		ls_set();
 	#endif
 	#ifdef SMPT_CM_CLIENT
-		lc_set();
+		smptr_ceMset();
 
 		smpt_rd_vk_set();
 	//! audio android
 //		al_set();
-		lc_vk();
 	#endif
 
 	while (1)
@@ -188,7 +187,7 @@ void sa_wait()
 
 	if (a_state & A_STATE_WAIT)
 	{
-//		lc_set();
+//		smptr_ceMset();
 //		vk_init();
 ////		al_set();
 //		lc_vk();

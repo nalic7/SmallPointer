@@ -1,4 +1,4 @@
-struct wl_keyboard *smpt_sf_wlcs_kb_p;
+struct wl_keyboard *smpt_sf_wl_ces_kb_p;
 
 static void wl_keyboard_listener_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t format, int32_t fd, uint32_t size)
 {
@@ -11,7 +11,7 @@ static void wl_keyboard_listener_key(void *data, struct wl_keyboard *wl_keyboard
 	if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
 	{
 		if (key == KEY_TAB)
-			smpt_sf_wlc_zwp_pc_set();
+			smpt_sf_wl_ce_zwp_pc_set();
 
 		if (key == KEY_W)
 			lcu_k ^= SMPTRB_K_W;
@@ -64,7 +64,7 @@ static void wl_keyboard_listener_repeat_info(void *data, struct wl_keyboard *wl_
 	// SMPT_DBmN2L("wl_keyboard_listener_repeat_info")
 }
 
-struct wl_keyboard_listener smpt_sf_wlcs_kb_listener =
+struct wl_keyboard_listener smpt_sf_wl_ces_kb_listener =
 {
 	.keymap = wl_keyboard_listener_keymap,
 	.enter = wl_keyboard_listener_enter,
@@ -74,7 +74,7 @@ struct wl_keyboard_listener smpt_sf_wlcs_kb_listener =
 	.repeat_info = wl_keyboard_listener_repeat_info
 };
 
-void smpt_sf_wlcs_kb_free()
+void smpt_sf_wl_ces_kb_free()
 {
-	wl_keyboard_destroy(smpt_sf_wlcs_kb_p);
+	wl_keyboard_destroy(smpt_sf_wl_ces_kb_p);
 }

@@ -1,4 +1,4 @@
-const float mm4x4_array[] =
+const float smptmPm4x4[] =
 {
 	1.0F, 0.0F, 0.0F, 0.0F,
 	0.0F, 1.0F, 0.0F, 0.0F,
@@ -6,7 +6,7 @@ const float mm4x4_array[] =
 	0.0F, 0.0F, 0.0F, 1.0F
 };
 
-void mm4x4_i(float m[16])
+void smptm_m4x4Mi(float m[16])
 {
 	float identity[] =
 	{
@@ -19,7 +19,7 @@ void mm4x4_i(float m[16])
 	int32_t l_0, l_1, l_2;
 	float s[16];
 	float t[16];
-	memcpy(s, mm4x4_array, sizeof(mm4x4_array));
+	memcpy(s, smptmPm4x4, sizeof(smptmPm4x4));
 	memcpy(t, m, sizeof(float) * 16);
 
 	for (l_0 = 0; l_0 < 3; l_0++)
@@ -120,16 +120,13 @@ void mm4x4_i(float m[16])
 	memcpy(m, s, sizeof(float) * 16);
 }
 
-void mm4x4_m(const float a[16], const float b[16], float w[16])
+void smptm_m4x4Mm(const float a[16], const float b[16], float w[16])
 {
-	// float float_array[16];
 	for (uint8_t l_0 = 0; l_0 < 4; l_0++)
 	{
 		for (uint8_t l_1 = 0; l_1 < 4; l_1++)
 		{
-			// float_array[i * 4 + j] = a[i * 4] * b[j] + a[i * 4 + 1] * b[4 + j] + a[i * 4 + 2] * b[8 + j] + a[i * 4 + 3] * b[12 + j];
 			w[l_0 * 4 + l_1] = a[l_0 * 4] * b[l_1] + a[l_0 * 4 + 1] * b[4 + l_1] + a[l_0 * 4 + 2] * b[8 + l_1] + a[l_0 * 4 + 3] * b[12 + l_1];
 		}
 	}
-	// memcpy(w, float_array, 16 * sizeof(float));
 }

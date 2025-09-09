@@ -174,14 +174,14 @@ int main()
 		smptr_svMset();
 	#endif
 	#ifdef SMPT_CM_CLIENT
-		lc_set();
+		smptr_ceMset();
 
 		#ifdef SMPT_CM_LIBINPUT
-			smpt_lipMset();
+			smpt_ip_lipMset();
 		#endif
 
 		#ifdef SMPT_CM_WL
-			smpt_sf_wlc_set();
+			smpt_sf_wl_ceMset();
 		#else
 			#ifdef SMPT_CM_VK
 				smpt_rd_vk_set();
@@ -192,7 +192,7 @@ int main()
 		// al_set();
 		//! test with wl
 		#ifdef SMPT_CM_LIBINPUT
-			smpt_lipMloop();
+			smpt_ip_lipMloop();
 		#endif
 
 		SMPT_DBmR2L("tcflush %d", tcflush(STDIN_FILENO, TCIFLUSH))

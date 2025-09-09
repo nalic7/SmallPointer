@@ -21,7 +21,7 @@ int smptr_svMloop(void *P)
 		smptr_svMread();
 
 		smptr_svmMloop();
-		if (++Urw == SMPTRBuRW)
+		if (++Urw == SMPTRuRW)
 		{
 			clock_gettime(CLOCK_MONOTONIC, &Stsp_e);
 			Dn = Stsp_e.tv_sec + (double)Stsp_e.tv_nsec / 1e9 - Stsp_s.tv_sec - (double)Stsp_s.tv_nsec / 1e9;

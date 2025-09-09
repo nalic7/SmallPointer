@@ -1,11 +1,11 @@
-const float mv4_srt_array[4 + 4 + 4] =
+const float smptm_v4Psrt[4 + 4 + 4] =
 {
 	1, 1, 1, 0,
 	0, 0, 0, 1,
 	0, 0, 0, 0
 };
 
-void mv4_q(float x, float y, float z, float w[4])
+void smptm_v4Mq(float x, float y, float z, float w[4])
 {
 	float c1 = cosf(x / 2);
 	float s1 = sinf(x / 2);
@@ -20,7 +20,7 @@ void mv4_q(float x, float y, float z, float w[4])
 	w[3] = c1 * c2 * c3 - s1 * s2 * s3;
 }
 
-void mv4_q2m(const float q[4], float w[16])
+void smptm_v4Mq2m(const float q[4], float w[16])
 {
 	float xy = q[0] * q[1];
 	float xz = q[0] * q[2];
@@ -43,15 +43,15 @@ void mv4_q2m(const float q[4], float w[16])
 	w[10] = 1 - 2 * (x_squared + y_squared);
 }
 
-void mv4_m(const float a[4], const float b[4], float w[4])
+void smptm_v4Mm(const float a[4], const float b[4], float w[4])
 {
-	w[0] = a[3]*b[0] + a[0]*b[3] + a[1]*b[2] - a[2]*b[1];
-	w[1] = a[3]*b[1] - a[0]*b[2] + a[1]*b[3] + a[2]*b[0];
-	w[2] = a[3]*b[2] + a[0]*b[1] - a[1]*b[0] + a[2]*b[3];
-	w[3] = a[3]*b[3] - a[0]*b[0] - a[1]*b[1] - a[2]*b[2];
+	w[0] = a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1];
+	w[1] = a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0];
+	w[2] = a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3];
+	w[3] = a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2];
 }
 
-void mv4_m4(const float a[16], const float b[4], float w[4])
+void smptm_v4Mm4(const float a[16], const float b[4], float w[4])
 {
 	for (uint8_t row = 0; row < 4; ++row)
 	{

@@ -26,7 +26,7 @@ void nc_send()
 
 void nc_get()
 {
-	if (recvfrom(server_fd, smptr_cePnet, SMPTRB_NET_BL, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl) > 0)
+	if (recvfrom(server_fd, smptr_cePnet, SMPTRlNET, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl) > 0)
 	{
 		lc_read();
 	}

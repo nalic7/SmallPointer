@@ -13,7 +13,7 @@
 // // 	-1.0F,  1.0F, 0.0F, 1.0F//top left
 // // };
 
-// // void lc_setVkVertexInputBindingDescription(VkVertexInputBindingDescription *vkvertexinputbindingdescription_p)
+// // void smptr_ceMsetVkVertexInputBindingDescription(VkVertexInputBindingDescription *vkvertexinputbindingdescription_p)
 // // {
 // // 	vkvertexinputbindingdescription_p[0] = (VkVertexInputBindingDescription)
 // // 	{
@@ -22,7 +22,7 @@
 // // 		.inputRate = VK_VERTEX_INPUT_RATE_VERTEX
 // // 	};
 // // }
-// // void lc_setVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *vkvertexinputattributedescription_p)
+// // void smptr_ceMsetVkVertexInputAttributeDescription(VkVertexInputAttributeDescription *vkvertexinputattributedescription_p)
 // // {
 // // 	//VK_FORMAT_R8_UINT
 // // 	vkvertexinputattributedescription_p[0] = (VkVertexInputAttributeDescription)
@@ -43,7 +43,7 @@
 // // 	};
 // // }
 
-// // void lc_setVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
+// // void smptr_ceMsetVkDescriptorSetLayout(VkDescriptorSetLayout *vkdescriptorsetlayout_p)
 // // {
 // // 	vk_makeDescriptorSetLayout
 // // 	(
@@ -71,7 +71,7 @@
 // // 		vkdescriptorsetlayout_p
 // // 	);
 // // }
-// // void lc_setVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
+// // void smptr_ceMsetVkDescriptorPoolSize(VkDescriptorPoolSize *vkdescriptorpoolsize_p)
 // // {
 // // 	//VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC
 // // 	vkdescriptorpoolsize_p[0] = (VkDescriptorPoolSize)
@@ -88,7 +88,7 @@
 // // 		.descriptorCount = 1
 // // 	};
 // // }
-// // void lc_setVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p)
+// // void smptr_ceMsetVkWriteDescriptorSet(VkDescriptorSet vkdescriptorset, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkDescriptorImageInfo *vkdescriptorimageinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p)
 // // {
 // // 	*vkdescriptorbufferinfo_p = (VkDescriptorBufferInfo)
 // // 	{

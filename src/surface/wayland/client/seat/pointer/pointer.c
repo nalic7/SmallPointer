@@ -1,8 +1,8 @@
-struct wl_pointer *smpt_sf_wlcs_pt_p;
+struct wl_pointer *smpt_sf_wl_ces_pt_p;
 
 static void wl_pointer_listener_enter(void *data, struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface, wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
-	wl_pointer_set_cursor(smpt_sf_wlcs_pt_p, serial, NULL, 0, 0);
+	wl_pointer_set_cursor(smpt_sf_wl_ces_pt_p, serial, NULL, 0, 0);
 }
 
 static void wl_pointer_listener_leave(void *data, struct wl_pointer *wl_pointer, uint32_t serial, struct wl_surface *surface)
@@ -50,7 +50,7 @@ static void wl_pointer_listener_axis(void *data, struct wl_pointer *wl_pointer, 
 	mtx_unlock(lb_mtx_t_p);
 }
 
-struct wl_pointer_listener smpt_sf_wlcs_pt_listener =
+struct wl_pointer_listener smpt_sf_wl_ces_pt_listener =
 {
 	.enter = wl_pointer_listener_enter,
 	.leave = wl_pointer_listener_leave,
@@ -59,7 +59,7 @@ struct wl_pointer_listener smpt_sf_wlcs_pt_listener =
 	.axis = wl_pointer_listener_axis,
 };
 
-void smpt_sf_wlcs_pt_free()
+void smpt_sf_wl_ces_pt_free()
 {
-	wl_pointer_destroy(smpt_sf_wlcs_pt_p);
+	wl_pointer_destroy(smpt_sf_wl_ces_pt_p);
 }

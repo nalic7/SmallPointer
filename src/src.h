@@ -16,6 +16,7 @@
 	#include <threads.h>
 	#include <string.h>
 
+	#include "input/input.h"
 	#include "raw/raw.h"
 
 	#ifdef SMPT_CM_VK
@@ -102,7 +103,7 @@
 
 		#ifdef SMPT_CM_LIBINPUT
 			#include <libinput.h>
-			#include "libinput/libinput.h"
+			#include "input/libinput/libinput.h"
 		#endif
 
 		#ifdef SMPT_CM_WL
@@ -195,6 +196,7 @@
 	#include "math/math.h"
 	#include "math/m4x4/m4x4.h"
 	#include "math/v4/v4.h"
+	#include "math/v3/v3.h"
 
 	#ifdef SMPT_CM_GEN
 		#include "gen/model/model.h"

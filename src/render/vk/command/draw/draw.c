@@ -155,8 +155,8 @@ void smpt_rd_vk_cmd_set()
 		//! need check again
 		//vk_cmd(vkcommandbuffer_p[l_0], &vkcommandbufferbegininfo, vkqueue_graphic);
 		// //s0-ubo
-		// // lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, &vkdescriptorimageinfo, vkwritedescriptorset_array);
-		// lc_setVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, vkwritedescriptorset_array);
+		// // smptr_ceMsetVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, &vkdescriptorimageinfo, vkwritedescriptorset_array);
+		// smptr_ceMsetVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, vkwritedescriptorset_array);
 		// //s1-update
 		// vkUpdateDescriptorSets(vkdevice, 6, vkwritedescriptorset_array, 0, VK_NULL_HANDLE);
 		// //e1-update
@@ -217,7 +217,10 @@ static void re_sc()
 	vkrenderpassbegininfo.renderArea.extent = smpt_rd_vk_swc_et2d;
 	vkrect2d.extent = smpt_rd_vk_swc_et2d;
 
-	MM4X4_P(tanf(90.0F * (M_PI / 180.0F) / 2.0F), _sf_width / _sf_height, 0.1F, 100.0F, (float *)lcp_vkbuffer_mp + 16 * 3)
+	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swc_image; ++l0)
+	{
+		SMPTM_M4X4mP(tanf(90.0F * (M_PI / 180.0F) / 2.0F), _sf_width / _sf_height, 0.1F, 100.0F, (float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swc_image + l0] + sizeof(float) * 16))
+	}
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
 //				rz = 0.0F;
@@ -229,9 +232,9 @@ static void re_sc()
 	vkFlushMappedMemoryRanges(smpt_rd_vkq_dv_p[smpt_rd_vk_device], 1, &(VkMappedMemoryRange)
 	{
 		.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-		.memory = lcp_vkdevicememory,
-		.offset = 16 * 3 * sizeof(float),
-		.size = 16 * sizeof(float),
+		.memory = smptr_ce_mdPvkdevicememory[2],
+		.offset = sizeof(float) * 16,
+		.size = sizeof(float) * 16,
 		.pNext = VK_NULL_HANDLE
 	});
 	_sf_state &= 0xFFu - _SF_S_RE;
@@ -244,6 +247,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 	_sf_state |= _SF_S_RENDER;
 	while (!(_sf_state & _SF_S_EXIT))
 	{
+		smptr_ceuMloop();
 		smptr_ceMread();
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
@@ -299,10 +303,10 @@ int smpt_rd_vk_cmd_loop(void *p)
 //					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
 					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &lcp_vkbuffer, r_cep_a_p + m1.b);
+					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &smptr_ce_mdPvkbuffer[0], r_cep_a_p + m1.b);
 
 					//! use lcv_vkbuffer
-					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], lcp_vkbuffer, r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);
+					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], smptr_ce_mdPvkbuffer[0], r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);
 					vkCmdDrawIndexed(vkcommandbuffer_p[smpt_rd_vk_swc_frame], r_cep_ai_l_p[a], 1, 0, 0, 0);
 				}
 

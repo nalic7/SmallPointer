@@ -1,22 +1,22 @@
-struct wl_display *smpt_sf_wlc_dp_p;
-struct wl_compositor *smpt_sf_wlc_cot_p;
-struct wl_surface *smpt_sf_wlc_sf_p;
+struct wl_display *smpt_sf_wl_ce_dp_p;
+struct wl_compositor *smpt_sf_wl_ce_cot_p;
+struct wl_surface *smpt_sf_wl_ce_sf_p;
 
-void smpt_sf_wlc_set()
+void smpt_sf_wl_ceMset()
 {
-	SMPT_DBmR2L("wl_display_connect %p", smpt_sf_wlc_dp_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
+	SMPT_DBmR2L("wl_display_connect %p", smpt_sf_wl_ce_dp_p = wl_display_connect(getenv("WAYLAND_DISPLAY")))
 
-	smpt_sf_wlc_rgt_set();
+	smpt_sf_wl_ce_rgt_set();
 
-	SMPT_DBmR2L("wl_display_roundtrip %d", wl_display_roundtrip(smpt_sf_wlc_dp_p))
+	SMPT_DBmR2L("wl_display_roundtrip %d", wl_display_roundtrip(smpt_sf_wl_ce_dp_p))
 
-	SMPT_DBmR2L("wl_compositor_create_surface %p", smpt_sf_wlc_sf_p = wl_compositor_create_surface(smpt_sf_wlc_cot_p))
+	SMPT_DBmR2L("wl_compositor_create_surface %p", smpt_sf_wl_ce_sf_p = wl_compositor_create_surface(smpt_sf_wl_ce_cot_p))
 
-	smpt_sf_wlc_xdg_sf_set();
-	smpt_sf_wlc_xdg_tl_set();
+	smpt_sf_wl_ce_xdg_sf_set();
+	smpt_sf_wl_ce_xdg_tl_set();
 
-	wl_surface_commit(smpt_sf_wlc_sf_p);
-	SMPT_DBmR2L("wl_display_dispatch %d", wl_display_dispatch(smpt_sf_wlc_dp_p));
+	wl_surface_commit(smpt_sf_wl_ce_sf_p);
+	SMPT_DBmR2L("wl_display_dispatch %d", wl_display_dispatch(smpt_sf_wl_ce_dp_p));
 
 	//.i loop
 	int r = 0;
@@ -35,29 +35,29 @@ void smpt_sf_wlc_set()
 		}
 		else
 		{
-			r = wl_display_dispatch(smpt_sf_wlc_dp_p);
+			r = wl_display_dispatch(smpt_sf_wl_ce_dp_p);
 		}
 	}
 
-	smpt_sf_wlc_free();
+	smpt_sf_wl_ce_free();
 	SMPT_DBmN2L("r %d", r);
 }
 
-void smpt_sf_wlc_free()
+void smpt_sf_wl_ce_free()
 {
-	smpt_sf_wlcs_free();
+	smpt_sf_wl_ces_free();
 
-	smpt_sf_wlc_xdg_wmb_free();
+	smpt_sf_wl_ce_xdg_wmb_free();
 
-	smpt_sf_wlc_zwp_lp_free();
-	smpt_sf_wlc_zwp_pc_free();
+	smpt_sf_wl_ce_zwp_lp_free();
+	smpt_sf_wl_ce_zwp_pc_free();
 
-	smpt_sf_wlc_zwp_rp_free();
+	smpt_sf_wl_ce_zwp_rp_free();
 
-	wl_surface_destroy(smpt_sf_wlc_sf_p);
-	wl_compositor_destroy(smpt_sf_wlc_cot_p);
+	wl_surface_destroy(smpt_sf_wl_ce_sf_p);
+	wl_compositor_destroy(smpt_sf_wl_ce_cot_p);
 
-	smpt_sf_wlc_rgt_free();
+	smpt_sf_wl_ce_rgt_free();
 
-	wl_display_disconnect(smpt_sf_wlc_dp_p);
+	wl_display_disconnect(smpt_sf_wl_ce_dp_p);
 }

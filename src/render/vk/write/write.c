@@ -18,58 +18,58 @@ static void smpt_rd_vkw_dsts_write(uint32_t device, uint32_t bind, VkDescriptorI
 	// vkUpdateDescriptorSets(smpt_rd_vkq_dv_p[device], 1, &vkwritedescriptorset, 0, VK_NULL_HANDLE);
 }
 
-void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, SMPTRB_MIT ds, uint8_t j, uint8_t mj)
+void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, SMPTRB_MIT ds, uint8_t j, uint8_t mj, uint8_t s)
 {
-	//.i gui/world d
+	//.i bindpose s 1+
 	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)
 	{
-		.buffer = lcp_vkbuffer,
-		.offset = sizeof(float) * 16 * 2,//0
-		.range = sizeof(float) * 16 * 2
-	};
-
-	//.i bindpose s 1+
-	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
-	{
-		.buffer = lcp_vkbuffer,
-		.offset = lcp_vkdevicesize_p[j] - sizeof(float) * 16 * 2,
+		.buffer = smptr_ce_mdPvkbuffer[0],
+		.offset = smptr_ce_mdPvkdevicesize[j] - sizeof(float) * 16 * 2,
 		.range = (mj - 1) * sizeof(float) * 16 * 2
 	};
 
 	//.i src_color s
-	vkdescriptorbufferinfo_p[2] = (VkDescriptorBufferInfo)
+	vkdescriptorbufferinfo_p[1] = (VkDescriptorBufferInfo)
 	{
-		.buffer = lcp_vkbuffer,
-		.offset = NALI_LCP_VP_BL,
+		.buffer = smptr_ce_mdPvkbuffer[0],
+		.offset = 0,
 		.range = lcp_rgba_bl
 	};
 
-	for (uint8_t l_0 = 0; l_0 < smpt_rd_vk_swc_image; ++l_0)
+	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swc_image; ++l0)
 	{
-		//.i animate d
-		vkdescriptorbufferinfo_p[3 + l_0 * 2] = (VkDescriptorBufferInfo)
+		//.i gui/world d
+		vkdescriptorbufferinfo_p[2 + l0 * 3 + 2] = (VkDescriptorBufferInfo)
 		{
-			.buffer = smptr_cemPvkbuffer[l_0 + ds * smpt_rd_vk_swc_image],
+			.buffer = smptr_ce_mdPvkbuffer[s + l0],
+			.offset = 0,
+			.range = sizeof(float) * 16 * 2
+		};
+
+		//.i animate d
+		vkdescriptorbufferinfo_p[2 + l0 * 3] = (VkDescriptorBufferInfo)
+		{
+			.buffer = smptr_cemPvkbuffer[l0 + ds * smpt_rd_vk_swc_image],
 			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
 			.range = mj * sizeof(float) * 4 * 3
 		};
 
 		//.i color d
-		vkdescriptorbufferinfo_p[3 + l_0 * 2 + 1] = (VkDescriptorBufferInfo)
+		vkdescriptorbufferinfo_p[2 + l0 * 3 + 1] = (VkDescriptorBufferInfo)
 		{
-			.buffer = smptr_cemPvkbuffer[l_0 + ds * smpt_rd_vk_swc_image],
+			.buffer = smptr_cemPvkbuffer[l0 + ds * smpt_rd_vk_swc_image],
 			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
 			.range = sizeof(float) * 4
 		};
 
-		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * SMPT_RD_VKW_DSTSLO_L);
+		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 0, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2 + l0 * 3 + 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l0], vkwritedescriptorset_p + l0 * SMPT_RD_VKW_DSTSLO_L);
 
-		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 1, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * SMPT_RD_VKW_DSTSLO_L + 1);
+		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 1, VK_NULL_HANDLE, vkdescriptorbufferinfo_p, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l0], vkwritedescriptorset_p + l0 * SMPT_RD_VKW_DSTSLO_L + 1);
 
-		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3 + l_0 * 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * SMPT_RD_VKW_DSTSLO_L + 2);
+		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 2, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2 + l0 * 3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l0], vkwritedescriptorset_p + l0 * SMPT_RD_VKW_DSTSLO_L + 2);
 
-		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 3, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * SMPT_RD_VKW_DSTSLO_L + 3);
+		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 3, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l0], vkwritedescriptorset_p + l0 * SMPT_RD_VKW_DSTSLO_L + 3);
 
-		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 4, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 3 + l_0 * 2 + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l_0], vkwritedescriptorset_p + l_0 * SMPT_RD_VKW_DSTSLO_L + 4);
+		smpt_rd_vkw_dsts_write(smpt_rd_vk_device, 4, VK_NULL_HANDLE, vkdescriptorbufferinfo_p + 2 + l0 * 3 + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, vkdescriptorset_p[l0], vkwritedescriptorset_p + l0 * SMPT_RD_VKW_DSTSLO_L + 4);
 	}
 }

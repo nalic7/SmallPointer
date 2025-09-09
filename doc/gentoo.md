@@ -44,7 +44,6 @@ make
 make modules_install
 cp arch/x86/boot/bzImage /boot/vmlinuz-6.16.5
 grub-mkconfig -o /boot/grub/grub.cfg
-emerge -a @module-rebuild
 ```
 >Clean Kernel
 ```bash

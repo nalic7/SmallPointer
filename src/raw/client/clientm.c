@@ -159,7 +159,7 @@ void smptr_cemMread()
 
 					++Ldst;
 					Pvkwritedescriptorset = realloc(Pvkwritedescriptorset, SMPT_RD_VKW_DSTSLO_L * smpt_rd_vk_swc_image * Ldst * sizeof(VkWriteDescriptorSet));
-					Pvkdescriptorbufferinfo = realloc(Pvkdescriptorbufferinfo, (3 + 2 * smpt_rd_vk_swc_image * Ldst) * sizeof(VkDescriptorBufferInfo));
+					Pvkdescriptorbufferinfo = realloc(Pvkdescriptorbufferinfo, (2 + 3 * smpt_rd_vk_swc_image * Ldst) * sizeof(VkDescriptorBufferInfo));
 
 					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swc_image; ++l1)
 					{
@@ -167,13 +167,13 @@ void smptr_cemMread()
 					}
 					smpt_rd_vkw_dsts
 					(
-						//! check
 						smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swc_image,
 						Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swc_image,
 						Pvkwritedescriptorset + (Ldst - 1) * smpt_rd_vk_swc_image,
 						l0,
 						m.m < lcp_joint_count_bl ? m.m : 0,
-						m.m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.m]
+						m.m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.m],
+						1 + 1 * smpt_rd_vk_swc_image
 					);
 				#endif
 
@@ -195,7 +195,6 @@ void smptr_cemMread()
 	}
 	//.i update buffer
 	Lm0 = 0;
-	smpt_rd_vk_swc_frame_buffer = (smpt_rd_vk_swc_frame_buffer + 1) % smpt_rd_vk_swc_image;
 	for (SMPTRtMI l0 = 0; l0 < smptrLm; ++l0)
 	{
 		struct SMPTRsM m = smptrPm[l0];
@@ -207,7 +206,7 @@ void smptr_cemMread()
 				*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + l1 * sizeof(float)) = 1.0;
 			}
 			memcpy(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float), lcp_a_p[m.m], lcp_joint_count_p[m.m] * 4 * 3 * sizeof(float));
-//			mv4_q(0, NALI_M_D2R(-45), NALI_M_D2R(-180), smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4);
+//			smptm_v4Mq(0, NALI_M_D2R(-45), NALI_M_D2R(-180), smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4);
 			*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
 			Pvkmappedmemoryrange = realloc(Pvkmappedmemoryrange, sizeof(VkMappedMemoryRange) * (Lm0 + 1));
 			Pvkmappedmemoryrange[Lm0++] = (VkMappedMemoryRange)
@@ -321,7 +320,7 @@ void smptr_cemMfree()
 //		}
 //
 //		//.i apply default view
-//		mv4_q(0, NALI_M_D2R(-45), NALI_M_D2R(-180), lcm_vkbuffer_mp[smpt_rd_vk_swc_frame_buffer + NALI_TEST_ds * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4);
+//		smptm_v4Mq(0, NALI_M_D2R(-45), NALI_M_D2R(-180), lcm_vkbuffer_mp[smpt_rd_vk_swc_frame_buffer + NALI_TEST_ds * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4);
 //		*(float *)(lcm_vkbuffer_mp[smpt_rd_vk_swc_frame_buffer + NALI_TEST_ds * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
 //
 //	//	//.i apply a loop

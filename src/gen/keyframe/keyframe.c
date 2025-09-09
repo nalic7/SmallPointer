@@ -39,7 +39,7 @@ void g_kf_write()
 				r_p[0] = *(float *)(data_p + step + sizeof(float));
 				r_p[1] = *(float *)(data_p + step + sizeof(float) * 2);
 				r_p[2] = *(float *)(data_p + step + sizeof(float) * 3);
-				MV4_qi(r_p, 0)
+				SMPTM_V4mQI(r_p, 0)
 				fwrite(r_p, sizeof(float), 4, file);
 				step += sizeof(float) * 4;
 

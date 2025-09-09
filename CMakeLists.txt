@@ -74,6 +74,7 @@ if(GEN)
 endif()
 
 list(APPEND SOURCES src/raw/raw.c)
+list(APPEND SOURCES src/input/input.c)
 
 if(DRM OR ASURFACE OR WL OR X11)
   list(APPEND SOURCES src/surface/surface.c)
@@ -168,7 +169,7 @@ if(ST STREQUAL "linux")
   if(LIBINPUT)
     list(APPEND TCD SMPT_CM_LIBINPUT)
 
-    file(GLOB_RECURSE G_SOURCES src/libinput/*.c)
+    file(GLOB_RECURSE G_SOURCES src/input/libinput/*.c)
     list(APPEND SOURCES ${G_SOURCES})
 
     list(APPEND TLL

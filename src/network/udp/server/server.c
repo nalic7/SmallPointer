@@ -34,9 +34,9 @@ static socklen_t client_sockaddr_in_bl = sizeof(client_sockaddr_in);
 static ssize_t r;
 void ns_get()
 {
-	r = recvfrom(server_fd, ls_net_p, SMPTRB_NET_BL, 0, (struct sockaddr*)&client_sockaddr_in, &client_sockaddr_in_bl);
+	r = recvfrom(server_fd, ls_net_p, SMPTRlNET, 0, (struct sockaddr*)&client_sockaddr_in, &client_sockaddr_in_bl);
 
-	if (r == sizeof(SMPTRB_PT))
+	if (r == sizeof(SMPTRtNET))
 	{
 		for (SMPTRB_UT l_0 = 0; l_0 < SMPTRB_UM; ++l_0)
 		{
