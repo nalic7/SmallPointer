@@ -7,6 +7,9 @@
 		extern VkBuffer *smptr_cemPvkbuffer;
 	#endif
 
+	extern struct SMPTRsM *smptr_cemPm;
+	extern SMPTRtM smptr_cemLm;
+
 	struct SMPTR_CEMsM1
 	{
 		SMPTRtMI i;

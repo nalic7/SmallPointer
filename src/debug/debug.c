@@ -1,6 +1,19 @@
 static mtx_t *Pmtx_t = &(mtx_t){};
 static FILE *Pfile;
 
+#ifdef SMPT_CM_TEST
+	//.i check in one thread only
+	static int Ierrno = 0;
+	void smpt_dbMerrno()
+	{
+		if (errno != Ierrno)
+		{
+			SMPT_DBmN2L("errno %s", strerror(errno))
+			Ierrno = errno;
+		}
+	}
+#endif
+
 void smpt_dbMset()
 {
 	int l0 = mtx_init(Pmtx_t, mtx_plain);
@@ -18,6 +31,8 @@ void smpt_dbMset()
 	char cwd_p[PATH_MAX];
 	SMPT_DBmN2L("getcwd %d", getcwd(cwd_p, sizeof(cwd_p)))
 	SMPT_DBmN2L("cwd_p %s", cwd_p)
+
+	SMPT_DBmN2L("__BYTE_ORDER %d", __BYTE_ORDER)
 }
 
 void smpt_dbMwrite(const char *format_p, ...)

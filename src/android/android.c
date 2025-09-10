@@ -99,24 +99,24 @@ static uint8_t a_state = 0;
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
 	SMPT_DBmN2L("window %p", window)
-	_sf_width = ANativeWindow_getWidth(window);
-	_sf_height = ANativeWindow_getHeight(window);
+	smpt_sfUwidth = ANativeWindow_getWidth(window);
+	smpt_sfUheight = ANativeWindow_getHeight(window);
 	sa_anativewindow_p = window;
 }
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
 {
 	SMPT_DBmN2L("window resize")
-	_sf_width = ANativeWindow_getWidth(window);
-	_sf_height = ANativeWindow_getHeight(window);
-	_sf_state |= _SF_S_RE;
+	smpt_sfUwidth = ANativeWindow_getWidth(window);
+	smpt_sfUheight = ANativeWindow_getHeight(window);
+	smpt_sfUstate |= SMPT_SFuS_RE;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
 	SMPT_DBmN2L("window 0")
 	sa_anativewindow_p = NULL;
-	_sf_state |= _SF_S_RE;
+	smpt_sfUstate |= SMPT_SFuS_RE;
 }
 
 //static void onConfigurationChanged(ANativeActivity* activity)
@@ -202,8 +202,8 @@ void sa_wait()
 //		vk_makeDevice(smpt_rd_vk_device);
 //		vk_getQueue(smpt_rd_vk_device);
 
-//		m_surface_state |= _SF_S_EXIT;
-		_sf_state |= _SF_S_RE;
+//		m_surface_state |= SMPT_SFuS_EXIT;
+		smpt_sfUstate |= SMPT_SFuS_RE;
 		a_state &= 0xFFu - A_STATE_WAIT;
 	}
 }

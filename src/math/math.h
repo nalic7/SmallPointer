@@ -33,9 +33,6 @@
 #define NALI_M_H3Y(hi, m) (hi / m) % m
 #define NALI_M_H3Z(hi, m) hi % m
 
-//network
-#define NALI_M_IP(a, b, c, d) a << 24 | b << 16 | c << 8 | d
-
 //view
 
 //908 ~ 3422

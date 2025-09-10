@@ -1,13 +1,29 @@
+struct SMPTR_SVtNET smptr_svPnet[SMPT_NWuU];
+
 void smptr_svMset()
 {
 	smptr_svuMset();
 	smptr_svmMset();
+
+	ns_set();
+
 	SMPT_DBmR2L("thrd_create %d", thrd_create(&(thrd_t){}, smptr_svMloop, NULL))
+}
+
+void smptr_svMsend(SMPT_NWtU u)
+{
+//	SMPT_DBmN2L("S u %d", u)
+//	SMPT_DBmN2L("S smptr_svPnet[u].Lnet %d", smptr_svPnet[u].Lnet)
+	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)smptr_svPnet[u].Pnet);
+	smptr_svPnet[u].Lnet = sizeof(struct timespec);
+	smptr_svmMsend(u);
+//	SMPT_DBmN2L("S smptr_svPnet[u].Lnet %d", smptr_svPnet[u].Lnet)
 }
 
 void smptr_svMread()
 {
 	smptr_svuMread();
+	//get u from ns
 }
 
 int smptr_svMloop(void *P)
@@ -16,11 +32,21 @@ int smptr_svMloop(void *P)
 	struct timespec Stsp_s, Stsp_e, Stsp_n = {0};
 	double Dn;
 	clock_gettime(CLOCK_MONOTONIC, &Stsp_s);
-	while (!(_sf_state & _SF_S_EXIT))
+	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
 	{
-		smptr_svMread();
+		#ifdef SMPT_CM_UDP
+			ns_get();
+		#endif
 
 		smptr_svmMloop();
+
+		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWuU; ++l0)
+		{
+			#ifdef SMPT_CM_UDP
+				ns_send(l0);
+			#endif
+		}
+
 		if (++Urw == SMPTRuRW)
 		{
 			clock_gettime(CLOCK_MONOTONIC, &Stsp_e);
@@ -37,17 +63,19 @@ int smptr_svMloop(void *P)
 			clock_gettime(CLOCK_MONOTONIC, &Stsp_s);
 		}
 	}
-	_sf_state |= _SF_S_EXIT_SERVER;
+	smpt_sfUstate |= SMPT_SFuS_EXIT_SERVER;
 	return 0;
 }
 
 void smptr_svMfree()
 {
-	while (!(_sf_state & _SF_S_EXIT_SERVER))
+	while (!(smpt_sfUstate & SMPT_SFuS_EXIT_SERVER))
 	{
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 
 	smptr_svmMfree();
 	smptr_svuMfree();
+
+	ns_free();
 }

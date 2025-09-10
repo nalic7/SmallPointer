@@ -6,5 +6,5 @@ emerge -qa \
 	media-libs/vulkan-layers \
 	gui-wm/hyprland x11-terms/kitty \
 	app-editors/vim app-misc/screen \
-	dev-util/android-sdk-build-tools dev-util/android-tools app-arch/zip app-arch/unzip \
+	app-arch/zip app-arch/unzip \
 	net-wireless/iwd net-wireless/bluez net-vpn/wireguard-tools

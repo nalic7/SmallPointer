@@ -21,15 +21,15 @@ void smpt_sf_wl_ceMset()
 	//.i loop
 	int r = 0;
 
-	while (!(_sf_state & _SF_S_RENDER))
+	while (!(smpt_sfUstate & SMPT_SFuS_RENDER))
 	{
-		SMPT_DBmN2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
-		SMPT_DBmN2L("_sf_state %d", _sf_state)
+		SMPT_DBmR2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+		SMPT_DBmN2L("smpt_sfUstate %d", smpt_sfUstate)
 	}
 
 	while (r != INT_MAX)
 	{
-		if (_sf_state & _SF_S_EXIT)
+		if (smpt_sfUstate & SMPT_SFuS_EXIT)
 		{
 			r = INT_MAX;
 		}

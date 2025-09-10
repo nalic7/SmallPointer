@@ -7,7 +7,11 @@
 			{ \
 				exit(EXIT_FAILURE); \
 			}
+
+		#define SMPTTmE smpt_dbMerrno();
 	#else
 		#define SMPTTmP(d_bl, l_bl)
+
+		#define SMPTTmE
 	#endif
 #endif

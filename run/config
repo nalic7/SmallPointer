@@ -12,7 +12,6 @@ sed -i '/set(GEN 1)/c\#set(GEN 1)' $F
 sed -i '/set(CLIENT 1)/c\#set(CLIENT 1)' $F
 sed -i '/set(SERVER 1)/c\#set(SERVER 1)' $F
 sed -i '/set(FFMPEG 1)/c\#set(FFMPEG 1)' $F
-sed -i '/set(RAW 1)/c\#set(RAW 1)' $F
 sed -i '/set(UDP 1)/c\#set(UDP 1)' $F
 sed -i '/set(TCP 1)/c\#set(TCP 1)' $F
 sed -i '/set(PIPEWIRE 1)/c\#set(PIPEWIRE 1)' $F

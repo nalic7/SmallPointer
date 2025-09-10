@@ -14,5 +14,5 @@
 	#define SMPT_IPuKEY_SPACE 1
 	#define SMPT_IPuKEY_LEFT_SHIFT 2
 
-	extern uint8_t smpt_ipPk[2];
+	extern uint8_t smpt_ipPs[2];
 #endif

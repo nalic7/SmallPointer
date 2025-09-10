@@ -35,6 +35,9 @@
 		X(POMI_TEA, "SuperCutePomi1.glb", 1) \
 		X(POMI_CAFE, "SuperCutePomi0.glb", 1)
 
+	#define SMPTRnMK \
+		X(POMI_WALK_LOOP, 0, 3, 5)
+
 	enum SMPTReMA
 	{
 		#define X(v, n, b) SMPTReMA_##v,
@@ -51,8 +54,18 @@
 		SMPTReMc
 	};
 
-	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
+	enum SMPTReMK
+	{
+		#define X(v, k0, k1, k2) SMPTReMK_##v,
+			SMPTRnMK
+		#undef X
+		SMPTReMKc
+	};
 
+	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
+	extern const SMPTRtMK smptrPmk[SMPTReMKc][3];
+
+	//! t r data
 	struct SMPTRsM
 	{
 		//.i client always get same size as server
@@ -66,8 +79,6 @@
 		uint8_t l;
 		SMPTRtMA *Pa;
 	};
-	extern struct SMPTRsM *smptrPm;
-	extern SMPTRtM smptrLm;
 
 	//.c server read/write
 	#define SMPTRuRW 20
@@ -76,13 +87,6 @@
 	#define SMPTRtNET uint8_t
 	#define SMPTRlNET 255
 
-
-	//.c max connect
-	#define SMPTRB_UM 1
-	//.c max connect type
-	#define SMPTRB_UT uint8_t
-	//.i void user
-	#define SMPTRB_UN 255
 
 	//.i animation
 	#define SMPTRB_AKIT uint8_t

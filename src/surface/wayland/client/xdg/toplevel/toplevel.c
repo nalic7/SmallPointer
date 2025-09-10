@@ -2,13 +2,13 @@ struct xdg_toplevel *smpt_sf_wl_ce_xdg_tl_p;
 
 static void xdg_toplevel_listener_configure(void *data, struct xdg_toplevel *_xdg_toplevel, int32_t width, int32_t height, struct wl_array *states)
 {
-	if (_sf_width != width || _sf_height != height)
+	if (smpt_sfUwidth != width || smpt_sfUheight != height)
 	{
 		wl_surface_commit(smpt_sf_wl_ce_sf_p);
 
-		_sf_width = width;
-		_sf_height = height;
-		_sf_state |= _SF_S_RE;
+		smpt_sfUwidth = width;
+		smpt_sfUheight = height;
+		smpt_sfUstate |= SMPT_SFuS_RE;
 	}
 }
 

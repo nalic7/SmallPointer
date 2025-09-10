@@ -12,6 +12,9 @@
 	static VkMappedMemoryRange *Pvkmappedmemoryrange;
 #endif
 
+struct SMPTRsM *smptr_cemPm;
+SMPTRtM smptr_cemLm = 0;
+
 struct SMPTR_CEMsM0
 {
 	SMPTRtM m;
@@ -25,6 +28,8 @@ uint32_t smptr_cemLm1 = 0;
 
 void smptr_cemMset()
 {
+	smptr_cemPm = malloc(0);
+
 	smptr_cemPm1 = malloc(0);
 
 	#ifdef SMPT_CM_VK
@@ -45,52 +50,61 @@ void smptr_cemMset()
 static SMPTRtMI Lm0 = 0;
 void smptr_cemMread()
 {
-	#ifndef SMPT_CM_RAW
-		SMPTRtMI count = *(SMPTRtMI *)smptr_cePnet;
-		smptr_ceLnet += sizeof(SMPTRtMI);
-
-		for (SMPTRtMI l0 = 0; l0 < count; ++l0)
+	//.i get data
+	SMPTRtMI Ucount = *(SMPTRtMI *)(smptr_cePnet + smptr_ceLnet);
+	for (SMPTRtMI l0 = Ucount; l0 < smptr_cemLm; ++l0)
+	{
+		if (smptr_cemPm[l0].m != SMPTRvM)
 		{
-			SMPTRtMI mi = *(SMPTRtMI *)smptr_cePnet;
-			smptr_ceLnet += sizeof(SMPTRtMI);
+			free(smptr_cemPm[l0].Pa);
+		}
+	}
+	smptr_cemLm = Ucount;
+	smptr_cemPm = realloc(smptr_cemPm, sizeof(struct SMPTRsM) * smptr_cemLm);
+	smptr_ceLnet += sizeof(SMPTRtMI);
 
-			uint8_t l = *(uint8_t *)smptr_cePnet;
+	for (SMPTRtMI l0 = 0; l0 < Ucount; ++l0)
+	{
+		struct SMPTRsM *Pm = smptr_cemPm + l0;
+
+		Pm->m = *(SMPTRtM *)(smptr_cePnet + smptr_ceLnet);
+		smptr_ceLnet += sizeof(SMPTRtM);
+		if (Pm->m != SMPTRvM)
+		{
+			Pm->l = *(uint8_t *)(smptr_cePnet + smptr_ceLnet);
 			smptr_ceLnet += sizeof(uint8_t);
 
-			SMPTRtMA maP[l];
-			memcpy(maP, smptr_cePnet + smptr_ceLnet, sizeof(SMPTRtMA) * l);
-			smptr_ceLnet += sizeof(SMPTRtMA) * l;
+			Pm->Pa = malloc(sizeof(SMPTRtMA) * Pm->l);
+			memcpy(Pm->Pa, smptr_cePnet + smptr_ceLnet, sizeof(SMPTRtMA) * Pm->l);
+			smptr_ceLnet += sizeof(SMPTRtMA) * Pm->l;
 
-			//.i if > ma -> mb ++
-			//.i add m
-			for (uint8_t l1 = 0; l1 < l; ++l1)
-			{
-				++smptrLm;
-				smptrPm = realloc(smptrPm, sizeof(SMPTRsM) * smptrLm);
-				smptrPm[l0] = ;
-			}
+			Pm->k = *(SMPTRtMK *)(smptr_cePnet + smptr_ceLnet);
+			smptr_ceLnet += sizeof(SMPTRtMK);
+
+			Pm->t = *(SMPTRtMT *)(smptr_cePnet + smptr_ceLnet);
+			smptr_ceLnet += sizeof(SMPTRtMT);
 		}
-	#endif
+	}
 
 	//.i clean m0
 	#ifdef SMPT_CM_VK
 		VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
 
-		if (smptrLm < Lm0)
+		if (smptr_cemLm < Lm0)
 		{
-			vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, (Lm0 - smptrLm) * smpt_rd_vk_swc_image, smptr_cemPvkdescriptorset + smptrLm * smpt_rd_vk_swc_image);
-			for (SMPTRtMI l0 = smptrLm * smpt_rd_vk_swc_image; l0 < Lm0 * smpt_rd_vk_swc_image; ++l0)
+			vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, (Lm0 - smptr_cemLm) * smpt_rd_vk_swc_image, smptr_cemPvkdescriptorset + smptr_cemLm * smpt_rd_vk_swc_image);
+			for (SMPTRtMI l0 = smptr_cemLm * smpt_rd_vk_swc_image; l0 < Lm0 * smpt_rd_vk_swc_image; ++l0)
 			{
 				vkUnmapMemory(vkdevice, Pvkdevicememory[l0]);
 				vkDestroyBuffer(vkdevice, smptr_cemPvkbuffer[l0], VK_NULL_HANDLE);
 				vkFreeMemory(vkdevice, Pvkdevicememory[l0], VK_NULL_HANDLE);
 			}
 		}
-		smptr_cemPvkdescriptorset = realloc(smptr_cemPvkdescriptorset, sizeof(VkDescriptorSet) * smpt_rd_vk_swc_image * smptrLm);
-		smptr_cemPvkbuffer = realloc(smptr_cemPvkbuffer, sizeof(VkBuffer) * smpt_rd_vk_swc_image * smptrLm);
-		smptr_cemPbuffer_map = realloc(smptr_cemPbuffer_map, sizeof(void *) * smpt_rd_vk_swc_image * smptrLm);
-		Pvkdevicememory = realloc(Pvkdevicememory, sizeof(VkDeviceMemory) * smpt_rd_vk_swc_image * smptrLm);
-		for (SMPTRtMI l0 = Lm0 * smpt_rd_vk_swc_image; l0 < smptrLm * smpt_rd_vk_swc_image; ++l0)
+		smptr_cemPvkdescriptorset = realloc(smptr_cemPvkdescriptorset, sizeof(VkDescriptorSet) * smpt_rd_vk_swc_image * smptr_cemLm);
+		smptr_cemPvkbuffer = realloc(smptr_cemPvkbuffer, sizeof(VkBuffer) * smpt_rd_vk_swc_image * smptr_cemLm);
+		smptr_cemPbuffer_map = realloc(smptr_cemPbuffer_map, sizeof(void *) * smpt_rd_vk_swc_image * smptr_cemLm);
+		Pvkdevicememory = realloc(Pvkdevicememory, sizeof(VkDeviceMemory) * smpt_rd_vk_swc_image * smptr_cemLm);
+		for (SMPTRtMI l0 = Lm0 * smpt_rd_vk_swc_image; l0 < smptr_cemLm * smpt_rd_vk_swc_image; ++l0)
 			smptr_cemPvkdescriptorset[l0] = 0;
 
 		Pvkdescriptorbufferinfo = realloc(Pvkdescriptorbufferinfo, 0);
@@ -99,9 +113,9 @@ void smptr_cemMread()
 
 	//.i update m
 	smptr_cemLm1 = 0;
-	for (SMPTRtMI l0 = 0; l0 < smptrLm; ++l0)
+	for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
 	{
-		struct SMPTRsM m = smptrPm[l0];
+		struct SMPTRsM m = smptr_cemPm[l0];
 		if (m.m == SMPTRvM)
 		{
 			if (smptr_cemPvkdescriptorset[l0])
@@ -193,11 +207,12 @@ void smptr_cemMread()
 			smptr_cemLm1 += m.l;
 		}
 	}
+	//! find depth
 	//.i update buffer
 	Lm0 = 0;
-	for (SMPTRtMI l0 = 0; l0 < smptrLm; ++l0)
+	for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
 	{
-		struct SMPTRsM m = smptrPm[l0];
+		struct SMPTRsM m = smptr_cemPm[l0];
 
 		if (m.m != SMPTRvM)
 		{
@@ -220,7 +235,7 @@ void smptr_cemMread()
 		}
 	}
 	vkFlushMappedMemoryRanges(vkdevice, Lm0, Pvkmappedmemoryrange);
-	Lm0 = smptrLm;
+	Lm0 = smptr_cemLm;
 	#ifdef SMPT_CM_VK
 		vkUpdateDescriptorSets(vkdevice, SMPT_RD_VKW_DSTSLO_L * smpt_rd_vk_swc_image * Ldst, Pvkwritedescriptorset, 0, VK_NULL_HANDLE);
 		Ldst = 0;
@@ -233,7 +248,7 @@ void smptr_cemMread()
 	smptr_cemLm1 = 0;
 	for (SMPTRtMI l0 = 0; l0 < Lm0; ++l0)
 	{
-		struct SMPTRsM m = smptrPm[l0];
+		struct SMPTRsM m = smptr_cemPm[l0];
 		if (m.m != SMPTRvM)
 			for (uint8_t l1 = 0; l1 < m.l; ++l1)
 			{
@@ -259,7 +274,12 @@ void smptr_cemMfree()
 		free(Pvkdescriptorbufferinfo);
 		free(Pvkwritedescriptorset);
 
-		vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, Lm0 * smpt_rd_vk_swc_image, smptr_cemPvkdescriptorset);
+		for (SMPTRtMI l0 = 0; l0 < Lm0; ++l0)
+		{
+			struct SMPTRsM m = smptr_cemPm[l0];
+			if (m.m != SMPTRvM)
+				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, smpt_rd_vk_swc_image, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swc_image);
+		}
 		for (SMPTRtMI l0 = 0; l0 < Lm0 * smpt_rd_vk_swc_image; ++l0)
 		{
 			vkUnmapMemory(vkdevice, Pvkdevicememory[l0]);
@@ -274,6 +294,15 @@ void smptr_cemMfree()
 	#endif
 
 	free(smptr_cemPm1);
+
+	for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
+	{
+		if (smptr_cemPm[l0].m != SMPTRvM)
+		{
+			free(smptr_cemPm[l0].Pa);
+		}
+	}
+	free(smptr_cemPm);
 }
 //	//! use atom to all flush
 //	//! avoid flush if able

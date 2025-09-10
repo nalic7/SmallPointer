@@ -2,6 +2,10 @@
 	#define SMPThDB
 
 	#ifdef SMPT_CM_DEBUG
+		#ifdef SMPT_CM_TEST
+			void smpt_dbMerrno();
+		#endif
+
 		void smpt_dbMset();
 		void smpt_dbMwrite(const char *format_p, ...);
 		void smpt_dbMfree();

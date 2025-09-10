@@ -219,7 +219,7 @@ static void re_sc()
 
 	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swc_image; ++l0)
 	{
-		SMPTM_M4X4mP(tanf(90.0F * (M_PI / 180.0F) / 2.0F), _sf_width / _sf_height, 0.1F, 100.0F, (float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swc_image + l0] + sizeof(float) * 16))
+		SMPTM_M4X4mP(tanf(90.0F * (M_PI / 180.0F) / 2.0F), smpt_sfUwidth / smpt_sfUheight, 0.1F, 100.0F, (float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swc_image + l0] + sizeof(float) * 16))
 	}
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
@@ -237,18 +237,22 @@ static void re_sc()
 		.size = sizeof(float) * 16,
 		.pNext = VK_NULL_HANDLE
 	});
-	_sf_state &= 0xFFu - _SF_S_RE;
+	smpt_sfUstate &= 0xFFu - SMPT_SFuS_RE;
 }
 
 int smpt_rd_vk_cmd_loop(void *p)
 {
 	lb_free0();
 
-	_sf_state |= _SF_S_RENDER;
-	while (!(_sf_state & _SF_S_EXIT))
+	smpt_sfUstate |= SMPT_SFuS_RENDER;
+	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
 	{
+		//.i logic
 		smptr_ceuMloop();
-		smptr_ceMread();
+		#ifdef SMPT_CM_UDP
+			nc_get();
+			nc_send();
+		#endif
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);
@@ -260,7 +264,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 
 		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[smpt_rd_vk_swc_frame] + 1;
 
-		if (_sf_state & _SF_S_RE)
+		if (smpt_sfUstate & SMPT_SFuS_RE)
 		{
 			re_sc();
 		}
@@ -337,7 +341,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 
 		smpt_rd_vk_swc_frame = (smpt_rd_vk_swc_frame + 1) % smpt_rd_vk_swc_image;
 	}
-	_sf_state |= _SF_S_EXIT_RENDER;
+	smpt_sfUstate |= SMPT_SFuS_EXIT_RENDER;
 
 	return 0;
 }

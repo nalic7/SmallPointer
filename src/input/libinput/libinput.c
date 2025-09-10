@@ -50,7 +50,7 @@ void smpt_ip_lipMloop()
 				struct libinput_device *Pdv = libinput_event_get_device(Pev);
 				if (libinput_device_config_dwt_is_available(Pdv))
 				{
-					SMPT_DBmR2L("libinput_device_config_dwt_set_enabled %p", libinput_device_config_dwt_set_enabled(Pdv, LIBINPUT_CONFIG_DWT_DISABLED))
+					SMPT_DBmR2L("libinput_device_config_dwt_set_enabled %d", libinput_device_config_dwt_set_enabled(Pdv, LIBINPUT_CONFIG_DWT_DISABLED))
 					state_main |= 1;
 				}
 			}
@@ -61,7 +61,7 @@ void smpt_ip_lipMloop()
 	double Dx = 0;
 	double Dy = 0;
 
-	while (!(_sf_state & _SF_S_EXIT))
+	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
 	{
 		libinput_dispatch(Plip);
 
@@ -86,32 +86,32 @@ void smpt_ip_lipMloop()
 					if (state == LIBINPUT_KEY_STATE_PRESSED)
 					{
 						if (key == KEY_A)
-							smpt_ipPk[0] |= SMPT_IPuKEY_A;
+							smpt_ipPs[0] |= SMPT_IPuKEY_A;
 						if (key == KEY_D)
-							smpt_ipPk[0] |= SMPT_IPuKEY_D;
+							smpt_ipPs[0] |= SMPT_IPuKEY_D;
 						if (key == KEY_W)
-							smpt_ipPk[0] |= SMPT_IPuKEY_W;
+							smpt_ipPs[0] |= SMPT_IPuKEY_W;
 						if (key == KEY_S)
-							smpt_ipPk[0] |= SMPT_IPuKEY_S;
+							smpt_ipPs[0] |= SMPT_IPuKEY_S;
 						if (key == KEY_SPACE)
-							smpt_ipPk[1] |= SMPT_IPuKEY_SPACE;
+							smpt_ipPs[1] |= SMPT_IPuKEY_SPACE;
 						if (key == KEY_LEFTSHIFT)
-							smpt_ipPk[1] |= SMPT_IPuKEY_LEFT_SHIFT;
+							smpt_ipPs[1] |= SMPT_IPuKEY_LEFT_SHIFT;
 					}
 					else
 					{
 						if (key == KEY_A)
-							smpt_ipPk[0] &= 255 - SMPT_IPuKEY_A;
+							smpt_ipPs[0] &= 255 - SMPT_IPuKEY_A;
 						if (key == KEY_D)
-							smpt_ipPk[0] &= 255 - SMPT_IPuKEY_D;
+							smpt_ipPs[0] &= 255 - SMPT_IPuKEY_D;
 						if (key == KEY_W)
-							smpt_ipPk[0] &= 255 - SMPT_IPuKEY_W;
+							smpt_ipPs[0] &= 255 - SMPT_IPuKEY_W;
 						if (key == KEY_S)
-							smpt_ipPk[0] &= 255 - SMPT_IPuKEY_S;
+							smpt_ipPs[0] &= 255 - SMPT_IPuKEY_S;
 						if (key == KEY_SPACE)
-							smpt_ipPk[1] &= 255 - SMPT_IPuKEY_SPACE;
+							smpt_ipPs[1] &= 255 - SMPT_IPuKEY_SPACE;
 						if (key == KEY_LEFTSHIFT)
-							smpt_ipPk[1] &= 255 - SMPT_IPuKEY_LEFT_SHIFT;
+							smpt_ipPs[1] &= 255 - SMPT_IPuKEY_LEFT_SHIFT;
 					}
 					break;
 
@@ -122,13 +122,13 @@ void smpt_ip_lipMloop()
 					//SMPT_DBmN2L("libinput_event_pointer_get_dx %f", dx)
 					//SMPT_DBmN2L("libinput_event_pointer_get_dy %f", dy)
 					if (Dx > 0)
-						smpt_ipPk[0] |= SMPT_IPuPOINT_PX;
+						smpt_ipPs[0] |= SMPT_IPuPOINT_PX;
 					if (Dx < 0)
-						smpt_ipPk[0] |= SMPT_IPuPOINT_NX;
+						smpt_ipPs[0] |= SMPT_IPuPOINT_NX;
 					if (Dy > 0)
-						smpt_ipPk[0] |= SMPT_IPuPOINT_PY;
+						smpt_ipPs[0] |= SMPT_IPuPOINT_PY;
 					if (Dy < 0)
-						smpt_ipPk[0] |= SMPT_IPuPOINT_NY;
+						smpt_ipPs[0] |= SMPT_IPuPOINT_NY;
 					break;
 //				case LIBINPUT_EVENT_GESTURE_HOLD_BEGIN:
 //					Pevgt = libinput_event_get_gesture_event(Pev);
@@ -136,7 +136,7 @@ void smpt_ip_lipMloop()
 //					//SMPT_DBmN2L("libinput_event_gesture_get_finger_count %d", Ifinger)
 //					if (Ifinger == 1)
 //					{
-//						smpt_ipPk[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
+//						smpt_ipPs[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
 //					}
 //					break;
 //				case LIBINPUT_EVENT_GESTURE_HOLD_END:
@@ -145,7 +145,7 @@ void smpt_ip_lipMloop()
 //					//SMPT_DBmN2L("libinput_event_gesture_get_finger_count %d", Ifinger)
 //					if (Ifinger == 1)
 //					{
-//						smpt_ipPk[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
+//						smpt_ipPs[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
 //					}
 //					break;
 				case LIBINPUT_EVENT_POINTER_BUTTON:

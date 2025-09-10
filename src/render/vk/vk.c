@@ -156,7 +156,7 @@ void smpt_rd_vk_set()
 
 	smpt_rd_vk_swc_make(smpt_rd_vkq_max_queue_surface_p[smpt_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 
-	while (!(_sf_state & _SF_S_RAW))
+	while (!(smpt_sfUstate & SMPT_SFuS_RAW))
 	{
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}

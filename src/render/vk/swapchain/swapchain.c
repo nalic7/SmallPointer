@@ -61,15 +61,15 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 //	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	if (vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	{
-		smpt_rd_vk_swc_et2d.width = _sf_height;
-		smpt_rd_vk_swc_et2d.height = _sf_width;
+		smpt_rd_vk_swc_et2d.width = smpt_sfUheight;
+		smpt_rd_vk_swc_et2d.height = smpt_sfUwidth;
 //		m_width = smpt_rd_vk_swc_et2d.width;
 //		m_height = smpt_rd_vk_swc_et2d.height;
 	}
 	else
 	{
-		smpt_rd_vk_swc_et2d.height = _sf_height;
-		smpt_rd_vk_swc_et2d.width = _sf_width;
+		smpt_rd_vk_swc_et2d.height = smpt_sfUheight;
+		smpt_rd_vk_swc_et2d.width = smpt_sfUwidth;
 	}
 
 ////	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR)

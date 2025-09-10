@@ -20,20 +20,20 @@ static float
 	q2_m4x4_array[16];
 void smptr_ceuMloop()
 {
-	if (smpt_ipPk[1] & SMPT_IPuKEY_SPACE)
+	if (smpt_ipPs[1] & SMPT_IPuKEY_SPACE)
 		smptr_ceuPt[1] -= 2 * Ddelta;
-	if (smpt_ipPk[1] & SMPT_IPuKEY_LEFT_SHIFT)
+	if (smpt_ipPs[1] & SMPT_IPuKEY_LEFT_SHIFT)
 		smptr_ceuPt[1] += 2 * Ddelta;
 
-	if (smpt_ipPk[0] & SMPT_IPuPOINT_PX)
+	if (smpt_ipPs[0] & SMPT_IPuPOINT_PX)
 		smptr_ceuPr[1] += 2.5 * Ddelta;
-	if (smpt_ipPk[0] & SMPT_IPuPOINT_NX)
+	if (smpt_ipPs[0] & SMPT_IPuPOINT_NX)
 		smptr_ceuPr[1] -= 2.5 * Ddelta;
-	if (smpt_ipPk[0] & SMPT_IPuPOINT_PY)
+	if (smpt_ipPs[0] & SMPT_IPuPOINT_PY)
 		smptr_ceuPr[0] += 2.5 * Ddelta;
-	if (smpt_ipPk[0] & SMPT_IPuPOINT_NY)
+	if (smpt_ipPs[0] & SMPT_IPuPOINT_NY)
 		smptr_ceuPr[0] -= 2.5 * Ddelta;
-	smpt_ipPk[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
+	smpt_ipPs[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
 
 	if (smptr_ceuPr[0] > NALI_M_D2R(90.0F))
 	{
@@ -50,13 +50,13 @@ void smptr_ceuMloop()
 		lb_u_update(smptr_ce_mdPbuffer_map[1 + smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer], smptr_ceuPr[1], Pr, q0_m4x4_array, q1_m4x4_array);
 
 		//.i fix t
-		if (smpt_ipPk[0] & SMPT_IPuKEY_A)
+		if (smpt_ipPs[0] & SMPT_IPuKEY_A)
 			Pr[0] -= 2 * Ddelta;
-		if (smpt_ipPk[0] & SMPT_IPuKEY_D)
+		if (smpt_ipPs[0] & SMPT_IPuKEY_D)
 			Pr[0] += 2 * Ddelta;
-		if (smpt_ipPk[0] & SMPT_IPuKEY_W)
+		if (smpt_ipPs[0] & SMPT_IPuKEY_W)
 			Pr[2] += 2 * Ddelta;
-		if (smpt_ipPk[0] & SMPT_IPuKEY_S)
+		if (smpt_ipPs[0] & SMPT_IPuKEY_S)
 			Pr[2] -= 2 * Ddelta;
 		Pr[3] = 0;
 		smptm_v4Mm4(smptr_ce_mdPbuffer_map[1 + smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer], Pr, q1_m4x4_array);

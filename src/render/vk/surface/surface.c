@@ -5,7 +5,7 @@ void smpt_rd_vk_sf_make()
 	#ifdef SMPT_CM_ST_ANDROID
 		while (sa_anativewindow_p == NULL)
 		{
-			SMPT_DBmN2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
+			SMPT_DBmR2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
 		}
 		SMPT_DBmR2L
 		(
@@ -47,10 +47,10 @@ void smpt_rd_vk_sf_make()
 				SMPT_DBmN2L("hieght %d", vkdisplaymodepropertieskhr_p[l_0].parameters.visibleRegion.height)
 				SMPT_DBmN2L("refreshRate %d", vkdisplaymodepropertieskhr_p[l_0].parameters.refreshRate)
 			}
-			_sf_width = vkdisplaymodepropertieskhr_p[0].parameters.visibleRegion.width;
-			_sf_height = vkdisplaymodepropertieskhr_p[0].parameters.visibleRegion.height;
+			smpt_sfUwidth = vkdisplaymodepropertieskhr_p[0].parameters.visibleRegion.width;
+			smpt_sfUheight = vkdisplaymodepropertieskhr_p[0].parameters.visibleRegion.height;
 			//.i project m4x4
-			_sf_state |= _SF_S_RE;
+			smpt_sfUstate |= SMPT_SFuS_RE;
 
 			uint32_t plane_count = 0;
 			SMPT_DBmR2L("vkGetPhysicalDeviceDisplayPlanePropertiesKHR %d", vkGetPhysicalDeviceDisplayPlanePropertiesKHR(smpt_rd_vkq_dv_pscdv_p[smpt_rd_vk_device], &plane_count, VK_NULL_HANDLE))

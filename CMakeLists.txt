@@ -13,7 +13,7 @@ set(DRM 1)
 #set(X11 1)
 
 #//.i run
-set(GEN 1)
+#set(GEN 1)
 set(CLIENT 1)
 set(SERVER 1)
 
@@ -21,8 +21,7 @@ set(SERVER 1)
 #set(FFMPEG 1)
 
 #//.i network protocol
-set(RAW 1)
-#set(UDP 1)
+set(UDP 1)
 #set(TCP 1)
 
 #//.i audio
@@ -41,7 +40,7 @@ set(LIBINPUT 1)
 #set(X11INPUT 1)
 #set(AINPUT 1)
 
-#set(TEST 1)
+set(TEST 1)
 set(DEBUG 1)
 
 set(PN SmallPointer)
@@ -75,6 +74,7 @@ endif()
 
 list(APPEND SOURCES src/raw/raw.c)
 list(APPEND SOURCES src/input/input.c)
+list(APPEND SOURCES src/network/network.c)
 
 if(DRM OR ASURFACE OR WL OR X11)
   list(APPEND SOURCES src/surface/surface.c)
@@ -121,23 +121,23 @@ if(FFMPEG)
   list(APPEND SOURCES src/ffmpeg/ffmpeg.c)
 endif()
 
-if(RAW)
-  list(APPEND TCD SMPT_CM_RAW)
-elseif(UDP)
+if(UDP)
   list(APPEND TCD SMPT_CM_UDP)
 
   if(CLIENT)
-    list(APPEND SOURCES src/network/udp/client.c)
-  elseif(SERVER)
-    list(APPEND SOURCES src/network/udp/server.c)
+    list(APPEND SOURCES src/network/udp/client/client.c)
+  endif()
+  if(SERVER)
+    list(APPEND SOURCES src/network/udp/server/server.c)
   endif()
 elseif(TCP)
   list(APPEND TCD SMPT_CM_TCP)
 
   if(CLIENT)
-    list(APPEND SOURCES src/network/tcp/client.c)
-  elseif(SERVER)
-    list(APPEND SOURCES src/network/tcp/server.c)
+    list(APPEND SOURCES src/network/tcp/client/client.c)
+  endif()
+  if(SERVER)
+    list(APPEND SOURCES src/network/tcp/server/server.c)
   endif()
 endif()
 

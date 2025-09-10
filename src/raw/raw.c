@@ -7,16 +7,17 @@ const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc] =
 		SMPTRnM
 	#undef X
 };
-
-struct SMPTRsM *smptrPm;
-SMPTRtM smptrLm = 0;
+const SMPTRtMK smptrPmk[SMPTReMKc][3] =
+{
+	#define X(v, k0, k1, k2) {k0, k1, k2},
+		SMPTRnMK
+	#undef X
+};
 
 struct SMPTRsCACHE *smptrPcache;
 
 void lb_set()
 {
-	smptrPm = malloc(0);
-
 	smptrPcache = malloc(sizeof(struct SMPTRsCACHE));
 	smptrPcache->d_bl_p = malloc(sizeof(uint32_t) * 2);
 	smptrPcache->d_bl_p[1] = 0;
@@ -49,7 +50,7 @@ void lb_free0()
 void lb_free1()
 {
 	#if SMPT_CM_DRM || SMPT_CM_ASURFACE || SMPT_CM_WL || SMPT_CM_X11
-		_sf_state |= _SF_S_EXIT;
+		smpt_sfUstate |= SMPT_SFuS_EXIT;
 	#endif
 
 	#ifdef SMPT_CM_SERVER
@@ -59,7 +60,6 @@ void lb_free1()
 	#ifdef SMPT_CM_CLIENT
 		smptr_ceMfree(smpt_rd_vk_device);
 	#endif
-	free(smptrPm);
 
 	//! switch to pipewire
 	// al_clean();

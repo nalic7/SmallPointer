@@ -6,6 +6,7 @@
 		#include <jvmti.h>
 	#endif
 
+	#include <errno.h>
 	#include <unistd.h>
 	#include <math.h>
 	#include <stdint.h>
@@ -16,6 +17,7 @@
 	#include <threads.h>
 	#include <string.h>
 
+	#include "network/network.h"
 	#include "input/input.h"
 	#include "raw/raw.h"
 
@@ -159,7 +161,6 @@
 
 	#if SMPT_CM_CLIENT || SMPT_CM_SERVER
 		#include <fcntl.h>
-//		#include <errno.h>
 //		#include <arpa/inet.h>
 //		#include <sys/socket.h>
 		#include <netinet/in.h>

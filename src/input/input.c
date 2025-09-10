@@ -1,1 +1,1 @@
-uint8_t smpt_ipPk[2] = {0};
+uint8_t smpt_ipPs[2] = {0};
