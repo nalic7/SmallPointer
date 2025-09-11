@@ -250,9 +250,9 @@ int smpt_rd_vk_cmd_loop(void *p)
 		smpt_rd_vk_swc_frame_buffer = (smpt_rd_vk_swc_frame_buffer + 1) % smpt_rd_vk_swc_image;
 		#ifdef SMPT_CM_UDP
 			nc_get();
+			smptr_ceMloop();
 			nc_send();
 		#endif
-		smptr_ceMloop();
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);
