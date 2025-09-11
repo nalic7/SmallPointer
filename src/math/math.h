@@ -5,7 +5,7 @@
 	#define NALI_M_MAX(a, b) ((a) > (b) ? (a) : (b))
 	#define NALI_M_LENGTH(number) ((number) == 0 ? 1 : log10(number) + 1)
 
-	#define NALI_M_NORMALN_F(v, m) fmodf(fmodf((v) + m / 2, m) + m, m) - m / 2
+	#define SMPTM_NORMALN_F(v, m) fmodf(fmodf((v) + m / 2, m) + m, m) - m / 2
 	#define NALI_M_NORMALN_I(v, m) ((((v) + m / 2) % m + m) % m - m / 2)
 
 	#define NALI_M_NORMALP_F(v, m) fmodf(fmodf(v, m) + m, m)

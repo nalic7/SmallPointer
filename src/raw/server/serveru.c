@@ -22,7 +22,7 @@ static float
 		0.0F, 0.0F, 0.0F, 1.0F
 	},
 	q1_m4x4_array[16],
-	Ddelta = 0.005;
+	Ddelta = 0.005F;
 void smptr_svuMread(SMPT_NWtU u)
 {
 	memcpy(smpt_svuPinput[u], smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet, sizeof(uint8_t) * SMPT_IPuL);
@@ -66,6 +66,8 @@ void smptr_svuMread(SMPT_NWtU u)
 	smptm_v4Mm4(Pm4x4, Pr, q1_m4x4_array);
 	smptr_svuSu[u].Ptr[0] += q1_m4x4_array[0];
 	smptr_svuSu[u].Ptr[2] += q1_m4x4_array[2];
+
+	smptr_svuSu[u].Ptr[4] = SMPTM_NORMALN_F(smptr_svuSu[u].Ptr[4], NALI_M_D2R(360));
 }
 
 void smptr_svuMfread()
