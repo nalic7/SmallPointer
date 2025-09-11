@@ -6,7 +6,6 @@
 		#include <jvmti.h>
 	#endif
 
-	#include <errno.h>
 	#include <unistd.h>
 	#include <math.h>
 	#include <stdint.h>
@@ -203,6 +202,10 @@
 		#include "gen/model/model.h"
 		#include "gen/keyframe/keyframe.h"
 		#include "gen/gen.h"
+	#endif
+
+	#ifdef SMPT_CM_TEST
+		#include <errno.h>
 	#endif
 
 	#include "test/test.h"

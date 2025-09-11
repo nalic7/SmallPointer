@@ -31,11 +31,11 @@ static struct sockaddr_in client_sockaddr_in = {0};
 static socklen_t client_sockaddr_in_bl = sizeof(client_sockaddr_in);
 void ns_get()
 {
-	if (recvfrom(server_fd, smptr_svPnet[0].Pnet, SMPTRlNET, 0, (struct sockaddr*)&client_sockaddr_in, &client_sockaddr_in_bl) > 0)
+	while (recvfrom(server_fd, smptr_svPnet[0].Pnet, SMPTRlNET, 0, (struct sockaddr*)&client_sockaddr_in, &client_sockaddr_in_bl) > 0)
 	{
 		//SMPT_DBmN2L("S smptr_svPnet[0].Lnet %d", smptr_svPnet[0].Lnet)
-		SMPT_DBmN2L("client_sockaddr_in.sin_addr.s_addr %d", client_sockaddr_in.sin_addr.s_addr)
-		SMPT_DBmN2L("client_sockaddr_in.sin_port %d", client_sockaddr_in.sin_port)
+		//SMPT_DBmN2L("client_sockaddr_in.sin_addr.s_addr %d", client_sockaddr_in.sin_addr.s_addr)
+		//SMPT_DBmN2L("client_sockaddr_in.sin_port %d", client_sockaddr_in.sin_port)
 		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWuU; ++l0)
 		{
 			//SMPT_DBmN2L("smpt_nwPu[l0] %d", smpt_nwPu[l0])
@@ -43,7 +43,7 @@ void ns_get()
 			{
 				ns_p[l0].client_sockaddr_in = client_sockaddr_in;
 				ns_p[l0].client_sockaddr_in_bl = client_sockaddr_in_bl;
-				smptr_svMread();
+				smptr_svMread(l0);
 				break;
 			}
 		}

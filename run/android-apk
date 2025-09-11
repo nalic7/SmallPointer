@@ -38,5 +38,5 @@ PATH=$(pwd)/../jdk-24.0.2/bin:$PATH apksigner sign --ks build-android-release/.k
   --key-pass pass:android \
   --ks-key-alias androiddebugkey \
   build-android-release/smallpointer-aligned.apk
-adb shell pm uninstall --user 0 com.nali.smallpointer
-adb install build-android-release/smallpointer-aligned.apk
+HOME=$(pwd)/../scrcpy-linux-x86_64-v3.3.2 ../scrcpy-linux-x86_64-v3.3.2/adb shell pm uninstall --user 0 com.nali.smallpointer
+HOME=$(pwd)/../scrcpy-linux-x86_64-v3.3.2 ../scrcpy-linux-x86_64-v3.3.2/adb install build-android-release/smallpointer-aligned.apk

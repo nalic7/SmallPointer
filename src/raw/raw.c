@@ -22,6 +22,8 @@ void lb_set()
 	smptrPcache->d_bl_p = malloc(sizeof(uint32_t) * 2);
 	smptrPcache->d_bl_p[1] = 0;
 	smptrPcache->d_p = f_read(NALI_F_HOME_ASSET, smptrPcache->d_bl_p);
+
+	//! load data
 }
 
 #define SMPTRB_RZ NALI_M_D2R(180.0F)

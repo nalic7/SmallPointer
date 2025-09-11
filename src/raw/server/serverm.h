@@ -7,5 +7,7 @@
 	void smptr_svmMset();
 	void smptr_svmMloop();
 	void smptr_svmMsend(SMPT_NWtU u);
+	void smptr_svmMfread();
+	void smptr_svmMfsend();
 	void smptr_svmMfree();
 #endif

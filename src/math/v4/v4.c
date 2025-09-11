@@ -14,11 +14,64 @@ void smptm_v4Mq(float x, float y, float z, float w[4])
 	float c3 = cosf(z / 2);
 	float s3 = sinf(z / 2);
 
+	//.i ZYX
 	w[0] = s1 * c2 * c3 + c1 * s2 * s3;
 	w[1] = c1 * s2 * c3 - s1 * c2 * s3;
 	w[2] = c1 * c2 * s3 + s1 * s2 * c3;
 	w[3] = c1 * c2 * c3 - s1 * s2 * s3;
+	//.i XYZ
+//	w[0] = s1 * c2 * c3 - c1 * s2 * s3;
+//	w[1] = c1 * s2 * c3 + s1 * c2 * s3;
+//	w[2] = c1 * c2 * s3 - s1 * s2 * c3;
+//	w[3] = c1 * c2 * c3 + s1 * s2 * s3;
 }
+
+//! test
+//void smptm_v4Mq2xyz(float *rx, float *ry, float *rz, float q[4])
+//{
+//	float n = sqrtf(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+//	q[0] /= n;
+//	q[1] /= n;
+//	q[2] /= n;
+//	q[3] /= n;
+//
+//	float sinr = 2.0F * (q[3] * q[0] + q[1] * q[2]);
+//	float cosr = 1.0F - 2.0F * (q[0] * q[0] + q[1] * q[1]);
+//	*rx = atan2f(sinr, cosr);
+//
+//	float sinp = 2.0F * (q[3] * q[1] - q[2] * q[0]);
+//	if (fabsf(sinp) >= 1)
+//		*ry = copysignf(M_PI / 2, sinp);
+//	else
+//		*ry = asinf(sinp);
+//
+//	float siny = 2.0F * (q[3] * q[2] + q[0] * q[1]);
+//	float cosy = 1.0F - 2.0F * (q[1] * q[1] + q[2] * q[2]);
+//	*rz = atan2f(siny, cosy);
+//}
+//
+//void smptm_v4Mq2zyx(float *rx, float *ry, float *rz, float q[4])
+//{
+//	float n = sqrtf(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+//	q[0] /= n;
+//	q[1] /= n;
+//	q[2] /= n;
+//	q[3] /= n;
+//
+//	float siny = 2.0F * (q[3] * q[2] + q[0] * q[1]);
+//	float cosy = 1.0F - 2.0F * (q[1] * q[1] + q[2] * q[2]);
+//	*rz = atan2f(siny, cosy);
+//
+//	float sinp = 2.0F * (q[3] * q[1] - q[2] * q[0]);
+//	if (fabsf(sinp) >= 1)
+//		*ry = copysignf(M_PI / 2, sinp);
+//	else
+//		*ry = asinf(sinp);
+//
+//	float sinr = 2.0F * (q[3] * q[0] + q[1] * q[2]);
+//	float cosr = 1.0F - 2.0F * (q[0] * q[0] + q[1] * q[1]);
+//	*rx = atan2f(sinr, cosr);
+//}
 
 void smptm_v4Mq2m(const float q[4], float w[16])
 {

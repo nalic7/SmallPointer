@@ -247,12 +247,12 @@ int smpt_rd_vk_cmd_loop(void *p)
 	smpt_sfUstate |= SMPT_SFuS_RENDER;
 	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
 	{
-		//.i logic
-		smptr_ceuMloop();
+		smpt_rd_vk_swc_frame_buffer = (smpt_rd_vk_swc_frame_buffer + 1) % smpt_rd_vk_swc_image;
 		#ifdef SMPT_CM_UDP
 			nc_get();
 			nc_send();
 		#endif
+		smptr_ceMloop();
 
 		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
 		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);
@@ -300,14 +300,14 @@ int smpt_rd_vk_cmd_loop(void *p)
 				for (uint32_t l_0 = 0; l_0 < smptr_cemLm1; ++l_0)
 				{
 					struct SMPTR_CEMsM1 m1 = smptr_cemPm1[l_0];
-					SMPTRtMA a = m1.a;
-//					SMPT_DBmN2L("m1.i * smpt_rd_vk_swc_image %d", m1.i * smpt_rd_vk_swc_image)
-//					SMPT_DBmN2L("m1.i %d", m1.i)
+					SMPTRtMA a = m1.Ua;
+//					SMPT_DBmN2L("m1.Ui * smpt_rd_vk_swc_image %d", m1.Ui * smpt_rd_vk_swc_image)
+//					SMPT_DBmN2L("m1.Ui %d", m1.Ui)
 //					SMPT_DBmN2L("smpt_rd_vk_swc_frame_buffer %d", smpt_rd_vk_swc_frame_buffer)
-//					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
-					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.i * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
+//					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
+					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &smptr_ce_mdPvkbuffer[0], r_cep_a_p + m1.b);
+					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &smptr_ce_mdPvkbuffer[0], r_cep_a_p + m1.Ub);
 
 					//! use lcv_vkbuffer
 					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], smptr_ce_mdPvkbuffer[0], r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);

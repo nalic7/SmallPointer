@@ -17,9 +17,9 @@ SMPTRtM smptr_cemLm = 0;
 
 struct SMPTR_CEMsM0
 {
-	SMPTRtM m;
-	SMPTRtMK k;
-	SMPTRtMT t;
+	SMPTRtM Um;
+	SMPTRtMK Uk;
+	SMPTRtMT Ut;
 };
 static struct SMPTR_CEMsM0 smptr_cemPm0[SMPTRmMI];
 
@@ -46,43 +46,58 @@ void smptr_cemMset()
 	#endif
 }
 
+static void Mfree_m(SMPTRtMI Us, SMPTRtMI Ue)
+{
+	for (SMPTRtMI l0 = Us; l0 < Ue; ++l0)
+	{
+		if (smptr_cemPm[l0].Um != SMPTRvM)
+		{
+			free(smptr_cemPm[l0].Pa);
+			free(smptr_cemPm[l0].Sm0.Ptr);
+		}
+	}
+}
+
 //.i sync n-mn
 static SMPTRtMI Lm0 = 0;
 void smptr_cemMread()
 {
 	//.i get data
 	SMPTRtMI Ucount = *(SMPTRtMI *)(smptr_cePnet + smptr_ceLnet);
-	for (SMPTRtMI l0 = Ucount; l0 < smptr_cemLm; ++l0)
-	{
-		if (smptr_cemPm[l0].m != SMPTRvM)
-		{
-			free(smptr_cemPm[l0].Pa);
-		}
-	}
+	Mfree_m(Ucount, smptr_cemLm);
 	smptr_cemLm = Ucount;
 	smptr_cemPm = realloc(smptr_cemPm, sizeof(struct SMPTRsM) * smptr_cemLm);
 	smptr_ceLnet += sizeof(SMPTRtMI);
 
+	//SMPT_DBmN2L("Ucount %d", Ucount)
 	for (SMPTRtMI l0 = 0; l0 < Ucount; ++l0)
 	{
 		struct SMPTRsM *Pm = smptr_cemPm + l0;
 
-		Pm->m = *(SMPTRtM *)(smptr_cePnet + smptr_ceLnet);
+		//SMPT_DBmN2L("Pm->Um %d", Pm->Um)
+		Pm->Um = *(SMPTRtM *)(smptr_cePnet + smptr_ceLnet);
 		smptr_ceLnet += sizeof(SMPTRtM);
-		if (Pm->m != SMPTRvM)
+		if (Pm->Um != SMPTRvM)
 		{
-			Pm->l = *(uint8_t *)(smptr_cePnet + smptr_ceLnet);
+			Pm->La = *(uint8_t *)(smptr_cePnet + smptr_ceLnet);
 			smptr_ceLnet += sizeof(uint8_t);
 
-			Pm->Pa = malloc(sizeof(SMPTRtMA) * Pm->l);
-			memcpy(Pm->Pa, smptr_cePnet + smptr_ceLnet, sizeof(SMPTRtMA) * Pm->l);
-			smptr_ceLnet += sizeof(SMPTRtMA) * Pm->l;
+			Pm->Pa = malloc(sizeof(SMPTRtMA) * Pm->La);
+			memcpy(Pm->Pa, smptr_cePnet + smptr_ceLnet, sizeof(SMPTRtMA) * Pm->La);
+			smptr_ceLnet += sizeof(SMPTRtMA) * Pm->La;
 
-			Pm->k = *(SMPTRtMK *)(smptr_cePnet + smptr_ceLnet);
+			Pm->Uk = *(SMPTRtMK *)(smptr_cePnet + smptr_ceLnet);
 			smptr_ceLnet += sizeof(SMPTRtMK);
 
-			Pm->t = *(SMPTRtMT *)(smptr_cePnet + smptr_ceLnet);
+			Pm->Ut = *(SMPTRtMT *)(smptr_cePnet + smptr_ceLnet);
 			smptr_ceLnet += sizeof(SMPTRtMT);
+
+			Pm->Sm0.Ltr = *(uint8_t *)(smptr_cePnet + smptr_ceLnet);
+			smptr_ceLnet += sizeof(uint8_t);
+
+			Pm->Sm0.Ptr = malloc(sizeof(float) * Pm->Sm0.Ltr);
+			memcpy(Pm->Sm0.Ptr, smptr_cePnet + smptr_ceLnet, sizeof(float) * Pm->Sm0.Ltr);
+			smptr_ceLnet += sizeof(float) * Pm->Sm0.Ltr;
 		}
 	}
 
@@ -116,7 +131,7 @@ void smptr_cemMread()
 	for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
 	{
 		struct SMPTRsM m = smptr_cemPm[l0];
-		if (m.m == SMPTRvM)
+		if (m.Um == SMPTRvM)
 		{
 			if (smptr_cemPvkdescriptorset[l0])
 			{
@@ -135,14 +150,14 @@ void smptr_cemMread()
 			uint8_t state = 0;
 
 			#ifdef SMPT_CM_VK
-				if (Lm0 <= l0 || !smptr_cemPvkdescriptorset[l0] || Pm0->m != m.m)
+				if (Lm0 <= l0 || !smptr_cemPvkdescriptorset[l0] || Pm0->Um != m.Um)
 			#endif
 			{
 				state |= 1;
-				Pm0->m = m.m;
+				Pm0->Um = m.Um;
 			}
 
-			if (Pm0->k != m.k)
+			if (Pm0->Uk != m.Uk)
 			{
 				state |= 2;
 			}
@@ -163,7 +178,7 @@ void smptr_cemMread()
 
 					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swc_image; ++l1)
 					{
-						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (m.m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.m]);
+						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (m.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.Um]);
 
 						VkMemoryRequirements vkmemoryrequirements;
 						vkdevicesize = (vkdevicesize + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1);
@@ -185,57 +200,28 @@ void smptr_cemMread()
 						Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swc_image,
 						Pvkwritedescriptorset + (Ldst - 1) * smpt_rd_vk_swc_image,
 						l0,
-						m.m < lcp_joint_count_bl ? m.m : 0,
-						m.m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.m],
+						m.Um < lcp_joint_count_bl ? m.Um : 0,
+						m.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.Um],
 						1 + 1 * smpt_rd_vk_swc_image
 					);
 				#endif
 
-				Pm0->k = m.k;
-				Pm0->t = m.t;
+				Pm0->Uk = m.Uk;
+				Pm0->Ut = m.Ut;
 			}
 			else if (state & 2)
 			{
-				Pm0->k = m.k;
-				Pm0->t = m.t;
+				Pm0->Uk = m.Uk;
+				Pm0->Ut = m.Ut;
 			}
 			else
 			{
 				//.i k t *d
 			}
 
-			smptr_cemLm1 += m.l;
+			smptr_cemLm1 += m.La;
 		}
 	}
-	//! find depth
-	//.i update buffer
-	Lm0 = 0;
-	for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
-	{
-		struct SMPTRsM m = smptr_cemPm[l0];
-
-		if (m.m != SMPTRvM)
-		{
-			for (uint8_t l1 = 0; l1 < 4; ++l1)
-			{
-				*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + l1 * sizeof(float)) = 1.0;
-			}
-			memcpy(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float), lcp_a_p[m.m], lcp_joint_count_p[m.m] * 4 * 3 * sizeof(float));
-//			smptm_v4Mq(0, NALI_M_D2R(-45), NALI_M_D2R(-180), smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4);
-			*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = -3.0;
-			Pvkmappedmemoryrange = realloc(Pvkmappedmemoryrange, sizeof(VkMappedMemoryRange) * (Lm0 + 1));
-			Pvkmappedmemoryrange[Lm0++] = (VkMappedMemoryRange)
-			{
-				.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-				.memory = Pvkdevicememory[smpt_rd_vk_swc_frame_buffer],
-				.offset = 0,
-				.size = ((sizeof(float) * 4 * 4 * (m.m >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.m])) + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1),
-				.pNext = VK_NULL_HANDLE
-			};
-		}
-	}
-	vkFlushMappedMemoryRanges(vkdevice, Lm0, Pvkmappedmemoryrange);
-	Lm0 = smptr_cemLm;
 	#ifdef SMPT_CM_VK
 		vkUpdateDescriptorSets(vkdevice, SMPT_RD_VKW_DSTSLO_L * smpt_rd_vk_swc_image * Ldst, Pvkwritedescriptorset, 0, VK_NULL_HANDLE);
 		Ldst = 0;
@@ -249,19 +235,60 @@ void smptr_cemMread()
 	for (SMPTRtMI l0 = 0; l0 < Lm0; ++l0)
 	{
 		struct SMPTRsM m = smptr_cemPm[l0];
-		if (m.m != SMPTRvM)
-			for (uint8_t l1 = 0; l1 < m.l; ++l1)
+		if (m.Um != SMPTRvM)
+			for (uint8_t l1 = 0; l1 < m.La; ++l1)
 			{
 				struct SMPTR_CEMsM1 *Pm1 = smptr_cemPm1 + smptr_cemLm1++;
-				Pm1->i = l0;
-				Pm1->a = m.Pa[l1];
+				Pm1->Ui = l0;
+				Pm1->Ua = m.Pa[l1];
 				//! set offset
-				Pm1->b = Pm1->a < SMPTReMAc + SMPTReMc ? smptrPmb[Pm1->a] : Pm1->a;
-//				SMPT_DBmN2L("Pm1->b %d", Pm1->b)
+				Pm1->Ub = Pm1->Ua < SMPTReMAc + SMPTReMc ? smptrPmb[Pm1->Ua] : Pm1->Ua;
+//				SMPT_DBmN2L("Pm1->Ub %d", Pm1->Ub)
 				//! find depth
-				Pm1->d = 0;
+				Pm1->Fd = 0;
 			}
 	}
+}
+
+void smptr_cemMloop()
+{
+	#ifdef SMPT_CM_VK
+		VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
+
+		//! find depth
+		//.i update buffer
+		Lm0 = 0;
+		for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
+		{
+			struct SMPTRsM m = smptr_cemPm[l0];
+			//SMPT_DBmN2L("m.Um %d", m.Um)
+
+			if (m.Um != SMPTRvM)
+			{
+				for (uint8_t l1 = 0; l1 < 4; ++l1)
+				{
+					*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + l1 * sizeof(float)) = 1.0;
+				}
+				memcpy(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float), lcp_a_p[m.Um], lcp_joint_count_p[m.Um] * 4 * 3 * sizeof(float));
+//				smptm_v4Mq(0, NALI_M_D2R(-45), NALI_M_D2R(-180), smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4);
+				*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4 * 2) = m.Sm0.Ptr[0];
+				*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4 * 2 + 1 * sizeof(float)) = m.Sm0.Ptr[1];
+				*(float *)(smptr_cemPbuffer_map[smpt_rd_vk_swc_frame_buffer + l0 * smpt_rd_vk_swc_image] + 4 * sizeof(float) + sizeof(float) * 4 * 2 + 2 * sizeof(float)) = m.Sm0.Ptr[2];
+				Pvkmappedmemoryrange = realloc(Pvkmappedmemoryrange, sizeof(VkMappedMemoryRange) * (Lm0 + 1));
+				Pvkmappedmemoryrange[Lm0++] = (VkMappedMemoryRange)
+				{
+					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+					.memory = Pvkdevicememory[smpt_rd_vk_swc_frame_buffer],
+					.offset = 0,
+					.size = ((sizeof(float) * 4 * 4 * (m.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.Um])) + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1),
+					.pNext = VK_NULL_HANDLE
+				};
+			}
+		}
+		if (Lm0)
+			vkFlushMappedMemoryRanges(vkdevice, Lm0, Pvkmappedmemoryrange);
+		Lm0 = smptr_cemLm;
+	#endif
 }
 
 void smptr_cemMfree()
@@ -277,7 +304,7 @@ void smptr_cemMfree()
 		for (SMPTRtMI l0 = 0; l0 < Lm0; ++l0)
 		{
 			struct SMPTRsM m = smptr_cemPm[l0];
-			if (m.m != SMPTRvM)
+			if (m.Um != SMPTRvM)
 				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, smpt_rd_vk_swc_image, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swc_image);
 		}
 		for (SMPTRtMI l0 = 0; l0 < Lm0 * smpt_rd_vk_swc_image; ++l0)
@@ -295,13 +322,7 @@ void smptr_cemMfree()
 
 	free(smptr_cemPm1);
 
-	for (SMPTRtMI l0 = 0; l0 < smptr_cemLm; ++l0)
-	{
-		if (smptr_cemPm[l0].m != SMPTRvM)
-		{
-			free(smptr_cemPm[l0].Pa);
-		}
-	}
+	Mfree_m(0, smptr_cemLm);
 	free(smptr_cemPm);
 }
 //	//! use atom to all flush

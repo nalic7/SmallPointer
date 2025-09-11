@@ -10,7 +10,6 @@
 	#define SMPTRmMI (0xFFFFu - 1)
 	#define SMPTRtMK uint8_t
 	#define SMPTRtMT uint16_t
-	#define SMPTRtMD float
 	#define SMPTRnMA \
 		X(FE0000_000, "FE0000.000", 1) \
 		X(FE0000_001, "FE0000.001", 1) \
@@ -65,19 +64,34 @@
 	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
 	extern const SMPTRtMK smptrPmk[SMPTReMKc][3];
 
-	//! t r data
+//	extern const float smptrPmd[SMPTReMAc + SMPTReMc][3];
+//	extern const SMPTRtMA smptrPmh[SMPTReMc];
+
+	struct SMPTRsM0
+	{
+		uint8_t Ltr;
+		//.i t ?rb ?rh
+		float *Ptr;
+	};
+
 	struct SMPTRsM
 	{
 		//.i client always get same size as server
 		//.i server can return norender to client
 		//.i i
-		SMPTRtM m;
+		SMPTRtM Um;
 		//.i a
-		SMPTRtMK k;
-		SMPTRtMT t;
+		SMPTRtMK Uk;
+		SMPTRtMT Ut;
 		//.i r
-		uint8_t l;
+		uint8_t La;
 		SMPTRtMA *Pa;
+		struct SMPTRsM0 Sm0;
+	};
+
+	struct SMPTRsU
+	{
+		float Ptr[5];
 	};
 
 	//.c server read/write

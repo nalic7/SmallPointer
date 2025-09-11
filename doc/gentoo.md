@@ -173,8 +173,8 @@ autocmd BufRead,BufNewFile CMakeLists.txt setlocal expandtab shiftwidth=2 softta
 >Install Blender
 ```bash
 cd ..
-wget https://mirror.freedif.org/blender/release/Blender4.5/blender-4.5.1-linux-x64.tar.xz
-tar -xf blender-4.5.1-linux-x64.tar.xz
-rm blender-4.5.1-linux-x64.tar.xz
+wget https://mirror.freedif.org/blender/release/Blender4.5/blender-4.5.3-linux-x64.tar.xz
+tar -xf blender-4.5.3-linux-x64.tar.xz
+rm blender-4.5.3-linux-x64.tar.xz
 cd SmallPointer
 ```

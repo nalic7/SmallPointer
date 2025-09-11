@@ -73,7 +73,6 @@ if(GEN)
 endif()
 
 list(APPEND SOURCES src/raw/raw.c)
-list(APPEND SOURCES src/input/input.c)
 list(APPEND SOURCES src/network/network.c)
 
 if(DRM OR ASURFACE OR WL OR X11)

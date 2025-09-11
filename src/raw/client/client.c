@@ -17,29 +17,33 @@ void smptr_ceMsend()
 	clock_gettime(CLOCK_MONOTONIC, (struct timespec *)smptr_cePnet);
 	smptr_ceLnet = sizeof(struct timespec);
 
-	SMPT_DBmN2L("smptr_ceLnet %d", smptr_ceLnet)
+	//SMPT_DBmN2L("smptr_ceLnet %d", smptr_ceLnet)
 
-	//! net
-	//lcu_send();
+	smptr_ceuMsend();
 }
 
-static struct timespec lc_time = {0};
-static struct timespec l_time;
+static struct timespec Stsp_e = {0}, Stsp_s;
 void smptr_ceMread()
 {
-	l_time = *(struct timespec *)smptr_cePnet;
-	SMPT_DBmN2L("C tv_sec %ld", l_time.tv_sec)
-	SMPT_DBmN2L("C tv_nsec %ld", l_time.tv_nsec)
+	Stsp_s = *(struct timespec *)smptr_cePnet;
+	//SMPT_DBmN2L("C tv_sec %ld", Stsp_s.tv_sec)
+	//SMPT_DBmN2L("C tv_nsec %ld", Stsp_s.tv_nsec)
 
-	if ((l_time.tv_sec > lc_time.tv_sec) || (l_time.tv_sec == lc_time.tv_sec && l_time.tv_nsec > lc_time.tv_nsec))
+	if ((Stsp_s.tv_sec > Stsp_e.tv_sec) || (Stsp_s.tv_sec == Stsp_e.tv_sec && Stsp_s.tv_nsec > Stsp_e.tv_nsec))
 	{
 		smptr_ceLnet = sizeof(struct timespec);
 
-		smpt_rd_vk_swc_frame_buffer = (smpt_rd_vk_swc_frame_buffer + 1) % smpt_rd_vk_swc_image;
+		smptr_ceuMread();
 		smptr_cemMread();
 
-		lc_time = l_time;
+		Stsp_e = Stsp_s;
 	}
+}
+
+void smptr_ceMloop()
+{
+	smptr_ceuMloop();
+	smptr_cemMloop();
 }
 
 void smptr_ceMfree(uint32_t device)
