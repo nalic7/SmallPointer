@@ -11,18 +11,18 @@ void ffmpeg_read(const char *filename)
 
 	#ifdef SMPT_CM_ST_ANDROID
 		uint32_t data_bl;
-		uint8_t *data_p = f_read(filename, &data_bl);
-		FILE *file_p = fopen(NALI_F_READ_CACHE, "wb");
+		uint8_t *data_p = smptfMread(filename, &data_bl);
+		FILE *file_p = fopen(SMPTFcREAD_CACHE, "wb");
 		fwrite(data_p, data_bl, 1, file_p);
 		fclose(file_p);
 		free(data_p);
-		SMPT_DBmR2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, NALI_F_READ_CACHE, NULL, NULL))
+		SMPT_DBmR2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, SMPTFcREAD_CACHE, NULL, NULL))
 	#else
 		SMPT_DBmR2L("avformat_open_input %d", avformat_open_input(&avformatcontext_p, filename, NULL, NULL))
 	#endif
 
 	#ifdef SMPT_CM_ST_ANDROID
-		remove(NALI_F_READ_CACHE);
+		remove(SMPTFcREAD_CACHE);
 	#endif
 
 	SMPT_DBmR2L("avformat_find_stream_info %d", avformat_find_stream_info(avformatcontext_p, NULL))

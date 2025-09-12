@@ -1,9 +1,8 @@
 struct SMPTRsU smptr_ceuSu = {0};
 uint8_t smpt_ceuPinput[SMPT_IPuL] = {0};
+float smpt_ceuPpoint[2] = {0};
 
 //! use on m
-//#define SMPTR_CEuFPS 144
-//#define SMPTR_CEuDELTA 1.0F/144
 //static struct SMPTRsU smptr_ceuSu0 = {0}, smptr_ceuSu1 = {0}, smptr_ceuSu2 = {0};
 //static uint8_t smptr_ceuUu0 = 0;
 //static float smptr_ceuPu1[sizeof(smptr_ceuSu0.Ptr)] = {0};
@@ -12,8 +11,6 @@ void smptr_ceuMset()
 {
 }
 
-static double Ddelta = 0;
-static struct timespec Stsp_s = {0}, Stsp_e;
 static float
 	Pr[4],
 
@@ -73,50 +70,53 @@ void smptr_ceuMloop()
 //		{
 //			smptr_ceuSu0.Ptr[l0] += smptr_ceuPu1[l0];
 //		}
-//		smptr_ceuSu0.Ptr[4] = SMPTM_NORMALN_F(smptr_ceuSu0.Ptr[4], NALI_M_D2R(360));
+//		smptr_ceuSu0.Ptr[4] = SMPTMmNORM_NF(smptr_ceuSu0.Ptr[4], SMPTMmD2R(360));
 //		++smptr_ceuUu0;
 //	}
-	void *Pbuffer = smptr_ce_mdPbuffer_map[1 + smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer];
+	float *Pbuffer = smptr_ce_mdPbuffer_map[1 + smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer];
 
-	if (smpt_ceuPinput[1] & SMPT_IPuKEY_SPACE)
-		smptr_ceuSu.Ptr[1] -= 2 * Ddelta;
-	if (smpt_ceuPinput[1] & SMPT_IPuKEY_LEFT_SHIFT)
-		smptr_ceuSu.Ptr[1] += 2 * Ddelta;
+	if (smpt_ceuPinput[0] & SMPT_IPuKEY_SPACE)
+		smptr_ceuSu.Ptr[1] -= 2 * smptr_ceDdelta;
+	if (smpt_ceuPinput[0] & SMPT_IPuKEY_LEFT_SHIFT)
+		smptr_ceuSu.Ptr[1] += 2 * smptr_ceDdelta;
 
-	if (smpt_ceuPinput[0] & SMPT_IPuPOINT_PX)
-		smptr_ceuSu.Ptr[4] += 2.5 * Ddelta;
-	if (smpt_ceuPinput[0] & SMPT_IPuPOINT_NX)
-		smptr_ceuSu.Ptr[4] -= 2.5 * Ddelta;
-	if (smpt_ceuPinput[0] & SMPT_IPuPOINT_PY)
-		smptr_ceuSu.Ptr[3] += 2.5 * Ddelta;
-	if (smpt_ceuPinput[0] & SMPT_IPuPOINT_NY)
-		smptr_ceuSu.Ptr[3] -= 2.5 * Ddelta;
-	smpt_ceuPinput[0] &= 255 - SMPT_IPuPOINT_PX - SMPT_IPuPOINT_NX - SMPT_IPuPOINT_PY - SMPT_IPuPOINT_NY;
+	smptr_ceuSu.Ptr[4] += smpt_ceuPpoint[0] * smptr_ceDdelta;
+	smptr_ceuSu.Ptr[3] += smpt_ceuPpoint[1] * smptr_ceDdelta;
+	memset(smpt_ceuPpoint, 0, sizeof(float) * 2);
 
-	if (smptr_ceuSu.Ptr[3] > NALI_M_D2R(90.0F))
+	if (smptr_ceuSu.Ptr[3] > SMPTMmD2R(90.0F))
 	{
-		smptr_ceuSu.Ptr[3] = NALI_M_D2R(90.0F);
+		smptr_ceuSu.Ptr[3] = SMPTMmD2R(90.0F);
 	}
-	else if (smptr_ceuSu.Ptr[3] < NALI_M_D2R(-90.0F))
+	else if (smptr_ceuSu.Ptr[3] < SMPTMmD2R(-90.0F))
 	{
-		smptr_ceuSu.Ptr[3] = NALI_M_D2R(-90.0F);
+		smptr_ceuSu.Ptr[3] = SMPTMmD2R(-90.0F);
 	}
-	smptr_ceuSu.Ptr[4] = SMPTM_NORMALN_F(smptr_ceuSu.Ptr[4], NALI_M_D2R(360));
+	smptr_ceuSu.Ptr[4] = SMPTMmNORM_NF(smptr_ceuSu.Ptr[4], SMPTMmD2R(360));
 
 	VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
 
 	memcpy(Pbuffer, smptmPm4x4, sizeof(float) * 16);
-	lb_u_update(Pbuffer, smptr_ceuSu.Ptr[4], Pr, q0_m4x4_array, q1_m4x4_array);
+
+	smptm_v4Mq(0, 0, SMPTMmD2R(180), Pr);
+	smptm_v4Mq2m(Pr, q0_m4x4_array);
+	memcpy(q1_m4x4_array, Pbuffer, sizeof(float) * 16);
+	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, Pbuffer);
+
+	smptm_v4Mq(0, smptr_ceuSu.Ptr[4], 0, Pr);
+	smptm_v4Mq2m(Pr, q0_m4x4_array);
+	memcpy(q1_m4x4_array, Pbuffer, sizeof(float) * 16);
+	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, Pbuffer);
 
 	//.i fix t
 	if (smpt_ceuPinput[0] & SMPT_IPuKEY_A)
-		Pr[0] -= 2 * Ddelta;
+		Pr[0] -= 2 * smptr_ceDdelta;
 	if (smpt_ceuPinput[0] & SMPT_IPuKEY_D)
-		Pr[0] += 2 * Ddelta;
+		Pr[0] += 2 * smptr_ceDdelta;
 	if (smpt_ceuPinput[0] & SMPT_IPuKEY_W)
-		Pr[2] += 2 * Ddelta;
+		Pr[2] += 2 * smptr_ceDdelta;
 	if (smpt_ceuPinput[0] & SMPT_IPuKEY_S)
-		Pr[2] -= 2 * Ddelta;
+		Pr[2] -= 2 * smptr_ceDdelta;
 	Pr[3] = 0;
 	smptm_v4Mm4(Pbuffer, Pr, q1_m4x4_array);
 	smptr_ceuSu.Ptr[0] += q1_m4x4_array[0];
@@ -143,10 +143,6 @@ void smptr_ceuMloop()
 		.size = sizeof(float) * 16,
 		.pNext = VK_NULL_HANDLE
 	});
-
-	clock_gettime(CLOCK_MONOTONIC, &Stsp_e);
-	Ddelta = Stsp_e.tv_sec + (double)Stsp_e.tv_nsec / 1e9 - Stsp_s.tv_sec - (double)Stsp_s.tv_nsec / 1e9;
-	Stsp_s = Stsp_e;
 }
 
 void smptr_ceuMfree()

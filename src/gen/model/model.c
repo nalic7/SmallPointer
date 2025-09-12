@@ -12,9 +12,9 @@ static const uint8_t setting_array[] =
 //! apply macro
 static const char *file_array[] =
 {
-	//NALI_F_FACTORY_MODEL "/SuperCutePomi0.glb"//main
-	//NALI_F_FACTORY_MODEL "/SuperCutePomi1.glb"
-	NALI_F_FACTORY_MODEL "/SuperCutePomi2.glb",//main for now
+	//SMPTFcFACTORY_MODEL "/SuperCutePomi0.glb"//main
+	//SMPTFcFACTORY_MODEL "/SuperCutePomi1.glb"
+	SMPTFcFACTORY_MODEL "/SuperCutePomi2.glb",//main for now
 	// NALI_FACTORY "Font.glb"
 };
 
@@ -898,7 +898,7 @@ void g_md_write()
 	// 	}
 	// }
 
-	FILE *file = fopen(NALI_F_HOME_ASSET, "ab");
+	FILE *file = fopen(SMPTFcHOME_ASSET, "ab");
 	SMPT_DBmN2L("fopen %p", file)
 
 	fwrite(&joint_count_bl, sizeof(uint8_t), 1, file);

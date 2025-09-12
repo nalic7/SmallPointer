@@ -7,19 +7,19 @@
 		#endif
 
 		void smpt_dbMset();
-		void smpt_dbMwrite(const char *format_p, ...);
+		void smpt_dbMwrite(const char *Pformat, ...);
 		void smpt_dbMfree();
 
-		#define SMPT_DBmR2L(format_p, ...) smpt_dbMwrite(format_p, ##__VA_ARGS__);
+		#define SMPT_DBmR2L(Pformat, ...) smpt_dbMwrite(Pformat, ##__VA_ARGS__);
 
-		#define SMPT_DBmW2L(format_p, ...) smpt_dbMwrite(format_p, ##__VA_ARGS__);
+		#define SMPT_DBmW2L(Pformat, ...) smpt_dbMwrite(Pformat, ##__VA_ARGS__);
 
-		#define SMPT_DBmN2L(format_p, ...) smpt_dbMwrite(format_p, ##__VA_ARGS__);
+		#define SMPT_DBmN2L(Pformat, ...) smpt_dbMwrite(Pformat, ##__VA_ARGS__);
 	#else
-		#define SMPT_DBmR2L(format_p, ...) __VA_ARGS__;
+		#define SMPT_DBmR2L(Pformat, ...) __VA_ARGS__;
 
-		#define SMPT_DBmW2L(format_p, ...) smpt_dbMwrite(format_p, ##__VA_ARGS__);
+		#define SMPT_DBmW2L(Pformat, ...) smpt_dbMwrite(Pformat, ##__VA_ARGS__);
 
-		#define SMPT_DBmN2L(format_p, ...)
+		#define SMPT_DBmN2L(Pformat, ...)
 	#endif
 #endif

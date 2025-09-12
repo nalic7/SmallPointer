@@ -9,7 +9,7 @@ void smptr_svmMset()
 	smptr_svmPm = realloc(smptr_svmPm, sizeof(struct SMPTRsM));
 	smptr_svmPm[0].Um = SMPTReM_POMI_PAPI;
 	smptr_svmPm[0].Uk = SMPTReMK_POMI_WALK_LOOP;
-	smptr_svmPm[0].Ut = 0;
+	smptr_svmPm[0].Ut = 255 * smptrPmk[smptr_svmPm[0].Uk][1];
 
 	smptr_svmPm[0].La = 9;
 	smptr_svmPm[0].Pa = malloc(sizeof(SMPTRtMA) * smptr_svmPm[0].La);
@@ -28,11 +28,19 @@ void smptr_svmMset()
 	smptr_svmPm[0].Sm0.Ptr = malloc(sizeof(float) * smptr_svmPm[0].Sm0.Ltr);
 	memset(smptr_svmPm[0].Sm0.Ptr, 0, sizeof(float) * smptr_svmPm[0].Sm0.Ltr);
 	smptr_svmPm[0].Sm0.Ptr[2] = -3;
+
 	++smptr_svmLm;
 }
 
 void smptr_svmMloop()
 {
+	//! test
+	const SMPTRtMK *Pk = smptrPmk[smptr_svmPm[0].Uk];
+	//smptr_svmPm[0].Ut += 255 / SMPTRuRW;
+	smptr_svmPm[0].Ut += 1;
+	//SMPT_DBmN2L("S0 Ut %d", smptr_svmPm[0].Ut)
+	smptr_svmPm[0].Ut = SMPTMmWRAP_I(smptr_svmPm[0].Ut, Pk[1] * 255, Pk[2] * 255);
+	//SMPT_DBmN2L("S1 Ut %d", smptr_svmPm[0].Ut)
 }
 
 void smptr_svmMsend(SMPT_NWtU u)

@@ -1,11 +1,11 @@
 static const char *file_array[] =
 {
-	NALI_F_FACTORY_KEYFRAME "/SuperCutePomiWalk.bin"
+	SMPTFcFACTORY_KEYFRAME "/SuperCutePomiWalk.bin"
 };
 
 void g_kf_write()
 {
-	FILE *file = fopen(NALI_F_HOME_ASSET, "ab");
+	FILE *file = fopen(SMPTFcHOME_ASSET, "ab");
 	fwrite((uint8_t[]){sizeof(file_array) / sizeof(file_array[0])}, sizeof(uint8_t), 1, file);
 
 	uint32_t data_bl;
@@ -13,7 +13,7 @@ void g_kf_write()
 	uint32_t step;
 	for (uint8_t l_0 = 0; l_0 < sizeof(file_array) / sizeof(file_array[0]); ++l_0)
 	{
-		data_p = f_read(file_array[l_0], &data_bl);
+		data_p = smptfMread(file_array[l_0], &data_bl);
 		step = 0;
 
 		uint8_t keyframe_bl = *(uint8_t *)(data_p + step);

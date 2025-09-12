@@ -25,6 +25,9 @@
 		#define SMPT_NWuIP SMPT_NWmIP(127, 0, 0, 1)
 	#endif
 
+	//.c port
+	#define SMPT_NWuPORT 11111
+
 	#ifdef SMPT_CM_SERVER
 		extern const uint32_t smpt_nwPu[SMPT_NWuU];
 	#endif

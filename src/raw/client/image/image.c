@@ -133,14 +133,14 @@
 // static void init()
 // {
 // 	//s0-image
-// 	m_nali_g_image_state_uint8_t_p = f_read(NALI_F_HOME "image.bin", &m_nali_g_max_image_state);
+// 	m_nali_g_image_state_uint8_t_p = smptfMread(SMPTFcHOME "image.bin", &m_nali_g_max_image_state);
 // 	m_nali_g_image_uint8_t_p = malloc(0);
 // 	m_nali_g_image_wh_uint32_t_p = malloc(0);
 
 // 	struct dirent *dirent_p;
 
 // 	const char image_type[] = ".png";
-// 	const char image_path[] = NALI_F_HOME_IMAGE;
+// 	const char image_path[] = SMPTFcHOME_IMAGE;
 // 	DIR *dir_p = opendir(image_path);
 // 	SMPT_DBmN2L("opendir %p", dir_p)
 

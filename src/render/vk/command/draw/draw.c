@@ -111,7 +111,7 @@ void smpt_rd_vk_cmd_set()
 
 	// const char shader_type[] = ".spv";
 
-	// const char vert_shader_path[] = NALI_F_HOME NALI_F_HOME_SHADER NALI_F_HOME_SHADER_VERT "/";
+	// const char vert_shader_path[] = SMPTFcHOME SMPTFcHOME_SHADER SMPTFcHOME_SHADER_VERT "/";
 	// uint32_t vert_index = 0;
 	// uint8_t vert_name_index = sizeof(vert_shader_path)-1;
 	// char *vert_file = malloc(vert_name_index + M_LENGTH(vert_index) + sizeof(shader_type)-1 + 1);
@@ -119,7 +119,7 @@ void smpt_rd_vk_cmd_set()
 	// sprintf(vert_file + vert_name_index, "%u", vert_index);
 	// strcat(vert_file, shader_type);
 
-	// const char frag_shader_path[] = NALI_F_HOME NALI_F_HOME_SHADER NALI_F_HOME_SHADER_FRAG "/";
+	// const char frag_shader_path[] = SMPTFcHOME SMPTFcHOME_SHADER SMPTFcHOME_SHADER_FRAG "/";
 	// uint32_t frag_index = 0;
 	// uint8_t frag_name_index = sizeof(frag_shader_path)-1;
 	// char *frag_file = malloc(frag_name_index + M_LENGTH(frag_index) + sizeof(shader_type)-1 + 1);
@@ -128,8 +128,8 @@ void smpt_rd_vk_cmd_set()
 	// strcat(frag_file, shader_type);
 
 	// smpt_rd_vk_pl_sd_set(smpt_rd_vk_device, vert_file, frag_file, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	// smpt_rd_vk_pl_sd_set(smpt_rd_vk_device, NALI_F_HOME NALI_F_HOME_SHADER "vert.spv", NALI_F_HOME NALI_F_HOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
-	smpt_rd_vk_pl_sd_set(smpt_rd_vk_device, NALI_F_HOME_VERT, NALI_F_HOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	// smpt_rd_vk_pl_sd_set(smpt_rd_vk_device, SMPTFcHOME SMPTFcHOME_SHADER "vert.spv", SMPTFcHOME SMPTFcHOME_SHADER "frag.spv", &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	smpt_rd_vk_pl_sd_set(smpt_rd_vk_device, SMPTFcHOME_VERT, SMPTFcHOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
 	// free(vert_file);
 	// free(frag_file);
 

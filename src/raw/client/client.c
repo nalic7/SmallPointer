@@ -1,6 +1,8 @@
 uint8_t smptr_cePnet[SMPTRlNET];
 SMPTRtNET smptr_ceLnet = 0;
 
+double smptr_ceDdelta = 0;
+
 void smptr_ceMset()
 {
 	lckf_set();
@@ -22,7 +24,7 @@ void smptr_ceMsend()
 	smptr_ceuMsend();
 }
 
-static struct timespec Stsp_e = {0}, Stsp_s;
+static struct timespec Stsp_s = {0}, Stsp_e;
 void smptr_ceMread()
 {
 	Stsp_s = *(struct timespec *)smptr_cePnet;
@@ -40,10 +42,15 @@ void smptr_ceMread()
 	}
 }
 
+static struct timespec Stsp_ds = {0}, Stsp_de;
 void smptr_ceMloop()
 {
 	smptr_ceuMloop();
 	smptr_cemMloop();
+
+	clock_gettime(CLOCK_MONOTONIC, &Stsp_de);
+	smptr_ceDdelta = Stsp_de.tv_sec + (double)Stsp_de.tv_nsec / 1e9 - Stsp_ds.tv_sec - (double)Stsp_ds.tv_nsec / 1e9;
+	Stsp_ds = Stsp_de;
 }
 
 void smptr_ceMfree(uint32_t device)

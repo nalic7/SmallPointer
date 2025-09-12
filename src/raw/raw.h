@@ -62,7 +62,7 @@
 	};
 
 	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
-	extern const SMPTRtMK smptrPmk[SMPTReMKc][3];
+	extern const SMPTRtMK smptrPmk[SMPTReMKc][4];
 
 //	extern const float smptrPmd[SMPTReMAc + SMPTReMc][3];
 //	extern const SMPTRtMA smptrPmh[SMPTReMc];
@@ -148,7 +148,6 @@
 	extern struct SMPTRsCACHE *smptrPcache;
 
 	void lb_set();
-	void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_array[16], float q1_m4x4_array[16]);
 	void lb_free0();
 	void lb_free1();
 #endif

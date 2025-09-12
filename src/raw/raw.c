@@ -7,7 +7,7 @@ const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc] =
 		SMPTRnM
 	#undef X
 };
-const SMPTRtMK smptrPmk[SMPTReMKc][3] =
+const SMPTRtMK smptrPmk[SMPTReMKc][4] =
 {
 	#define X(v, k0, k1, k2) {k0, k1, k2},
 		SMPTRnMK
@@ -21,25 +21,9 @@ void lb_set()
 	smptrPcache = malloc(sizeof(struct SMPTRsCACHE));
 	smptrPcache->d_bl_p = malloc(sizeof(uint32_t) * 2);
 	smptrPcache->d_bl_p[1] = 0;
-	smptrPcache->d_p = f_read(NALI_F_HOME_ASSET, smptrPcache->d_bl_p);
+	smptrPcache->d_p = smptfMread(SMPTFcHOME_ASSET, smptrPcache->d_bl_p);
 
 	//! load data
-}
-
-#define SMPTRB_RZ NALI_M_D2R(180.0F)
-void lb_u_update(float w_p[16], float ry, float q_v4_array[4], float q0_m4x4_array[16], float q1_m4x4_array[16])
-{
-	memcpy(w_p, smptmPm4x4, sizeof(smptmPm4x4));
-
-	smptm_v4Mq(0, 0, SMPTRB_RZ, q_v4_array);
-	smptm_v4Mq2m(q_v4_array, q0_m4x4_array);
-	memcpy(q1_m4x4_array, w_p, sizeof(float) * 16);
-	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, w_p);
-
-	smptm_v4Mq(0, ry, 0, q_v4_array);
-	smptm_v4Mq2m(q_v4_array, q0_m4x4_array);
-	memcpy(q1_m4x4_array, w_p, sizeof(float) * 16);
-	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, w_p);
 }
 
 void lb_free0()

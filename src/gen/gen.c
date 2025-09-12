@@ -26,20 +26,20 @@
 // static const void config[];
 void g_write()
 {
-	SMPT_DBmR2L("mkdir %d", mkdir(NALI_F_HOME, S_IRUSR | S_IWUSR | S_IXUSR))
-	remove(NALI_F_HOME_ASSET);
+	SMPT_DBmR2L("mkdir %d", mkdir(SMPTFcHOME, S_IRUSR | S_IWUSR | S_IXUSR))
+	remove(SMPTFcHOME_ASSET);
 	g_kf_write();
 	g_md_write();
 
-	// FILE *file = fopen(NALI_F_HOME "pipeline.bin", "wb");
+	// FILE *file = fopen(SMPTFcHOME "pipeline.bin", "wb");
 	// fwrite(pipeline, sizeof(char), sizeof(pipeline), file);
 	// fclose(file);
 
-	// file = fopen(NALI_F_HOME "model.bin", "wb");
+	// file = fopen(SMPTFcHOME "model.bin", "wb");
 	// fwrite(model, sizeof(char), sizeof(model), file);
 	// fclose(file);
 
-	// file = fopen(NALI_F_HOME "image.bin", "wb");
+	// file = fopen(SMPTFcHOME "image.bin", "wb");
 	// fwrite(image, sizeof(char), sizeof(image), file);
 	// fclose(file);
 }

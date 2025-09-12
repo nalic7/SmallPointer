@@ -1,7 +1,7 @@
 void smpt_rd_vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p)
 {
 	uint32_t code_b = 0;
-	void *code_p = f_read(vert_p, &code_b);
+	void *code_p = smptfMread(vert_p, &code_b);
 	SMPT_DBmR2L
 	(
 		"vkCreateShaderModule %d",
@@ -22,7 +22,7 @@ void smpt_rd_vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderM
 	)
 	free(code_p);
 
-	code_p = f_read(frag_p, &code_b);
+	code_p = smptfMread(frag_p, &code_b);
 	SMPT_DBmR2L
 	(
 		"vkCreateShaderModule %d",

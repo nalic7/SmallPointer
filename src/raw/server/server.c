@@ -1,10 +1,11 @@
 struct SMPTR_SVtNET smptr_svPnet[SMPT_NWuU];
 
 FILE *smptr_svPfile;
+uint8_t smptr_svUrw = 0;
 
 void smptr_svMset()
 {
-	SMPT_DBmR2L("mkdir %d", mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR))
+	SMPT_DBmR2L("mkdir %d", mkdir(SMPTFcSAVE, S_IRUSR | S_IWUSR | S_IXUSR))
 
 	smptr_svuMset();
 	smptr_svmMset();
@@ -47,7 +48,6 @@ void smptr_svMread(SMPT_NWtU u)
 
 int smptr_svMloop(void *P)
 {
-	uint8_t Urw = 0;
 	struct timespec Stsp_s, Stsp_e, Stsp_n = {0};
 	double Dn;
 	clock_gettime(CLOCK_MONOTONIC, &Stsp_s);
@@ -66,7 +66,7 @@ int smptr_svMloop(void *P)
 			#endif
 		}
 
-		if (++Urw == SMPTRuRW)
+		if (++smptr_svUrw == SMPTRuRW)
 		{
 			clock_gettime(CLOCK_MONOTONIC, &Stsp_e);
 			Dn = Stsp_e.tv_sec + (double)Stsp_e.tv_nsec / 1e9 - Stsp_s.tv_sec - (double)Stsp_s.tv_nsec / 1e9;
@@ -78,7 +78,7 @@ int smptr_svMloop(void *P)
 				Stsp_n.tv_nsec = (1.0 - Dn) * 1e9;
 				thrd_sleep(&Stsp_n, NULL);
 			}
-			Urw = 0;
+			smptr_svUrw = 0;
 			clock_gettime(CLOCK_MONOTONIC, &Stsp_s);
 		}
 	}
@@ -89,7 +89,7 @@ int smptr_svMloop(void *P)
 
 void smptr_svMfread()
 {
-	SMPT_DBmR2L("fopen %p", smptr_svPfile = fopen(NALI_F_SAVE_SPACE, "rb"))
+	SMPT_DBmR2L("fopen %p", smptr_svPfile = fopen(SMPTFcSAVE_SPACE, "rb"))
 
 	smptr_svuMfread();
 	smptr_svmMfread();
@@ -102,7 +102,7 @@ void smptr_svMfread()
 
 void smptr_svMfsend()
 {
-	SMPT_DBmR2L("fopen %p", smptr_svPfile = fopen(NALI_F_SAVE_SPACE, "wb"))
+	SMPT_DBmR2L("fopen %p", smptr_svPfile = fopen(SMPTFcSAVE_SPACE, "wb"))
 
 	smptr_svuMfsend();
 	smptr_svmMfsend();

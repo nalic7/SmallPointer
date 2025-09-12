@@ -1,34 +1,34 @@
-void *f_read(const char *c_p, uint32_t *bl_p)
+void *smptfMread(const char *Pc, uint32_t *Pl)
 {
-#ifdef SMPT_CM_ST_ANDROID
-	AAssetManager *aassetmanager_p = sa_anativeactivity_p->assetManager;
-	AAsset *aasset_p = AAssetManager_open(aassetmanager_p, c_p, AASSET_MODE_BUFFER);
-	*bl_p = AAsset_getLength(aasset_p);
-	const void* data = AAsset_getBuffer(aasset_p);
+	#ifdef SMPT_CM_ST_ANDROID
+		AAssetManager *Paassetmanager = sa_anativeactivity_p->assetManager;
+		AAsset *Paasset = AAssetManager_open(Paassetmanager, Pc, AASSET_MODE_BUFFER);
+		*Pl = AAsset_getLength(Paasset);
+		const void *Pdata = AAsset_getBuffer(Paasset);
 
-	void *p = malloc(*bl_p);
-	memcpy(p, data, *bl_p);
+		void *P = malloc(*Pl);
+		memcpy(P, Pdata, *Pl);
 
-	AAsset_close(aasset_p);
+		AAsset_close(Paasset);
 
-	return p;
-#else
-	FILE *file_p = fopen(c_p, "rb");
-	SMPT_DBmN2L("fopen %p", file_p)
-	return f_read1(file_p, bl_p);
-#endif
+		return P;
+	#else
+		FILE *Pfile = fopen(Pc, "rb");
+		SMPT_DBmN2L("fopen %p", Pfile)
+		return smptfMread1(Pfile, Pl);
+	#endif
 }
 
-void *f_read1(FILE *file_p, uint32_t *bl_p)
+void *smptfMread1(FILE *Pfile, uint32_t *Pl)
 {
-	SMPT_DBmR2L("fseek %d", fseek(file_p, 0, SEEK_END))
-	SMPT_DBmR2L("ftell %d", *bl_p = ftell(file_p))
-	SMPT_DBmR2L("fseek %d", fseek(file_p, 0, SEEK_SET))
+	SMPT_DBmR2L("fseek %d", fseek(Pfile, 0, SEEK_END))
+	SMPT_DBmR2L("ftell %d", *Pl = ftell(Pfile))
+	SMPT_DBmR2L("fseek %d", fseek(Pfile, 0, SEEK_SET))
 
-	void *p = malloc(*bl_p);
-	SMPT_DBmR2L("fread %ld", fread(p, *bl_p, 1, file_p))
+	void *P = malloc(*Pl);
+	SMPT_DBmR2L("fread %ld", fread(P, *Pl, 1, Pfile))
 
-	SMPT_DBmR2L("fclose %d", fclose(file_p))
+	SMPT_DBmR2L("fclose %d", fclose(Pfile))
 
-	return p;
+	return P;
 }

@@ -16,36 +16,36 @@ static FILE *Pfile;
 
 void smpt_dbMset()
 {
-	int l0 = mtx_init(Pmtx_t, mtx_plain);
-	int l1 = mkdir(NALI_F_SAVE, S_IRUSR | S_IWUSR | S_IXUSR);
-	int l2 = remove(NALI_F_SAVE_LOG);
-	Pfile = fopen(NALI_F_SAVE_LOG, "ab");
+	int I0 = mtx_init(Pmtx_t, mtx_plain);
+	int I1 = mkdir(SMPTFcSAVE, S_IRUSR | S_IWUSR | S_IXUSR);
+	int I2 = remove(SMPTFcSAVE_LOG);
+	Pfile = fopen(SMPTFcSAVE_LOG, "ab");
 
-	SMPT_DBmN2L("mtx_init %d", l0)
-	SMPT_DBmN2L("mkdir %d", l1)
-	SMPT_DBmN2L("remove %d", l2)
+	SMPT_DBmN2L("mtx_init %d", I0)
+	SMPT_DBmN2L("mkdir %d", I1)
+	SMPT_DBmN2L("remove %d", I2)
 	SMPT_DBmN2L("fopen %p", Pfile)
 
 	SMPT_DBmN2L("_SC_OPEN_MAX %ld", sysconf(_SC_OPEN_MAX))
 
-	char cwd_p[PATH_MAX];
-	SMPT_DBmN2L("getcwd %d", getcwd(cwd_p, sizeof(cwd_p)))
-	SMPT_DBmN2L("cwd_p %s", cwd_p)
+	char Pcwd[PATH_MAX];
+	SMPT_DBmN2L("getcwd %d", getcwd(Pcwd, sizeof(Pcwd)))
+	SMPT_DBmN2L("cwd_p %s", Pcwd)
 
 	SMPT_DBmN2L("__BYTE_ORDER %d", __BYTE_ORDER)
 }
 
-void smpt_dbMwrite(const char *format_p, ...)
+void smpt_dbMwrite(const char *Pformat, ...)
 {
 	mtx_lock(Pmtx_t);
 
-	char lc_p[1024];
-	va_list lva_list;
-	va_start(lva_list, format_p);
-	int l0 = vsnprintf(lc_p, sizeof(lc_p), format_p, lva_list);
-	va_end(lva_list);
+	char Pc[1024];
+	va_list Vlist;
+	va_start(Vlist, Pformat);
+	int I0 = vsnprintf(Pc, sizeof(Pc), Pformat, Vlist);
+	va_end(Vlist);
 
-	fwrite(lc_p, 1, l0, Pfile);
+	fwrite(Pc, 1, I0, Pfile);
 	fwrite("\n", 1, 1, Pfile);
 
 	//force write

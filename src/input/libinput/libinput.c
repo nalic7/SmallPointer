@@ -58,9 +58,6 @@ void smpt_ip_lipMloop()
 				libinput_event_destroy(Pev);
 			}
 		}
-
-		double Dx = 0;
-		double Dy = 0;
 	#endif
 
 	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
@@ -97,9 +94,9 @@ void smpt_ip_lipMloop()
 							if (key == KEY_S)
 								smpt_ceuPinput[0] |= SMPT_IPuKEY_S;
 							if (key == KEY_SPACE)
-								smpt_ceuPinput[1] |= SMPT_IPuKEY_SPACE;
+								smpt_ceuPinput[0] |= SMPT_IPuKEY_SPACE;
 							if (key == KEY_LEFTSHIFT)
-								smpt_ceuPinput[1] |= SMPT_IPuKEY_LEFT_SHIFT;
+								smpt_ceuPinput[0] |= SMPT_IPuKEY_LEFT_SHIFT;
 						}
 						else
 						{
@@ -112,9 +109,9 @@ void smpt_ip_lipMloop()
 							if (key == KEY_S)
 								smpt_ceuPinput[0] &= 255 - SMPT_IPuKEY_S;
 							if (key == KEY_SPACE)
-								smpt_ceuPinput[1] &= 255 - SMPT_IPuKEY_SPACE;
+								smpt_ceuPinput[0] &= 255 - SMPT_IPuKEY_SPACE;
 							if (key == KEY_LEFTSHIFT)
-								smpt_ceuPinput[1] &= 255 - SMPT_IPuKEY_LEFT_SHIFT;
+								smpt_ceuPinput[0] &= 255 - SMPT_IPuKEY_LEFT_SHIFT;
 						}
 					#endif
 					break;
@@ -122,18 +119,10 @@ void smpt_ip_lipMloop()
 				#ifdef SMPT_CM_CLIENT
 					case LIBINPUT_EVENT_POINTER_MOTION:
 						Pevpt = libinput_event_get_pointer_event(Pev);
-						Dx = libinput_event_pointer_get_dx(Pevpt);
-						Dy = libinput_event_pointer_get_dy(Pevpt);
 						//SMPT_DBmN2L("libinput_event_pointer_get_dx %f", dx)
 						//SMPT_DBmN2L("libinput_event_pointer_get_dy %f", dy)
-						if (Dx > 0)
-							smpt_ceuPinput[0] |= SMPT_IPuPOINT_PX;
-						if (Dx < 0)
-							smpt_ceuPinput[0] |= SMPT_IPuPOINT_NX;
-						if (Dy > 0)
-							smpt_ceuPinput[0] |= SMPT_IPuPOINT_PY;
-						if (Dy < 0)
-							smpt_ceuPinput[0] |= SMPT_IPuPOINT_NY;
+						smpt_ceuPpoint[0] += libinput_event_pointer_get_dx(Pevpt);
+						smpt_ceuPpoint[1] += libinput_event_pointer_get_dy(Pevpt);
 						break;
 //					case LIBINPUT_EVENT_GESTURE_HOLD_BEGIN:
 //						Pevgt = libinput_event_get_gesture_event(Pev);

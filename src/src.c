@@ -16,7 +16,7 @@ int main()
 //		u_h = 0,
 //		u_v = 0,
 //		
-//		o_h = NALI_M_D2R(90),
+//		o_h = SMPTMmD2R(90),
 //		o_v = 0,
 //		
 //		u_hv[3] = {1, 0, 0};
@@ -145,10 +145,10 @@ int main()
 //	// // // SMPT_DBmN2L("angle_rad %f", angle_rad)
 //
 //	// SMPT_DBmN2L("horizontal angle %f", o_h)
-//	// SMPT_DBmN2L("horizontal angle (r2d) %f", NALI_M_R2D(o_h))
+//	// SMPT_DBmN2L("horizontal angle (r2d) %f", SMPTMmR2D(o_h))
 //
 //	// SMPT_DBmN2L("vertical angle %f", o_v)
-//	// SMPT_DBmN2L("vertical angle (r2d) %f", NALI_M_R2D(o_v))
+//	// SMPT_DBmN2L("vertical angle (r2d) %f", SMPTMmR2D(o_v))
 //
 //	// SMPT_DBmN2L("u_hv[0] %f", u_hv[0])
 //	// SMPT_DBmN2L("u_hv[1] %f", u_hv[1])

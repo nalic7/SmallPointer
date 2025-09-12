@@ -14,7 +14,7 @@ void nc_set()
 
 	server_sockaddr_in.sin_family = AF_INET;
 	server_sockaddr_in.sin_addr.s_addr = SMPT_NWuIP;
-	server_sockaddr_in.sin_port = SMPTuPORT;
+	server_sockaddr_in.sin_port = SMPT_NWuPORT;
 //	SMPTTmE
 }
 

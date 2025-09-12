@@ -3,42 +3,42 @@
 
 	#ifdef SMPT_CM_GEN
 		//.c source folder
-		#define NALI_F_FACTORY "../source/"
-		#define NALI_F_FACTORY_MODEL NALI_F_FACTORY "model"
-		#define NALI_F_FACTORY_KEYFRAME NALI_F_FACTORY "keyframe"
+		#define SMPTFcFACTORY "../source/"
+		#define SMPTFcFACTORY_MODEL SMPTFcFACTORY "model"
+		#define SMPTFcFACTORY_KEYFRAME SMPTFcFACTORY "keyframe"
 	#endif
 
 	#ifdef SMPT_CM_ST_ANDROID
-		#define NALI_F_HOME
+		#define SMPTFcHOME
 
 		//.c package folder
-		#define NALI_F_PACKAGE "/storage/emulated/0/Android/data/com.nali.smallpointer/"
-		#define NALI_F_SAVE NALI_F_PACKAGE "save/"
-		#define NALI_F_READ_CACHE NALI_F_PACKAGE "c"
+		#define SMPTFcPACKAGE "/storage/emulated/0/Android/data/com.nali.smallpointer/"
+		#define SMPTFcSAVE SMPTFcPACKAGE "save/"
+		#define SMPTFcREAD_CACHE SMPTFcPACKAGE "c"
 	#else
-		#define NALI_F_HOME "../asset/"
-		#define NALI_F_SAVE "save/"
+		#define SMPTFcHOME "../asset/"
+		#define SMPTFcSAVE "save/"
 	#endif
 
 	//! will clean this
-	#define NALI_F_HOME_SOUND NALI_F_HOME "sound/"
-	#define NALI_F_HOME_SOUND_BGM NALI_F_HOME_SOUND "bgm.ogg"
+	#define SMPTFcHOME_SOUND SMPTFcHOME "sound/"
+	#define SMPTFcHOME_SOUND_BGM SMPTFcHOME_SOUND "bgm.ogg"
 
-	// #define NALI_F_HOME_IMAGE NALI_F_HOME "image"
+	// #define SMPTFcHOME_IMAGE SMPTFcHOME "image"
 
-	#define NALI_F_HOME_ASSET NALI_F_HOME "asset.bin"
-	#define NALI_F_HOME_VERT NALI_F_HOME "vert.spv"
-	#define NALI_F_HOME_FRAG NALI_F_HOME "frag.spv"
+	#define SMPTFcHOME_ASSET SMPTFcHOME "asset.bin"
+	#define SMPTFcHOME_VERT SMPTFcHOME "vert.spv"
+	#define SMPTFcHOME_FRAG SMPTFcHOME "frag.spv"
 
-	#define NALI_F_SAVE_LOG NALI_F_SAVE "log.dat"
-	#define NALI_F_SAVE_SPACE NALI_F_SAVE "space.bin"
+	#define SMPTFcSAVE_LOG SMPTFcSAVE "log.dat"
+	#define SMPTFcSAVE_SPACE SMPTFcSAVE "map.bin"
 
-	// #define NALI_F_SAVE_USER NALI_F_SAVE "user/"
-	// #define NALI_F_SAVE_USER_ITEM NALI_F_SAVE "user/item/"
-	// #define NALI_F_SAVE_USER_TEAM NALI_F_SAVE "user/team/"
+	// #define SMPTFcSAVE_USER SMPTFcSAVE "user/"
+	// #define SMPTFcSAVE_USER_ITEM SMPTFcSAVE "user/item/"
+	// #define SMPTFcSAVE_USER_TEAM SMPTFcSAVE "user/team/"
 
-	// #define NALI_F_SAVE_MAP NALI_F_SAVE "map/"
+	// #define SMPTFcSAVE_MAP SMPTFcSAVE "map/"
 
-	void *f_read(const char *c_p, uint32_t *bl_p);
-	void *f_read1(FILE *file_p, uint32_t *bl_p);
+	void *smptfMread(const char *Pc, uint32_t *Pl);
+	void *smptfMread1(FILE *Pfile, uint32_t *Pl);
 #endif

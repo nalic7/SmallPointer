@@ -5,27 +5,29 @@
 	#define NALI_M_MAX(a, b) ((a) > (b) ? (a) : (b))
 	#define NALI_M_LENGTH(number) ((number) == 0 ? 1 : log10(number) + 1)
 
-	#define SMPTM_NORMALN_F(v, m) fmodf(fmodf((v) + m / 2, m) + m, m) - m / 2
+	#define SMPTMmNORM_NF(v, m) fmodf(fmodf((v) + m / 2, m) + m, m) - m / 2
 	#define NALI_M_NORMALN_I(v, m) ((((v) + m / 2) % m + m) % m - m / 2)
 
 	#define NALI_M_NORMALP_F(v, m) fmodf(fmodf(v, m) + m, m)
 	#define NALI_M_NORMALP_I(v, m) (((v) % m + m) % m)
 
 	#define NALI_M_WRAP_F(v, min, max) fmodf(v - min, max - min) + min
-	#define NALI_M_WRAP_I(v, min, max) ((v - min) % (max - min)) + min
+	#define SMPTMmFIX_I(v, min, max) ((v - min) % (max - min)) + min
+
+	#define SMPTMmWRAP_I(v, min, max) min + (((v - min) % (max - min)) + (max - min)) % (max - min)
 
 	#define NALI_M_SIZE(x, y, z) (x) * (x) + (y) * (y) + (z) * (z)
 
 	//image
 	#define NALI_M_MIPMAP(width, height) (uint32_t)(log2(((width) > (height)) ? (width) : (height))) + 1
 
-	//rotate
-	#define NALI_M_D2R(v) ((v) * M_PI / 180.0)
-	#define NALI_M_R2D(v) ((v) * 180.0 / M_PI)
+	//.i rotate
+	#define SMPTMmD2R(v) ((v) * M_PI / 180.0)
+	#define SMPTMmR2D(v) ((v) * 180.0 / M_PI)
 
-	//animation
+	//.i animation
 	//! clean this
-	#define NALI_M_LERP(a, b, t) (a) = (a) + ((b) - (a)) * (t)
+	#define SMPTMmLERP(a, b, t) (a) = (a) + ((b) - (a)) * (t)
 
 	//hash
 	#define NALI_M_H3(x, y, z, m) x * m * m + y * m + z

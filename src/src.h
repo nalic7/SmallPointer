@@ -163,8 +163,6 @@
 //		#include <arpa/inet.h>
 //		#include <sys/socket.h>
 		#include <netinet/in.h>
-		//.c port
-		#define SMPTuPORT 11111
 	#endif
 
 	#ifdef SMPT_CM_CLIENT
