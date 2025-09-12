@@ -1,18 +1,18 @@
-VkSwapchainKHR smpt_rd_vk_swc_khr;
-VkExtent2D smpt_rd_vk_swc_et2d;
-VkRenderPass smpt_rd_vk_swc_rdp;
+VkSwapchainKHR smpt_rd_vk_swcVkhr;
+VkExtent2D smpt_rd_vk_swcVet2d;
+VkRenderPass smpt_rd_vk_swcVrdp;
 
-VkImage *smpt_rd_vk_swc_im_p;
-VkImageView *smpt_rd_vk_swc_imv_p;
-VkFramebuffer *smpt_rd_vk_swc_fbf_p;
+VkImage *smpt_rd_vk_swcPim;
+VkImageView *smpt_rd_vk_swcPimv;
+VkFramebuffer *smpt_rd_vk_swcPfbf;
 
-uint8_t smpt_rd_vk_swc_image;
-uint8_t smpt_rd_vk_swc_frame = 0;
-uint8_t smpt_rd_vk_swc_frame_buffer = 0;
+uint8_t smpt_rd_vk_swcUimage;
+uint8_t smpt_rd_vk_swcUframe = 0;
+uint8_t smpt_rd_vk_swcUframe_buffer = 0;
 
 //VkSurfaceTransformFlagBitsKHR m_vksurfacetransformflagbitskhr;
 
-static uint32_t swapchain_image;
+static uint32_t Uimage;
 
 static VkImage vkimage_depth;
 static VkImageView vkimageview_depth;
@@ -22,7 +22,7 @@ static VkImage vkimage_color;
 static VkImageView vkimageview_color;
 static VkDeviceMemory vkdevicememory_color;
 
-void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
+void smpt_rd_vk_swcMmake(VkSharingMode vksharingmode)
 {
 	VkPhysicalDevice vkphysicaldevice = smpt_rd_vkq_dv_pscdv_p[smpt_rd_vk_device];
 	VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
@@ -55,41 +55,41 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 
 	VkSurfaceCapabilitiesKHR vksurfacecapabilitieskhr;
 	SMPT_DBmR2L("vkGetPhysicalDeviceSurfaceCapabilitiesKHR %d", vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkphysicaldevice, smpt_rd_vk_sf_khr, &vksurfacecapabilitieskhr))
-	SMPT_DBmR2L("_vk_swc_image %d", smpt_rd_vk_swc_image = vksurfacecapabilitieskhr.minImageCount)
+	SMPT_DBmR2L("_vk_swc_image %d", smpt_rd_vk_swcUimage = vksurfacecapabilitieskhr.minImageCount)
 
 //	m_vksurfacetransformflagbitskhr = vksurfacecapabilitieskhr.currentTransform;
 //	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	if (vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || vksurfacecapabilitieskhr.currentTransform == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 	{
-		smpt_rd_vk_swc_et2d.width = smpt_sfUheight;
-		smpt_rd_vk_swc_et2d.height = smpt_sfUwidth;
-//		m_width = smpt_rd_vk_swc_et2d.width;
-//		m_height = smpt_rd_vk_swc_et2d.height;
+		smpt_rd_vk_swcVet2d.width = smpt_sfUheight;
+		smpt_rd_vk_swcVet2d.height = smpt_sfUwidth;
+//		m_width = smpt_rd_vk_swcVet2d.width;
+//		m_height = smpt_rd_vk_swcVet2d.height;
 	}
 	else
 	{
-		smpt_rd_vk_swc_et2d.height = smpt_sfUheight;
-		smpt_rd_vk_swc_et2d.width = smpt_sfUwidth;
+		smpt_rd_vk_swcVet2d.height = smpt_sfUheight;
+		smpt_rd_vk_swcVet2d.width = smpt_sfUwidth;
 	}
 
 ////	if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR)
 ////	{
-////		smpt_rd_vk_swc_et2d.height = 1;
-////		smpt_rd_vk_swc_et2d.width = 1;
-////		m_width = smpt_rd_vk_swc_et2d.width;
-////		m_height = smpt_rd_vk_swc_et2d.height;
+////		smpt_rd_vk_swcVet2d.height = 1;
+////		smpt_rd_vk_swcVet2d.width = 1;
+////		m_width = smpt_rd_vk_swcVet2d.width;
+////		m_height = smpt_rd_vk_swcVet2d.height;
 ////	}
 ////	else if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR)
 ////	{
-////		smpt_rd_vk_swc_et2d.height = 1;
-////		smpt_rd_vk_swc_et2d.width = 1;
-////		m_width = smpt_rd_vk_swc_et2d.width;
-////		m_height = smpt_rd_vk_swc_et2d.height;
+////		smpt_rd_vk_swcVet2d.height = 1;
+////		smpt_rd_vk_swcVet2d.width = 1;
+////		m_width = smpt_rd_vk_swcVet2d.width;
+////		m_height = smpt_rd_vk_swcVet2d.height;
 ////	}
 //	else
 //	{
-//		smpt_rd_vk_swc_et2d.height = m_height;
-//		smpt_rd_vk_swc_et2d.width = m_width;
+//		smpt_rd_vk_swcVet2d.height = m_height;
+//		smpt_rd_vk_swcVet2d.width = m_width;
 //	}
 
 	SMPT_DBmR2L
@@ -105,7 +105,7 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 				.minImageCount = vksurfacecapabilitieskhr.minImageCount,
 				.imageFormat = SMPT_RD_VK_COLOR_FORMAT,
 				.imageColorSpace = SMPT_RD_VK_COLOR_SPACE,
-				.imageExtent = smpt_rd_vk_swc_et2d,
+				.imageExtent = smpt_rd_vk_swcVet2d,
 				.imageArrayLayers = 1,
 				.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 
@@ -125,23 +125,23 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			&smpt_rd_vk_swc_khr
+			&smpt_rd_vk_swcVkhr
 		)
 	)
 
-	SMPT_DBmR2L("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, smpt_rd_vk_swc_khr, &swapchain_image, VK_NULL_HANDLE))
+	SMPT_DBmR2L("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, smpt_rd_vk_swcVkhr, &Uimage, VK_NULL_HANDLE))
 
 	#ifdef SMPT_RD_VK_INFO_SC
-		SMPT_DBmN2L("vksurfaceformatkhr_image %d", swapchain_image)
+		SMPT_DBmN2L("vksurfaceformatkhr_image %d", Uimage)
 	#endif
 
-	smpt_rd_vk_swc_im_p = malloc(sizeof(VkImage) * swapchain_image);
-	smpt_rd_vk_swc_imv_p = malloc(sizeof(VkImageView) * swapchain_image);
-	smpt_rd_vk_swc_fbf_p = malloc(sizeof(VkFramebuffer) * swapchain_image);
+	smpt_rd_vk_swcPim = malloc(sizeof(VkImage) * Uimage);
+	smpt_rd_vk_swcPimv = malloc(sizeof(VkImageView) * Uimage);
+	smpt_rd_vk_swcPfbf = malloc(sizeof(VkFramebuffer) * Uimage);
 
-	SMPT_DBmR2L("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, smpt_rd_vk_swc_khr, &swapchain_image, smpt_rd_vk_swc_im_p))
+	SMPT_DBmR2L("vkGetSwapchainImagesKHR %d", vkGetSwapchainImagesKHR(vkdevice, smpt_rd_vk_swcVkhr, &Uimage, smpt_rd_vk_swcPim))
 
-	SMPT_RD_VK_RDP_MAKE(smpt_rd_vk_device, &smpt_rd_vk_swc_rdp)
+	SMPT_RD_VK_RDP_MAKE(smpt_rd_vk_device, &smpt_rd_vk_swcVrdp)
 
 	SMPT_RD_VK_IM_MAKE
 	(
@@ -149,8 +149,8 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 		SMPT_RD_VK_DEPTH_FORMAT,
 		((VkExtent3D)
 		{
-			.width = smpt_rd_vk_swc_et2d.width,
-			.height = smpt_rd_vk_swc_et2d.height,
+			.width = smpt_rd_vk_swcVet2d.width,
+			.height = smpt_rd_vk_swcVet2d.height,
 			.depth = 1
 		}),
 		1,
@@ -170,8 +170,8 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 		SMPT_RD_VK_COLOR_FORMAT,
 		((VkExtent3D)
 		{
-			.width = smpt_rd_vk_swc_et2d.width,
-			.height = smpt_rd_vk_swc_et2d.height,
+			.width = smpt_rd_vk_swcVet2d.width,
+			.height = smpt_rd_vk_swcVet2d.height,
 			.depth = 1
 		}),
 		1,
@@ -184,9 +184,9 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 	SMPT_RD_VK_IM_GEN(smpt_rd_vk_device, vkimage_color, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vkdevicememory_color, vkmemoryrequirements)
 	SMPT_RD_VK_IMV_MAKE(smpt_rd_vk_device, vkimage_color, SMPT_RD_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &vkimageview_color)
 
-	for (uint32_t i = 0; i < swapchain_image; ++i)
+	for (uint32_t i = 0; i < Uimage; ++i)
 	{
-		SMPT_RD_VK_IMV_MAKE(smpt_rd_vk_device, smpt_rd_vk_swc_im_p[i], SMPT_RD_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &smpt_rd_vk_swc_imv_p[i])
+		SMPT_RD_VK_IMV_MAKE(smpt_rd_vk_device, smpt_rd_vk_swcPim[i], SMPT_RD_VK_COLOR_FORMAT, VK_IMAGE_ASPECT_COLOR_BIT, 1, &smpt_rd_vk_swcPimv[i])
 		SMPT_RD_VK_FBF_MAKE
 		(
 			smpt_rd_vk_device,
@@ -194,16 +194,16 @@ void smpt_rd_vk_swc_make(VkSharingMode vksharingmode)
 			{
 				vkimageview_color,
 				vkimageview_depth,
-				smpt_rd_vk_swc_imv_p[i]
+				smpt_rd_vk_swcPimv[i]
 			}),
 			3,
-			smpt_rd_vk_swc_rdp,
-			&smpt_rd_vk_swc_fbf_p[i]
+			smpt_rd_vk_swcVrdp,
+			&smpt_rd_vk_swcPfbf[i]
 		)
 	}
 }
 
-void smpt_rd_vk_swc_free()
+void smpt_rd_vk_swcMfree()
 {
 //	VkPhysicalDevice vkphysicaldevice = m_vkphysicaldevice_p[smpt_rd_vk_device];
 	VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
@@ -216,17 +216,17 @@ void smpt_rd_vk_swc_free()
 	vkDestroyImage(vkdevice, vkimage_color, VK_NULL_HANDLE);
 	vkFreeMemory(vkdevice, vkdevicememory_color, VK_NULL_HANDLE);
 
-	for (uint32_t i = 0; i < swapchain_image; ++i)
+	for (uint32_t i = 0; i < Uimage; ++i)
 	{
-		vkDestroyFramebuffer(vkdevice, smpt_rd_vk_swc_fbf_p[i], VK_NULL_HANDLE);
-		vkDestroyImageView(vkdevice, smpt_rd_vk_swc_imv_p[i], VK_NULL_HANDLE);
+		vkDestroyFramebuffer(vkdevice, smpt_rd_vk_swcPfbf[i], VK_NULL_HANDLE);
+		vkDestroyImageView(vkdevice, smpt_rd_vk_swcPimv[i], VK_NULL_HANDLE);
 	}
 
-	vkDestroyRenderPass(vkdevice, smpt_rd_vk_swc_rdp, VK_NULL_HANDLE);
+	vkDestroyRenderPass(vkdevice, smpt_rd_vk_swcVrdp, VK_NULL_HANDLE);
 	SMPT_DBmN2L("->vkDestroySwapchainKHR");
-	vkDestroySwapchainKHR(vkdevice, smpt_rd_vk_swc_khr, VK_NULL_HANDLE);
+	vkDestroySwapchainKHR(vkdevice, smpt_rd_vk_swcVkhr, VK_NULL_HANDLE);
 
-	free(smpt_rd_vk_swc_im_p);
-	free(smpt_rd_vk_swc_imv_p);
-	free(smpt_rd_vk_swc_fbf_p);
+	free(smpt_rd_vk_swcPim);
+	free(smpt_rd_vk_swcPimv);
+	free(smpt_rd_vk_swcPfbf);
 }

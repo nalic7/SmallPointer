@@ -36,7 +36,7 @@ void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo
 		.range = lcp_rgba_bl
 	};
 
-	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swc_image; ++l0)
+	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swcUimage; ++l0)
 	{
 		//.i gui/world d
 		vkdescriptorbufferinfo_p[2 + l0 * 3 + 2] = (VkDescriptorBufferInfo)
@@ -49,7 +49,7 @@ void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo
 		//.i animate d
 		vkdescriptorbufferinfo_p[2 + l0 * 3] = (VkDescriptorBufferInfo)
 		{
-			.buffer = smptr_cemPvkbuffer[l0 + ds * smpt_rd_vk_swc_image],
+			.buffer = smptr_cemPvkbuffer[l0 + ds * smpt_rd_vk_swcUimage],
 			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds + sizeof(float) * 4,
 			.range = mj * sizeof(float) * 4 * 3
 		};
@@ -57,7 +57,7 @@ void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo
 		//.i color d
 		vkdescriptorbufferinfo_p[2 + l0 * 3 + 1] = (VkDescriptorBufferInfo)
 		{
-			.buffer = smptr_cemPvkbuffer[l0 + ds * smpt_rd_vk_swc_image],
+			.buffer = smptr_cemPvkbuffer[l0 + ds * smpt_rd_vk_swcUimage],
 			.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * ds,
 			.range = sizeof(float) * 4
 		};

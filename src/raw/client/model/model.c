@@ -395,9 +395,9 @@ void lcp_set()
 #ifdef SMPT_CM_VK
 	void lcp_vk()
 	{
-		smptr_ce_mdPvkbuffer = malloc(sizeof(VkBuffer) * (1 + 2 * smpt_rd_vk_swc_image));
-		smptr_ce_mdPvkdevicememory = malloc(sizeof(VkDeviceMemory) * (1 + 2 * smpt_rd_vk_swc_image));
-		smptr_ce_mdPbuffer_map = malloc(sizeof(void *) * (1 + 2 * smpt_rd_vk_swc_image));
+		smptr_ce_mdPvkbuffer = malloc(sizeof(VkBuffer) * (1 + 2 * smpt_rd_vk_swcUimage));
+		smptr_ce_mdPvkdevicememory = malloc(sizeof(VkDeviceMemory) * (1 + 2 * smpt_rd_vk_swcUimage));
+		smptr_ce_mdPbuffer_map = malloc(sizeof(void *) * (1 + 2 * smpt_rd_vk_swcUimage));
 
 		VkDeviceSize vkdevicesize = lcp_rgba_bl;
 
@@ -425,7 +425,7 @@ void lcp_set()
 		SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dv_p[smpt_rd_vk_device], smptr_ce_mdPvkdevicememory[0], 0, vkdevicesize, 0, &smptr_ce_mdPbuffer_map[0]))
 
 		//.i gui world
-		for (uint8_t l0 = 1; l0 < (1 + 2 * smpt_rd_vk_swc_image); ++l0)
+		for (uint8_t l0 = 1; l0 < (1 + 2 * smpt_rd_vk_swcUimage); ++l0)
 		{
 			SMPT_RD_VK_BF_MAKE(smpt_rd_vk_device, sizeof(float) * 16 * 2, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[l0], smptr_ce_mdPvkdevicememory[l0], vkmemoryrequirements)
 			SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dv_p[smpt_rd_vk_device], smptr_ce_mdPvkdevicememory[l0], 0, sizeof(float) * 16 * 2, 0, &smptr_ce_mdPbuffer_map[l0]))
@@ -543,7 +543,7 @@ void lcp_set()
 void lcp_free(uint32_t device)
 {
 	#ifdef SMPT_CM_VK
-		for (uint8_t l0 = 0; l0 < 1 + 2 * smpt_rd_vk_swc_image; ++l0)
+		for (uint8_t l0 = 0; l0 < 1 + 2 * smpt_rd_vk_swcUimage; ++l0)
 		{
 			VkDevice vkdevice = smpt_rd_vkq_dv_p[device];
 			vkUnmapMemory(smpt_rd_vkq_dv_p[device], smptr_ce_mdPvkdevicememory[l0]);

@@ -1,18 +1,18 @@
-#ifndef SMPT_RD_VK_SWC_H
-	#define SMPT_RD_VK_SWC_H
+#ifndef SMPT_RD_VKhSWC
+	#define SMPT_RD_VKhSWC
 
-	extern VkSwapchainKHR smpt_rd_vk_swc_khr;
-	extern VkExtent2D smpt_rd_vk_swc_et2d;
-	extern VkRenderPass smpt_rd_vk_swc_rdp;
+	extern VkSwapchainKHR smpt_rd_vk_swcVkhr;
+	extern VkExtent2D smpt_rd_vk_swcVet2d;
+	extern VkRenderPass smpt_rd_vk_swcVrdp;
 
-	extern VkImage *smpt_rd_vk_swc_im_p;
-	extern VkImageView *smpt_rd_vk_swc_imv_p;
-	extern VkFramebuffer *smpt_rd_vk_swc_fbf_p;
+	extern VkImage *smpt_rd_vk_swcPim;
+	extern VkImageView *smpt_rd_vk_swcPimv;
+	extern VkFramebuffer *smpt_rd_vk_swcPfbf;
 
-	extern uint8_t smpt_rd_vk_swc_image;
-	extern uint8_t smpt_rd_vk_swc_frame;
-	extern uint8_t smpt_rd_vk_swc_frame_buffer;
+	extern uint8_t smpt_rd_vk_swcUimage;
+	extern uint8_t smpt_rd_vk_swcUframe;
+	extern uint8_t smpt_rd_vk_swcUframe_buffer;
 
-	void smpt_rd_vk_swc_make(VkSharingMode vksharingmode);
-	void smpt_rd_vk_swc_free();
+	void smpt_rd_vk_swcMmake(VkSharingMode vksharingmode);
+	void smpt_rd_vk_swcMfree();
 #endif

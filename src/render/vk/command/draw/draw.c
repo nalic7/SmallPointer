@@ -68,7 +68,7 @@ static VkRect2D vkrect2d =
 //graphic
 static VkFence *vkfence_p;
 //image render
-//[smpt_rd_vk_swc_image][2]
+//[smpt_rd_vk_swcUimage][2]
 static VkSemaphore **vksemaphore_p;
 
 static VkSubmitInfo image_vksubmitinfo =
@@ -87,7 +87,7 @@ static VkPresentInfoKHR vkpresentinfokhr =
 	.waitSemaphoreCount = 1,
 
 	.swapchainCount = 1,
-	.pSwapchains = &smpt_rd_vk_swc_khr,
+	.pSwapchains = &smpt_rd_vk_swcVkhr,
 
 	.pResults = VK_NULL_HANDLE,
 	.pNext = VK_NULL_HANDLE
@@ -135,7 +135,7 @@ void smpt_rd_vk_cmd_set()
 
 	//s1-s
 	smpt_rd_vk_pl_lo_make(smpt_rd_vk_device, &vkpipelinelayout);
-	smpt_rd_vk_pl_make(smpt_rd_vk_device, vkpipelineshaderstagecreateinfo_array, smpt_rd_vk_swc_rdp, vkpipelinelayout, &vkpipeline);
+	smpt_rd_vk_pl_make(smpt_rd_vk_device, vkpipelineshaderstagecreateinfo_array, smpt_rd_vk_swcVrdp, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -143,10 +143,10 @@ void smpt_rd_vk_cmd_set()
 	//e0-s
 
 	//s0-draw
-	vkcommandbuffer_p = malloc(sizeof(VkCommandBuffer) * smpt_rd_vk_swc_image);
-	vkfence_p = malloc(sizeof(VkFence) * smpt_rd_vk_swc_image);
-	vksemaphore_p = malloc(sizeof(VkSemaphore *) * smpt_rd_vk_swc_image);
-	for (uint8_t l_0 = 0; l_0 < smpt_rd_vk_swc_image; ++l_0)
+	vkcommandbuffer_p = malloc(sizeof(VkCommandBuffer) * smpt_rd_vk_swcUimage);
+	vkfence_p = malloc(sizeof(VkFence) * smpt_rd_vk_swcUimage);
+	vksemaphore_p = malloc(sizeof(VkSemaphore *) * smpt_rd_vk_swcUimage);
+	for (uint8_t l_0 = 0; l_0 < smpt_rd_vk_swcUimage; ++l_0)
 	{
 		//s0-cmd
 		smpt_rd_vk_cm_bf_make(smpt_rd_vk_device, smpt_rd_vk_queue_g, vkcommandbuffer_p + l_0, 1);
@@ -171,13 +171,13 @@ void smpt_rd_vk_cmd_set()
 		}
 	}
 
-	vkrenderpassbegininfo.renderPass = smpt_rd_vk_swc_rdp;
-	vkrenderpassbegininfo.renderArea.extent = smpt_rd_vk_swc_et2d;
+	vkrenderpassbegininfo.renderPass = smpt_rd_vk_swcVrdp;
+	vkrenderpassbegininfo.renderArea.extent = smpt_rd_vk_swcVet2d;
 
-	vkviewport.width = smpt_rd_vk_swc_et2d.width;
-	vkviewport.height = smpt_rd_vk_swc_et2d.height;
+	vkviewport.width = smpt_rd_vk_swcVet2d.width;
+	vkviewport.height = smpt_rd_vk_swcVet2d.height;
 
-	vkrect2d.extent = smpt_rd_vk_swc_et2d;
+	vkrect2d.extent = smpt_rd_vk_swcVet2d;
 
 	//e0-draw
 
@@ -203,23 +203,23 @@ static void re_sc()
 //					smpt_rd_vk_sf_make();
 //				}
 //			#endif
-	smpt_rd_vk_swc_free();
+	smpt_rd_vk_swcMfree();
 
 	#ifdef SMPT_CM_ST_ANDROID
 		sa_wait();
 	#endif
 
-	smpt_rd_vk_swc_make(smpt_rd_vkq_max_queue_surface_p[smpt_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+	smpt_rd_vk_swcMmake(smpt_rd_vkq_max_queue_surface_p[smpt_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 
-	vkrenderpassbegininfo.renderPass = smpt_rd_vk_swc_rdp;
-	vkviewport.width = smpt_rd_vk_swc_et2d.width;
-	vkviewport.height = smpt_rd_vk_swc_et2d.height;
-	vkrenderpassbegininfo.renderArea.extent = smpt_rd_vk_swc_et2d;
-	vkrect2d.extent = smpt_rd_vk_swc_et2d;
+	vkrenderpassbegininfo.renderPass = smpt_rd_vk_swcVrdp;
+	vkviewport.width = smpt_rd_vk_swcVet2d.width;
+	vkviewport.height = smpt_rd_vk_swcVet2d.height;
+	vkrenderpassbegininfo.renderArea.extent = smpt_rd_vk_swcVet2d;
+	vkrect2d.extent = smpt_rd_vk_swcVet2d;
 
-	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swc_image; ++l0)
+	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swcUimage; ++l0)
 	{
-		SMPTM_M4X4mP(tanf(90.0F * (M_PI / 180.0F) / 2.0F), smpt_sfUwidth / smpt_sfUheight, 0.1F, 100.0F, (float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swc_image + l0] + sizeof(float) * 16))
+		SMPTM_M4X4mP(tanf(90.0F * (M_PI / 180.0F) / 2.0F), smpt_sfUwidth / smpt_sfUheight, 0.1F, 100.0F, (float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swcUimage + l0] + sizeof(float) * 16))
 	}
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
@@ -247,22 +247,22 @@ int smpt_rd_vk_cmd_loop(void *p)
 	smpt_sfUstate |= SMPT_SFuS_RENDER;
 	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
 	{
-		smpt_rd_vk_swc_frame_buffer = (smpt_rd_vk_swc_frame_buffer + 1) % smpt_rd_vk_swc_image;
+		smpt_rd_vk_swcUframe_buffer = (smpt_rd_vk_swcUframe_buffer + 1) % smpt_rd_vk_swcUimage;
 		#ifdef SMPT_CM_UDP
 			nc_get();
 			smptr_ceMloop();
 			nc_send();
 		#endif
 
-		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swc_frame, VK_TRUE, UINT64_MAX);
-		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swc_frame]);
+		vkWaitForFences(vkdevice, 1, vkfence_p + smpt_rd_vk_swcUframe, VK_TRUE, UINT64_MAX);
+		vkResetFences(vkdevice, 1, &vkfence_p[smpt_rd_vk_swcUframe]);
 
-		image_vksubmitinfo.pCommandBuffers = &vkcommandbuffer_p[smpt_rd_vk_swc_frame];
+		image_vksubmitinfo.pCommandBuffers = &vkcommandbuffer_p[smpt_rd_vk_swcUframe];
 
-		image_vksubmitinfo.pWaitSemaphores = vksemaphore_p[smpt_rd_vk_swc_frame];
-		image_vksubmitinfo.pSignalSemaphores = vksemaphore_p[smpt_rd_vk_swc_frame] + 1;
+		image_vksubmitinfo.pWaitSemaphores = vksemaphore_p[smpt_rd_vk_swcUframe];
+		image_vksubmitinfo.pSignalSemaphores = vksemaphore_p[smpt_rd_vk_swcUframe] + 1;
 
-		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[smpt_rd_vk_swc_frame] + 1;
+		vkpresentinfokhr.pWaitSemaphores = vksemaphore_p[smpt_rd_vk_swcUframe] + 1;
 
 		if (smpt_sfUstate & SMPT_SFuS_RE)
 		{
@@ -270,7 +270,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 		}
 
 		uint32_t image_index;
-		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, smpt_rd_vk_swc_khr, UINT64_MAX, vksemaphore_p[smpt_rd_vk_swc_frame][0], VK_NULL_HANDLE, &image_index);
+		VkResult vkresult = vkAcquireNextImageKHR(vkdevice, smpt_rd_vk_swcVkhr, UINT64_MAX, vksemaphore_p[smpt_rd_vk_swcUframe][0], VK_NULL_HANDLE, &image_index);
 		if (vkresult != VK_SUCCESS)
 		{
 			//support recreate vkswapchainkhr if need
@@ -278,20 +278,20 @@ int smpt_rd_vk_cmd_loop(void *p)
 			re_sc();
 		}
 
-		vkrenderpassbegininfo.framebuffer = smpt_rd_vk_swc_fbf_p[image_index];
+		vkrenderpassbegininfo.framebuffer = smpt_rd_vk_swcPfbf[image_index];
 		vkpresentinfokhr.pImageIndices = &image_index;
 
-		vkBeginCommandBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], &vkcommandbufferbegininfo);
+		vkBeginCommandBuffer(vkcommandbuffer_p[smpt_rd_vk_swcUframe], &vkcommandbufferbegininfo);
 
-			vkCmdBeginRenderPass(vkcommandbuffer_p[smpt_rd_vk_swc_frame], &vkrenderpassbegininfo, VK_SUBPASS_CONTENTS_INLINE);
+			vkCmdBeginRenderPass(vkcommandbuffer_p[smpt_rd_vk_swcUframe], &vkrenderpassbegininfo, VK_SUBPASS_CONTENTS_INLINE);
 
-				vkCmdBindPipeline(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
+				vkCmdBindPipeline(vkcommandbuffer_p[smpt_rd_vk_swcUframe], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline);
 
 				//s0-VkDynamicState
 				// if (update)
 				// {
-				vkCmdSetViewport(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &vkviewport);
-				vkCmdSetScissor(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &vkrect2d);
+				vkCmdSetViewport(vkcommandbuffer_p[smpt_rd_vk_swcUframe], 0, 1, &vkviewport);
+				vkCmdSetScissor(vkcommandbuffer_p[smpt_rd_vk_swcUframe], 0, 1, &vkrect2d);
 				// 	update = 0;
 				// }
 				//e0-VkDynamicState
@@ -301,24 +301,24 @@ int smpt_rd_vk_cmd_loop(void *p)
 				{
 					struct SMPTR_CEMsM1 m1 = smptr_cemPm1[l_0];
 					SMPTRtMA a = m1.Ua;
-//					SMPT_DBmN2L("m1.Ui * smpt_rd_vk_swc_image %d", m1.Ui * smpt_rd_vk_swc_image)
+//					SMPT_DBmN2L("m1.Ui * smpt_rd_vk_swcUimage %d", m1.Ui * smpt_rd_vk_swcUimage)
 //					SMPT_DBmN2L("m1.Ui %d", m1.Ui)
-//					SMPT_DBmN2L("smpt_rd_vk_swc_frame_buffer %d", smpt_rd_vk_swc_frame_buffer)
-//					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer %p", smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer)
-					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swc_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swc_image + smpt_rd_vk_swc_frame_buffer, 0, VK_NULL_HANDLE);
+//					SMPT_DBmN2L("smpt_rd_vk_swcUframe_buffer %d", smpt_rd_vk_swcUframe_buffer)
+//					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swcUimage + smpt_rd_vk_swcUframe_buffer %p", smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swcUimage + smpt_rd_vk_swcUframe_buffer)
+					vkCmdBindDescriptorSets(vkcommandbuffer_p[smpt_rd_vk_swcUframe], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swcUimage + smpt_rd_vk_swcUframe_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swc_frame], 0, 1, &smptr_ce_mdPvkbuffer[0], r_cep_a_p + m1.Ub);
+					vkCmdBindVertexBuffers(vkcommandbuffer_p[smpt_rd_vk_swcUframe], 0, 1, &smptr_ce_mdPvkbuffer[0], r_cep_a_p + m1.Ub);
 
 					//! use lcv_vkbuffer
-					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame], smptr_ce_mdPvkbuffer[0], r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);
-					vkCmdDrawIndexed(vkcommandbuffer_p[smpt_rd_vk_swc_frame], r_cep_ai_l_p[a], 1, 0, 0, 0);
+					vkCmdBindIndexBuffer(vkcommandbuffer_p[smpt_rd_vk_swcUframe], smptr_ce_mdPvkbuffer[0], r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(vkcommandbuffer_p[smpt_rd_vk_swcUframe], r_cep_ai_l_p[a], 1, 0, 0, 0);
 				}
 
-			vkCmdEndRenderPass(vkcommandbuffer_p[smpt_rd_vk_swc_frame]);
+			vkCmdEndRenderPass(vkcommandbuffer_p[smpt_rd_vk_swcUframe]);
 
-		vkEndCommandBuffer(vkcommandbuffer_p[smpt_rd_vk_swc_frame]);
+		vkEndCommandBuffer(vkcommandbuffer_p[smpt_rd_vk_swcUframe]);
 
-		vkQueueSubmit(vkqueue_graphic, 1, &image_vksubmitinfo, vkfence_p[smpt_rd_vk_swc_frame]);
+		vkQueueSubmit(vkqueue_graphic, 1, &image_vksubmitinfo, vkfence_p[smpt_rd_vk_swcUframe]);
 		vkQueuePresentKHR(vkqueue_graphic, &vkpresentinfokhr);
 
 		++frame;
@@ -339,7 +339,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 			frame = 0;
 		}
 
-		smpt_rd_vk_swc_frame = (smpt_rd_vk_swc_frame + 1) % smpt_rd_vk_swc_image;
+		smpt_rd_vk_swcUframe = (smpt_rd_vk_swcUframe + 1) % smpt_rd_vk_swcUimage;
 	}
 	smpt_sfUstate |= SMPT_SFuS_EXIT_RENDER;
 
@@ -348,7 +348,7 @@ int smpt_rd_vk_cmd_loop(void *p)
 
 void smpt_rd_vk_cmd_free()
 {
-	for (uint8_t l_0 = 0; l_0 < smpt_rd_vk_swc_image; ++l_0)
+	for (uint8_t l_0 = 0; l_0 < smpt_rd_vk_swcUimage; ++l_0)
 	{
 		vkFreeCommandBuffers(vkdevice, smpt_rd_vk_cmp_p[smpt_rd_vk_device][smpt_rd_vk_queue_g], 1, vkcommandbuffer_p + l_0);
 

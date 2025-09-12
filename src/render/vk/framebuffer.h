@@ -14,8 +14,8 @@
 					.renderPass = vkrenderpass, \
 					.attachmentCount = vkimageview_size, \
 					.pAttachments = vkimageview_p, \
-					.width = smpt_rd_vk_swc_et2d.width, \
-					.height = smpt_rd_vk_swc_et2d.height, \
+					.width = smpt_rd_vk_swcVet2d.width, \
+					.height = smpt_rd_vk_swcVet2d.height, \
 					.layers = 1, \
 					.flags = 0, \
 					.pNext = VK_NULL_HANDLE \

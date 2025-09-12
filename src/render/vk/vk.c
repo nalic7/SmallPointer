@@ -154,7 +154,7 @@ void smpt_rd_vk_set()
 		smpt_rd_vk_cmp_make(d);
 	}
 
-	smpt_rd_vk_swc_make(smpt_rd_vkq_max_queue_surface_p[smpt_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+	smpt_rd_vk_swcMmake(smpt_rd_vkq_max_queue_surface_p[smpt_rd_vk_device] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
 
 	while (!(smpt_sfUstate & SMPT_SFuS_RAW))
 	{
@@ -173,7 +173,7 @@ void smpt_rd_vk_free()
 {
 	smpt_rd_vk_cmp_free();
 
-	smpt_rd_vk_swc_free();
+	smpt_rd_vk_swcMfree();
 
 	smpt_rd_vkq_dv_free();
 	smpt_rd_vkq_free();
