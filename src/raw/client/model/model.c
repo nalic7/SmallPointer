@@ -1,19 +1,14 @@
 //.i vk
 VkDeviceSize r_cep_a_p[NALI_LCS_A_BL];
 VkDeviceSize *r_cep_ai_p;
-uint32_t *r_cep_ai_l_p;
-
-//.i data
-uint32_t lcp_rgba_bl;
+uint32_t
+	*r_cep_ai_l_p,
+	lcp_rgba_bl;
 
 uint8_t
-	// lcm_max_j = 0,
-
 	*lcp_joint_count_p,
 	lcp_joint_count_bl,
 	**lcp_a_p;
-
-float **lcp_bp_p;
 
 #ifdef SMPT_CM_VK
 	VkBuffer *smptr_ce_mdPvkbuffer;
@@ -22,10 +17,6 @@ float **lcp_bp_p;
 	VkDeviceSize *smptr_ce_mdPvkdevicesize;
 #endif
 
-//to bypass oit / sort for translucent
-//x1 switch color attribute
-//x2 in shader get current pixel on screen then switch color <- need to check every pixel
-
 struct m_bone
 {
 	uint8_t
@@ -33,12 +24,11 @@ struct m_bone
 		joint_bl;
 };
 
+static float **lcp_bp_p;
 static struct m_bone *m_bone_p;
 
 static uint32_t **index_p;
 static uint32_t *index_bl_p;
-// static uint8_t **attribute_p;
-// static uint32_t *attribute_bl_p;
 static uint8_t *a_p_array[NALI_LCS_A_BL];
 static uint32_t a_bl_array[NALI_LCS_A_BL];
 static uint8_t model_il;
@@ -67,11 +57,6 @@ void lcp_set()
 
 	for (uint8_t l_0 = 0; l_0 < lcp_joint_count_bl; ++l_0)
 	{
-		// if (lcm_max_j < lcm_joint_count_p[l_0])
-		// {
-		// 	lcm_max_j = lcm_joint_count_p[l_0];
-		// }
-
 		smptrPcache->bs_p[l_0] = malloc(sizeof(uint16_t) * lcp_joint_count_p[l_0]);
 		smptrPcache->be_p[l_0] = malloc(sizeof(uint16_t) * lcp_joint_count_p[l_0]);
 		smptrPcache->bs_p[l_0][0] = 0;
@@ -107,13 +92,9 @@ void lcp_set()
 			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, smptrPcache->d_p + smptrPcache->d_bl_p[1] + l_1 * sizeof(float) * 16, sizeof(float) * 16);
 			memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, lcp_bp_p[l_0] + l_1 * 16 * 2, sizeof(float) * 16);
 			smptm_m4x4Mi(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16);
-
-			//memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2, smptmPm4x4, sizeof(smptmPm4x4));
-			//memcpy(lcp_bp_p[l_0] + l_1 * 16 * 2 + 16, smptmPm4x4, sizeof(smptmPm4x4));
 		}
 		smptrPcache->d_bl_p[1] += sizeof(float) * 16 * (lcp_joint_count_p[l_0] - 1);
 	}
-
 	// l_bone_bl = 0;
 	// for (uint8_t l_0 = 0; l_0 < m_joint_count_bl; ++l_0)
 	// {

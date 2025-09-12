@@ -5,7 +5,7 @@ void smpt_rd_vkw_dstsp_make(uint32_t device)
 	VkDescriptorPoolSize vkdescriptorpoolsize =
 	{
 		.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-		.descriptorCount = SMPTRB_MIM * SMPT_RD_VKW_DSTSLO_L
+		.descriptorCount = SMPTRmMI * SMPT_RD_VKW_DSTSLO_L
 	};
 
 	SMPT_DBmR2L
@@ -19,7 +19,7 @@ void smpt_rd_vkw_dstsp_make(uint32_t device)
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
 				.poolSizeCount = 1,
 				.pPoolSizes = &vkdescriptorpoolsize,
-				.maxSets = SMPTRB_MIM,
+				.maxSets = SMPTRmMI,
 
 				.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
 				.pNext = VK_NULL_HANDLE

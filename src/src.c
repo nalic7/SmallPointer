@@ -169,7 +169,7 @@ int main()
 	#ifdef SMPT_CM_GEN
 		g_write();
 	#endif
-	lb_set();
+	smptrMset();
 	#ifdef SMPT_CM_SERVER
 		smptr_svMset();
 	#endif

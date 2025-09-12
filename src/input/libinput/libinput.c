@@ -81,7 +81,7 @@ void smpt_ip_lipMloop()
 					uint32_t state = libinput_event_keyboard_get_key_state(Pevkb);
 					//SMPT_DBmN2L("libinput_event_keyboard_get_key %d", key)
 					if (key == KEY_ESC)
-						lb_free1();
+						smptrMfree1();
 					#ifdef SMPT_CM_CLIENT
 						if (state == LIBINPUT_KEY_STATE_PRESSED)
 						{
@@ -147,7 +147,7 @@ void smpt_ip_lipMloop()
 						uint32_t button = libinput_event_pointer_get_button(Pevpt);
 						//SMPT_DBmN2L("libinput_event_pointer_get_button %d", button)
 //						if (button == BTN_RIGHT)
-//							lb_free1();
+//							smptrMfree1();
 						break;
 
 //					case LIBINPUT_EVENT_TOUCH_UP:

@@ -242,7 +242,7 @@ static void re_sc()
 
 int smpt_rd_vk_cmd_loop(void *p)
 {
-	lb_free0();
+	smptrMfree0();
 
 	smpt_sfUstate |= SMPT_SFuS_RENDER;
 	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))

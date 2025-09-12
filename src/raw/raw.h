@@ -102,28 +102,7 @@
 	#define SMPTRlNET 255
 
 
-	//.i animation
-	#define SMPTRB_AKIT uint8_t
-	#define SMPTRB_AKIN 0xFFu
-	//.i animation key
-	#define SMPTRB_AKT uint8_t
-	//.i animation keyframe/float /255
-	#define SMPTRB_AFT uint16_t
-
-	//.i model
-	#define SMPTRB_MT uint8_t
-	//.i model index
-	#define SMPTRB_MIT uint16_t
-	#define SMPTRB_M8BL 256/8
-	#define SMPTRB_MIM 0xFFFFu-1
-	#define SMPTRB_MIN 0xFFFFu
-
-	//.i model attribute
-	#define SMPTRB_MAT uint8_t
-	//.i model max
-	#define SMPTRB_MM 0xFFu-1
-	#define SMPTRB_MN 0xFFu
-
+	//! clean
 	//.i chunk
 	#define SMPTRB_CT uint8_t
 	#define SMPTRB_C_ST int8_t
@@ -132,6 +111,7 @@
 	#define SMPTRB_CMFL 1024.0F
 	//.i chunk hash/3 key
 	#define SMPTRB_CHT uint16_t
+
 
 	struct SMPTRsCACHE
 	{
@@ -147,7 +127,7 @@
 	};
 	extern struct SMPTRsCACHE *smptrPcache;
 
-	void lb_set();
-	void lb_free0();
-	void lb_free1();
+	void smptrMset();
+	void smptrMfree0();
+	void smptrMfree1();
 #endif

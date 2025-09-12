@@ -14,7 +14,7 @@ static void xdg_toplevel_listener_configure(void *data, struct xdg_toplevel *_xd
 
 static void xdg_toplevel_listener_close(void *data, struct xdg_toplevel *xdg_toplevel)
 {
-	lb_free1();
+	smptrMfree1();
 }
 
 static void xdg_toplevel_listener_configure_bounds(void *data, struct xdg_toplevel *xdg_toplevel, int32_t width, int32_t height)

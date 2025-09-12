@@ -16,7 +16,7 @@ const SMPTRtMK smptrPmk[SMPTReMKc][4] =
 
 struct SMPTRsCACHE *smptrPcache;
 
-void lb_set()
+void smptrMset()
 {
 	smptrPcache = malloc(sizeof(struct SMPTRsCACHE));
 	smptrPcache->d_bl_p = malloc(sizeof(uint32_t) * 2);
@@ -26,14 +26,14 @@ void lb_set()
 	//! load data
 }
 
-void lb_free0()
+void smptrMfree0()
 {
 	free(smptrPcache->d_bl_p);
 	free(smptrPcache->d_p);
 	free(smptrPcache);
 }
 
-void lb_free1()
+void smptrMfree1()
 {
 	#if SMPT_CM_DRM || SMPT_CM_ASURFACE || SMPT_CM_WL || SMPT_CM_X11
 		smpt_sfUstate |= SMPT_SFuS_EXIT;

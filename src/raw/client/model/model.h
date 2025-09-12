@@ -9,17 +9,14 @@
 
 	extern VkDeviceSize r_cep_a_p[NALI_LCS_A_BL];
 	extern VkDeviceSize *r_cep_ai_p;
-	extern uint32_t *r_cep_ai_l_p;
-
 	extern uint32_t
+		*r_cep_ai_l_p,
 		lcp_rgba_bl;
 
 	extern uint8_t
 		*lcp_joint_count_p,
 		lcp_joint_count_bl,
 		**lcp_a_p;
-
-	extern float **lcp_bp_p;
 
 	#ifdef SMPT_CM_VK
 		extern VkBuffer *smptr_ce_mdPvkbuffer;

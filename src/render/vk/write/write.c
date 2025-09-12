@@ -18,7 +18,7 @@ static void smpt_rd_vkw_dsts_write(uint32_t device, uint32_t bind, VkDescriptorI
 	// vkUpdateDescriptorSets(smpt_rd_vkq_dv_p[device], 1, &vkwritedescriptorset, 0, VK_NULL_HANDLE);
 }
 
-void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, SMPTRB_MIT ds, uint8_t j, uint8_t mj, uint8_t s)
+void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, SMPTRtMI ds, uint8_t j, uint8_t mj, uint8_t s)
 {
 	//.i bindpose s 1+
 	vkdescriptorbufferinfo_p[0] = (VkDescriptorBufferInfo)

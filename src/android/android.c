@@ -4,7 +4,7 @@ static float
 
 static int s1_set(void *p)
 {
-	lb_set();
+	smptrMset();
 	#if SMPT_CM_SERVER
 		ls_set();
 	#endif
