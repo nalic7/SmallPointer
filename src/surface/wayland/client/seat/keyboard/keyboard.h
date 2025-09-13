@@ -1,9 +1,9 @@
-#ifndef smpt_sf_wl_ceS_KB_H
-	#define smpt_sf_wl_ceS_KB_H
+#ifndef SMPT_SF_WL_CEShKB
+	#define SMPT_SF_WL_CEShKB
 
-	extern struct wl_keyboard *smpt_sf_wl_ces_kb_p;
+	extern struct wl_keyboard *smpt_sf_wl_ces_kbP;
 
-	extern struct wl_keyboard_listener smpt_sf_wl_ces_kb_listener;
+	extern struct wl_keyboard_listener smpt_sf_wl_ces_kbSlistener;
 
-	void smpt_sf_wl_ces_kb_free();
+	void smpt_sf_wl_ces_kbMfree();
 #endif

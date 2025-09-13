@@ -5,9 +5,10 @@
 	//c1j0
 	//t1j1u1v1
 	//t1j0u1v1
-	#define NALI_LCS_A_BL 2
+	#define SMPTR_CE_MDlA 2
 
-	extern VkDeviceSize r_cep_a_p[NALI_LCS_A_BL];
+	//! move to raw
+	extern VkDeviceSize r_cep_a_p[SMPTR_CE_MDlA];
 	extern VkDeviceSize *r_cep_ai_p;
 	extern uint32_t
 		*r_cep_ai_l_p,

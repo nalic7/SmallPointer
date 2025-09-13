@@ -58,6 +58,6 @@ void smptrMfree1()
 	// al_clean();
 
 	#ifdef SMPT_CM_WL
-		smpt_sf_wl_ce_free();
+		smpt_sf_wl_ceMfree();
 	#endif
 }

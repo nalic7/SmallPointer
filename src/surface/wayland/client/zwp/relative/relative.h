@@ -1,10 +1,10 @@
-#ifndef smpt_sf_wl_ce_ZWP_R_H
-	#define smpt_sf_wl_ce_ZWP_R_H
+#ifndef SMPT_SF_WL_CE_ZWPhRLT
+	#define SMPT_SF_WL_CE_ZWPhRLT
 
-	extern struct zwp_relative_pointer_manager_v1 *smpt_sf_wl_ce_zwp_rp_mng_p;
-	extern struct zwp_relative_pointer_v1 *smpt_sf_wl_ce_zwp_rp_p;
+	extern struct zwp_relative_pointer_manager_v1 *smpt_sf_wl_ce_zwp_rltPpt_mng;
+	extern struct zwp_relative_pointer_v1 *smpt_sf_wl_ce_zwp_rltPpt;
 
-	extern struct zwp_relative_pointer_v1_listener smpt_sf_wl_ce_zwp_rp_listener;
+	extern struct zwp_relative_pointer_v1_listener smpt_sf_wl_ce_zwp_rltSpt_listener;
 
-	void smpt_sf_wl_ce_zwp_rp_free();
+	void smpt_sf_wl_ce_zwp_rltMfree();
 #endif

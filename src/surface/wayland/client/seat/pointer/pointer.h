@@ -1,9 +1,9 @@
-#ifndef smpt_sf_wl_ceS_PT_H
-	#define smpt_sf_wl_ceS_PT_H
+#ifndef SMPT_SF_WL_CEShPT
+	#define SMPT_SF_WL_CEShPT
 
-	extern struct wl_pointer *smpt_sf_wl_ces_pt_p;
+	extern struct wl_pointer *smpt_sf_wl_cesPtP;
 
-	extern struct wl_pointer_listener smpt_sf_wl_ces_pt_listener;
+	extern struct wl_pointer_listener smpt_sf_wl_cesPtSlistener;
 
-	void smpt_sf_wl_ces_pt_free();
+	void smpt_sf_wl_cesPtMfree();
 #endif

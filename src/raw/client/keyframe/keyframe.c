@@ -1,74 +1,75 @@
-struct lckf **lckf_p;
-uint8_t *lckf_bl_p;
-// static uint8_t lckf_keyframe_bl;
+struct SMPTR_CE_KFs **smptr_ce_kfP;
+uint8_t *smptr_ce_kfPl;
 
-void lckf_set()
+static uint8_t Lkf;
+void smptr_ce_kfMset()
 {
-	uint8_t l_keyframe_bl = *(uint8_t *)smptrPcache->d_p;
+	Lkf = *(uint8_t *)smptrPcache->d_p;
 	smptrPcache->d_bl_p[1] += sizeof(uint8_t);
-	lckf_bl_p = malloc(l_keyframe_bl);
-	lckf_p = malloc(l_keyframe_bl * sizeof(struct lckf *));
-	memset(lckf_p, 0, l_keyframe_bl * sizeof(struct lckf *));
+	smptr_ce_kfPl = malloc(Lkf);
+	smptr_ce_kfP = malloc(Lkf * sizeof(struct SMPTR_CE_KFs *));
+	memset(smptr_ce_kfP, 0, Lkf * sizeof(struct SMPTR_CE_KFs *));
 
-	for (uint8_t l_0 = 0; l_0 < l_keyframe_bl; ++l_0)
+	for (uint8_t l0 = 0; l0 < Lkf; ++l0)
 	{
-		lckf_bl_p[l_0] = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
+		smptr_ce_kfPl[l0] = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
 		smptrPcache->d_bl_p[1] += sizeof(uint8_t);
-		lckf_p[l_0] = malloc(lckf_bl_p[l_0] * sizeof(struct lckf));
+		smptr_ce_kfP[l0] = malloc(smptr_ce_kfPl[l0] * sizeof(struct SMPTR_CE_KFs));
 
-		for (uint32_t l_1 = 0; l_1 < lckf_bl_p[l_0]; ++l_1)
+		for (uint32_t l1 = 0; l1 < smptr_ce_kfPl[l0]; ++l1)
 		{
-			// lckf_p[l_0][l_1].keyframe = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
-			// smptrPcache->d_bl_p[1] += sizeof(uint8_t);
-
-			lckf_p[l_0][l_1].bone_bl = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
+			smptr_ce_kfP[l0][l1].Lbone = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
 			smptrPcache->d_bl_p[1] += sizeof(uint8_t);
 
-			lckf_p[l_0][l_1].bone_p = malloc(lckf_p[l_0][l_1].bone_bl);
-			lckf_p[l_0][l_1].s_p = malloc(sizeof(float *) * lckf_p[l_0][l_1].bone_bl);
-			lckf_p[l_0][l_1].r_p = malloc(sizeof(float *) * lckf_p[l_0][l_1].bone_bl);
-			lckf_p[l_0][l_1].t_p = malloc(sizeof(float *) * lckf_p[l_0][l_1].bone_bl);
+			smptr_ce_kfP[l0][l1].Pbone = malloc(smptr_ce_kfP[l0][l1].Lbone);
+			smptr_ce_kfP[l0][l1].Ps = malloc(sizeof(float *) * smptr_ce_kfP[l0][l1].Lbone);
+			smptr_ce_kfP[l0][l1].Pr = malloc(sizeof(float *) * smptr_ce_kfP[l0][l1].Lbone);
+			smptr_ce_kfP[l0][l1].Pt = malloc(sizeof(float *) * smptr_ce_kfP[l0][l1].Lbone);
 
-			for (uint32_t l_2 = 0; l_2 < lckf_p[l_0][l_1].bone_bl; ++l_2)
+			for (uint32_t l2 = 0; l2 < smptr_ce_kfP[l0][l1].Lbone; ++l2)
 			{
-				lckf_p[l_0][l_1].bone_p[l_2] = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
+				smptr_ce_kfP[l0][l1].Pbone[l2] = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
 				smptrPcache->d_bl_p[1] += sizeof(uint8_t);
 
-				lckf_p[l_0][l_1].s_p[l_2] = malloc(sizeof(float) * 3);
-				memcpy(lckf_p[l_0][l_1].s_p[l_2], smptrPcache->d_p + smptrPcache->d_bl_p[1], sizeof(float) * 3);
+				smptr_ce_kfP[l0][l1].Ps[l2] = malloc(sizeof(float) * 3);
+				memcpy(smptr_ce_kfP[l0][l1].Ps[l2], smptrPcache->d_p + smptrPcache->d_bl_p[1], sizeof(float) * 3);
 				smptrPcache->d_bl_p[1] += sizeof(float) * 3;
 
-				lckf_p[l_0][l_1].r_p[l_2] = malloc(sizeof(float) * 4);
-				memcpy(lckf_p[l_0][l_1].r_p[l_2], smptrPcache->d_p + smptrPcache->d_bl_p[1], sizeof(float) * 4);
+				smptr_ce_kfP[l0][l1].Pr[l2] = malloc(sizeof(float) * 4);
+				memcpy(smptr_ce_kfP[l0][l1].Pr[l2], smptrPcache->d_p + smptrPcache->d_bl_p[1], sizeof(float) * 4);
 				smptrPcache->d_bl_p[1] += sizeof(float) * 4;
 
-				lckf_p[l_0][l_1].t_p[l_2] = malloc(sizeof(float) * 3);
-				memcpy(lckf_p[l_0][l_1].t_p[l_2], smptrPcache->d_p + smptrPcache->d_bl_p[1], sizeof(float) * 3);
+				smptr_ce_kfP[l0][l1].Pt[l2] = malloc(sizeof(float) * 3);
+				memcpy(smptr_ce_kfP[l0][l1].Pt[l2], smptrPcache->d_p + smptrPcache->d_bl_p[1], sizeof(float) * 3);
 				smptrPcache->d_bl_p[1] += sizeof(float) * 3;
 			}
-
-			lckf_p[l_0][l_1].k_min = lckf_p[l_0][l_1].bone_p[0];
-			lckf_p[l_0][l_1].k_max = lckf_p[l_0][l_1].bone_p[lckf_p[l_0][l_1].bone_bl - 1];
-			if (l_1 > 0)
-			{
-				if (lckf_p[l_0][l_1 - 1].k_min > lckf_p[l_0][l_1].bone_p[0])
-				{
-					lckf_p[l_0][l_1 - 1].k_min = lckf_p[l_0][l_1].bone_p[0];
-				}
-				if (lckf_p[l_0][l_1 - 1].k_max < lckf_p[l_0][l_1].bone_p[lckf_p[l_0][l_1].bone_bl - 1])
-				{
-					lckf_p[l_0][l_1 - 1].k_max = lckf_p[l_0][l_1].bone_p[lckf_p[l_0][l_1].bone_bl - 1];
-				}
-			}
-		}
-
-		if (lckf_p[l_0][lckf_bl_p[l_0] - 1].k_min > lckf_p[l_0][0].bone_p[0])
-		{
-			lckf_p[l_0][lckf_bl_p[l_0] - 1].k_min = lckf_p[l_0][0].bone_p[0];
-		}
-		if (lckf_p[l_0][lckf_bl_p[l_0] - 1].k_max < lckf_p[l_0][0].bone_p[lckf_p[l_0][0].bone_bl - 1])
-		{
-			lckf_p[l_0][lckf_bl_p[l_0] - 1].k_max = lckf_p[l_0][0].bone_p[lckf_p[l_0][0].bone_bl - 1];
 		}
 	}
+}
+
+void smptr_ce_kfMfree()
+{
+	for (uint8_t l0 = 0; l0 < Lkf; ++l0)
+	{
+		for (uint32_t l1 = 0; l1 < smptr_ce_kfPl[l0]; ++l1)
+		{
+			free(smptr_ce_kfP[l0][l1].Pbone);
+
+			for (uint32_t l2 = 0; l2 < smptr_ce_kfP[l0][l1].Lbone; ++l2)
+			{
+				free(smptr_ce_kfP[l0][l1].Pr[l2]);
+				free(smptr_ce_kfP[l0][l1].Pt[l2]);
+				free(smptr_ce_kfP[l0][l1].Ps[l2]);
+			}
+
+			free(smptr_ce_kfP[l0][l1].Pr);
+			free(smptr_ce_kfP[l0][l1].Pt);
+			free(smptr_ce_kfP[l0][l1].Ps);
+		}
+
+		free(smptr_ce_kfP[l0]);
+	}
+
+	free(smptr_ce_kfP);
+	free(smptr_ce_kfPl);
 }

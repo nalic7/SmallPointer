@@ -1,26 +1,20 @@
-#ifndef _RC_KF_H
-#define _RC_KF_H
+#ifndef SMPTR_CEhKF
+	#define SMPTR_CEhKF
 
-struct lckf
-{
-	uint8_t
-		// keyframe,//debug only
-		bone_bl,
-		*bone_p,
+	struct SMPTR_CE_KFs
+	{
+		uint8_t
+			Lbone,
+			*Pbone;
+		float
+			**Ps,
+			**Pr,
+			**Pt;
+	};
 
-		//new
-		k_min,
-		k_max;
-	float
-		**s_p,
-		**r_p,
-		**t_p;
-};
+	extern struct SMPTR_CE_KFs **smptr_ce_kfP;
+	extern uint8_t *smptr_ce_kfPl;
 
-//select keyframe
-extern struct lckf **lckf_p;
-extern uint8_t *lckf_bl_p;
-
-void lckf_set();
-
+	void smptr_ce_kfMset();
+	void smptr_ce_kfMfree();
 #endif

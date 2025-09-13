@@ -1,5 +1,5 @@
 //.i vk
-VkDeviceSize r_cep_a_p[NALI_LCS_A_BL];
+VkDeviceSize r_cep_a_p[SMPTR_CE_MDlA];
 VkDeviceSize *r_cep_ai_p;
 uint32_t
 	*r_cep_ai_l_p,
@@ -29,8 +29,8 @@ static struct m_bone *m_bone_p;
 
 static uint32_t **index_p;
 static uint32_t *index_bl_p;
-static uint8_t *a_p_array[NALI_LCS_A_BL];
-static uint32_t a_bl_array[NALI_LCS_A_BL];
+static uint8_t *a_p_array[SMPTR_CE_MDlA];
+static uint32_t a_bl_array[SMPTR_CE_MDlA];
 static uint8_t model_il;
 
 static float *rgba_p;
@@ -407,7 +407,7 @@ void lcp_set()
 			vkdevicesize += index_bl_p[l_0];
 		}
 
-		for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
+		for (uint32_t l_0 = 0; l_0 < SMPTR_CE_MDlA; ++l_0)
 		{
 			r_cep_a_p[l_0] = vkdevicesize;
 			vkdevicesize += a_bl_array[l_0];
@@ -447,7 +447,7 @@ void lcp_set()
 		}
 
 		//.i a index
-		for (uint32_t l_0 = 0; l_0 < NALI_LCS_A_BL; ++l_0)
+		for (uint32_t l_0 = 0; l_0 < SMPTR_CE_MDlA; ++l_0)
 		{
 			memcpy(smptr_ce_mdPbuffer_map[0] + vkdevicesize, a_p_array[l_0], a_bl_array[l_0]);
 			vkdevicesize += a_bl_array[l_0];

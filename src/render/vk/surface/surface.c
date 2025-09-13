@@ -106,8 +106,8 @@ void smpt_rd_vk_sfMmake()
 					&(VkWaylandSurfaceCreateInfoKHR)
 					{
 						.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
-						.display = smpt_sf_wl_ce_dp_p,
-						.surface = smpt_sf_wl_ce_sf_p,
+						.display = smpt_sf_wl_ce_Pdp,
+						.surface = smpt_sf_wl_cePsf,
 						.flags = 0,
 						.pNext = VK_NULL_HANDLE
 					},

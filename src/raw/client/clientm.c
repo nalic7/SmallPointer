@@ -377,29 +377,29 @@ void smptr_cemMloop()
 					SMPTRtMK Uks = Pm01->Ft;
 					float Fkf = Pm01->Ft - Uks;
 					SMPTRtMK Uke = SMPTMmWRAP_I(Uks + 1, Pk[1], Pk[2]);
-					struct lckf l_lckf = lckf_p[Pk[0]][Uks];
+					struct SMPTR_CE_KFs Skf = smptr_ce_kfP[Pk[0]][Uks];
 					//SMPT_DBmN2L("Uks %d", Uks)
 					//SMPT_DBmN2L("Fkf %f", Fkf)
 					//SMPT_DBmN2L("Uke %d", Uke)
-					for (uint8_t l_0 = 0; l_0 < l_lckf.bone_bl; ++l_0)
+					for (uint8_t l_0 = 0; l_0 < Skf.Lbone; ++l_0)
 					{
-						memcpy(Pbuffer + 4 + l_lckf.bone_p[l_0] * 4 * 3, l_lckf.s_p[l_0], sizeof(float) * 3);
-						memcpy(Pbuffer + 4 + l_lckf.bone_p[l_0] * 4 * 3 + 4, l_lckf.r_p[l_0], sizeof(float) * 4);
-						memcpy(Pbuffer + 4 + l_lckf.bone_p[l_0] * 4 * 3 + 4 * 2, l_lckf.t_p[l_0], sizeof(float) * 3);
+						memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3, Skf.Ps[l_0], sizeof(float) * 3);
+						memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4, Skf.Pr[l_0], sizeof(float) * 4);
+						memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4 * 2, Skf.Pt[l_0], sizeof(float) * 3);
 					}
 
-					l_lckf = lckf_p[Pk[0]][Uke];
-					for (uint8_t l_0 = 0; l_0 < l_lckf.bone_bl; ++l_0)
+					Skf = smptr_ce_kfP[Pk[0]][Uke];
+					for (uint8_t l_0 = 0; l_0 < Skf.Lbone; ++l_0)
 					{
 						for (uint8_t l_3 = 0; l_3 < 3; ++l_3)
 						{
-							SMPTMmLERP(((float *)(Pbuffer + 4 + l_lckf.bone_p[l_0] * 4 * 3))[l_3], l_lckf.s_p[l_0][l_3], Fkf);
-							SMPTMmLERP(((float *)(Pbuffer + 4 + l_lckf.bone_p[l_0] * 4 * 3 + 4 * 2))[l_3], l_lckf.t_p[l_0][l_3], Fkf);
+							SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3))[l_3], Skf.Ps[l_0][l_3], Fkf);
+							SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4 * 2))[l_3], Skf.Pt[l_0][l_3], Fkf);
 						}
 
 						for (uint8_t l_3 = 0; l_3 < 4; ++l_3)
 						{
-							SMPTMmLERP(((float *)(Pbuffer + 4 + l_lckf.bone_p[l_0] * 4 * 3 + 4))[l_3], l_lckf.r_p[l_0][l_3], Fkf);
+							SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4))[l_3], Skf.Pr[l_0][l_3], Fkf);
 						}
 					}
 				}

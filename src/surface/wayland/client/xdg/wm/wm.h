@@ -1,9 +1,9 @@
-#ifndef smpt_sf_wl_ce_XDG_WMB_H
-	#define smpt_sf_wl_ce_XDG_WMB_H
+#ifndef SMPT_SF_WL_CE_XDGhWM
+	#define SMPT_SF_WL_CE_XDGhWM
 
-	extern struct xdg_wm_base *smpt_sf_wl_ce_xdg_wmb_p;
+	extern struct xdg_wm_base *smpt_sf_wl_ce_xdg_wmPb;
 
-	extern struct xdg_wm_base_listener smpt_sf_wl_ce_xdg_wmb_listener;
+	extern struct xdg_wm_base_listener smpt_sf_wl_ce_xdg_wmSb_listener;
 
-	void smpt_sf_wl_ce_xdg_wmb_free();
+	void smpt_sf_wl_ce_xdg_wmMfree();
 #endif

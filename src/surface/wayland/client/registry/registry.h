@@ -1,10 +1,10 @@
-#ifndef smpt_sf_wl_ce_RGT_H
-	#define smpt_sf_wl_ce_RGT_H
+#ifndef SMPT_SF_WL_CEhRGT
+	#define SMPT_SF_WL_CEhRGT
 
-	extern struct wl_registry *smpt_sf_wl_ce_rgt_p;
+	extern struct wl_registry *smpt_sf_wl_ce_rgtP;
 
-	extern struct wl_registry_listener smpt_sf_wl_ce_rgt_listener;
+	extern struct wl_registry_listener smpt_sf_wl_ce_rgtSlistener;
 
-	void smpt_sf_wl_ce_rgt_set();
-	void smpt_sf_wl_ce_rgt_free();
+	void smpt_sf_wl_ce_rgtMset();
+	void smpt_sf_wl_ce_rgtMfree();
 #endif
