@@ -1,5 +1,5 @@
-#ifndef SMPT_RD_VK_PL_LO_H
-	#define SMPT_RD_VK_PL_LO_H
+#ifndef SMPT_RD_VK_PLhLO
+	#define SMPT_RD_VK_PLhLO
 
-	void smpt_rd_vk_pl_lo_make(uint32_t device, VkPipelineLayout *vkpipelinelayout_p);
+	void smpt_rd_vk_pl_loMmake(uint32_t device, VkPipelineLayout *Pvkpipelinelayout);
 #endif

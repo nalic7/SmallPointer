@@ -32,7 +32,7 @@
 //	// SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(vkqueue_graphic))
 //
 //	// //s0-freeImage
-//	// VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
+//	// VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
 //	// for (uint32_t i = 0; i < m_nali_g_max_image; ++i)
 //	// {
 //	// 	vkDestroyBuffer(vkdevice, m_nali_g_image_vkbuffer_p[i], VK_NULL_HANDLE);

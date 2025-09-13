@@ -184,7 +184,7 @@ int main()
 			smpt_sf_wl_ceMset();
 		#else
 			#ifdef SMPT_CM_VK
-				smpt_rd_vk_set();
+				smpt_rd_vkMset();
 			#endif
 		#endif
 

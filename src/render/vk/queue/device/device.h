@@ -1,11 +1,11 @@
-#ifndef SMPT_RD_VKQ_DV_H
-	#define SMPT_RD_VKQ_DV_H
+#ifndef SMPT_RD_VKQhDV
+	#define SMPT_RD_VKQhDV
 
-	extern const char *smpt_rd_vkq_dv_ets_p[1];
+	extern const char *smpt_rd_vkq_dvPets[1];
 
-	extern VkDevice *smpt_rd_vkq_dv_p;
+	extern VkDevice *smpt_rd_vkq_dvP;
 
-	void smpt_rd_vkq_dv_set();
-	void smpt_rd_vkq_dv_make(uint32_t device);
-	void smpt_rd_vkq_dv_free();
+	void smpt_rd_vkq_dvMset();
+	void smpt_rd_vkq_dvMmake(uint32_t device);
+	void smpt_rd_vkq_dvMfree();
 #endif

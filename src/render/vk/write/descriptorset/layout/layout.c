@@ -1,17 +1,17 @@
-VkDescriptorSetLayout smpt_rd_vkw_dsts_lo;
+VkDescriptorSetLayout smpt_rd_vkw_dsts_loV;
 
-void smpt_rd_vkw_dsts_lo_make(uint32_t device)
+void smpt_rd_vkw_dsts_loMmake(uint32_t device)
 {
 	SMPT_DBmR2L
 	(
 		"vkCreateDescriptorSetLayout %d",
 		vkCreateDescriptorSetLayout
 		(
-			smpt_rd_vkq_dv_p[device],
+			smpt_rd_vkq_dvP[device],
 			&(VkDescriptorSetLayoutCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-				.bindingCount = SMPT_RD_VKW_DSTSLO_L,
+				.bindingCount = SMPT_RD_VKW_DSTS_LOl,
 				.pBindings = (VkDescriptorSetLayoutBinding[])
 				{
 					{
@@ -55,12 +55,12 @@ void smpt_rd_vkw_dsts_lo_make(uint32_t device)
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			&smpt_rd_vkw_dsts_lo
+			&smpt_rd_vkw_dsts_loV
 		)
 	)
 }
 
-void smpt_rd_vkw_dsts_lo_free(uint32_t device)
+void smpt_rd_vkw_dsts_loMfree(uint32_t device)
 {
-	vkDestroyDescriptorSetLayout(smpt_rd_vkq_dv_p[device], smpt_rd_vkw_dsts_lo, VK_NULL_HANDLE);
+	vkDestroyDescriptorSetLayout(smpt_rd_vkq_dvP[device], smpt_rd_vkw_dsts_loV, VK_NULL_HANDLE);
 }

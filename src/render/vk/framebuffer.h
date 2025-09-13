@@ -1,13 +1,13 @@
-#ifndef SMPT_RD_VK_FBF_H
-	#define SMPT_RD_VK_FBF_H
+#ifndef SMPT_RD_VKhFBF
+	#define SMPT_RD_VKhFBF
 
-	#define SMPT_RD_VK_FBF_MAKE(device, vkimageview_p, vkimageview_size, vkrenderpass, vkframebuffer_p) \
+	#define SMPT_RD_VK_FBFmMAKE(device, vkimageview_p, vkimageview_size, vkrenderpass, vkframebuffer_p) \
 		SMPT_DBmR2L \
 		( \
 			"vkCreateFramebuffer %d", \
 			vkCreateFramebuffer \
 			( \
-				smpt_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dvP[device], \
 				&(VkFramebufferCreateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO, \

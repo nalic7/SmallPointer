@@ -1,9 +1,9 @@
-#ifndef SMPT_RD_VKQ_DV_PSCDV_H
-	#define SMPT_RD_VKQ_DV_PSCDV_H
+#ifndef SMPT_RD_VKQ_DVhPSCDV
+	#define SMPT_RD_VKQ_DVhPSCDV
 
-	extern uint32_t smpt_rd_vkq_dv_pscdv_bl;
-	extern VkPhysicalDevice *smpt_rd_vkq_dv_pscdv_p;
+	extern VkPhysicalDevice *smpt_rd_vkq_dv_pscdvP;
+	extern uint32_t smpt_rd_vkq_dv_pscdvL;
 
-	void smpt_rd_vkq_dv_pscdv_make();
-	void smpt_rd_vkq_dv_pscdv_free();
+	void smpt_rd_vkq_dv_pscdvMmake();
+	void smpt_rd_vkq_dv_pscdvMfree();
 #endif

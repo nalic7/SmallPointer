@@ -1,16 +1,16 @@
-#ifndef SMPT_RD_VK_BF_H
-	#define SMPT_RD_VK_BF_H
+#ifndef SMPT_RD_VKhBF
+	#define SMPT_RD_VKhBF
 
-	uint32_t smpt_rd_vk_bf_type(uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags);
+	uint32_t smpt_rd_vk_bfMtype(uint32_t device, uint32_t typefilter, VkMemoryPropertyFlags vkmemorypropertyflags);
 
 	//VkMemoryRequirements vkmemoryrequirements
-	#define SMPT_RD_VK_BF_MAKE(device, vkdevicesize, vkbufferusageflags, vkmemorypropertyflags, vkbuffer, vkdevicememory, vkmemoryrequirements) \
+	#define SMPT_RD_VK_BFmMAKE(device, vkdevicesize, vkbufferusageflags, vkmemorypropertyflags, vkbuffer, vkdevicememory, vkmemoryrequirements) \
 		SMPT_DBmR2L \
 		( \
 			"vkCreateBuffer %d", \
 			vkCreateBuffer \
 			( \
-				smpt_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dvP[device], \
 				&(VkBufferCreateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, \
@@ -26,17 +26,17 @@
 				&vkbuffer \
 			) \
 		) \
-		vkGetBufferMemoryRequirements(smpt_rd_vkq_dv_p[device], vkbuffer, &vkmemoryrequirements); \
+		vkGetBufferMemoryRequirements(smpt_rd_vkq_dvP[device], vkbuffer, &vkmemoryrequirements); \
 		SMPT_DBmR2L \
 		( \
 			"vkAllocateMemory %d", \
 			vkAllocateMemory \
 			( \
-				smpt_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dvP[device], \
 				&(VkMemoryAllocateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, \
-					.memoryTypeIndex = smpt_rd_vk_bf_type(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags), \
+					.memoryTypeIndex = smpt_rd_vk_bfMtype(device, vkmemoryrequirements.memoryTypeBits, vkmemorypropertyflags), \
 					.allocationSize = vkmemoryrequirements.size, \
 					.pNext = VK_NULL_HANDLE \
 				}, \
@@ -44,11 +44,11 @@
 				&vkdevicememory \
 			) \
 		) \
-		SMPT_DBmR2L("vkBindBufferMemory %d", vkBindBufferMemory(smpt_rd_vkq_dv_p[device], vkbuffer, vkdevicememory, 0))
+		SMPT_DBmR2L("vkBindBufferMemory %d", vkBindBufferMemory(smpt_rd_vkq_dvP[device], vkbuffer, vkdevicememory, 0))
 
-	//void *data_p
-	#define SMPT_RD_VK_BF_MAP(device, vkdevicesize, buffer_data_p, vkdevicememory_p, data_p) \
-		SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dv_p[device], *vkdevicememory_p, 0, vkdevicesize, 0, &data_p)) \
-		memcpy(data_p, buffer_data_p, vkdevicesize); \
-		vkUnmapMemory(smpt_rd_vkq_dv_p[device], *vkdevicememory_p);
+	//void *Pdata
+	#define SMPT_RD_VK_BFmMAP(device, vkdevicesize, Pbuffer_data, Pvkdevicememory, Pdata) \
+		SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dvP[device], *Pvkdevicememory, 0, vkdevicesize, 0, &Pdata)) \
+		memcpy(Pdata, Pbuffer_data, vkdevicesize); \
+		vkUnmapMemory(smpt_rd_vkq_dvP[device], *Pvkdevicememory);
 #endif

@@ -8,5 +8,5 @@
 	#define SMPT_IPuKEY_SPACE 16
 	#define SMPT_IPuKEY_LEFT_SHIFT 32
 
-	#define SMPT_IPuL 1
+	#define SMPT_IPlL 1
 #endif

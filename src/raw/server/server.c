@@ -1,4 +1,4 @@
-struct SMPTR_SVtNET smptr_svPnet[SMPT_NWuU];
+struct SMPTR_SVtNET smptr_svPnet[SMPT_NWlU];
 
 FILE *smptr_svPfile;
 uint8_t smptr_svUrw = 0;
@@ -10,7 +10,10 @@ void smptr_svMset()
 	smptr_svuMset();
 	smptr_svmMset();
 
-	ns_set();
+	#ifdef SMPT_CM_UDP
+		smpt_nw_udp_svMset();
+	#endif
+
 	smptr_svMfread();
 
 	SMPT_DBmR2L("thrd_create %d", thrd_create(&(thrd_t){}, smptr_svMloop, NULL))
@@ -28,7 +31,7 @@ void smptr_svMsend(SMPT_NWtU u)
 //	SMPT_DBmN2L("S smptr_svPnet[u].Lnet %d", smptr_svPnet[u].Lnet)
 }
 
-static struct timespec Ptsp_e[SMPT_NWuU] = {0}, Ptsp_s[SMPT_NWuU];
+static struct timespec Ptsp_e[SMPT_NWlU] = {0}, Ptsp_s[SMPT_NWlU];
 void smptr_svMread(SMPT_NWtU u)
 {
 	Ptsp_s[u] = *(struct timespec *)smptr_svPnet[u].Pnet;
@@ -54,15 +57,15 @@ int smptr_svMloop(void *P)
 	while (!(smpt_sfUstate & SMPT_SFuS_EXIT))
 	{
 		#ifdef SMPT_CM_UDP
-			ns_get();
+			smpt_nw_udp_svMread();
 		#endif
 
 		smptr_svmMloop();
 
-		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWuU; ++l0)
+		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWlU; ++l0)
 		{
 			#ifdef SMPT_CM_UDP
-				ns_send(l0);
+				smpt_nw_udp_svMsend(l0);
 			#endif
 		}
 
@@ -120,5 +123,7 @@ void smptr_svMfree()
 	smptr_svmMfree();
 	smptr_svuMfree();
 
-	ns_free();
+	#ifdef SMPT_CM_UDP
+		smpt_nw_udp_svMfree();
+	#endif
 }

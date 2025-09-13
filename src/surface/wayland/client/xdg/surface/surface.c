@@ -5,7 +5,7 @@ static void xdg_surface_listener_configure(void *data, struct xdg_surface *_xdg_
 	xdg_surface_ack_configure(smpt_sf_wl_ce_xdg_sf_p, serial);
 	wl_surface_commit(smpt_sf_wl_ce_sf_p);
 	#ifdef SMPT_CM_VK
-		smpt_rd_vk_set();
+		smpt_rd_vkMset();
 	#endif
 }
 

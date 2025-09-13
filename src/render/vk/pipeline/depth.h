@@ -1,7 +1,7 @@
-#ifndef SMPT_RD_VK_PLD_H
-	#define SMPT_RD_VK_PLD_H
+#ifndef SMPT_RD_VK_PLhD
+	#define SMPT_RD_VK_PLhD
 
-	#define SMPT_RD_VK_PLD_SC_SACAIF(name) \
+	#define SMPT_RD_VK_PLDmSC_SACAIF(name) \
 		VkPipelineDepthStencilStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO, \

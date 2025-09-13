@@ -1,5 +1,5 @@
-#ifndef SMPT_RD_VKW_H
-	#define SMPT_RD_VKW_H
+#ifndef SMPT_RD_VKhW
+	#define SMPT_RD_VKhW
 
-	void smpt_rd_vkw_dsts(VkDescriptorSet *vkdescriptorset_p, VkDescriptorBufferInfo *vkdescriptorbufferinfo_p, VkWriteDescriptorSet *vkwritedescriptorset_p, SMPTRtMI ds, uint8_t j, uint8_t mj, uint8_t s);
+	void smpt_rd_vkwMdsts(VkDescriptorSet *Pvkdescriptorset, VkDescriptorBufferInfo *Pvkdescriptorbufferinfo, VkWriteDescriptorSet *Pvkwritedescriptorset, SMPTRtMI ds, uint8_t j, uint8_t mj, uint8_t s);
 #endif

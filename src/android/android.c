@@ -11,7 +11,7 @@ static int s1_set(void *p)
 	#ifdef SMPT_CM_CLIENT
 		smptr_ceMset();
 
-		smpt_rd_vk_set();
+		smpt_rd_vkMset();
 	//! audio android
 //		al_set();
 	#endif
@@ -194,13 +194,13 @@ void sa_wait()
 
 //		vk_freeDevice();
 //		vk_freeQueue();
-		smpt_rd_vk_sf_free();
-		smpt_rd_vk_sf_make();
+		smpt_rd_vk_sfMfree();
+		smpt_rd_vk_sfMmake();
 //		vk_initQueue();
 //		vk_initDevice();
-//		vk_setQueue(smpt_rd_vk_device);
-//		vk_makeDevice(smpt_rd_vk_device);
-//		vk_getQueue(smpt_rd_vk_device);
+//		vk_setQueue(smpt_rd_vkUdevice);
+//		vk_makeDevice(smpt_rd_vkUdevice);
+//		vk_getQueue(smpt_rd_vkUdevice);
 
 //		m_surface_state |= SMPT_SFuS_EXIT;
 		smpt_sfUstate |= SMPT_SFuS_RE;

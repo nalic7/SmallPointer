@@ -1,8 +1,8 @@
 #ifndef SMPT_NW_UDPhCE
 	#define SMPT_NW_UDPhCE
 
-	void nc_set();
-	void nc_send();
-	void nc_get();
-	void nc_free();
+	void smpt_nw_udp_ceMset();
+	void smpt_nw_udp_ceMsend();
+	void smpt_nw_udp_ceMread();
+	void smpt_nw_udp_ceMfree();
 #endif

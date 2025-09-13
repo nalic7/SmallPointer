@@ -1,39 +1,39 @@
-static int server_fd;
-static struct sockaddr_in server_sockaddr_in = {0};
-static socklen_t server_sockaddr_in_bl = sizeof(server_sockaddr_in);
+static int Isv;
+static struct sockaddr_in Ssv = {0};
+static socklen_t Lsv = sizeof(Ssv);
 
-void nc_set()
+void smpt_nw_udp_ceMset()
 {
 //	SMPTTmE
 
-	SMPT_DBmR2L("socket %d", server_fd = socket(AF_INET, SOCK_DGRAM, 0))
+	SMPT_DBmR2L("socket %d", Isv = socket(AF_INET, SOCK_DGRAM, 0))
 //	SMPTTmE
 
-	SMPT_DBmR2L("fcntl %d", fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK))
+	SMPT_DBmR2L("fcntl %d", fcntl(Isv, F_SETFL, fcntl(Isv, F_GETFL, 0) | O_NONBLOCK))
 //	SMPTTmE
 
-	server_sockaddr_in.sin_family = AF_INET;
-	server_sockaddr_in.sin_addr.s_addr = SMPT_NWuIP;
-	server_sockaddr_in.sin_port = SMPT_NWuPORT;
+	Ssv.sin_family = AF_INET;
+	Ssv.sin_addr.s_addr = SMPT_NWuIP;
+	Ssv.sin_port = SMPT_NWuPORT;
 //	SMPTTmE
 }
 
-void nc_send()
+void smpt_nw_udp_ceMsend()
 {
 	smptr_ceMsend();
-	sendto(server_fd, smptr_cePnet, smptr_ceLnet, 0, (struct sockaddr *)&server_sockaddr_in, server_sockaddr_in_bl);
+	sendto(Isv, smptr_cePnet, smptr_ceLnet, 0, (struct sockaddr *)&Ssv, Lsv);
 //	SMPTTmE
 }
 
-void nc_get()
+void smpt_nw_udp_ceMread()
 {
-	if (recvfrom(server_fd, smptr_cePnet, SMPTRlNET, 0, (struct sockaddr*)&server_sockaddr_in, &server_sockaddr_in_bl) > 0)
+	if (recvfrom(Isv, smptr_cePnet, SMPTRlNET, 0, (struct sockaddr*)&Ssv, &Lsv) > 0)
 	{
 		smptr_ceMread();
 	}
 }
 
-void nc_free()
+void smpt_nw_udp_ceMfree()
 {
-	close(server_fd);
+	close(Isv);
 }

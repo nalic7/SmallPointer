@@ -1,6 +1,6 @@
-#ifndef SMPT_RD_VKSMPT_DB_H
-	#define SMPT_RD_VKSMPT_DB_H
+#ifndef SMPT_RD_VKSMPThDB
+	#define SMPT_RD_VKSMPThDB
 
-	void smpt_rd_vksmpt_db_make();
-	void smpt_rd_vksmpt_db_free();
+	void smpt_rd_vksmpt_dbMmake();
+	void smpt_rd_vksmpt_dbMfree();
 #endif

@@ -1,14 +1,14 @@
-#ifndef SMPT_RD_VKQ_H
-	#define SMPT_RD_VKQ_H
+#ifndef SMPT_RDhVKQ
+	#define SMPT_RDhVKQ
 
-	extern uint32_t *smpt_rd_vkq_max_queue_p;
-	extern uint32_t *smpt_rd_vkq_max_queue_surface_p;
-	extern uint32_t **smpt_rd_vkq_queue_surface_p;
+	extern uint32_t *smpt_rd_vkqPmax_queue;
+	extern uint32_t *smpt_rd_vkqPmax_queue_surface;
+	extern uint32_t **smpt_rd_vkqPqueue_surface;
 
-	extern VkQueue **smpt_rd_vkq_p;
+	extern VkQueue **smpt_rd_vkqP;
 
-	void smpt_rd_vkq_set();
-	void smpt_rd_vkq_add(uint32_t device);
-	void smpt_rd_vkq_get(uint32_t device);
-	void smpt_rd_vkq_free();
+	void smpt_rd_vkqMset();
+	void smpt_rd_vkqMadd(uint32_t device);
+	void smpt_rd_vkqMget(uint32_t device);
+	void smpt_rd_vkqMfree();
 #endif

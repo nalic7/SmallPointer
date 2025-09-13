@@ -20,14 +20,14 @@ static VkResult createDebugUtilsMessengerEXT(VkInstance vkinstance, const VkDebu
 	}
 }
 
-void smpt_rd_vksmpt_db_make()
+void smpt_rd_vksmpt_dbMmake()
 {
 	SMPT_DBmR2L
 	(
 		"createDebugUtilsMessengerEXT %d",
 		createDebugUtilsMessengerEXT
 		(
-			smpt_rd_vkq_dv_pscdv_it,
+			smpt_rd_vkq_dv_pscdv_itV,
 			&(VkDebugUtilsMessengerCreateInfoEXT)
 			{
 				.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
@@ -45,11 +45,11 @@ void smpt_rd_vksmpt_db_make()
 	)
 }
 
-void smpt_rd_vksmpt_db_free()
+void smpt_rd_vksmpt_dbMfree()
 {
-	PFN_vkDestroyDebugUtilsMessengerEXT pfn_vkdestroydebugutilsmessengerext = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(smpt_rd_vkq_dv_pscdv_it, "vkDestroyDebugUtilsMessengerEXT");
+	PFN_vkDestroyDebugUtilsMessengerEXT pfn_vkdestroydebugutilsmessengerext = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(smpt_rd_vkq_dv_pscdv_itV, "vkDestroyDebugUtilsMessengerEXT");
 	if (pfn_vkdestroydebugutilsmessengerext != NULL)
 	{
-		pfn_vkdestroydebugutilsmessengerext(smpt_rd_vkq_dv_pscdv_it, vkdebugutilsmessengerext, VK_NULL_HANDLE);
+		pfn_vkdestroydebugutilsmessengerext(smpt_rd_vkq_dv_pscdv_itV, vkdebugutilsmessengerext, VK_NULL_HANDLE);
 	}
 }

@@ -1,13 +1,13 @@
-void smpt_rd_vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderModule *vkshadermodule_vert_p, VkShaderModule *vkshadermodule_frag_p, VkPipelineShaderStageCreateInfo *vkpipelineshaderstagecreateinfo_p)
+void smpt_rd_vk_pl_sdMset(uint32_t device, char *Pvert, char *Pfrag, VkShaderModule *Pvkshadermodule_vert, VkShaderModule *Pvkshadermodule_frag, VkPipelineShaderStageCreateInfo *Pvkpipelineshaderstagecreateinfo)
 {
 	uint32_t code_b = 0;
-	void *code_p = smptfMread(vert_p, &code_b);
+	void *code_p = smptfMread(Pvert, &code_b);
 	SMPT_DBmR2L
 	(
 		"vkCreateShaderModule %d",
 		vkCreateShaderModule
 		(
-			smpt_rd_vkq_dv_p[device],
+			smpt_rd_vkq_dvP[device],
 			&(VkShaderModuleCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
@@ -17,18 +17,18 @@ void smpt_rd_vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderM
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			vkshadermodule_vert_p
+			Pvkshadermodule_vert
 		)
 	)
 	free(code_p);
 
-	code_p = smptfMread(frag_p, &code_b);
+	code_p = smptfMread(Pfrag, &code_b);
 	SMPT_DBmR2L
 	(
 		"vkCreateShaderModule %d",
 		vkCreateShaderModule
 		(
-			smpt_rd_vkq_dv_p[device],
+			smpt_rd_vkq_dvP[device],
 			&(VkShaderModuleCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
@@ -38,27 +38,27 @@ void smpt_rd_vk_pl_sd_set(uint32_t device, char *vert_p, char *frag_p, VkShaderM
 				.pNext = VK_NULL_HANDLE
 			},
 			VK_NULL_HANDLE,
-			vkshadermodule_frag_p
+			Pvkshadermodule_frag
 		)
 	)
 	free(code_p);
 
-	vkpipelineshaderstagecreateinfo_p[0] = (VkPipelineShaderStageCreateInfo)
+	Pvkpipelineshaderstagecreateinfo[0] = (VkPipelineShaderStageCreateInfo)
 	{
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
 		.stage = VK_SHADER_STAGE_VERTEX_BIT,
-		.module = *vkshadermodule_vert_p,
+		.module = *Pvkshadermodule_vert,
 		.pName = "main",
 
 		.flags = 0,
 		.pNext = VK_NULL_HANDLE,
 		.pSpecializationInfo = VK_NULL_HANDLE
 	};
-	vkpipelineshaderstagecreateinfo_p[1] = (VkPipelineShaderStageCreateInfo)
+	Pvkpipelineshaderstagecreateinfo[1] = (VkPipelineShaderStageCreateInfo)
 	{
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
 		.stage = VK_SHADER_STAGE_FRAGMENT_BIT,
-		.module = *vkshadermodule_frag_p,
+		.module = *Pvkshadermodule_frag,
 		.pName = "main",
 
 		.flags = 0,

@@ -1,7 +1,7 @@
-#ifndef SMPT_RD_VK_PL_CL_H
-	#define SMPT_RD_VK_PL_CL_H
+#ifndef SMPT_RD_VK_PLhCL
+	#define SMPT_RD_VK_PLhCL
 
-	#define SMPT_RD_VK_PL_CL_BATMST(name) \
+	#define SMPT_RD_VK_PL_CLmBATMST(name) \
 		VkPipelineColorBlendAttachmentState name = \
 		{ \
 			.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT, \
@@ -14,7 +14,7 @@
 			.alphaBlendOp = VK_BLEND_OP_ADD, \
 		};
 
-	#define SMPT_RD_VK_PL_CL_BSACAIF(vkpipelinecolorblendattachmentstate_p, name) \
+	#define SMPT_RD_VK_PL_CLmBSACAIF(vkpipelinecolorblendattachmentstate_p, name) \
 		VkPipelineColorBlendStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO, \

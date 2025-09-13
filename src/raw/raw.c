@@ -3,14 +3,21 @@ const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc] =
 	#define X(v, n, b) b,
 		SMPTRnMA
 	#undef X
-	#define X(v, n, b) b,
+	#define X(v, n, b, r) b,
 		SMPTRnM
 	#undef X
 };
-const SMPTRtMK smptrPmk[SMPTReMKc][4] =
+const SMPTRtMK smptrPmk[SMPTReMKc][3] =
 {
 	#define X(v, k0, k1, k2) {k0, k1, k2},
 		SMPTRnMK
+	#undef X
+};
+
+const SMPTRtMA smptrPmr[SMPTReMc] =
+{
+	#define X(v, n, b, r) r,
+		SMPTRnM
 	#undef X
 };
 
@@ -44,7 +51,7 @@ void smptrMfree1()
 	#endif
 
 	#ifdef SMPT_CM_CLIENT
-		smptr_ceMfree(smpt_rd_vk_device);
+		smptr_ceMfree(smpt_rd_vkUdevice);
 	#endif
 
 	//! switch to pipewire

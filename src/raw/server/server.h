@@ -6,7 +6,7 @@
 		uint8_t Pnet[SMPTRlNET];
 		SMPTRtNET Lnet;
 	};
-	extern struct SMPTR_SVtNET smptr_svPnet[SMPT_NWuU];
+	extern struct SMPTR_SVtNET smptr_svPnet[SMPT_NWlU];
 
 	extern FILE *smptr_svPfile;
 	extern uint8_t smptr_svUrw;

@@ -1,4 +1,4 @@
-VkInstance smpt_rd_vkq_dv_pscdv_it;
+VkInstance smpt_rd_vkq_dv_pscdv_itV;
 
 static const char *extension_p[] =
 {
@@ -20,13 +20,13 @@ static const char *extension_p[] =
 };
 
 #ifdef SMPT_CM_VK_DEBUG
-	const char *smpt_rd_vkq_dv_pscdv_it_layer_p[] =
+	const char *smpt_rd_vkq_dv_pscdv_itPlayer[] =
 	{
 		"VK_LAYER_KHRONOS_validation"
 	};
 #endif
 
-void smpt_rd_vkq_dv_pscdv_it_make()
+void smpt_rd_vkq_dv_pscdv_itMmake()
 {
 	SMPT_DBmR2L
 	(
@@ -43,7 +43,7 @@ void smpt_rd_vkq_dv_pscdv_it_make()
 					.applicationVersion = VK_MAKE_VERSION(1, 0, 0),
 					.pEngineName = VK_NULL_HANDLE,
 					.engineVersion = VK_MAKE_VERSION(1, 0, 0),
-					.apiVersion = SMPT_RD_VK_VERSION,
+					.apiVersion = VK_API_VERSION_1_0,
 
 					.pNext = VK_NULL_HANDLE
 				},
@@ -54,20 +54,20 @@ void smpt_rd_vkq_dv_pscdv_it_make()
 				.pNext = VK_NULL_HANDLE,
 
 				#ifdef SMPT_CM_VK_DEBUG
-					.enabledLayerCount = sizeof(smpt_rd_vkq_dv_pscdv_it_layer_p) / sizeof(smpt_rd_vkq_dv_pscdv_it_layer_p[0]),
-					.ppEnabledLayerNames = smpt_rd_vkq_dv_pscdv_it_layer_p
+					.enabledLayerCount = sizeof(smpt_rd_vkq_dv_pscdv_itPlayer) / sizeof(smpt_rd_vkq_dv_pscdv_itPlayer[0]),
+					.ppEnabledLayerNames = smpt_rd_vkq_dv_pscdv_itPlayer
 				#else
 					.enabledLayerCount = 0,
 					.ppEnabledLayerNames = VK_NULL_HANDLE
 				#endif
 			},
 			VK_NULL_HANDLE,
-			&smpt_rd_vkq_dv_pscdv_it
+			&smpt_rd_vkq_dv_pscdv_itV
 		)
 	)
 }
 
-void smpt_rd_vkq_dv_pscdv_it_free()
+void smpt_rd_vkq_dv_pscdv_itMfree()
 {
-	vkDestroyInstance(smpt_rd_vkq_dv_pscdv_it, NULL);
+	vkDestroyInstance(smpt_rd_vkq_dv_pscdv_itV, NULL);
 }

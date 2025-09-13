@@ -7,7 +7,7 @@
 	#define SMPTRtMA uint8_t
 	#define SMPTRtMB uint8_t
 	#define SMPTRtMI uint16_t
-	#define SMPTRmMI (0xFFFFu - 1)
+	#define SMPTRlMI (0xFFFFu - 1)
 	#define SMPTRtMK uint8_t
 	#define SMPTRtMT uint16_t
 	#define SMPTRnMA \
@@ -30,9 +30,9 @@
 		X(IShovel, "IShovel", 1)
 
 	#define SMPTRnM \
-		X(POMI_PAPI, "SuperCutePomi2.glb", 1) \
-		X(POMI_TEA, "SuperCutePomi1.glb", 1) \
-		X(POMI_CAFE, "SuperCutePomi0.glb", 1)
+		X(POMI_PAPI, "SuperCutePomi2.glb", 1, 31) \
+		X(POMI_TEA, "SuperCutePomi1.glb", 1, 31) \
+		X(POMI_CAFE, "SuperCutePomi0.glb", 1, 31)
 
 	#define SMPTRnMK \
 		X(POMI_WALK_LOOP, 0, 3, 5)
@@ -47,7 +47,7 @@
 
 	enum SMPTReM
 	{
-		#define X(v, n, b) SMPTReM_##v,
+		#define X(v, n, b, r) SMPTReM_##v,
 			SMPTRnM
 		#undef X
 		SMPTReMc
@@ -62,15 +62,14 @@
 	};
 
 	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
-	extern const SMPTRtMK smptrPmk[SMPTReMKc][4];
+	extern const SMPTRtMK smptrPmk[SMPTReMKc][3];
 
+	extern const SMPTRtMA smptrPmr[SMPTReMc];
 //	extern const float smptrPmd[SMPTReMAc + SMPTReMc][3];
-//	extern const SMPTRtMA smptrPmh[SMPTReMc];
 
 	struct SMPTRsM0
 	{
 		uint8_t Ltr;
-		//.i t ?rb ?rh
 		float *Ptr;
 	};
 
@@ -91,7 +90,7 @@
 
 	struct SMPTRsU
 	{
-		float Ptr[5];
+		float Ptr[3 + 2];
 	};
 
 	//.c server read/write

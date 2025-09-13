@@ -2,7 +2,7 @@
 	#define SMPThNW
 
 	//.c max connect
-	#define SMPT_NWuU 1
+	#define SMPT_NWlU 1
 	//.c max connect type
 	#define SMPT_NWtU uint8_t
 
@@ -29,6 +29,6 @@
 	#define SMPT_NWuPORT 11111
 
 	#ifdef SMPT_CM_SERVER
-		extern const uint32_t smpt_nwPu[SMPT_NWuU];
+		extern const uint32_t smpt_nwPu[SMPT_NWlU];
 	#endif
 #endif

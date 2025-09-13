@@ -1,13 +1,13 @@
-#ifndef SMPT_RD_VK_RDP_H
-	#define SMPT_RD_VK_RDP_H
+#ifndef SMPT_RD_VKhRDP
+	#define SMPT_RD_VKhRDP
 
-	#define SMPT_RD_VK_RDP_MAKE(device, vkrenderpass_p) \
+	#define SMPT_RD_VK_RDPmMAKE(device, color_format, depth_format, vkrenderpass_p) \
 		SMPT_DBmR2L \
 		( \
 			"vkCreateRenderPass %d", \
 			vkCreateRenderPass \
 			( \
-				smpt_rd_vkq_dv_p[device], \
+				smpt_rd_vkq_dvP[device], \
 				&(VkRenderPassCreateInfo) \
 				{ \
 					.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO, \
@@ -15,8 +15,8 @@
 					.pAttachments = (VkAttachmentDescription[]) \
 					{ \
 						{ \
-							.format = SMPT_RD_VK_COLOR_FORMAT, \
-							.samples = SMPT_RD_VK_SAMPLE_C, \
+							.format = color_format, \
+							.samples = smpt_rd_vkUsample_count, \
 							.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR, \
 							.storeOp = VK_ATTACHMENT_STORE_OP_STORE, \
 							.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE, \
@@ -26,8 +26,8 @@
 							.flags = 0 \
 						}, \
 						{ \
-							.format = SMPT_RD_VK_DEPTH_FORMAT, \
-							.samples = SMPT_RD_VK_SAMPLE_C, \
+							.format = depth_format, \
+							.samples = smpt_rd_vkUsample_count, \
 							.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR, \
 							.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE, \
 							.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE, \
@@ -37,7 +37,7 @@
 							.flags = 0 \
 						}, \
 						{ \
-							.format = SMPT_RD_VK_COLOR_FORMAT, \
+							.format = color_format, \
 							.samples = VK_SAMPLE_COUNT_1_BIT, \
 							.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE, \
 							.storeOp = VK_ATTACHMENT_STORE_OP_STORE, \

@@ -9,7 +9,10 @@ void smptr_ceMset()
 	lcp_set();
 
 	smptr_cemMset();
-	nc_set();
+
+	#ifdef SMPT_CM_UDP
+		smpt_nw_udp_ceMset();
+	#endif
 
 	smpt_sfUstate |= SMPT_SFuS_RAW;
 }
@@ -55,7 +58,9 @@ void smptr_ceMloop()
 
 void smptr_ceMfree(uint32_t device)
 {
-	nc_free();
+	#ifdef SMPT_CM_UDP
+		smpt_nw_udp_ceMfree();
+	#endif
 
 	#ifdef SMPT_CM_VK
 		while (!(smpt_sfUstate & SMPT_SFuS_EXIT_RENDER))
@@ -64,13 +69,13 @@ void smptr_ceMfree(uint32_t device)
 			SMPT_DBmN2L("smpt_sfUstate %d", smpt_sfUstate)
 		}
 
-		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkq_p[smpt_rd_vk_device][smpt_rd_vk_queue_g]))
+		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkqP[smpt_rd_vkUdevice][smpt_rd_vkUqueue_g]))
 
 		smptr_cemMfree();
-		smpt_rd_vkw_dstsp_free(device);
-		smpt_rd_vkw_dsts_lo_free(device);
+		smpt_rd_vkw_dstspMfree(device);
+		smpt_rd_vkw_dsts_loMfree(device);
 
 		lcp_free(device);
-		smpt_rd_vk_cmd_free();
+		smpt_rd_vk_cmdMfree();
 	#endif
 }

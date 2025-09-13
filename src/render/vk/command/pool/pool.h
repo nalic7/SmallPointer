@@ -1,9 +1,9 @@
-#ifndef SMPT_RD_VK_CMP_H
-	#define SMPT_RD_VK_CMP_H
+#ifndef SMPT_RD_VK_CMhP
+	#define SMPT_RD_VK_CMhP
 
-	extern VkCommandPool **smpt_rd_vk_cmp_p;
+	extern VkCommandPool **smpt_rd_vk_cmpP;
 
-	void smpt_rd_vk_cmp_set();
-	void smpt_rd_vk_cmp_make(uint32_t device);
-	void smpt_rd_vk_cmp_free();
+	void smpt_rd_vk_cmpMset();
+	void smpt_rd_vk_cmpMmake(uint32_t device);
+	void smpt_rd_vk_cmpMfree();
 #endif

@@ -1,5 +1,5 @@
 struct SMPTRsU smptr_ceuSu = {0};
-uint8_t smpt_ceuPinput[SMPT_IPuL] = {0};
+uint8_t smpt_ceuPinput[SMPT_IPlL] = {0};
 float smpt_ceuPpoint[2] = {0};
 
 //! use on m
@@ -94,7 +94,7 @@ void smptr_ceuMloop()
 	}
 	smptr_ceuSu.Ptr[4] = SMPTMmNORM_NF(smptr_ceuSu.Ptr[4], SMPTMmD2R(360));
 
-	VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
+	VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
 
 	memcpy(Pbuffer, smptmPm4x4, sizeof(float) * 16);
 

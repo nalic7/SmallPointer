@@ -1,6 +1,5 @@
-#ifndef SMPT_RD_VKW_DSTS_H
-	#define SMPT_RD_VKW_DSTS_H
+#ifndef SMPT_RD_VKWhDSTS
+	#define SMPT_RD_VKWhDSTS
 
-	void smpt_rd_vkw_dsts_make(uint32_t device, VkDescriptorSet *vkdescriptorset_p);
-
+	void smpt_rd_vkw_dstsMmake(uint32_t device, VkDescriptorSet *Pvkdescriptorset);
 #endif

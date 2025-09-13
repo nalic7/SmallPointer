@@ -34,7 +34,7 @@ struct SMPTR_CEMsM0
 	SMPTRtMT Ut;
 	//float Ptr[3 + 1 + 2];
 };
-static struct SMPTR_CEMsM0 smptr_cemPm0[SMPTRmMI];
+static struct SMPTR_CEMsM0 smptr_cemPm0[SMPTRlMI];
 
 struct SMPTR_CEMsM01
 {
@@ -42,7 +42,7 @@ struct SMPTR_CEMsM01
 	float Ft;
 	//float Ptr[3 + 1 + 2];
 };
-static struct SMPTR_CEMsM01 smptr_cemPm01[SMPTRmMI];
+static struct SMPTR_CEMsM01 smptr_cemPm01[SMPTRlMI];
 
 struct SMPTR_CEMsM1 *smptr_cemPm1;
 uint32_t smptr_cemLm1 = 0;
@@ -147,13 +147,13 @@ void smptr_cemMread()
 
 	//.i clean m0
 	#ifdef SMPT_CM_VK
-		VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
+		VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
 
 		if (smptr_cemLm < Lm0)
 		{
 			Mfree_vk(smptr_cemLm, Lm0);
 
-//			vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, (Lm0 - smptr_cemLm) * smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + smptr_cemLm * smpt_rd_vk_swcUimage);
+//			vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, (Lm0 - smptr_cemLm) * smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + smptr_cemLm * smpt_rd_vk_swcUimage);
 //			for (SMPTRtMI l0 = smptr_cemLm * smpt_rd_vk_swcUimage; l0 < Lm0 * smpt_rd_vk_swcUimage; ++l0)
 //			{
 //				vkUnmapMemory(vkdevice, Pvkdevicememory[l0]);
@@ -181,7 +181,7 @@ void smptr_cemMread()
 		{
 			if (smptr_cemPvkdescriptorset[l0])
 			{
-				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
+				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
 				for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 				{
 					vkUnmapMemory(vkdevice, Pvkdevicememory[l0 * smpt_rd_vk_swcUimage + l1]);
@@ -204,7 +204,7 @@ void smptr_cemMread()
 					{
 						Mfree_vk(l0, l0 + 1);
 
-//						vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
+//						vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
 //						for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 //						{
 //							vkUnmapMemory(vkdevice, Pvkdevicememory[l0 * smpt_rd_vk_swcUimage + l1]);
@@ -218,20 +218,20 @@ void smptr_cemMread()
 						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (Pm->Sm.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[Pm->Sm.Um]);
 
 						VkMemoryRequirements vkmemoryrequirements;
-						vkdevicesize = (vkdevicesize + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1);
-						SMPT_RD_VK_BF_MAKE(smpt_rd_vk_device, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage], Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
+						vkdevicesize = (vkdevicesize + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1);
+						SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage], Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
 						SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(vkdevice, Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], 0, vkdevicesize, 0, &smptr_cemPbuffer_map[(l1 + l0 * smpt_rd_vk_swcUimage)]))
 					}
 
 					++Ldst;
-					Pvkwritedescriptorset = realloc(Pvkwritedescriptorset, SMPT_RD_VKW_DSTSLO_L * smpt_rd_vk_swcUimage * Ldst * sizeof(VkWriteDescriptorSet));
+					Pvkwritedescriptorset = realloc(Pvkwritedescriptorset, SMPT_RD_VKW_DSTS_LOl * smpt_rd_vk_swcUimage * Ldst * sizeof(VkWriteDescriptorSet));
 					Pvkdescriptorbufferinfo = realloc(Pvkdescriptorbufferinfo, (2 + 3 * smpt_rd_vk_swcUimage * Ldst) * sizeof(VkDescriptorBufferInfo));
 
 					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 					{
-						smpt_rd_vkw_dsts_make(smpt_rd_vk_device, smptr_cemPvkdescriptorset + l1 + l0 * smpt_rd_vk_swcUimage);
+						smpt_rd_vkw_dstsMmake(smpt_rd_vkUdevice, smptr_cemPvkdescriptorset + l1 + l0 * smpt_rd_vk_swcUimage);
 					}
-					smpt_rd_vkw_dsts
+					smpt_rd_vkwMdsts
 					(
 						smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage,
 						Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swcUimage,
@@ -280,7 +280,7 @@ void smptr_cemMread()
 		}
 	}
 	#ifdef SMPT_CM_VK
-		vkUpdateDescriptorSets(vkdevice, SMPT_RD_VKW_DSTSLO_L * smpt_rd_vk_swcUimage * Ldst, Pvkwritedescriptorset, 0, VK_NULL_HANDLE);
+		vkUpdateDescriptorSets(vkdevice, SMPT_RD_VKW_DSTS_LOl * smpt_rd_vk_swcUimage * Ldst, Pvkwritedescriptorset, 0, VK_NULL_HANDLE);
 		Ldst = 0;
 		Pvkwritedescriptorset = realloc(Pvkwritedescriptorset, 0);
 		Pvkdescriptorbufferinfo = realloc(Pvkdescriptorbufferinfo, 0);
@@ -312,7 +312,7 @@ void smptr_cemMread()
 void smptr_cemMloop()
 {
 	#ifdef SMPT_CM_VK
-		VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
+		VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
 
 		//.i free
 		uint32_t Ufree = Lfree;
@@ -320,12 +320,16 @@ void smptr_cemMloop()
 		{
 			if ((Pfree[l0] = Pfree[l0] >> 1) == 0)
 			{
-				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, smpt_rd_vk_swcUimage, Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage);
-				for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
+				if (Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage)
 				{
-					vkUnmapMemory(vkdevice, Pvkdevicememory_free[l0 * smpt_rd_vk_swcUimage + l1]);
-					vkDestroyBuffer(vkdevice, Pvkbuffer_free[l0 * smpt_rd_vk_swcUimage + l1], VK_NULL_HANDLE);
-					vkFreeMemory(vkdevice, Pvkdevicememory_free[l0 * smpt_rd_vk_swcUimage + l1], VK_NULL_HANDLE);
+					vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage);
+					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
+					{
+						vkUnmapMemory(vkdevice, Pvkdevicememory_free[l0 * smpt_rd_vk_swcUimage + l1]);
+						vkDestroyBuffer(vkdevice, Pvkbuffer_free[l0 * smpt_rd_vk_swcUimage + l1], VK_NULL_HANDLE);
+						vkFreeMemory(vkdevice, Pvkdevicememory_free[l0 * smpt_rd_vk_swcUimage + l1], VK_NULL_HANDLE);
+					}
+					Pvkdescriptorset_free[l0 * smpt_rd_vk_swcUimage] = 0;
 				}
 				if (Ufree == Lfree)
 					Ufree = l0;
@@ -409,7 +413,7 @@ void smptr_cemMloop()
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 					.memory = Pvkdevicememory[smpt_rd_vk_swcUframe_buffer],
 					.offset = 0,
-					.size = ((sizeof(float) * 4 * 4 * (m.Sm.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.Sm.Um])) + (smpt_rd_vk_non_coherent_atom_size - 1)) & ~(smpt_rd_vk_non_coherent_atom_size - 1),
+					.size = ((sizeof(float) * 4 * 4 * (m.Sm.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.Sm.Um])) + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1),
 					.pNext = VK_NULL_HANDLE
 				};
 			}
@@ -423,11 +427,11 @@ void smptr_cemMloop()
 void smptr_cemMfree()
 {
 	#ifdef SMPT_CM_VK
-		VkDevice vkdevice = smpt_rd_vkq_dv_p[smpt_rd_vk_device];
+		VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
 
 		if (Lfree)
 		{
-			vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, Lfree * smpt_rd_vk_swcUimage, Pvkdescriptorset_free);
+			vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, Lfree * smpt_rd_vk_swcUimage, Pvkdescriptorset_free);
 			for (uint32_t l0 = 0; l0 < Lfree; ++l0)
 			{
 				for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
@@ -453,7 +457,7 @@ void smptr_cemMfree()
 			struct SMPTR_CEMsM m = smptr_cemPm[l0];
 			if (m.Sm.Um != SMPTRvM)
 			{
-				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstsp, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
+				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
 
 				for (SMPTRtMI l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 				{

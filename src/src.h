@@ -56,8 +56,8 @@
 		#include "render/vk/command/pool/pool.h"
 		#include "render/vk/command/buffer/buffer.h"
 		#include "render/vk/buffer/buffer.h"
-		#include "render/vk/imageview/image.h"
-		#include "render/vk/imageview/imageview.h"
+		#include "render/vk/image.h"
+		#include "render/vk/imageview.h"
 		#include "render/vk/sampler.h"
 
 		#include "render/vk/write/write.h"

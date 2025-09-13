@@ -1,7 +1,7 @@
-#ifndef SMPT_RD_VK_PL_VT_H
-	#define SMPT_RD_VK_PL_VT_H
+#ifndef SMPT_RD_VK_PLhVT
+	#define SMPT_RD_VK_PLhVT
 
-	#define SMPT_RD_VK_PL_VT_IPBIDST(name) \
+	#define SMPT_RD_VK_PL_VTmIPBIDST(name) \
 		VkVertexInputBindingDescription name = \
 		{ \
 			.binding = 0, \
@@ -9,7 +9,7 @@
 			.inputRate = VK_VERTEX_INPUT_RATE_VERTEX \
 		};
 
-	#define SMPT_RD_VK_PL_VT_IPATBDST(name) \
+	#define SMPT_RD_VK_PL_VTmIPATBDST(name) \
 		VkVertexInputAttributeDescription name[] = \
 		{ \
 			(VkVertexInputAttributeDescription) \
@@ -28,7 +28,7 @@
 			} \
 		};
 
-	#define SMPT_RD_VK_PL_VT_IPSACAIF(vkvertexinputbindingdescription_p, vkvertexinputattributedescription_p, vkvertexinputattributedescription_size, name) \
+	#define SMPT_RD_VK_PL_VTmIPSACAIF(vkvertexinputbindingdescription_p, vkvertexinputattributedescription_p, vkvertexinputattributedescription_size, name) \
 		VkPipelineVertexInputStateCreateInfo name = \
 		{ \
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO, \

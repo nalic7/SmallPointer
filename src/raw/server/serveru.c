@@ -1,4 +1,4 @@
-struct SMPTRsU smptr_svuSu[SMPT_NWuU];
+struct SMPTRsU smptr_svuSu[SMPT_NWlU];
 
 void smptr_svuMset()
 {
@@ -20,17 +20,17 @@ void smptr_svuMfread()
 {
 	if (smptr_svPfile)
 	{
-		fread(smptr_svuSu, sizeof(struct SMPTRsU), SMPT_NWuU, smptr_svPfile);
+		fread(smptr_svuSu, sizeof(struct SMPTRsU), SMPT_NWlU, smptr_svPfile);
 	}
 	else
 	{
-		memset(smptr_svuSu, 0, sizeof(struct SMPTRsU) * SMPT_NWuU);
+		memset(smptr_svuSu, 0, sizeof(struct SMPTRsU) * SMPT_NWlU);
 	}
 }
 
 void smptr_svuMfsend()
 {
-	fwrite(smptr_svuSu, sizeof(struct SMPTRsU), SMPT_NWuU, smptr_svPfile);
+	fwrite(smptr_svuSu, sizeof(struct SMPTRsU), SMPT_NWlU, smptr_svPfile);
 }
 
 void smptr_svuMfree()

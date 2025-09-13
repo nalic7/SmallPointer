@@ -1,41 +1,15 @@
-#ifndef SMPT_RD_VK_H
-	#define SMPT_RD_VK_H
+#ifndef SMPT_RDhVK
+	#define SMPT_RDhVK
 
-	//.c sc info
-	#define SMPT_RD_VK_INFO_SC
+	extern uint32_t smpt_rd_vkUdevice;
+	extern uint32_t smpt_rd_vkUqueue_g;
+	extern uint32_t smpt_rd_vkUqueue_ct;
 
-	#define SMPT_RD_VK_VERSION VK_API_VERSION_1_0//VK_API_VERSION_1_0 VK_API_VERSION_1_4
+	extern float smpt_rd_vkFmax_sampler_anisotropy;
+	extern uint8_t
+		smpt_rd_vkUnon_coherent_atom_size,
+		smpt_rd_vkUsample_count;
 
-	//.c surface
-	#define SMPT_RD_VK_COLOR_FORMAT_BYTE 4
-	//.i surface
-	#ifdef SMPT_CM_DRM
-		#define SMPT_RD_VK_COLOR_FORMAT VK_FORMAT_B8G8R8A8_UNORM
-	#else
-		#define SMPT_RD_VK_COLOR_FORMAT VK_FORMAT_R8G8B8A8_UNORM
-	#endif
-	//.i image
-	#define SMPT_RD_VK_IMAGE_FORMAT VK_FORMAT_R8G8B8A8_UNORM
-	#define SMPT_RD_VK_COLOR_SPACE VK_COLOR_SPACE_SRGB_NONLINEAR_KHR
-	#define SMPT_RD_VK_DEPTH_FORMAT VK_FORMAT_D32_SFLOAT//VK_FORMAT_D16_UNORM
-
-	//.c sample
-	#define SMPT_RD_VK_SAMPLE_S VK_TRUE//VK_FALSE
-	#define SMPT_RD_VK_SAMPLE_C VK_SAMPLE_COUNT_8_BIT//VK_SAMPLE_COUNT_1_BIT
-	#define SMPT_RD_VK_SAMPLE_V 1.0F//0
-
-	//.c vsync
-	#define SMPT_RD_VK_PRESENT VK_PRESENT_MODE_FIFO_KHR//VK_PRESENT_MODE_IMMEDIATE_KHR
-
-	//.c sampler
-	#define SMPT_RD_VK_MAX_SAMPLER_ANISOTROPY 16.0F//0
-
-	extern uint32_t smpt_rd_vk_device;
-	extern uint32_t smpt_rd_vk_queue_g;
-	extern uint32_t smpt_rd_vk_queue_ct;
-
-	extern uint8_t smpt_rd_vk_non_coherent_atom_size;
-
-	void smpt_rd_vk_set();
-	void smpt_rd_vk_free();
+	void smpt_rd_vkMset();
+	void smpt_rd_vkMfree();
 #endif
