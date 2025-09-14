@@ -1,5 +1,5 @@
-#ifndef G_H
-	#define G_H
+#ifndef SMPThG
+	#define SMPThG
 
-	void g_write();
+	void smptgMsend();
 #endif

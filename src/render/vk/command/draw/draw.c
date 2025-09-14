@@ -206,7 +206,7 @@ static void re_sc()
 	smpt_rd_vk_swcMfree();
 
 	#ifdef SMPT_CM_ST_ANDROID
-		sa_wait();
+		smpt_arMwait();
 	#endif
 
 	smpt_rd_vk_swcMmake(smpt_rd_vkqPmax_queue_surface[smpt_rd_vkUdevice] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);

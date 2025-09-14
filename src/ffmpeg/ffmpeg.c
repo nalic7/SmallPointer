@@ -77,8 +77,8 @@ uint8_t *ffmpeg_ogg(int *sample_rate_p, int *nb_channels_p, uint32_t *data_bl)
 	SMPT_DBmR2L("av_find_best_stream %d", stream_index = av_find_best_stream(avformatcontext_p, AVMEDIA_TYPE_AUDIO, -1, -1, &avcodec_p, 0))
 
 	avcodeccontext_p = avcodec_alloc_context3(avcodec_p);
-    avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[stream_index]->codecpar);
-    avcodec_open2(avcodeccontext_p, avcodec_p, NULL);
+	avcodec_parameters_to_context(avcodeccontext_p, avformatcontext_p->streams[stream_index]->codecpar);
+	avcodec_open2(avcodeccontext_p, avcodec_p, NULL);
 
 	uint8_t *data_p = NULL;
 	*data_bl = 0;
@@ -184,13 +184,13 @@ void ffmpeg_free()
 // 				SWS_BICUBIC, NULL, NULL, NULL
 // 			);
 
-// 			AVFrame* rgbaFrame = av_frame_alloc();
+// 			AVFrame *rgbaFrame = av_frame_alloc();
 // 			rgbaFrame->width = avframe->width;
 // 			rgbaFrame->height = avframe->height;
 // 			rgbaFrame->format = AV_PIX_FMT_RGBA;
 
 // 			av_frame_get_buffer(rgbaFrame, 32);
-// 			sws_scale(swscontext, (const uint8_t* const*)avframe->data, avframe->linesize, 0, avframe->height, rgbaFrame->data, rgbaFrame->linesize);
+// 			sws_scale(swscontext, (const uint8_t *const *)avframe->data, avframe->linesize, 0, avframe->height, rgbaFrame->data, rgbaFrame->linesize);
 // 		}
 // 	}
 

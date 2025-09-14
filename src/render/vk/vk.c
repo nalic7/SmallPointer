@@ -168,7 +168,7 @@ void smpt_rd_vkMset()
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
 	}
 
-	lcp_vk();
+	smptr_ce_mdMvk();
 	smpt_rd_vkw_dsts_loMmake(smpt_rd_vkUdevice);
 	smpt_rd_vkw_dstspMmake(smpt_rd_vkUdevice);
 

@@ -30,9 +30,12 @@
 		X(IShovel, "IShovel", 1)
 
 	#define SMPTRnM \
-		X(POMI_PAPI, "SuperCutePomi2.glb", 1, 31) \
-		X(POMI_TEA, "SuperCutePomi1.glb", 1, 31) \
-		X(POMI_CAFE, "SuperCutePomi0.glb", 1, 31)
+		X(POMI_PAPI, "SuperCutePomi2", 1, 31) \
+		X(POMI_TEA, "SuperCutePomi1", 1, 31) \
+		X(POMI_CAFE, "SuperCutePomi0", 1, 31)
+
+	#define SMPTRnM1 \
+		X(FONT, "Font", 0)
 
 	#define SMPTRnMK \
 		X(POMI_WALK_LOOP, 0, 3, 5)
@@ -53,6 +56,14 @@
 		SMPTReMc
 	};
 
+	enum SMPTReM1
+	{
+		#define X(v, n, b) SMPTReM1_##v,
+			SMPTRnM1
+		#undef X
+		SMPTReM1c
+	};
+
 	enum SMPTReMK
 	{
 		#define X(v, k0, k1, k2) SMPTReMK_##v,
@@ -61,7 +72,7 @@
 		SMPTReMKc
 	};
 
-	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc];
+	extern const SMPTRtMB smptrPmb[SMPTReMAc + SMPTReMc + SMPTReM1c];
 	extern const SMPTRtMK smptrPmk[SMPTReMKc][3];
 
 	extern const SMPTRtMA smptrPmr[SMPTReMc];

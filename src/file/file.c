@@ -1,7 +1,7 @@
 void *smptfMread(const char *Pc, uint32_t *Pl)
 {
 	#ifdef SMPT_CM_ST_ANDROID
-		AAssetManager *Paassetmanager = sa_anativeactivity_p->assetManager;
+		AAssetManager *Paassetmanager = smpt_arPnative_activity->assetManager;
 		AAsset *Paasset = AAssetManager_open(Paassetmanager, Pc, AASSET_MODE_BUFFER);
 		*Pl = AAsset_getLength(Paasset);
 		const void *Pdata = AAsset_getBuffer(Paasset);

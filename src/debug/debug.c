@@ -29,7 +29,7 @@ void smpt_dbMset()
 	SMPT_DBmN2L("_SC_OPEN_MAX %ld", sysconf(_SC_OPEN_MAX))
 
 	char Pcwd[PATH_MAX];
-	SMPT_DBmN2L("getcwd %d", getcwd(Pcwd, sizeof(Pcwd)))
+	SMPT_DBmN2L("getcwd %p", getcwd(Pcwd, sizeof(Pcwd)))
 	SMPT_DBmN2L("cwd_p %s", Pcwd)
 
 	SMPT_DBmN2L("__BYTE_ORDER %d", __BYTE_ORDER)

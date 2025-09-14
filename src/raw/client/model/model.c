@@ -1,6 +1,9 @@
 //.i vk
-VkDeviceSize r_cep_a_p[SMPTR_CE_MDlA];
-VkDeviceSize *r_cep_ai_p;
+#ifdef SMPT_CM_VK
+	VkDeviceSize r_cep_a_p[SMPTR_CE_MDlA];
+	VkDeviceSize *r_cep_ai_p;
+#endif
+
 uint32_t
 	*r_cep_ai_l_p,
 	lcp_rgba_bl;
@@ -35,7 +38,7 @@ static uint8_t model_il;
 
 static float *rgba_p;
 
-void lcp_set()
+void smptr_ce_mdMset()
 {
 	lcp_joint_count_bl = *(uint8_t *)(smptrPcache->d_p + smptrPcache->d_bl_p[1]);
 	smptrPcache->d_bl_p[1] += sizeof(uint8_t);
@@ -393,7 +396,7 @@ void lcp_set()
 
 
 #ifdef SMPT_CM_VK
-	void lcp_vk()
+	void smptr_ce_mdMvk()
 	{
 		smptr_ce_mdPvkbuffer = malloc(sizeof(VkBuffer) * (1 + 2 * smpt_rd_vk_swcUimage));
 		smptr_ce_mdPvkdevicememory = malloc(sizeof(VkDeviceMemory) * (1 + 2 * smpt_rd_vk_swcUimage));
@@ -540,7 +543,7 @@ void lcp_set()
 	}
 #endif
 
-void lcp_free(uint32_t device)
+void smptr_ce_mdMfree(uint32_t device)
 {
 	#ifdef SMPT_CM_VK
 		for (uint8_t l0 = 0; l0 < 1 + 2 * smpt_rd_vk_swcUimage; ++l0)

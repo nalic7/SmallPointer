@@ -1,5 +1,5 @@
-#ifndef G_KF_H
-	#define G_KF_H
+#ifndef SMPTGhKF
+	#define SMPTGhKF
 
-	void g_kf_write();
+	void smptg_kfMsend();
 #endif

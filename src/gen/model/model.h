@@ -1,5 +1,5 @@
-#ifndef G_MD_H
-	#define G_MD_H
+#ifndef SMPTGhMD
+	#define SMPTGhMD
 
-	void g_md_write();
+	void smptg_mdMsend();
 #endif

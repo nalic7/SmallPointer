@@ -19,9 +19,9 @@ static int s1_set(void *p)
 	while (1)
 	{
 		AInputEvent *ainputevent_p = NULL;
-		while (sa_ainputqueue_p != NULL && AInputQueue_getEvent(sa_ainputqueue_p, &ainputevent_p) >= 0)
+		while (smpt_arPinput_queue != NULL && AInputQueue_getEvent(smpt_arPinput_queue, &ainputevent_p) >= 0)
 		{
-			if (AInputQueue_preDispatchEvent(sa_ainputqueue_p, ainputevent_p))
+			if (AInputQueue_preDispatchEvent(smpt_arPinput_queue, ainputevent_p))
 			{
 				continue;
 			}
@@ -49,7 +49,6 @@ static int s1_set(void *p)
 				}
 //					else if (/*actionType == AMOTION_EVENT_ACTION_DOWN || */actionType == AMOTION_EVENT_ACTION_UP)
 //					{
-//
 //					}
 				x00 = l_x;
 				y00 = l_y;
@@ -80,17 +79,15 @@ static int s1_set(void *p)
 					y01 = l_y;
 				}
 			}
-			AInputQueue_finishEvent(sa_ainputqueue_p, ainputevent_p, 1);
+			AInputQueue_finishEvent(smpt_arPinput_queue, ainputevent_p, 1);
 		}
 	}
 	return 0;
 }
-//JNIEXPORT void JNICALL Java_com_nali_scene_Scene_runC(JNIEnv *jnienv_p, jobject jobject)
 
-ANativeWindow *sa_anativewindow_p = NULL;
-ANativeActivity *sa_anativeactivity_p;
-AInputQueue *sa_ainputqueue_p = NULL;
-//static int32_t orientation;
+ANativeWindow *smpt_arPnative_window = NULL;
+ANativeActivity *smpt_arPnative_activity;
+AInputQueue *smpt_arPinput_queue = NULL;
 
 static uint8_t a_state = 0;
 #define A_STATE_WAIT 1
@@ -101,7 +98,7 @@ static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* wind
 	SMPT_DBmN2L("window %p", window)
 	smpt_sfUwidth = ANativeWindow_getWidth(window);
 	smpt_sfUheight = ANativeWindow_getHeight(window);
-	sa_anativewindow_p = window;
+	smpt_arPnative_window = window;
 }
 
 static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
@@ -115,46 +112,23 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
 	SMPT_DBmN2L("window 0")
-	sa_anativewindow_p = NULL;
+	smpt_arPnative_window = NULL;
 	smpt_sfUstate |= SMPT_SFuS_RE;
 }
 
-//static void onConfigurationChanged(ANativeActivity* activity)
-//{
-//	SMPT_DBmN2L("onConfigurationChanged")
-//
-//	AConfiguration *aconfiguration_p = AConfiguration_new();
-//	AConfiguration_fromAssetManager(aconfiguration_p, activity->assetManager);
-//
-//	orientation = AConfiguration_getOrientation(aconfiguration_p);
-//
-//	SMPT_DBmN2L("orientation %d", orientation)
-////	if (orientation == ACONFIGURATION_ORIENTATION_PORT)
-////	{
-////	}
-////	else if (orientation == ACONFIGURATION_ORIENTATION_LAND)
-////	{
-////	}
-////	else
-////	{
-////	}
-//
-//	AConfiguration_delete(aconfiguration_p);
-//}
-
 static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue)
 {
-	sa_ainputqueue_p = queue;
+	smpt_arPinput_queue = queue;
 }
 
 static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 {
-	sa_ainputqueue_p = NULL;
+	smpt_arPinput_queue = NULL;
 }
 
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
-	#ifdef NALI_D_FILE
+	#ifdef SMPT_CM_DEBUG
 		smpt_db_set();
 	#endif
 
@@ -170,16 +144,12 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 	activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
 	activity->callbacks->onInputQueueCreated = onInputQueueCreated;
 	activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
-//	activity->callbacks->onConfigurationChanged = onConfigurationChanged;
-	sa_anativeactivity_p = activity;
-
-//	SLObjectItf slobjectitf;
-//	SMPT_DBmR2L("slCreateEngine %d", slCreateEngine(&slobjectitf, 0, NULL, 0, NULL, NULL))
+	smpt_arPnative_activity = activity;
 }
 
-void sa_wait()
+void smpt_arMwait()
 {
-	while (!sa_anativewindow_p)
+	while (!smpt_arPnative_window)
 	{
 		a_state |= A_STATE_WAIT;
 		thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
@@ -187,62 +157,10 @@ void sa_wait()
 
 	if (a_state & A_STATE_WAIT)
 	{
-//		smptr_ceMset();
-//		vk_init();
-////		al_set();
-//		lc_vk();
-
-//		vk_freeDevice();
-//		vk_freeQueue();
 		smpt_rd_vk_sfMfree();
 		smpt_rd_vk_sfMmake();
-//		vk_initQueue();
-//		vk_initDevice();
-//		vk_setQueue(smpt_rd_vkUdevice);
-//		vk_makeDevice(smpt_rd_vkUdevice);
-//		vk_getQueue(smpt_rd_vkUdevice);
 
-//		m_surface_state |= SMPT_SFuS_EXIT;
 		smpt_sfUstate |= SMPT_SFuS_RE;
 		a_state &= 0xFFu - A_STATE_WAIT;
 	}
 }
-
-//AAudioStreamDataCallbackResult data_callback(AAudioStream *stream, void *userData, void *audioData, int32_t numFrames) {
-//	// Fill audioData with the samples to be played
-//	// For this example, we'll just produce silence (zeros)
-//	float *buffer = (float*)audioData;
-//	for (int i = 0; i < numFrames; i++) {
-//		buffer[i] = 0.0f;  // Silence
-//	}
-//	return AAUDIO_STREAM_DATA_CALLBACK_RESULT_CONTINUE;
-//}
-//
-//void play_audio() {
-//	AAudioStreamBuilder *builder = NULL;
-//	AAudioStream *stream = NULL;
-//
-//	// Create the AAudio stream builder
-//	AAudio_createStreamBuilder(&builder);
-//
-//	// Set the callback function
-//	AAudioStreamBuilder_setDataCallback(builder, data_callback);
-//
-//	// Configure the stream parameters (e.g., format, channels, sample rate)
-//	AAudioStreamBuilder_setFormat(builder, AAUDIO_FORMAT_PCM_FLOAT);
-//	AAudioStreamBuilder_setChannelCount(builder, 1);  // Mono
-//	AAudioStreamBuilder_setSampleRate(builder, 44100); // 44.1 kHz
-//
-//	// Open the stream
-//	AAudio_createStream(builder, &stream);
-//
-//	// Start the stream for playback
-//	AAudioStream_requestStart(stream);
-//
-//	// Let the audio play for a few seconds (e.g., 5 seconds)
-//	usleep(5000000);  // 5 seconds in microseconds
-//
-//	// Stop and release the stream
-//	AAudioStream_requestStop(stream);
-//	AAudioStream_close(stream);
-//}

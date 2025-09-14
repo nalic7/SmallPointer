@@ -3,7 +3,7 @@ VkSurfaceKHR smpt_rd_vk_sfVkhr = VK_NULL_HANDLE;
 void smpt_rd_vk_sfMmake()
 {
 	#ifdef SMPT_CM_ST_ANDROID
-		while (sa_anativewindow_p == NULL)
+		while (smpt_arPnative_window == NULL)
 		{
 			SMPT_DBmR2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
 		}
@@ -16,7 +16,7 @@ void smpt_rd_vk_sfMmake()
 				&(VkAndroidSurfaceCreateInfoKHR)
 				{
 					.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
-					.window = sa_anativewindow_p,
+					.window = smpt_arPnative_window,
 					.flags = 0,
 					.pNext = VK_NULL_HANDLE
 				},

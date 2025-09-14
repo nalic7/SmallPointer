@@ -1,12 +1,9 @@
-#ifndef _SF_ANDROID_H
-#define _SF_ANDROID_H
+#ifndef SMPThAR
+	#define SMPThAR
 
-#define LOOPER_ID_INPUT 1
+	extern ANativeWindow *smpt_arPnative_window;
+	extern ANativeActivity *smpt_arPnative_activity;
+	extern AInputQueue *smpt_arPinput_queue;
 
-extern ANativeWindow *sa_anativewindow_p;
-extern ANativeActivity *sa_anativeactivity_p;
-extern AInputQueue *sa_ainputqueue_p;
-
-void sa_wait();
-
+	void smpt_arMwait();
 #endif

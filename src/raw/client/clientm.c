@@ -298,8 +298,8 @@ void smptr_cemMread()
 				struct SMPTR_CEMsM1 *Pm1 = smptr_cemPm1 + smptr_cemLm1++;
 				Pm1->Ui = l0;
 				Pm1->Ua = m.Sm.Pa[l1];
-				//! set offset
-				Pm1->Ub = Pm1->Ua < SMPTReMAc + SMPTReMc ? smptrPmb[Pm1->Ua] : Pm1->Ua;
+				//! check
+				Pm1->Ub = Pm1->Ua < SMPTReMAc + SMPTReMc + SMPTReM1c ? smptrPmb[Pm1->Ua] : 4 + Pm1->Ua - SMPTReMAc - SMPTReMc - SMPTReM1c;
 //				SMPT_DBmN2L("Pm1->Ub %d", Pm1->Ub)
 				//! find depth
 				Pm1->Fd = 0;
@@ -370,7 +370,7 @@ void smptr_cemMloop()
 					if (Pm01->Uf != SMPTR_CEuFPS)
 					{
 						Pm01->Ft += m.Ft;
-						Pm01->Ft = NALI_M_WRAP_F(Pm01->Ft, Pk[1], Pk[2]);
+						Pm01->Ft = SMPTMmWRAP_F(Pm01->Ft, Pk[1], Pk[2]);
 						++Pm01->Uf;
 					}
 

@@ -6,7 +6,7 @@ double smptr_ceDdelta = 0;
 void smptr_ceMset()
 {
 	smptr_ce_kfMset();
-	lcp_set();
+	smptr_ce_mdMset();
 
 	smptr_cemMset();
 
@@ -75,7 +75,7 @@ void smptr_ceMfree(uint32_t device)
 		smpt_rd_vkw_dstspMfree(device);
 		smpt_rd_vkw_dsts_loMfree(device);
 
-		lcp_free(device);
+		smptr_ce_mdMfree(device);
 		smpt_rd_vk_cmdMfree();
 	#endif
 

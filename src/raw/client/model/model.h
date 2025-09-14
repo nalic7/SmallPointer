@@ -8,8 +8,10 @@
 	#define SMPTR_CE_MDlA 2
 
 	//! move to raw
-	extern VkDeviceSize r_cep_a_p[SMPTR_CE_MDlA];
-	extern VkDeviceSize *r_cep_ai_p;
+	#ifdef SMPT_CM_VK
+		extern VkDeviceSize r_cep_a_p[SMPTR_CE_MDlA];
+		extern VkDeviceSize *r_cep_ai_p;
+	#endif
 	extern uint32_t
 		*r_cep_ai_l_p,
 		lcp_rgba_bl;
@@ -26,7 +28,9 @@
 		extern VkDeviceSize *smptr_ce_mdPvkdevicesize;
 	#endif
 
-	void lcp_set();
-	void lcp_vk();
-	void lcp_free(uint32_t device);
+	void smptr_ce_mdMset();
+	#ifdef SMPT_CM_VK
+		void smptr_ce_mdMvk();
+	#endif
+	void smptr_ce_mdMfree(uint32_t device);
 #endif
