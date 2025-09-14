@@ -33,7 +33,7 @@ void smpt_rd_vkwMdsts(VkDescriptorSet *Pvkdescriptorset, VkDescriptorBufferInfo 
 	{
 		.buffer = smptr_ce_mdPvkbuffer[0],
 		.offset = 0,
-		.range = lcp_rgba_bl
+		.range = smptr_ce_mdLrgba
 	};
 
 	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swcUimage; ++l0)

@@ -1,5 +1,5 @@
-#ifndef _MCC_H
-	#define _MCC_H
+#ifndef SMPT_MChC
+	#define SMPT_MChC
 
-	void JNICALL mcc_jvmtiEventClassLoad(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread, jclass klass);
+	void JNICALL smpt_mccMjvmtiEventClassLoad(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread, jclass klass);
 #endif

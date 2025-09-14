@@ -1,4 +1,4 @@
-#ifndef _MC_MT_H
-	#define _MC_MT_H
+#ifndef SMPT_MChMT
+	#define SMPT_MChMT
 
 #endif

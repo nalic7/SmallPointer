@@ -32,138 +32,141 @@ static const char *Pm[] =
 	#undef X
 };
 
-static uint8_t mesh_id_array[sizeof(Pm) / sizeof(Pm[0])];
-static uint8_t mesh_index = 0;
+static uint8_t Pmi[sizeof(Pm) / sizeof(Pm[0])];
+static uint8_t Lmi = 0;
 
-static uint32_t bone_bl = 0;
+static uint32_t Lbone = 0;
 
-static uint8_t *joint_count_p;
-static uint8_t joint_count_bl = 0;
-static uint8_t joint_array[1024];
-static uint32_t joint_bl = 0;
+static uint8_t *Pji;
+static uint8_t Lji = 0;
+static uint8_t Pj[1024];
+static uint32_t Lj = 0;
 
-static float *rgba_p = 0;
-static char **material_p;
-static uint8_t material_fl = 0;
+static float *Prgba = 0;
+static char **Pmaterial;
+static uint8_t Lmaterial = 0;
 
-static uint8_t *ai_p;
-static uint32_t ai_bl = 0;
+static uint8_t *Pai;
+static uint32_t Lai = 0;
 
-static uint8_t *attribute_j1c1_p;
-static uint32_t attribute_j1c1_bl = 0;
-static uint8_t *attribute_c1_p;
-static uint32_t attribute_c1_bl = 0;
+static uint8_t *Pa_j1c1;
+static uint32_t La_j1c1 = 0;
+static uint8_t *Pa_c1;
+static uint32_t La_c1 = 0;
 
-static uint8_t *i_p;
-static uint32_t i_bl = 0;
-static uint8_t *cut_i_p;
-static uint32_t cut_i_bl = 0;
+static uint8_t *Pi;
+static uint32_t Li = 0;
+static uint8_t *Pi1;
+static uint32_t Li1 = 0;
 
-static float *i_bindpose_p;
-static uint32_t i_bindpose_bl = 0;
+static float *Pbindpose;
+static uint32_t Lbindpose = 0;
 
 void smptg_mdMsend()
 {
-	joint_count_p = malloc(0);
+	Pji = malloc(0);
 
-	i_bindpose_p = malloc(0);
+	Pbindpose = malloc(0);
 
-	material_p = malloc(0);
+	Pmaterial = malloc(0);
 
-	ai_p = malloc(0);
-	attribute_j1c1_p = malloc(0);
-	i_p = malloc(0);
-	cut_i_p = malloc(0);
+	Pai = malloc(0);
 
-	cgltf_options *cgltf_options_p = &(cgltf_options){};
-	cgltf_data *cgltf_data_p = NULL;
-	for (uint32_t l_0 = 0; l_0 < sizeof(Pc) / sizeof(Pc[0]); ++l_0)
+	Pa_j1c1 = malloc(0);
+	Pa_c1 = malloc(0);
+
+	Pi = malloc(0);
+	Pi1 = malloc(0);
+
+	cgltf_options *Pcgltf_options = &(cgltf_options){};
+	cgltf_data *Pcgltf_data = NULL;
+	for (uint32_t l0 = 0; l0 < sizeof(Pc) / sizeof(Pc[0]); ++l0)
 	{
-		SMPT_DBmR2L("cgltf_parse_file %d", cgltf_parse_file(cgltf_options_p, Pc[l_0], &cgltf_data_p))
-		SMPT_DBmR2L("cgltf_load_buffers %d", cgltf_load_buffers(cgltf_options_p, cgltf_data_p, Pc[l_0]))
-		SMPT_DBmR2L("cgltf_validate %d", cgltf_validate(cgltf_data_p))
+		SMPT_DBmR2L("cgltf_parse_file %d", cgltf_parse_file(Pcgltf_options, Pc[l0], &Pcgltf_data))
+		SMPT_DBmR2L("cgltf_load_buffers %d", cgltf_load_buffers(Pcgltf_options, Pcgltf_data, Pc[l0]))
+		SMPT_DBmR2L("cgltf_validate %d", cgltf_validate(Pcgltf_data))
 
-		if (Pg[l_0] & 1)
+		if (Pg[l0] & 1)
 		{
-			cgltf_skin *cgltf_skin_p = &cgltf_data_p->skins[0];
+			cgltf_skin *Pcgltf_skin = &Pcgltf_data->skins[0];
 
 			//.i bindpose
-			i_bindpose_p = realloc(i_bindpose_p, (cgltf_skin_p->joints_count - 1) * sizeof(float) * 16);
-			memcpy(i_bindpose_p + i_bindpose_bl * 16, cgltf_skin_p->inverse_bind_matrices->buffer_view->buffer->data + cgltf_skin_p->inverse_bind_matrices->buffer_view->offset + sizeof(float) * 16, sizeof(float) * 16 * (cgltf_skin_p->joints_count - 1));
-			i_bindpose_bl += cgltf_skin_p->joints_count - 1;
+			Pbindpose = realloc(Pbindpose, (Pcgltf_skin->joints_count - 1) * sizeof(float) * 16);
+			memcpy(Pbindpose + Lbindpose * 16, Pcgltf_skin->inverse_bind_matrices->buffer_view->buffer->data + Pcgltf_skin->inverse_bind_matrices->buffer_view->offset + sizeof(float) * 16, sizeof(float) * 16 * (Pcgltf_skin->joints_count - 1));
+			Lbindpose += Pcgltf_skin->joints_count - 1;
 
-			joint_count_p = realloc(joint_count_p, joint_count_bl + sizeof(uint8_t));
-			joint_count_p[joint_count_bl] = cgltf_skin_p->joints_count;
-			joint_count_bl += sizeof(uint8_t);
+			Pji = realloc(Pji, Lji + sizeof(uint8_t));
+			Pji[Lji] = Pcgltf_skin->joints_count;
+			Lji += sizeof(uint8_t);
 
 			//.i use first bone as main with default m4x4
-			cgltf_node *base_cgltf_node_p = cgltf_skin_p->joints[0];
+			cgltf_node *Pbase_cgltf_node = Pcgltf_skin->joints[0];
 
-			for (uint32_t l_2 = 0; l_2 < cgltf_skin_p->joints_count; ++l_2)
+			for (uint32_t l2 = 0; l2 < Pcgltf_skin->joints_count; ++l2)
 			{
-				cgltf_node *cgltf_node_joints_p = cgltf_skin_p->joints[l_2];
+				cgltf_node *Pcgltf_node_joints = Pcgltf_skin->joints[l2];
 
-				if (l_2 == 0)
+				if (l2 == 0)
 				{
-					joint_array[joint_bl] = 0;
-					joint_bl += sizeof(uint8_t);
+					Pj[Lj] = 0;
+					Lj += sizeof(uint8_t);
 				}
 				else
 				{
 					uint32_t c_0 = 0;
-					while ((cgltf_node_joints_p = cgltf_node_joints_p->parent) != base_cgltf_node_p)
+					while ((Pcgltf_node_joints = Pcgltf_node_joints->parent) != Pbase_cgltf_node)
 					{
-						for (uint32_t j_1 = 0; j_1 < cgltf_skin_p->joints_count; ++j_1)
-							if (cgltf_node_joints_p == cgltf_skin_p->joints[j_1])
+						for (uint32_t j_1 = 0; j_1 < Pcgltf_skin->joints_count; ++j_1)
+							if (Pcgltf_node_joints == Pcgltf_skin->joints[j_1])
 							{
-								joint_array[joint_bl + c_0 + 1] = j_1;
+								Pj[Lj + c_0 + 1] = j_1;
 								break;
 							}
 
 						++c_0;
 					}
-					joint_array[joint_bl] = c_0;
-					joint_bl += sizeof(uint8_t) + c_0;
+					Pj[Lj] = c_0;
+					Lj += sizeof(uint8_t) + c_0;
 				}
 			}
 
-			bone_bl += cgltf_skin_p->joints_count;
+			Lbone += Pcgltf_skin->joints_count;
 		}
 
 		uint8_t mix_array[sizeof(float) * 3 + 2];
 		uint32_t l_index = 0;
 		uint32_t l_own_index = 0;
 		uint32_t *l_index_p;
-		for (uint32_t l_1 = 0; l_1 < cgltf_data_p->meshes_count; ++l_1)
+		for (uint32_t l1 = 0; l1 < Pcgltf_data->meshes_count; ++l1)
 		{
-			cgltf_mesh *cgltf_mesh_p = &cgltf_data_p->meshes[l_1];
+			cgltf_mesh *cgltf_mesh_p = &Pcgltf_data->meshes[l1];
 			SMPT_DBmN2L("cgltf_mesh %s", cgltf_mesh_p->name)
 
 			l_index_p = &l_index;
 
-			for (uint8_t l_2 = 0; l_2 < sizeof(Pm) / sizeof(Pm[0]); ++l_2)
-				if (!strcmp(Pm[l_2], cgltf_mesh_p->name))
+			for (uint8_t l2 = 0; l2 < sizeof(Pm) / sizeof(Pm[0]); ++l2)
+				if (!strcmp(Pm[l2], cgltf_mesh_p->name))
 				{
-					mesh_id_array[l_2] = mesh_index++;
+					Pmi[l2] = Lmi++;
 					l_own_index = 0;
 					l_index_p = &l_own_index;
 					break;
 				}
 
-			for (uint32_t l_2 = 0; l_2 < cgltf_mesh_p->primitives_count; ++l_2)
+			for (uint32_t l2 = 0; l2 < cgltf_mesh_p->primitives_count; ++l2)
 			{
-				cgltf_primitive *cgltf_primitive_p = &cgltf_mesh_p->primitives[l_2];
+				cgltf_primitive *cgltf_primitive_p = &cgltf_mesh_p->primitives[l2];
 
 				mix_array[sizeof(float) * 3] = 0;
 				//.i material/color
-				while (mix_array[sizeof(float) * 3] < material_fl)
+				while (mix_array[sizeof(float) * 3] < Lmaterial)
 				{
-					if (!strcmp(material_p[mix_array[sizeof(float) * 3]], cgltf_primitive_p->material->name))
+					if (!strcmp(Pmaterial[mix_array[sizeof(float) * 3]], cgltf_primitive_p->material->name))
 						break;
 					//.i j1c1
 					++mix_array[sizeof(float) * 3];
 				}
-				if (mix_array[sizeof(float) * 3] == material_fl)
+				if (mix_array[sizeof(float) * 3] == Lmaterial)
 				{
 					cgltf_material *cgltf_material_p = cgltf_primitive_p->material;
 					cgltf_float *cgltf_float_array = cgltf_material_p->pbr_metallic_roughness.base_color_factor;
@@ -171,25 +174,25 @@ void smptg_mdMsend()
 					if (strstr(cgltf_material_p->name, ".C0."))
 						SMPT_DBmW2L("SMPTG %s", cgltf_material_p->name)
 
-					++material_fl;
-					material_p = realloc(material_p, sizeof(char *) * material_fl);
-					material_p[mix_array[sizeof(float) * 3]] = cgltf_material_p->name;
-					rgba_p = realloc(rgba_p, sizeof(float) * 4 * material_fl);
+					++Lmaterial;
+					Pmaterial = realloc(Pmaterial, sizeof(char *) * Lmaterial);
+					Pmaterial[mix_array[sizeof(float) * 3]] = cgltf_material_p->name;
+					Prgba = realloc(Prgba, sizeof(float) * 4 * Lmaterial);
 					uint16_t i4 = mix_array[sizeof(float) * 3] * 4;
-					rgba_p[i4] = emissive_factor[0];
-					rgba_p[i4 + 1] = emissive_factor[1];
-					rgba_p[i4 + 2] = emissive_factor[2];
-					rgba_p[i4 + 3] = cgltf_float_array[3];
+					Prgba[i4] = emissive_factor[0];
+					Prgba[i4 + 1] = emissive_factor[1];
+					Prgba[i4 + 2] = emissive_factor[2];
+					Prgba[i4 + 3] = cgltf_float_array[3];
 				}
 
 				uint8_t l_set = 0;
-				for (uint32_t l_3 = 0; l_3 < cgltf_primitive_p->indices->count; ++l_3)
+				for (uint32_t l3 = 0; l3 < cgltf_primitive_p->indices->count; ++l3)
 				{
-					uint16_t l_3_0 = *(uint16_t *)(cgltf_primitive_p->indices->buffer_view->buffer->data + cgltf_primitive_p->indices->buffer_view->offset + l_3 * sizeof(uint16_t));
+					uint16_t l3_0 = *(uint16_t *)(cgltf_primitive_p->indices->buffer_view->buffer->data + cgltf_primitive_p->indices->buffer_view->offset + l3 * sizeof(uint16_t));
 
-					for (uint32_t l_4 = 0; l_4 < cgltf_primitive_p->attributes_count; ++l_4)
+					for (uint32_t l4 = 0; l4 < cgltf_primitive_p->attributes_count; ++l4)
 					{
-						cgltf_attribute *cgltf_attribute_p = &cgltf_primitive_p->attributes[l_4];
+						cgltf_attribute *cgltf_attribute_p = &cgltf_primitive_p->attributes[l4];
 						cgltf_accessor *cgltf_accessor_p = cgltf_attribute_p->data;
 
 						cgltf_buffer_view *cgltf_buffer_view_p = cgltf_accessor_p->buffer_view;
@@ -197,13 +200,13 @@ void smptg_mdMsend()
 						uint8_t *v_p = cgltf_buffer_view_p->buffer->data + cgltf_buffer_view_p->offset;
 
 						uint8_t a_bl = cgltf_accessor_p->stride / type_bl;
-						for (uint32_t l_5 = 0; l_5 < a_bl; ++l_5)
+						for (uint32_t l5 = 0; l5 < a_bl; ++l5)
 						{
 							if (cgltf_attribute_p->type == cgltf_attribute_type_joints)
 							{
-								if (l_5 == 0)
+								if (l5 == 0)
 								{
-									uint8_t a_j = *(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+									uint8_t a_j = *(v_p + l3_0 * cgltf_accessor_p->stride + l5 * type_bl);
 									if (a_j == 0)
 									{
 										SMPT_DBmW2L("SMPTG a_j0")
@@ -214,11 +217,11 @@ void smptg_mdMsend()
 							}
 							else if (cgltf_attribute_p->type == cgltf_attribute_type_weights)
 							{
-								if (l_5 == 0)
+								if (l5 == 0)
 								{
 									if (cgltf_accessor_p->component_type == cgltf_component_type_r_32f)
 									{
-										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+										float *p = (float *)(v_p + l3_0 * cgltf_accessor_p->stride + l5 * type_bl);
 										if (!*p)
 										{
 											SMPT_DBmW2L("SMPTG w2 %f", *p)
@@ -231,11 +234,11 @@ void smptg_mdMsend()
 
 									l_set = 1;
 								}
-								else if (l_5 == 1)
+								else if (l5 == 1)
 								{
 									if (cgltf_accessor_p->component_type == cgltf_component_type_r_32f)
 									{
-										float *p = (float *)(v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl);
+										float *p = (float *)(v_p + l3_0 * cgltf_accessor_p->stride + l5 * type_bl);
 										if (*p)
 										{
 											SMPT_DBmW2L("SMPTG w2 %f", *p)
@@ -249,7 +252,7 @@ void smptg_mdMsend()
 							}
 							else if (cgltf_attribute_p->type == cgltf_attribute_type_position)
 							{
-								memcpy(mix_array + l_5 * type_bl, v_p + l_3_0 * cgltf_accessor_p->stride + l_5 * type_bl, type_bl);
+								memcpy(mix_array + l5 * type_bl, v_p + l3_0 * cgltf_accessor_p->stride + l5 * type_bl, type_bl);
 							}
 							else
 							{
@@ -260,21 +263,21 @@ void smptg_mdMsend()
 						//.i c1
 						if (cgltf_primitive_p->attributes_count == 1)
 						{
-							for (uint32_t l_5 = 0; l_5 < attribute_c1_bl; l_5 += sizeof(float) * 3 + 1)
+							for (uint32_t l5 = 0; l5 < La_c1; l5 += sizeof(float) * 3 + 1)
 							{
-								if (!memcmp(attribute_c1_p + l_5, mix_array, sizeof(float) * 3 + 1))
+								if (!memcmp(Pa_c1 + l5, mix_array, sizeof(float) * 3 + 1))
 								{
 									if (l_index_p == &l_own_index)
 									{
-										cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
-										*(uint32_t *)(cut_i_p + cut_i_bl) = l_5 / (sizeof(float) * 3 + 1);
-										cut_i_bl += sizeof(uint32_t);
+										Pi1 = realloc(Pi1, Li1 + sizeof(uint32_t));
+										*(uint32_t *)(Pi1 + Li1) = l5 / (sizeof(float) * 3 + 1);
+										Li1 += sizeof(uint32_t);
 									}
 									else
 									{
-										i_p = realloc(i_p, i_bl + sizeof(uint32_t));
-										*(uint32_t *)(i_p + i_bl) = l_5 / (sizeof(float) * 3 + 1);
-										i_bl += sizeof(uint32_t);
+										Pi = realloc(Pi, Li + sizeof(uint32_t));
+										*(uint32_t *)(Pi + Li) = l5 / (sizeof(float) * 3 + 1);
+										Li += sizeof(uint32_t);
 									}
 									*l_index_p += sizeof(uint32_t);
 
@@ -284,50 +287,50 @@ void smptg_mdMsend()
 							}
 							if (l_set == 1)
 							{
-								attribute_c1_p = realloc(attribute_c1_p, attribute_c1_bl + sizeof(float) * 3 + 1);
-								memcpy(attribute_c1_p + attribute_c1_bl, mix_array, sizeof(float) * 3 + 1);
+								Pa_c1 = realloc(Pa_c1, La_c1 + sizeof(float) * 3 + 1);
+								memcpy(Pa_c1 + La_c1, mix_array, sizeof(float) * 3 + 1);
 
 								if (l_index_p == &l_own_index)
 								{
-									cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
-									*(uint32_t *)(cut_i_p + cut_i_bl) = attribute_c1_bl / (sizeof(float) * 3 + 1);
-									cut_i_bl += sizeof(uint32_t);
+									Pi1 = realloc(Pi1, Li1 + sizeof(uint32_t));
+									*(uint32_t *)(Pi1 + Li1) = La_c1 / (sizeof(float) * 3 + 1);
+									Li1 += sizeof(uint32_t);
 								}
 								else
 								{
-									i_p = realloc(i_p, i_bl + sizeof(uint32_t));
-									*(uint32_t *)(i_p + i_bl) = attribute_c1_bl / (sizeof(float) * 3 + 1);
-									i_bl += sizeof(uint32_t);
+									Pi = realloc(Pi, Li + sizeof(uint32_t));
+									*(uint32_t *)(Pi + Li) = La_c1 / (sizeof(float) * 3 + 1);
+									Li += sizeof(uint32_t);
 								}
 								*l_index_p += sizeof(uint32_t);
 
-								attribute_c1_bl += sizeof(float) * 3 + 1;
+								La_c1 += sizeof(float) * 3 + 1;
 
 								l_set = 0;
 							}
 						}
 						//.i j1u1v1t1
-						//else if (cgltf_primitive_p->attributes_count == 4 && l_4 == 3)
+						//else if (cgltf_primitive_p->attributes_count == 4 && l4 == 3)
 						//{
 						//}
 						//.i j1c1
 						else if (l_set == 1)
 						{
-							for (uint32_t l_5 = 0; l_5 < attribute_j1c1_bl; l_5 += sizeof(float) * 3 + 2)
+							for (uint32_t l5 = 0; l5 < La_j1c1; l5 += sizeof(float) * 3 + 2)
 							{
-								if (!memcmp(attribute_j1c1_p + l_5, mix_array, sizeof(float) * 3 + 2))
+								if (!memcmp(Pa_j1c1 + l5, mix_array, sizeof(float) * 3 + 2))
 								{
 									if (l_index_p == &l_own_index)
 									{
-										cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
-										*(uint32_t *)(cut_i_p + cut_i_bl) = l_5 / (sizeof(float) * 3 + 2);
-										cut_i_bl += sizeof(uint32_t);
+										Pi1 = realloc(Pi1, Li1 + sizeof(uint32_t));
+										*(uint32_t *)(Pi1 + Li1) = l5 / (sizeof(float) * 3 + 2);
+										Li1 += sizeof(uint32_t);
 									}
 									else
 									{
-										i_p = realloc(i_p, i_bl + sizeof(uint32_t));
-										*(uint32_t *)(i_p + i_bl) = l_5 / (sizeof(float) * 3 + 2);
-										i_bl += sizeof(uint32_t);
+										Pi = realloc(Pi, Li + sizeof(uint32_t));
+										*(uint32_t *)(Pi + Li) = l5 / (sizeof(float) * 3 + 2);
+										Li += sizeof(uint32_t);
 									}
 									*l_index_p += sizeof(uint32_t);
 
@@ -337,24 +340,24 @@ void smptg_mdMsend()
 							}
 							if (l_set == 1)
 							{
-								attribute_j1c1_p = realloc(attribute_j1c1_p, attribute_j1c1_bl + sizeof(float) * 3 + 2);
-								memcpy(attribute_j1c1_p + attribute_j1c1_bl, mix_array, sizeof(float) * 3 + 2);
+								Pa_j1c1 = realloc(Pa_j1c1, La_j1c1 + sizeof(float) * 3 + 2);
+								memcpy(Pa_j1c1 + La_j1c1, mix_array, sizeof(float) * 3 + 2);
 
 								if (l_index_p == &l_own_index)
 								{
-									cut_i_p = realloc(cut_i_p, cut_i_bl + sizeof(uint32_t));
-									*(uint32_t *)(cut_i_p + cut_i_bl) = attribute_j1c1_bl / (sizeof(float) * 3 + 2);
-									cut_i_bl += sizeof(uint32_t);
+									Pi1 = realloc(Pi1, Li1 + sizeof(uint32_t));
+									*(uint32_t *)(Pi1 + Li1) = La_j1c1 / (sizeof(float) * 3 + 2);
+									Li1 += sizeof(uint32_t);
 								}
 								else
 								{
-									i_p = realloc(i_p, i_bl + sizeof(uint32_t));
-									*(uint32_t *)(i_p + i_bl) = attribute_j1c1_bl / (sizeof(float) * 3 + 2);
-									i_bl += sizeof(uint32_t);
+									Pi = realloc(Pi, Li + sizeof(uint32_t));
+									*(uint32_t *)(Pi + Li) = La_j1c1 / (sizeof(float) * 3 + 2);
+									Li += sizeof(uint32_t);
 								}
 								*l_index_p += sizeof(uint32_t);
 
-								attribute_j1c1_bl += sizeof(float) * 3 + 2;
+								La_j1c1 += sizeof(float) * 3 + 2;
 
 								l_set = 0;
 							}
@@ -365,68 +368,87 @@ void smptg_mdMsend()
 
 			if (l_index_p == &l_own_index)
 			{
-				ai_p = realloc(ai_p, ai_bl + sizeof(uint32_t));
-				*(uint32_t *)(ai_p + ai_bl) = l_own_index;
-				ai_bl += sizeof(uint32_t);
+				Pai = realloc(Pai, Lai + sizeof(uint32_t));
+				*(uint32_t *)(Pai + Lai) = l_own_index;
+				Lai += sizeof(uint32_t);
 			}
 		}
-		ai_p = realloc(ai_p, ai_bl + sizeof(uint32_t));
-		*(uint32_t *)(ai_p + ai_bl) = l_index;
-		ai_bl += sizeof(uint32_t);
+		Pai = realloc(Pai, Lai + sizeof(uint32_t));
+		*(uint32_t *)(Pai + Lai) = l_index;
+		Lai += sizeof(uint32_t);
 
-		cgltf_free(cgltf_data_p);
+		cgltf_free(Pcgltf_data);
 	}
 
-	SMPT_DBmR2L("material_fl %d", material_fl)
-	SMPT_DBmR2L("bone_bl %d", bone_bl)
+	SMPT_DBmR2L("Lmaterial %d", Lmaterial)
+	SMPT_DBmR2L("Lbone %d", Lbone)
 
 	FILE *file = fopen(SMPTFcHOME_ASSET, "ab");
 	SMPT_DBmN2L("fopen %p", file)
 
-	fwrite(&joint_count_bl, sizeof(uint8_t), 1, file);
-	fwrite(joint_count_p, sizeof(uint8_t), joint_count_bl, file);
-	fwrite(joint_array, sizeof(uint8_t), joint_bl, file);
-	fwrite(i_bindpose_p, sizeof(float), i_bindpose_bl * 16, file);
+	fwrite(&Lji, sizeof(uint8_t), 1, file);
+	fwrite(Pji, sizeof(uint8_t), Lji, file);
+	fwrite(Pj, sizeof(uint8_t), Lj, file);
+	fwrite(Pbindpose, sizeof(float), Lbindpose * 16, file);
 
-	fwrite(&ai_bl, sizeof(uint32_t), 1, file);
-	for (uint8_t l_0 = 0; l_0 < sizeof(Pm) / sizeof(Pm[0]); ++l_0)
+	fwrite(&Lai, sizeof(uint32_t), 1, file);
+	for (uint8_t l0 = 0; l0 < sizeof(Pm) / sizeof(Pm[0]); ++l0)
 	{
-		uint8_t l_0_0 = mesh_id_array[l_0];
-		fwrite(ai_p + l_0_0 * sizeof(uint32_t), sizeof(uint32_t), 1, file);
+		uint8_t l0_0 = Pmi[l0];
+		fwrite(Pai + l0_0 * sizeof(uint32_t), sizeof(uint32_t), 1, file);
 	}
-	fwrite(ai_p + sizeof(Pm) / sizeof(Pm[0]) * sizeof(uint32_t), sizeof(uint32_t), 1, file);
+	fwrite(Pai + sizeof(Pm) / sizeof(Pm[0]) * sizeof(uint32_t), sizeof(uint32_t), 1, file);
 
-	for (uint8_t l_0 = 0; l_0 < sizeof(Pm) / sizeof(Pm[0]); ++l_0)
+	for (uint8_t l0 = 0; l0 < sizeof(Pm) / sizeof(Pm[0]); ++l0)
 	{
-		uint8_t l_0_0 = mesh_id_array[l_0];
+		uint8_t l0_0 = Pmi[l0];
 
-		uint32_t size = *(uint32_t *)(ai_p + l_0_0 * sizeof(uint32_t));
+		uint32_t size = *(uint32_t *)(Pai + l0_0 * sizeof(uint32_t));
 		uint32_t index = 0;
 
-		for (uint8_t l_1 = 0; l_1 < l_0_0; ++l_1)
+		for (uint8_t l1 = 0; l1 < l0_0; ++l1)
 		{
-			index += *(uint32_t *)(ai_p + l_1 * sizeof(uint32_t));
+			index += *(uint32_t *)(Pai + l1 * sizeof(uint32_t));
 		}
 
-		fwrite(cut_i_p + index, sizeof(uint8_t), size, file);
+		fwrite(Pi1 + index, sizeof(uint8_t), size, file);
 	}
-	fwrite(i_p, sizeof(uint8_t), i_bl, file);
+	fwrite(Pi, sizeof(uint8_t), Li, file);
 
-	fwrite(&material_fl, sizeof(uint8_t), 1, file);
-	fwrite(rgba_p, sizeof(float), material_fl * 4, file);
+	fwrite(&Lmaterial, sizeof(uint8_t), 1, file);
+	fwrite(Prgba, sizeof(float), Lmaterial * 4, file);
 
 	//.i uv
 
 	//.i a c1
-	fwrite((uint32_t[]){attribute_c1_bl / (sizeof(float)*3+1)}, sizeof(uint32_t), 1, file);
-	fwrite(attribute_c1_p, sizeof(uint8_t), attribute_c1_bl, file);
+	fwrite((uint32_t[]){La_c1 / (sizeof(float)*3+1)}, sizeof(uint32_t), 1, file);
+	fwrite(Pa_c1, sizeof(uint8_t), La_c1, file);
 
 	//.i a j1c1
-	fwrite(attribute_j1c1_p, sizeof(uint8_t), attribute_j1c1_bl, file);
+	fwrite(Pa_j1c1, sizeof(uint8_t), La_j1c1, file);
 
 	//.i a j1t1u1v1
 
 	//.i a t1u1v1
 
 	fclose(file);
+}
+
+void smptg_mdMfree()
+{
+	free(Pji);
+	free(Prgba);
+
+	free(Pmaterial);
+
+	free(Pai);
+
+	free(Pa_j1c1);
+	free(Pa_c1);
+
+	free(Pi);
+
+	free(Pi1);
+
+	free(Pbindpose);
 }

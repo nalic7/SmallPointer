@@ -215,7 +215,7 @@ void smptr_cemMread()
 
 					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 					{
-						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (Pm->Sm.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[Pm->Sm.Um]);
+						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (Pm->Sm.Um >= smptr_ce_mdLj ? 1 : smptr_ce_mdPj[Pm->Sm.Um]);
 
 						VkMemoryRequirements vkmemoryrequirements;
 						vkdevicesize = (vkdevicesize + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1);
@@ -237,8 +237,8 @@ void smptr_cemMread()
 						Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swcUimage,
 						Pvkwritedescriptorset + (Ldst - 1) * smpt_rd_vk_swcUimage,
 						l0,
-						Pm->Sm.Um < lcp_joint_count_bl ? Pm->Sm.Um : 0,
-						Pm->Sm.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[Pm->Sm.Um],
+						Pm->Sm.Um < smptr_ce_mdLj ? Pm->Sm.Um : 0,
+						Pm->Sm.Um >= smptr_ce_mdLj ? 1 : smptr_ce_mdPj[Pm->Sm.Um],
 						1 + 1 * smpt_rd_vk_swcUimage
 					);
 				#endif
@@ -362,8 +362,8 @@ void smptr_cemMloop()
 				{
 					*(float *)(Pbuffer + l1) = 1.0;
 				}
-				memcpy(Pbuffer + 4, lcp_a_p[m.Sm.Um], lcp_joint_count_p[m.Sm.Um] * 4 * 3 * sizeof(float));
-				if (m.Sm.Um < lcp_joint_count_bl)
+				memcpy(Pbuffer + 4, smptr_ce_mdPb[m.Sm.Um], smptr_ce_mdPj[m.Sm.Um] * 4 * 3 * sizeof(float));
+				if (m.Sm.Um < smptr_ce_mdLj)
 				{
 					const SMPTRtMK *Pk = smptrPmk[m.Sm.Uk];
 
@@ -413,7 +413,7 @@ void smptr_cemMloop()
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 					.memory = Pvkdevicememory[smpt_rd_vk_swcUframe_buffer],
 					.offset = 0,
-					.size = ((sizeof(float) * 4 * 4 * (m.Sm.Um >= lcp_joint_count_bl ? 1 : lcp_joint_count_p[m.Sm.Um])) + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1),
+					.size = ((sizeof(float) * 4 * 4 * (m.Sm.Um >= smptr_ce_mdLj ? 1 : smptr_ce_mdPj[m.Sm.Um])) + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1),
 					.pNext = VK_NULL_HANDLE
 				};
 			}

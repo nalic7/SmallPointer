@@ -310,11 +310,11 @@ int smpt_rd_vk_cmdMloop(void *P)
 //					SMPT_DBmN2L("smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swcUimage + smpt_rd_vk_swcUframe_buffer %p", smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swcUimage + smpt_rd_vk_swcUframe_buffer)
 					vkCmdBindDescriptorSets(Pvkcommandbuffer[smpt_rd_vk_swcUframe], VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipelinelayout, 0, 1, smptr_cemPvkdescriptorset + m1.Ui * smpt_rd_vk_swcUimage + smpt_rd_vk_swcUframe_buffer, 0, VK_NULL_HANDLE);
 					//! use lcv_vkbuffer
-					vkCmdBindVertexBuffers(Pvkcommandbuffer[smpt_rd_vk_swcUframe], 0, 1, &smptr_ce_mdPvkbuffer[0], r_cep_a_p + m1.Ub);
+					vkCmdBindVertexBuffers(Pvkcommandbuffer[smpt_rd_vk_swcUframe], 0, 1, &smptr_ce_mdPvkbuffer[0], smptr_ce_mdPai + m1.Ub);
 
 					//! use lcv_vkbuffer
-					vkCmdBindIndexBuffer(Pvkcommandbuffer[smpt_rd_vk_swcUframe], smptr_ce_mdPvkbuffer[0], r_cep_ai_p[a], VK_INDEX_TYPE_UINT32);
-					vkCmdDrawIndexed(Pvkcommandbuffer[smpt_rd_vk_swcUframe], r_cep_ai_l_p[a], 1, 0, 0, 0);
+					vkCmdBindIndexBuffer(Pvkcommandbuffer[smpt_rd_vk_swcUframe], smptr_ce_mdPvkbuffer[0], smptr_ce_mdPli[a], VK_INDEX_TYPE_UINT32);
+					vkCmdDrawIndexed(Pvkcommandbuffer[smpt_rd_vk_swcUframe], smptr_ce_mdPil[a], 1, 0, 0, 0);
 				}
 
 			vkCmdEndRenderPass(Pvkcommandbuffer[smpt_rd_vk_swcUframe]);
@@ -325,18 +325,11 @@ int smpt_rd_vk_cmdMloop(void *P)
 		vkQueuePresentKHR(vkqueue_graphic, &vkpresentinfokhr);
 
 		++frame;
-		// frame_end = time(0);
-		// frame_time = frame_end - frame_start;
 		clock_gettime(CLOCK_MONOTONIC, &frame_end);
 		frame_time = frame_end.tv_sec + (double)frame_end.tv_nsec / 1e9 - frame_start.tv_sec - (double)frame_start.tv_nsec / 1e9;
-		// if (frame_time > 0)
-		// if (frame == 144)
 		if (frame_time >= 1.0)
 		{
-			// end = clock();
-			// cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 			frame_start = frame_end;
-			// SMPT_DBmN2L("time %ld", frame_time)
 			SMPT_DBmN2L("time %f", frame_time)
 			SMPT_DBmN2L("frame %d", frame)
 			frame = 0;

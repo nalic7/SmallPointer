@@ -1,4 +1,4 @@
-void JNICALL mcc_jvmtiEventClassLoad(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread, jclass klass)
+void JNICALL smpt_mccMjvmtiEventClassLoad(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread, jclass klass)
 {
 //		char *signature;
 //		char *generic;
