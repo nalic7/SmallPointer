@@ -54,11 +54,11 @@ void smptr_svmMsend(SMPT_NWtU u)
 	{
 		struct SMPTRsM m = smptr_svmPm[l0];
 
-		*(SMPTRtM *)(smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet) = m.Um;
-		smptr_svPnet[u].Lnet += sizeof(SMPTRtM);
-
-		if (m.Um != SMPTRvM)
+		if (smptr_svuPm[u][l0 / 8] & 1 << (l0 % 8))
 		{
+			*(SMPTRtM *)(smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet) = m.Um;
+			smptr_svPnet[u].Lnet += sizeof(SMPTRtM);
+
 			*(uint8_t *)(smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet) = m.La;
 			smptr_svPnet[u].Lnet += sizeof(uint8_t);
 
@@ -76,6 +76,11 @@ void smptr_svmMsend(SMPT_NWtU u)
 
 			memcpy(smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet, m.Sm0.Ptr, sizeof(float) * m.Sm0.Ltr);
 			smptr_svPnet[u].Lnet += sizeof(float) * m.Sm0.Ltr;
+		}
+		else
+		{
+			*(SMPTRtM *)(smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet) = SMPTRvM;
+			smptr_svPnet[u].Lnet += sizeof(SMPTRtM);
 		}
 	}
 }

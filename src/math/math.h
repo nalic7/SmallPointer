@@ -29,11 +29,10 @@
 
 //	//908 ~ 3422
 //	//-x
-//	#define SMPTMmXZ2YAW(x, z) atan2f(x, z)
+	#define SMPTMmXZ2YAW(x, z) atan2f(x, z)
 //	//-y
-//	#define SMPTMmXYZ2PITCH(x, y, z) atan2f(y, sqrtf(x * x + z * z))
-//	// #define M_EPSILON = 45.0F
-//	// #define M_IN_C(a, b) abs(a - b) <= M_EPSILON
+	#define SMPTMmXYZ2PITCH(x, y, z) atan2f(y, sqrtf(x * x + z * z))
+	#define SMPTMmIN_C(a, b, m) abs(a - b) <= m
 
 //	//4679 ~ 8940
 //	#define SMPTMmHV2X(yaw, pitch) cosf(pitch) * cosf(yaw)

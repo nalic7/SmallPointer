@@ -60,6 +60,7 @@ int smptr_svMloop(void *P)
 			smpt_nw_udp_svMread();
 		#endif
 
+		smptr_svuMloop();
 		smptr_svmMloop();
 
 		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWlU; ++l0)

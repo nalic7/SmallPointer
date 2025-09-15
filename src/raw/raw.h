@@ -3,7 +3,7 @@
 
 	//.i model
 	#define SMPTRtM uint8_t
-	#define SMPTRvM 0xFFFFu
+	#define SMPTRvM 0xFFu
 	#define SMPTRtMA uint8_t
 	#define SMPTRtMB uint8_t
 	#define SMPTRtMI uint16_t
