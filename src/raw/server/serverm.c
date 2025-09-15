@@ -27,6 +27,7 @@ void smptr_svmMset()
 	//smptr_svmPm[0].Sm0.Ltr = 3 + 4 + 4 * 2;
 	smptr_svmPm[0].Sm0.Ptr = malloc(sizeof(float) * smptr_svmPm[0].Sm0.Ltr);
 	memset(smptr_svmPm[0].Sm0.Ptr, 0, sizeof(float) * smptr_svmPm[0].Sm0.Ltr);
+	smptr_svmPm[0].Sm0.Ptr[1] = -0.5;
 	smptr_svmPm[0].Sm0.Ptr[2] = -3;
 
 	++smptr_svmLm;

@@ -219,7 +219,9 @@ static void re_sc()
 
 	for (uint8_t l0 = 0; l0 < smpt_rd_vk_swcUimage; ++l0)
 	{
-		SMPTM_M4X4mP(tanf(90.0F * (M_PI / 180.0F) / 2.0F), smpt_sfUwidth / smpt_sfUheight, 0.1F, 100.0F, (float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swcUimage + l0] + sizeof(float) * 16))
+		//.t default m4x4 / switch to 0
+		//memset(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swcUimage + l0] + sizeof(float) * 16, 0, sizeof(float) * 16);
+		SMPTM_M4X4mP((float *)(smptr_ce_mdPbuffer_map[1 + 1 * smpt_rd_vk_swcUimage + l0] + sizeof(float) * 16))
 	}
 //			if (m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR || m_vksurfacetransformflagbitskhr == VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
 //			{
