@@ -28,11 +28,15 @@
 //	#define SMPTMmH3Z(hi, m) hi % m
 
 //	//908 ~ 3422
-//	//-x
-	#define SMPTMmXZ2YAW(x, z) atan2f(x, z)
-//	//-y
-	#define SMPTMmXYZ2PITCH(x, y, z) atan2f(y, sqrtf(x * x + z * z))
-	#define SMPTMmIN_C(a, b, m) abs(a - b) <= m
+	#define SMPTMmXZ2YAW(x, z) atan2f(-x, z)
+	#define SMPTMmXYZ2PITCH(x, y, z) atan2f(-y, sqrtf(x * x + z * z))
+	#define SMPTMmSpi(name, a, b, pi) \
+		float name = fmodf((a - b + pi), 2 * pi); \
+		if (name < 0) \
+		{ \
+			name += 2 * pi; \
+		} \
+		name -= pi; \
 
 //	//4679 ~ 8940
 //	#define SMPTMmHV2X(yaw, pitch) cosf(pitch) * cosf(yaw)

@@ -86,9 +86,9 @@ static void Mfree_m(SMPTRtMI Us, SMPTRtMI Ue)
 
 static void Mfree_vk(SMPTRtMI Us, SMPTRtMI Ue)
 {
-	SMPT_DBmN2L("Us %d", Us)
-	SMPT_DBmN2L("Ue %d", Ue)
-	SMPT_DBmN2L("Lfree %d", Lfree)
+//	SMPT_DBmN2L("Us %d", Us)
+//	SMPT_DBmN2L("Ue %d", Ue)
+//	SMPT_DBmN2L("Lfree %d", Lfree)
 	Pvkdescriptorset_free = realloc(Pvkdescriptorset_free, sizeof(VkDescriptorSet) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage);
 	Pvkbuffer_free = realloc(Pvkbuffer_free, sizeof(VkBuffer) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage);
 	Pvkdevicememory_free = realloc(Pvkdevicememory_free, sizeof(VkDeviceMemory) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage);
@@ -101,7 +101,7 @@ static void Mfree_vk(SMPTRtMI Us, SMPTRtMI Ue)
 	memcpy(Pvkbuffer_free + Lfree * smpt_rd_vk_swcUimage, smptr_cemPvkbuffer + Us * smpt_rd_vk_swcUimage, sizeof(VkBuffer) * (Ue - Us) * smpt_rd_vk_swcUimage);
 	memcpy(Pvkdevicememory_free + Lfree * smpt_rd_vk_swcUimage, Pvkdevicememory + Us * smpt_rd_vk_swcUimage, sizeof(VkDeviceMemory) * (Ue - Us) * smpt_rd_vk_swcUimage);
 	Lfree += Ue - Us;
-	SMPT_DBmN2L("Lfree %d", Lfree)
+//	SMPT_DBmN2L("Lfree %d", Lfree)
 }
 
 //.i sync n-mn
