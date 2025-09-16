@@ -27,19 +27,19 @@
 //	#define SMPTMmH3Y(hi, m) (hi / m) % m
 //	#define SMPTMmH3Z(hi, m) hi % m
 
-//	//908 ~ 3422
-	#define SMPTMmXZ2YAW(x, z) atan2f(-x, z)
-	#define SMPTMmXYZ2PITCH(x, y, z) atan2f(-y, sqrtf(x * x + z * z))
-	#define SMPTMmSpi(name, a, b, pi) \
-		float name = fmodf((a - b + pi), 2 * pi); \
-		if (name < 0) \
-		{ \
-			name += 2 * pi; \
-		} \
-		name -= pi; \
+	//.m 908~3422
+	#define SMPTMmXZ2H(x, z) atan2f(-x, z)
+	#define SMPTMmXYZ2V(x, y, z) atan2f(-y, sqrtf(x * x + z * z))
+//	#define SMPTMmSpi(name, a, b, pi) \
+//		float name = fmodf((a - b + pi), 2 * pi); \
+//		if (name < 0) \
+//		{ \
+//			name += 2 * pi; \
+//		} \
+//		name -= pi; \
 
-//	//4679 ~ 8940
-//	#define SMPTMmHV2X(yaw, pitch) cosf(pitch) * cosf(yaw)
-//	#define SMPTMmV2Y(pitch) sinf(pitch)
-//	#define SMPTMmHV2Z(yaw, pitch) cosf(pitch) * sinf(yaw)
+	//.m 4679~8940
+	#define SMPTMmHV2Z(h, v) cosf(v) * cosf(h)
+	#define SMPTMmV2Y(v) sinf(v)
+	#define SMPTMmHV2X(h, v) cosf(v) * sinf(h)
 #endif

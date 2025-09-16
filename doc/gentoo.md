@@ -14,6 +14,10 @@ VIDEO_CARDS="amdgpu radeonsi nouveau nvk zink"
 #Intel_cpu,igpu / NVIDIA_dgpu
 VIDEO_CARDS="intel nvidia nouveau nvk zink"
 ```
+>Config kbdrate
+```bash
+sudo kbdrate -r 30 -d 250
+```
 >Install Package
 ```bash
 run/gentoo
@@ -56,67 +60,68 @@ rm /boot/vmlinuz-6.16.4
 env = XCURSOR_THEME,Adwaita
 #LOOK AND FEEL
 general {
-    gaps_in = 5
-    gaps_out = 20
+	gaps_in = 5
+	gaps_out = 20
 
-    border_size = 2
+	border_size = 2
 
-    col.active_border = rgba(85858585)
-    col.inactive_border = rgba(00000000)
+	col.active_border = rgba(85858585)
+	col.inactive_border = rgba(00000000)
 
-    resize_on_border = false
+	resize_on_border = false
 
-    allow_tearing = false
+	allow_tearing = false
 
-    layout = dwindle
+	layout = dwindle
 }
 
 decoration:blur:enabled = false
 
 decoration {
-    active_opacity = 1.0
-    inactive_opacity = 0.5
+	active_opacity = 1.0
+	inactive_opacity = 0.5
 }
 
 animations {
-    enabled = no
+	enabled = no
 }
 
 dwindle {
-    pseudotile = true
-    preserve_split = true
+	pseudotile = true
+	preserve_split = true
 }
 
 master {
-    new_status = master
+	new_status = master
 }
 
 misc {
-    background_color = rgba(00000000)
-    force_default_wallpaper = 0
-    disable_hyprland_logo = true
+	background_color = rgba(00000000)
+	force_default_wallpaper = 0
+	disable_hyprland_logo = true
 }
 #INPUT
 input {
-    kb_layout = us
-    kb_variant =
-    kb_model =
-    kb_options =
-    kb_rules =
+	kb_layout = us
+	kb_variant =
+	kb_model =
+	kb_options =
+	kb_rules =
 
-    follow_mouse = 1
+	follow_mouse = 1
 
-    sensitivity = 0
+	sensitivity = 0
 
-    numlock_by_default = true
-    touchpad {
-        natural_scroll = false
-        disable_while_typing = false
-    }
+	numlock_by_default = true
+	touchpad {
+		natural_scroll = false
+		disable_while_typing = false
+	}
+
+	repeat_delay=150
+	repeat_rate=50
 }
 #KEYBINDINGS
-SUPER = SUPER
-
 bind = SUPER, f11, fullscreen, 0
 bind = SUPER, f, fullscreenstate, 2,
 

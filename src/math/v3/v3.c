@@ -1,3 +1,10 @@
+//const int8_t smptm_v3Ppath[3] =
+//{
+//	-1,
+//	0,
+//	1
+//};
+
 //void smptm_v3Mq2m(const float q[3], float w[16])
 //{
 //	float xy = q[0] * q[1];
@@ -20,13 +27,6 @@
 //	w[9] = 2 * (yz + x);
 //	w[10] = 1 - 2 * (x_squared + y_squared);
 //}
-
-//const int8_t smptm_v3Ppath[3] =
-//{
-//	-1,
-//	0,
-//	1
-//};
 
 //uint8_t smptm_v3Mray(float Pa[3], float Pb[3], float Pc[3])
 //{

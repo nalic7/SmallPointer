@@ -51,4 +51,27 @@
 		SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(smpt_rd_vkq_dvP[device], *Pvkdevicememory, 0, vkdevicesize, 0, &Pdata)) \
 		memcpy(Pdata, Pbuffer_data, vkdevicesize); \
 		vkUnmapMemory(smpt_rd_vkq_dvP[device], *Pvkdevicememory);
+
+	#define SMPT_RD_VK_BFmFREE_F \
+		static VkBuffer *Pvkbuffer_free; \
+		static VkDeviceMemory *Pvkdevicememory_free; \
+		static uint8_t *Pfree; \
+		static uint32_t Lfree = 0;
+
+	#define SMPT_RD_VK_BFmFREE_SET \
+		Pvkbuffer_free = malloc(0); \
+		Pvkdevicememory_free = malloc(0); \
+		Pfree = malloc(0);
+
+	#define SMPT_RD_VK_BFmFREE_FREE_VK \
+		Pvkbuffer_free = realloc(Pvkbuffer_free, sizeof(VkBuffer) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage); \
+		Pvkdevicememory_free = realloc(Pvkdevicememory_free, sizeof(VkDeviceMemory) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage); \
+		Pfree = realloc(Pfree, sizeof(uint8_t) * (Lfree + Ue - Us)); \
+		for (uint32_t l0 = Lfree; l0 < Lfree + Ue - Us; ++l0) \
+		{ \
+			Pfree[l0] = 1 << smpt_rd_vk_swcUimage; \
+		} \
+		memcpy(Pvkbuffer_free + Lfree * smpt_rd_vk_swcUimage, smptr_cemPvkbuffer + Us * smpt_rd_vk_swcUimage, sizeof(VkBuffer) * (Ue - Us) * smpt_rd_vk_swcUimage); \
+		memcpy(Pvkdevicememory_free + Lfree * smpt_rd_vk_swcUimage, Pvkdevicememory + Us * smpt_rd_vk_swcUimage, sizeof(VkDeviceMemory) * (Ue - Us) * smpt_rd_vk_swcUimage); \
+		Lfree += Ue - Us;
 #endif

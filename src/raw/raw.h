@@ -102,6 +102,16 @@
 	struct SMPTRsU
 	{
 		float Ptr[3 + 2];
+		//uint8_t Us;
+	};
+
+	struct SMPTRsA
+	{
+		SMPTRtA Ua;
+		float
+			*Pv,
+			*Pc;
+		uint16_t Lv;
 	};
 
 	//.c server read/write

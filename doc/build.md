@@ -37,6 +37,7 @@ run/gdb
 ```
 >Android
 ```bash
+run/java-gen
 run/android-tool
 cd ..
 git clone --branch release/7.1 https://github.com/FFmpeg/FFmpeg.git

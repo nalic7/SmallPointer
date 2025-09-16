@@ -1,0 +1,4 @@
+#!/bin/bash
+cd ../prism
+HOME=$(pwd) ./PrismLauncher-Linux-x86_64.AppImage
+cd ../SmallPointer
