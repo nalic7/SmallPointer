@@ -26,7 +26,6 @@ void smpt_nw_udp_svMset()
 
 void smpt_nw_udp_svMsend(SMPT_NWtU u)
 {
-	smptr_svMsend(u);
 	sendto(Isv, smptr_svPnet[u].Pnet, smptr_svPnet[u].Lnet, 0, (struct sockaddr *)&Pce[u].Sce, Pce[u].Lce);
 //	SMPTTmE
 }

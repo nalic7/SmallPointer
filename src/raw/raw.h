@@ -105,13 +105,16 @@
 		//uint8_t Us;
 	};
 
+	//.i a
+	#define SMPTRtA uint16_t
+	#define SMPTRvA 0xFFFFu
 	struct SMPTRsA
 	{
 		SMPTRtA Ua;
 		float
 			*Pv,
 			*Pc;
-		uint16_t Lv;
+		uint8_t Lv;
 	};
 
 	//.c server read/write

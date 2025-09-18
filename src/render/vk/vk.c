@@ -169,6 +169,7 @@ void smpt_rd_vkMset()
 	}
 
 	smptr_ce_mdMvk();
+	smptr_ceaMvk();
 	smpt_rd_vkw_dsts_loMmake(smpt_rd_vkUdevice);
 	smpt_rd_vkw_dstspMmake(smpt_rd_vkUdevice);
 

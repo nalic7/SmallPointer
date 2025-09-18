@@ -9,6 +9,7 @@ void smptr_ceMset()
 	smptr_ce_mdMset();
 
 	smptr_cemMset();
+	smptr_ceaMset();
 
 	#ifdef SMPT_CM_UDP
 		smpt_nw_udp_ceMset();
@@ -40,6 +41,7 @@ void smptr_ceMread()
 
 		smptr_ceuMread();
 		smptr_cemMread();
+		smptr_ceaMread();
 
 		Stsp_e = Stsp_s;
 	}
@@ -48,12 +50,22 @@ void smptr_ceMread()
 static struct timespec Stsp_ds = {0}, Stsp_de;
 void smptr_ceMloop()
 {
+	#ifdef SMPT_CM_UDP
+		smpt_nw_udp_ceMread();
+	#endif
+
 	smptr_ceuMloop();
+	smptr_ceaMloop();
 	smptr_cemMloop();
 
 	clock_gettime(CLOCK_MONOTONIC, &Stsp_de);
 	smptr_ceDdelta = Stsp_de.tv_sec + (double)Stsp_de.tv_nsec / 1e9 - Stsp_ds.tv_sec - (double)Stsp_ds.tv_nsec / 1e9;
 	Stsp_ds = Stsp_de;
+
+	smptr_ceMsend();
+	#ifdef SMPT_CM_UDP
+		smpt_nw_udp_ceMsend();
+	#endif
 }
 
 void smptr_ceMfree(uint32_t device)
@@ -71,6 +83,7 @@ void smptr_ceMfree(uint32_t device)
 
 		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkqP[smpt_rd_vkUdevice][smpt_rd_vkUqueue_g]))
 
+		smptr_ceaMfree();
 		smptr_cemMfree();
 		smpt_rd_vkw_dstspMfree(device);
 		smpt_rd_vkw_dsts_loMfree(device);

@@ -239,6 +239,8 @@ void smptr_ce_mdMset()
 #ifdef SMPT_CM_VK
 	void smptr_ce_mdMvk()
 	{
+		//! + 1 * smpt_rd_vk_swcUimage + a * smpt_rd_vk_swcUimage
+		//! a own frame_buffer
 		smptr_ce_mdPvkbuffer = malloc(sizeof(VkBuffer) * (1 + 2 * smpt_rd_vk_swcUimage));
 		smptr_ce_mdPvkdevicememory = malloc(sizeof(VkDeviceMemory) * (1 + 2 * smpt_rd_vk_swcUimage));
 		smptr_ce_mdPbuffer_map = malloc(sizeof(void *) * (1 + 2 * smpt_rd_vk_swcUimage));

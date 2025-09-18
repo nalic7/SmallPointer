@@ -28,6 +28,7 @@ void smptr_svMsend(SMPT_NWtU u)
 
 	smptr_svuMsend(u);
 	smptr_svmMsend(u);
+	smptr_svaMsend(u);
 //	SMPT_DBmN2L("S smptr_svPnet[u].Lnet %d", smptr_svPnet[u].Lnet)
 }
 
@@ -62,9 +63,11 @@ int smptr_svMloop(void *P)
 
 		smptr_svuMloop();
 		smptr_svmMloop();
+		smptr_svaMloop();
 
 		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWlU; ++l0)
 		{
+			smptr_svMsend(u);
 			#ifdef SMPT_CM_UDP
 				smpt_nw_udp_svMsend(l0);
 			#endif

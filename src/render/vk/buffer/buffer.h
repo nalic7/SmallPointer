@@ -57,13 +57,11 @@
 		static VkDeviceMemory *Pvkdevicememory_free; \
 		static uint8_t *Pfree; \
 		static uint32_t Lfree = 0;
-
 	#define SMPT_RD_VK_BFmFREE_SET \
 		Pvkbuffer_free = malloc(0); \
 		Pvkdevicememory_free = malloc(0); \
 		Pfree = malloc(0);
-
-	#define SMPT_RD_VK_BFmFREE_FREE_VK \
+	#define SMPT_RD_VK_BFmFREE_HELP \
 		Pvkbuffer_free = realloc(Pvkbuffer_free, sizeof(VkBuffer) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage); \
 		Pvkdevicememory_free = realloc(Pvkdevicememory_free, sizeof(VkDeviceMemory) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage); \
 		Pfree = realloc(Pfree, sizeof(uint8_t) * (Lfree + Ue - Us)); \
@@ -74,4 +72,20 @@
 		memcpy(Pvkbuffer_free + Lfree * smpt_rd_vk_swcUimage, smptr_cemPvkbuffer + Us * smpt_rd_vk_swcUimage, sizeof(VkBuffer) * (Ue - Us) * smpt_rd_vk_swcUimage); \
 		memcpy(Pvkdevicememory_free + Lfree * smpt_rd_vk_swcUimage, Pvkdevicememory + Us * smpt_rd_vk_swcUimage, sizeof(VkDeviceMemory) * (Ue - Us) * smpt_rd_vk_swcUimage); \
 		Lfree += Ue - Us;
+	#define SMPT_RD_VK_BFmFREE_ABLE(ls) !(Pfree[ls] = Pfree[ls] >> 1)
+	#define SMPT_RD_VK_BFmFREE_DO(ls, ln) \
+		for (uint8_t ln = 0; ln < smpt_rd_vk_swcUimage; ++ln) \
+		{ \
+			vkUnmapMemory(vkdevice, Pvkdevicememory_free[ls * smpt_rd_vk_swcUimage + ln]); \
+			vkDestroyBuffer(vkdevice, Pvkbuffer_free[ls * smpt_rd_vk_swcUimage + ln], VK_NULL_HANDLE); \
+			vkFreeMemory(vkdevice, Pvkdevicememory_free[ls * smpt_rd_vk_swcUimage + ln], VK_NULL_HANDLE); \
+		}
+	#define SMPT_RD_VK_BFmFREE_RE \
+		Pvkbuffer_free = realloc(Pvkbuffer_free, sizeof(VkBuffer) * Lfree * smpt_rd_vk_swcUimage); \
+		Pvkdevicememory_free = realloc(Pvkdevicememory_free, sizeof(VkDeviceMemory) * Lfree * smpt_rd_vk_swcUimage); \
+		Pfree = realloc(Pfree, sizeof(uint8_t) * Lfree);
+	#define SMPT_RD_VK_BFmFREE_CLEAN \
+		free(Pfree); \
+		free(Pvkdevicememory_free); \
+		free(Pvkbuffer_free);
 #endif

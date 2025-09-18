@@ -20,7 +20,6 @@ void smpt_nw_udp_ceMset()
 
 void smpt_nw_udp_ceMsend()
 {
-	smptr_ceMsend();
 	sendto(Isv, smptr_cePnet, smptr_ceLnet, 0, (struct sockaddr *)&Ssv, Lsv);
 //	SMPTTmE
 }
