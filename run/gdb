@@ -1,5 +1,5 @@
-#!/bin/bash
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/..
 cmake --build build-debug
 cd build-debug
 gdb SmallPointer
-cd ..

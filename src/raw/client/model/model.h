@@ -31,5 +31,5 @@
 	#ifdef SMPT_CM_VK
 		void smptr_ce_mdMvk();
 	#endif
-	void smptr_ce_mdMfree(uint32_t device);
+	void smptr_ce_mdMfree();
 #endif

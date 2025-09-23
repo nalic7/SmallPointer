@@ -1,4 +1,3 @@
-#!/bin/bash
 emerge -qa \
 	sys-kernel/vanilla-sources sys-kernel/linux-firmware \
 	sys-firmware/nvidia-firmware \

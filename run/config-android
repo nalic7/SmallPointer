@@ -1,4 +1,5 @@
-#!/bin/bash
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/..
 F=CMakeLists.txt
 sed -i '/#set(ST android)/c\set(ST android)' $F
 sed -i '/#set(ASURFACE 1)/c\set(ASURFACE 1)' $F

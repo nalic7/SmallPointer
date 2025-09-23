@@ -1,3 +1,4 @@
+//! clean
 uint32_t *smpt_rd_vkqPmax_queue;
 uint32_t *smpt_rd_vkqPmax_queue_surface;
 
@@ -22,9 +23,7 @@ void smpt_rd_vkqMadd(uint32_t device)
 	VkPhysicalDevice vkphysicaldevice = smpt_rd_vkq_dv_pscdvP[device];
 
 	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &smpt_rd_vkqPmax_queue[device], VK_NULL_HANDLE);
-
 	VkQueueFamilyProperties *vkqueuefamilyproperties_p = malloc(smpt_rd_vkqPmax_queue[device] * sizeof(VkQueueFamilyProperties));
-
 	vkGetPhysicalDeviceQueueFamilyProperties(vkphysicaldevice, &smpt_rd_vkqPmax_queue[device], vkqueuefamilyproperties_p);
 
 	SMPT_DBmN2L("max_queue %d", smpt_rd_vkqPmax_queue[device])
@@ -52,17 +51,7 @@ void smpt_rd_vkqMadd(uint32_t device)
 			smpt_rd_vkqPqueue_surface[device] = realloc(smpt_rd_vkqPqueue_surface[device], (smpt_rd_vkqPmax_queue_surface[device] + 1) * sizeof(uint32_t));
 			smpt_rd_vkqPqueue_surface[device][smpt_rd_vkqPmax_queue_surface[device]++] = i;
 			SMPT_DBmN2L("surface_1 %d", i);
-			// m_queue_render = i;
 		}
-		else
-		{
-			SMPT_DBmN2L("surface_0 %d", i);
-		}
-
-		// if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_TRANSFER_BIT)
-		// {
-		// 	info("VK_QUEUE_TRANSFER_BIT %d", i);
-		// }
 	}
 
 	SMPT_DBmN2L("_vkq_max_queue_surface_p[device] %d", smpt_rd_vkqPmax_queue_surface[device])

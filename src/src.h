@@ -171,6 +171,7 @@
 		#include "raw/client/client.h"
 		#include "raw/client/clientu.h"
 		#include "raw/client/clientm.h"
+		#include "raw/client/clienta.h"
 
 		#ifdef SMPT_CM_UDP
 			#include "network/udp/client/client.h"
@@ -181,6 +182,7 @@
 		#include "raw/server/server.h"
 		#include "raw/server/serveru.h"
 		#include "raw/server/serverm.h"
+		#include "raw/server/servera.h"
 
 		#ifdef SMPT_CM_UDP
 			#include "network/udp/server/server.h"

@@ -6,6 +6,7 @@
 	void smptm_m4x4Mi(float m[16]);
 	void smptm_m4x4Mm(const float a[16], const float b[16], float w[16]);
 
+	//! fix
 	//.c fov / project
 //	#define SMPTM_M4X4fFOV 90.0F * 0.5F
 	#define SMPTM_M4X4fFOV (90.0F * (M_PI / 180.0F) / 2.0F)

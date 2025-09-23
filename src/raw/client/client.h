@@ -14,5 +14,5 @@
 	void smptr_ceMsend();
 	void smptr_ceMread();
 	void smptr_ceMloop();
-	void smptr_ceMfree(uint32_t device);
+	void smptr_ceMfree();
 #endif

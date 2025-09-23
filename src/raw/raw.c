@@ -54,7 +54,7 @@ void smptrMfree1()
 	#endif
 
 	#ifdef SMPT_CM_CLIENT
-		smptr_ceMfree(smpt_rd_vkUdevice);
+		smptr_ceMfree();
 	#endif
 
 	//! switch to pipewire

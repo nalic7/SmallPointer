@@ -39,11 +39,7 @@ run/gdb
 ```bash
 run/java-gen
 run/android-tool
-cd ..
-git clone --branch release/7.1 https://github.com/FFmpeg/FFmpeg.git
-cd FFmpeg
-../SmallPointer/run/android-ffmpeg
-cd ../SmallPointer
+run/android-ffmpeg
 run/config
 run/config-android
 run/android-apk

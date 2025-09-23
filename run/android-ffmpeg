@@ -1,4 +1,7 @@
-#!/bin/bash
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/../..
+git clone --branch release/7.1 https://github.com/FFmpeg/FFmpeg.git
+cd FFmpeg
 NDK=../android-ndk-r27d
 API=21
 ARCH=arm64

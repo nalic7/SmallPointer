@@ -1,7 +1,7 @@
 #ifndef SMPT_RDhVK
 	#define SMPT_RDhVK
 
-	extern uint32_t smpt_rd_vkUdevice;
+	//! clean
 	extern uint32_t smpt_rd_vkUqueue_g;
 	extern uint32_t smpt_rd_vkUqueue_ct;
 

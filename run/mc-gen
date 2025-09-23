@@ -1,5 +1,5 @@
-#!/bin/bash
-cd ..
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/../..
 mkdir -p prism/mcp
 cd prism
 wget https://github.com/PrismLauncher/PrismLauncher/releases/download/9.4/PrismLauncher-Linux-x86_64.AppImage
@@ -9,4 +9,3 @@ cd mcp
 wget https://github.com/ModCoderPack/MCPMappingsArchive/raw/master/mcp_stable/39-1.12/mcp_stable-39-1.12.zip
 unzip mcp_stable-39-1.12.zip
 rm mcp_stable-39-1.12.zip
-cd ../../SmallPointer

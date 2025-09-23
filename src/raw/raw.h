@@ -107,34 +107,23 @@
 
 	//.i a
 	#define SMPTRtA uint16_t
-	#define SMPTRvA 0xFFFFu
 	struct SMPTRsA
 	{
 		SMPTRtA Ua;
 		float
-			*Pv,
-			*Pc;
-		uint8_t Lv;
+			//.i 3
+			*Pv;
+		uint8_t
+			*Pc,
+			Lv;
 	};
 
 	//.c server read/write
 	#define SMPTRuRW 20
 
 	//.i package
-	#define SMPTRtNET uint8_t
-	#define SMPTRlNET 255
-
-
-	//! clean
-	//.i chunk
-	#define SMPTRB_CT uint8_t
-	#define SMPTRB_C_ST int8_t
-	#define SMPTRB_CIBL 16
-	//.i xyz
-	#define SMPTRB_CMFL 1024.0F
-	//.i chunk hash/3 key
-	#define SMPTRB_CHT uint16_t
-
+	#define SMPTRtNET uint16_t
+	#define SMPTRlNET 0xFFFFu
 
 	struct SMPTRsCACHE
 	{

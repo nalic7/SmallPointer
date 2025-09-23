@@ -1,5 +1,5 @@
 struct SMPTRsM *smptr_svmPm;
-SMPTRtM smptr_svmLm = 0;
+SMPTRtMI smptr_svmLm = 0;
 
 void smptr_svmMset()
 {
@@ -46,8 +46,6 @@ void smptr_svmMloop()
 
 void smptr_svmMsend(SMPT_NWtU u)
 {
-	//! cull m
-	//.i send data
 	*(SMPTRtMI *)(smptr_svPnet[u].Pnet + smptr_svPnet[u].Lnet) = smptr_svmLm;
 	smptr_svPnet[u].Lnet += sizeof(SMPTRtMI);
 

@@ -86,7 +86,7 @@ static void Mfree_vk(SMPTRtMI Us, SMPTRtMI Ue)
 //	SMPT_DBmN2L("Lfree %d", Lfree)
 	Pvkdescriptorset_free = realloc(Pvkdescriptorset_free, sizeof(VkDescriptorSet) * (Lfree + Ue - Us) * smpt_rd_vk_swcUimage);
 	memcpy(Pvkdescriptorset_free + Lfree * smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + Us * smpt_rd_vk_swcUimage, sizeof(VkDescriptorSet) * (Ue - Us) * smpt_rd_vk_swcUimage);
-	SMPT_RD_VK_BFmFREE_HELP
+	SMPT_RD_VK_BFmFREE_HELP(smptr_cemPvkbuffer, Pvkdevicememory)
 //	SMPT_DBmN2L("Lfree %d", Lfree)
 }
 
@@ -137,7 +137,7 @@ void smptr_cemMread()
 
 	//.i clean m0
 	#ifdef SMPT_CM_VK
-		VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
+		VkDevice vkdevice = smpt_rd_vkq_dvP[SMPT_RD_VKQuDV];
 
 		if (Lm < Lm0)
 			Mfree_vk(Lm, Lm0);
@@ -185,12 +185,12 @@ void smptr_cemMread()
 
 					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 					{
-						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * (Pm->Sm.Um >= smptr_ce_mdLj ? 1 : smptr_ce_mdPj[Pm->Sm.Um]);
+						VkDeviceSize vkdevicesize = sizeof(float) * 4 * 4 * smptr_ce_mdPj[Pm->Sm.Um];
 
 						VkMemoryRequirements vkmemoryrequirements;
 						vkdevicesize = (vkdevicesize + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1);
 						SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage], Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
-						SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(vkdevice, Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], 0, vkdevicesize, 0, &Pbuffer_map[(l1 + l0 * smpt_rd_vk_swcUimage)]))
+						SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(vkdevice, Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], 0, vkdevicesize, 0, &Pbuffer_map[l1 + l0 * smpt_rd_vk_swcUimage]))
 					}
 
 					++Ldst;
@@ -201,16 +201,54 @@ void smptr_cemMread()
 					{
 						smpt_rd_vkw_dstsMmake(smpt_rd_vkUdevice, smptr_cemPvkdescriptorset + l1 + l0 * smpt_rd_vk_swcUimage);
 					}
-					smpt_rd_vkwMdsts
-					(
-						smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage,
-						Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swcUimage,
-						Pvkwritedescriptorset + (Ldst - 1) * smpt_rd_vk_swcUimage,
-						l0,
-						Pm->Sm.Um < smptr_ce_mdLj ? Pm->Sm.Um : 0,
-						Pm->Sm.Um >= smptr_ce_mdLj ? 1 : smptr_ce_mdPj[Pm->Sm.Um],
-						1 + 1 * smpt_rd_vk_swcUimage
-					);
+					VkDescriptorSet *Pvkdescriptorset = smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage;
+					VkDescriptorBufferInfo *Pvkdescriptorbufferinfo0 = Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swcUimage;
+					VkWriteDescriptorSet *Pvkwritedescriptorset0 = Pvkwritedescriptorset + (Ldst - 1) * smpt_rd_vk_swcUimage;
+					const uint8_t j = Pm->Sm.Um;
+					const uint8_t mj = smptr_ce_mdPj[Pm->Sm.Um];
+					//.i bindpose s 1+
+					Pvkdescriptorbufferinfo0[0] = (VkDescriptorBufferInfo)
+					{
+						.buffer = smptr_ce_mdPvkbuffer[0],
+						.offset = smptr_ce_mdPvkdevicesize[j] - sizeof(float) * 16 * 2,
+						.range = (mj - 1) * sizeof(float) * 16 * 2
+					};
+					//.i src_color s
+					Pvkdescriptorbufferinfo0[1] = (VkDescriptorBufferInfo)
+					{
+						.buffer = smptr_ce_mdPvkbuffer[0],
+						.offset = 0,
+						.range = smptr_ce_mdLrgba
+					};
+					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
+					{
+						//.i gui/world d
+						Pvkdescriptorbufferinfo0[2 + l1 * 3 + 2] = (VkDescriptorBufferInfo)
+						{
+							.buffer = smptr_ce_mdPvkbuffer[1 + 2 * smpt_rd_vk_swcUimage + l1],
+							.offset = 0,
+							.range = sizeof(float) * 16 * 2
+						};
+						//.i animate d
+						Pvkdescriptorbufferinfo0[2 + l1 * 3] = (VkDescriptorBufferInfo)
+						{
+							.buffer = smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage],
+							.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * l0 + sizeof(float) * 4,
+							.range = mj * sizeof(float) * 4 * 3
+						};
+						//.i color d
+						Pvkdescriptorbufferinfo0[2 + l1 * 3 + 1] = (VkDescriptorBufferInfo)
+						{
+							.buffer = smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage],
+							.offset = mj * (sizeof(float) * 4 + sizeof(float) * 4 * 3) * l0,
+							.range = sizeof(float) * 4
+						};
+						SMPT_RD_VKWmDSTS(0, VK_NULL_HANDLE, Pvkdescriptorbufferinfo0 + 2 + l1 * 3 + 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, Pvkdescriptorset[l1], Pvkwritedescriptorset0[l1 * SMPT_RD_VKW_DSTS_LOl]);
+						SMPT_RD_VKWmDSTS(1, VK_NULL_HANDLE, Pvkdescriptorbufferinfo0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, Pvkdescriptorset[l1], Pvkwritedescriptorset0[l1 * SMPT_RD_VKW_DSTS_LOl + 1]);
+						SMPT_RD_VKWmDSTS(2, VK_NULL_HANDLE, Pvkdescriptorbufferinfo0 + 2 + l1 * 3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, Pvkdescriptorset[l1], Pvkwritedescriptorset0[l1 * SMPT_RD_VKW_DSTS_LOl + 2]);
+						SMPT_RD_VKWmDSTS(3, VK_NULL_HANDLE, Pvkdescriptorbufferinfo0 + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, Pvkdescriptorset[l1], Pvkwritedescriptorset0[l1 * SMPT_RD_VKW_DSTS_LOl + 3]);
+						SMPT_RD_VKWmDSTS(4, VK_NULL_HANDLE, Pvkdescriptorbufferinfo0 + 2 + l1 * 3 + 1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, Pvkdescriptorset[l1], Pvkwritedescriptorset0[l1 * SMPT_RD_VKW_DSTS_LOl + 4]);
+					}
 				#endif
 
 				Pm01->Uf = SMPTR_CEuFPS;
@@ -275,16 +313,15 @@ void smptr_cemMread()
 			}
 	}
 	//.i add a to m1
-	for (SMPTRtAI l0 = 0; l0 < smptr_ceaLa; ++l0)
+	for (SMPTRtA l0 = 0; l0 < smptr_ceaLa; ++l0)
 	{
-		struct SMPTR_CEAsA *Pa = smptr_ceaPa + l0;
+		struct SMPTR_CEAsA Sa = smptr_ceaPa[l0];
 		struct SMPTR_CEMsM1 *Pm1 = smptr_cemPm1 + smptr_cemLm1 + l0;
-		if (a.Sa.Ua != SMPTRvA)
+		if (Sa.Sa.Ua == l0)
 		{
-			Pm1->Ui = #;
-			Pm1->Ua = # + l0;
-			//Pm1->Ub = SMPTR_CE_MDlA + Pm1->Ua - SMPTReMAc - SMPTReMc - SMPTReM1c;
-			Pm1->Ub = # + l0;
+			Pm1->Ui = l0;
+			Pm1->Ua = Sa.Sa.Lv;
+			Pm1->Ub = SMPTR_CE_MDlA;
 			//! find depth
 			Pm1->Fd = 0;
 		}
@@ -294,7 +331,7 @@ void smptr_cemMread()
 void smptr_cemMloop()
 {
 	#ifdef SMPT_CM_VK
-		VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
+		VkDevice vkdevice = smpt_rd_vkq_dvP[SMPT_RD_VKQuDV];
 
 		//.i free
 		uint32_t Ufree = Lfree;
@@ -338,53 +375,51 @@ void smptr_cemMloop()
 					*(float *)(Pbuffer + l1) = 1.0;
 				}
 				memcpy(Pbuffer + 4, smptr_ce_mdPb[m.Sm.Um], smptr_ce_mdPj[m.Sm.Um] * 4 * 3 * sizeof(float));
-				if (m.Sm.Um < smptr_ce_mdLj)
+				const SMPTRtMK *Pk = smptrPmk[m.Sm.Uk];
+
+				if (Pm01->Uf >= SMPTR_CEuFPS - 1)
 				{
-					const SMPTRtMK *Pk = smptrPmk[m.Sm.Uk];
-
-					if (Pm01->Uf >= SMPTR_CEuFPS - 1)
-					{
-						if (Pm01->Uf == SMPTR_CEuFPS)
-							--Pm01->Uf;
-						else
-							Pm01->Ft = m.Sm.Ut / 255.0F;
-					}
+					if (Pm01->Uf == SMPTR_CEuFPS)
+						--Pm01->Uf;
 					else
+						Pm01->Ft = m.Sm.Ut / 255.0F;
+				}
+				else
+				{
+					Pm01->Ft += m.Ft;
+					Pm01->Ft = SMPTMmWRAP_F(Pm01->Ft, Pk[1], Pk[2]);
+				}
+				++Pm01->Uf;
+
+				SMPTRtMK Uks = Pm01->Ft;
+				float Fkf = Pm01->Ft - Uks;
+				SMPTRtMK Uke = SMPTMmWRAP_I(Uks + 1, Pk[1], Pk[2]);
+				struct SMPTR_CE_KFs Skf = smptr_ce_kfP[Pk[0]][Uks];
+				//SMPT_DBmN2L("Uks %d", Uks)
+				//SMPT_DBmN2L("Fkf %f", Fkf)
+				//SMPT_DBmN2L("Uke %d", Uke)
+				for (uint8_t l_0 = 0; l_0 < Skf.Lbone; ++l_0)
+				{
+					memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3, Skf.Ps[l_0], sizeof(float) * 3);
+					memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4, Skf.Pr[l_0], sizeof(float) * 4);
+					memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4 * 2, Skf.Pt[l_0], sizeof(float) * 3);
+				}
+
+				Skf = smptr_ce_kfP[Pk[0]][Uke];
+				for (uint8_t l_0 = 0; l_0 < Skf.Lbone; ++l_0)
+				{
+					for (uint8_t l_3 = 0; l_3 < 3; ++l_3)
 					{
-						Pm01->Ft += m.Ft;
-						Pm01->Ft = SMPTMmWRAP_F(Pm01->Ft, Pk[1], Pk[2]);
+						SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3))[l_3], Skf.Ps[l_0][l_3], Fkf);
+						SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4 * 2))[l_3], Skf.Pt[l_0][l_3], Fkf);
 					}
-					++Pm01->Uf;
 
-					SMPTRtMK Uks = Pm01->Ft;
-					float Fkf = Pm01->Ft - Uks;
-					SMPTRtMK Uke = SMPTMmWRAP_I(Uks + 1, Pk[1], Pk[2]);
-					struct SMPTR_CE_KFs Skf = smptr_ce_kfP[Pk[0]][Uks];
-					//SMPT_DBmN2L("Uks %d", Uks)
-					//SMPT_DBmN2L("Fkf %f", Fkf)
-					//SMPT_DBmN2L("Uke %d", Uke)
-					for (uint8_t l_0 = 0; l_0 < Skf.Lbone; ++l_0)
+					for (uint8_t l_3 = 0; l_3 < 4; ++l_3)
 					{
-						memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3, Skf.Ps[l_0], sizeof(float) * 3);
-						memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4, Skf.Pr[l_0], sizeof(float) * 4);
-						memcpy(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4 * 2, Skf.Pt[l_0], sizeof(float) * 3);
-					}
-
-					Skf = smptr_ce_kfP[Pk[0]][Uke];
-					for (uint8_t l_0 = 0; l_0 < Skf.Lbone; ++l_0)
-					{
-						for (uint8_t l_3 = 0; l_3 < 3; ++l_3)
-						{
-							SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3))[l_3], Skf.Ps[l_0][l_3], Fkf);
-							SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4 * 2))[l_3], Skf.Pt[l_0][l_3], Fkf);
-						}
-
-						for (uint8_t l_3 = 0; l_3 < 4; ++l_3)
-						{
-							SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4))[l_3], Skf.Pr[l_0][l_3], Fkf);
-						}
+						SMPTMmLERP(((float *)(Pbuffer + 4 + Skf.Pbone[l_0] * 4 * 3 + 4))[l_3], Skf.Pr[l_0][l_3], Fkf);
 					}
 				}
+
 //				smptm_v4Mq(0, SMPTMmD2R(-45), 0, Pbuffer + 4 + 4);
 				*(float *)(Pbuffer + 4 + 4 * 2) = m.Sm.Sm0.Ptr[0];
 				*(float *)(Pbuffer + 4 + 4 * 2 + 1) = m.Sm.Sm0.Ptr[1];
@@ -395,16 +430,16 @@ void smptr_cemMloop()
 					.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
 					.memory = Pvkdevicememory[smpt_rd_vk_swcUframe_buffer],
 					.offset = 0,
-					.size = ((sizeof(float) * 4 * 4 * (m.Sm.Um >= smptr_ce_mdLj ? 1 : smptr_ce_mdPj[m.Sm.Um])) + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1),
+					.size = ((sizeof(float) * 4 * 4 * smptr_ce_mdPj[m.Sm.Um]) + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1),
 					.pNext = VK_NULL_HANDLE
 				};
 			}
 		}
 		//! animate a
-		for (SMPTRtAI l0 = 0; l0 < smptr_ceaLa; ++l0)
+		for (SMPTRtA l0 = 0; l0 < smptr_ceaLa; ++l0)
 		{
-			struct SMPTR_CEAsA *Pa = smptr_ceaPa + l0;
-			if (a.Sa.Ua != SMPTRvA)
+			struct SMPTR_CEAsA Sa = smptr_ceaPa[l0];
+			if (Sa.Sa.Ua == l0)
 			{
 			}
 		}
@@ -417,7 +452,7 @@ void smptr_cemMloop()
 void smptr_cemMfree()
 {
 	#ifdef SMPT_CM_VK
-		VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
+		VkDevice vkdevice = smpt_rd_vkq_dvP[SMPT_RD_VKQuDV];
 
 		if (Lfree)
 		{

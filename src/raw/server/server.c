@@ -67,7 +67,7 @@ int smptr_svMloop(void *P)
 
 		for (SMPT_NWtU l0 = 0; l0 < SMPT_NWlU; ++l0)
 		{
-			smptr_svMsend(u);
+			smptr_svMsend(l0);
 			#ifdef SMPT_CM_UDP
 				smpt_nw_udp_svMsend(l0);
 			#endif

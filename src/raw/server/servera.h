@@ -1,8 +1,8 @@
 #ifndef SMPTRhSVA
 	#define SMPTRhSVA
 
-	extern struct SMPTRsA smptr_svaSa[SMPT_NWlU];
-	extern uint8_t *smptr_svaPa[SMPT_NWlU];
+	extern struct SMPTRsA *smptr_svaPa;
+	extern SMPTRtA smptr_svaLa;
 
 	void smptr_svaMset();
 	void smptr_svaMloop();

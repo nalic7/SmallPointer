@@ -1,5 +1,6 @@
-#!/bin/bash
-rm -rf build-android-release
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/..
+rm -r build-android-release
 cmake \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_TOOLCHAIN_FILE=../android-ndk-r27d/build/cmake/android.toolchain.cmake \

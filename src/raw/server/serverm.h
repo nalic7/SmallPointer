@@ -2,7 +2,7 @@
 	#define SMPTRhSVM
 
 	extern struct SMPTRsM *smptr_svmPm;
-	extern SMPTRtM smptr_svmLm;
+	extern SMPTRtMI smptr_svmLm;
 
 	void smptr_svmMset();
 	void smptr_svmMloop();

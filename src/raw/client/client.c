@@ -68,7 +68,7 @@ void smptr_ceMloop()
 	#endif
 }
 
-void smptr_ceMfree(uint32_t device)
+void smptr_ceMfree()
 {
 	#ifdef SMPT_CM_UDP
 		smpt_nw_udp_ceMfree();
@@ -81,14 +81,14 @@ void smptr_ceMfree(uint32_t device)
 			SMPT_DBmN2L("smpt_sfUstate %d", smpt_sfUstate)
 		}
 
-		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkqP[smpt_rd_vkUdevice][smpt_rd_vkUqueue_g]))
+		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkqP[SMPT_RD_VKQuDV][smpt_rd_vkUqueue_g]))
 
 		smptr_ceaMfree();
 		smptr_cemMfree();
-		smpt_rd_vkw_dstspMfree(device);
-		smpt_rd_vkw_dsts_loMfree(device);
+		smpt_rd_vkw_dstspMfree();
+		smpt_rd_vkw_dsts_loMfree();
 
-		smptr_ce_mdMfree(device);
+		smptr_ce_mdMfree();
 		smpt_rd_vk_cmdMfree();
 	#endif
 

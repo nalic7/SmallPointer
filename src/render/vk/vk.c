@@ -1,5 +1,4 @@
-//.c select gpu index
-uint32_t smpt_rd_vkUdevice = 0;
+//! clean
 uint32_t smpt_rd_vkUqueue_g = 0;
 uint32_t smpt_rd_vkUqueue_ct = 0;
 
@@ -170,8 +169,8 @@ void smpt_rd_vkMset()
 
 	smptr_ce_mdMvk();
 	smptr_ceaMvk();
-	smpt_rd_vkw_dsts_loMmake(smpt_rd_vkUdevice);
-	smpt_rd_vkw_dstspMmake(smpt_rd_vkUdevice);
+	smpt_rd_vkw_dsts_loMmake();
+	smpt_rd_vkw_dstspMmake();
 
 	smpt_rd_vk_cmdMset();
 	SMPT_DBmR2L("thrd_create %d", thrd_create(&(thrd_t){}, smpt_rd_vk_cmdMloop, NULL))

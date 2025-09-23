@@ -1,5 +1,6 @@
-#!/bin/bash
-rm -rf lib/wayland
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/..
+rm -r lib/wayland
 mkdir -p lib/wayland
 cd lib/wayland
 
@@ -11,5 +12,3 @@ wayland-scanner private-code /usr/share/wayland-protocols/unstable/pointer-const
 
 wayland-scanner client-header /usr/share/wayland-protocols/unstable/relative-pointer/relative-pointer-unstable-v1.xml relative-pointer-unstable-v1.h
 wayland-scanner private-code /usr/share/wayland-protocols/unstable/relative-pointer/relative-pointer-unstable-v1.xml relative-pointer-unstable-v1.c
-
-cd ../..
