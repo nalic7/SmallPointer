@@ -12,7 +12,7 @@ void smpt_rd_vk_sfMmake()
 			"vkCreateAndroidSurfaceKHR %d",
 			vkCreateAndroidSurfaceKHR
 			(
-				smpt_rd_vkq_dv_pscdv_itV,
+				smpt_rd_vkqVit,
 				&(VkAndroidSurfaceCreateInfoKHR)
 				{
 					.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
@@ -75,7 +75,7 @@ void smpt_rd_vk_sfMmake()
 				"vkCreateDisplayPlaneSurfaceKHR %d",
 				vkCreateDisplayPlaneSurfaceKHR
 				(
-					smpt_rd_vkq_dv_pscdv_itV,
+					smpt_rd_vkqVit,
 					&(VkDisplaySurfaceCreateInfoKHR)
 					{
 						.sType = VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR,
@@ -102,7 +102,7 @@ void smpt_rd_vk_sfMmake()
 				"vkCreateWaylandSurfaceKHR %d",
 				vkCreateWaylandSurfaceKHR
 				(
-					smpt_rd_vkq_dv_pscdv_itV,
+					smpt_rd_vkqVit,
 					&(VkWaylandSurfaceCreateInfoKHR)
 					{
 						.sType = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
@@ -121,6 +121,6 @@ void smpt_rd_vk_sfMmake()
 
 void smpt_rd_vk_sfMfree()
 {
-	vkDestroySurfaceKHR(smpt_rd_vkq_dv_pscdv_itV, smpt_rd_vk_sfVkhr, NULL);
+	vkDestroySurfaceKHR(smpt_rd_vkqVit, smpt_rd_vk_sfVkhr, NULL);
 	smpt_rd_vk_sfVkhr = VK_NULL_HANDLE;
 }

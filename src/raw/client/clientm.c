@@ -189,7 +189,7 @@ void smptr_cemMread()
 
 						VkMemoryRequirements vkmemoryrequirements;
 						vkdevicesize = (vkdevicesize + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1);
-						SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage], Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
+						SMPT_RD_VK_BFmMAKE(SMPT_RD_VKQuDV, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_cemPvkbuffer[l1 + l0 * smpt_rd_vk_swcUimage], Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
 						SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(vkdevice, Pvkdevicememory[l1 + l0 * smpt_rd_vk_swcUimage], 0, vkdevicesize, 0, &Pbuffer_map[l1 + l0 * smpt_rd_vk_swcUimage]))
 					}
 
@@ -199,7 +199,7 @@ void smptr_cemMread()
 
 					for (uint8_t l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 					{
-						smpt_rd_vkw_dstsMmake(smpt_rd_vkUdevice, smptr_cemPvkdescriptorset + l1 + l0 * smpt_rd_vk_swcUimage);
+						SMPT_RD_VKW_DSTSmMAKE(SMPT_RD_VKQuDV, 0, smptr_cemPvkdescriptorset + l1 + l0 * smpt_rd_vk_swcUimage)
 					}
 					VkDescriptorSet *Pvkdescriptorset = smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage;
 					VkDescriptorBufferInfo *Pvkdescriptorbufferinfo0 = Pvkdescriptorbufferinfo + (Ldst - 1) * smpt_rd_vk_swcUimage;
@@ -341,7 +341,7 @@ void smptr_cemMloop()
 			{
 				if (Pvkdescriptorset_free[l0 * smpt_rd_vk_swcUimage])
 				{
-					vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage);
+					vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspP[0], smpt_rd_vk_swcUimage, Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage);
 					SMPT_RD_VK_BFmFREE_DO(l0, l1)
 					Pvkdescriptorset_free[l0 * smpt_rd_vk_swcUimage] = 0;
 				}
@@ -462,7 +462,7 @@ void smptr_cemMfree()
 				{
 					if (Pvkdescriptorset_free[l0 * smpt_rd_vk_swcUimage])
 					{
-						vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage);
+						vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspP[0], smpt_rd_vk_swcUimage, Pvkdescriptorset_free + l0 * smpt_rd_vk_swcUimage);
 						SMPT_RD_VK_BFmFREE_DO(l0, l1)
 						Pvkdescriptorset_free[l0 * smpt_rd_vk_swcUimage] = 0;
 					}
@@ -482,7 +482,7 @@ void smptr_cemMfree()
 			struct SMPTR_CEMsM m = smptr_cemPm[l0];
 			if (m.Sm.Um != SMPTRvM)
 			{
-				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
+				vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspP[0], smpt_rd_vk_swcUimage, smptr_cemPvkdescriptorset + l0 * smpt_rd_vk_swcUimage);
 
 				for (SMPTRtMI l1 = 0; l1 < smpt_rd_vk_swcUimage; ++l1)
 				{

@@ -1,19 +1,28 @@
 #ifndef SMPT_RDhVKQ
 	#define SMPT_RDhVKQ
 
-	//! use all queue
-	//.c select gpu index
-	#define SMPT_RD_VKQuDV 0
-	#define SMPT_RD_VKQuCP 0
-
-	extern uint32_t *smpt_rd_vkqPmax_queue;
-	extern uint32_t *smpt_rd_vkqPmax_queue_surface;
-	extern uint32_t **smpt_rd_vkqPqueue_surface;
-
-	extern VkQueue **smpt_rd_vkqP;
+	struct SMPT_RD_VKQsINFO
+	{
+		float Fmax_sampler_anisotropy;
+		uint8_t
+			Unon_coherent_atom_size,
+			Usample_count,
+			//.i gp+sf -> shader / draw / image
+			//.i cp -> data
+			//.i tf -> image
+			Ugp,
+			Usf,
+			Ucp,
+			Utf;
+		VkQueue *Pvkqueue;
+		//.i 0 draw
+		//.i 1 offload
+		VkDevice Vvkdevice;
+		VkPhysicalDevice Vvkphysicaldevice;
+	};
+	extern struct SMPT_RD_VKQsINFO *smpt_rd_vkqPinfo;
+	extern uint32_t smpt_rd_vkqLinfo;
 
 	void smpt_rd_vkqMset();
-	void smpt_rd_vkqMadd(uint32_t device);
-	void smpt_rd_vkqMget(uint32_t device);
 	void smpt_rd_vkqMfree();
 #endif

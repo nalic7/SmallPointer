@@ -3,10 +3,7 @@ VkCommandPool **smpt_rd_vk_cmpP;
 void smpt_rd_vk_cmpMset()
 {
 	smpt_rd_vk_cmpP = malloc(sizeof(VkCommandPool *) * smpt_rd_vkq_dv_pscdvL);
-}
 
-void smpt_rd_vk_cmpMmake(uint32_t device)
-{
 	uint32_t max_queue = smpt_rd_vkqPmax_queue[device];
 	smpt_rd_vk_cmpP[device] = malloc(sizeof(VkCommandPool) * max_queue);
 

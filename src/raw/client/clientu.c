@@ -94,7 +94,7 @@ void smptr_ceuMloop()
 	}
 	smptr_ceuSu.Ptr[4] = SMPTMmNORM_NF(smptr_ceuSu.Ptr[4], SMPTMmD2R(360));
 
-	VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
+	VkDevice vkdevice = smpt_rd_vkq_dvP[SMPT_RD_VKQuDV];
 
 	memcpy(Pbuffer, smptmPm4x4, sizeof(float) * 16);
 

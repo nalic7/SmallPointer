@@ -1,2 +1,2 @@
 DIR0=$(cd -- $(dirname -- $0) && pwd)
-HOME=$DIR0/../../blender-4.5.3-linux-x64/blender $DIR0/../../blender-4.5.3-linux-x64/blender
+HOME=$DIR0/../../blender-4.5.3-linux-x64 $DIR0/../../blender-4.5.3-linux-x64/blender

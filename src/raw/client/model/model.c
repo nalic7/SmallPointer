@@ -267,13 +267,13 @@ void smptr_ce_mdMset()
 
 		VkMemoryRequirements vkmemoryrequirements;
 		vkdevicesize = (vkdevicesize + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1);
-		SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[0], smptr_ce_mdPvkdevicememory[0], vkmemoryrequirements)
+		SMPT_RD_VK_BFmMAKE(SMPT_RD_VKQuDV, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[0], smptr_ce_mdPvkdevicememory[0], vkmemoryrequirements)
 		SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(Vvkdevice, smptr_ce_mdPvkdevicememory[0], 0, vkdevicesize, 0, &smptr_ce_mdPbuffer_map[0]))
 
 		//.i a
 		for (uint8_t l0 = 1; l0 < 1 + smpt_rd_vk_swcUimage; ++l0)
 		{
-			SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, sizeof(float) * 4 + sizeof(smptm_v4Psrt), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[l0], smptr_ce_mdPvkdevicememory[l0], vkmemoryrequirements)
+			SMPT_RD_VK_BFmMAKE(SMPT_RD_VKQuDV, sizeof(float) * 4 + sizeof(smptm_v4Psrt), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[l0], smptr_ce_mdPvkdevicememory[l0], vkmemoryrequirements)
 			SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(Vvkdevice, smptr_ce_mdPvkdevicememory[l0], 0, sizeof(float) * 4 + sizeof(smptm_v4Psrt), 0, &smptr_ce_mdPbuffer_map[l0]))
 			for (uint8_t l1 = 0; l1 < 4; ++l1)
 			{
@@ -293,7 +293,7 @@ void smptr_ce_mdMset()
 		//.i gui world
 		for (uint8_t l0 = 1 + 1 * smpt_rd_vk_swcUimage; l0 < 1 + 3 * smpt_rd_vk_swcUimage; ++l0)
 		{
-			SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, sizeof(float) * 16 * 2, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[l0], smptr_ce_mdPvkdevicememory[l0], vkmemoryrequirements)
+			SMPT_RD_VK_BFmMAKE(SMPT_RD_VKQuDV, sizeof(float) * 16 * 2, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[l0], smptr_ce_mdPvkdevicememory[l0], vkmemoryrequirements)
 			SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(Vvkdevice, smptr_ce_mdPvkdevicememory[l0], 0, sizeof(float) * 16 * 2, 0, &smptr_ce_mdPbuffer_map[l0]))
 			memcpy(smptr_ce_mdPbuffer_map[l0], smptmPm4x4, sizeof(float) * 16);
 			memcpy(smptr_ce_mdPbuffer_map[l0] + sizeof(float) * 16, smptmPm4x4, sizeof(float) * 16);

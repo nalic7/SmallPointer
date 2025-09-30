@@ -48,7 +48,7 @@ void smptr_ceaMset()
 		VkDescriptorBufferInfo Pvkdescriptorbufferinfo[2 + 3 * smpt_rd_vk_swcUimage];
 		for (uint8_t l0 = 0; l0 < smpt_rd_vk_swcUimage; ++l0)
 		{
-			smpt_rd_vkw_dstsMmake(smpt_rd_vkUdevice, smptr_ceaPvkdescriptorset + l0);
+			SMPT_RD_VKW_DSTSmMAKE(SMPT_RD_VKQuDV, 0, smptr_ceaPvkdescriptorset + l0)
 		}
 		//.i bindpose s 1+
 		Pvkdescriptorbufferinfo[0] = (VkDescriptorBufferInfo)
@@ -200,7 +200,7 @@ void smptr_ceaMread()
 
 						VkMemoryRequirements vkmemoryrequirements;
 						vkdevicesize = (vkdevicesize + (smpt_rd_vkUnon_coherent_atom_size - 1)) & ~(smpt_rd_vkUnon_coherent_atom_size - 1);
-						SMPT_RD_VK_BFmMAKE(smpt_rd_vkUdevice, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[SMPTR_CEAuBUFFER + l1 + l0 * smpt_rd_vk_swcUimage], smptr_ce_mdPvkdevicememory[SMPTR_CEAuBUFFER + l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
+						SMPT_RD_VK_BFmMAKE(SMPT_RD_VKQuDV, vkdevicesize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, smptr_ce_mdPvkbuffer[SMPTR_CEAuBUFFER + l1 + l0 * smpt_rd_vk_swcUimage], smptr_ce_mdPvkdevicememory[SMPTR_CEAuBUFFER + l1 + l0 * smpt_rd_vk_swcUimage], vkmemoryrequirements)
 						SMPT_DBmR2L("vkMapMemory %d", vkMapMemory(vkdevice, smptr_ce_mdPvkdevicememory[SMPTR_CEAuBUFFER + l1 + l0 * smpt_rd_vk_swcUimage], 0, vkdevicesize, 0, &smptr_ce_mdPbuffer_map[SMPTR_CEAuBUFFER + l1 + l0 * smpt_rd_vk_swcUimage]))
 						for (uint8_t l2 = 0; l2 < Pa->Sa.Lv; ++l2)
 						{
@@ -293,7 +293,7 @@ void smptr_ceaMfree()
 
 		free(Pvkmappedmemoryrange);
 
-		vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspV, smpt_rd_vk_swcUimage, smptr_ceaPvkdescriptorset);
+		vkFreeDescriptorSets(vkdevice, smpt_rd_vkw_dstspP[0], smpt_rd_vk_swcUimage, smptr_ceaPvkdescriptorset);
 		for (SMPTRtA l0 = 0; l0 < smptr_ceaLa; ++l0)
 		{
 			struct SMPTR_CEAsA a = smptr_ceaPa[l0];
