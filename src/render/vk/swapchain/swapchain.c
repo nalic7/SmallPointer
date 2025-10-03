@@ -23,10 +23,11 @@ static VkDeviceMemory vkdevicememory_color;
 static VkPresentModeKHR vkpresentmodekhr;
 static VkSurfaceFormatKHR vksurfaceformatkhr;
 
-void smpt_rd_vk_swcMmake(VkSharingMode vksharingmode)
+void smpt_rd_vk_swcMset()
 {
-	VkPhysicalDevice vkphysicaldevice = smpt_rd_vkq_dv_pscdvP[smpt_rd_vkUdevice];
-	VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
+	const struct SMPT_RD_VKQsINFO *Pinfo = smpt_rd_vkqPinfo + SMPT_RD_VKQuMAIN;
+	const VkPhysicalDevice vkphysicaldevice = Pinfo->Vvkphysicaldevice;
+	const VkDevice vkdevice = Pinfo->Vvkdevice;
 
 	uint32_t Usurface_format;
 	SMPT_DBmR2L("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, smpt_rd_vk_sfVkhr, &Usurface_format, VK_NULL_HANDLE))
@@ -116,12 +117,12 @@ void smpt_rd_vk_swcMmake(VkSharingMode vksharingmode)
 				.presentMode = vkpresentmodekhr,
 				.clipped = VK_TRUE,
 
-				.queueFamilyIndexCount = smpt_rd_vkqPmax_queue_surface[smpt_rd_vkUdevice],
-				.pQueueFamilyIndices = smpt_rd_vkqPqueue_surface[smpt_rd_vkUdevice],
+				.queueFamilyIndexCount = Pinfo->Sfamily.Lsf,
+				.pQueueFamilyIndices = Pinfo->Sfamily.Psf,
 
 				.oldSwapchain = VK_NULL_HANDLE,
 
-				.imageSharingMode = vksharingmode,
+				.imageSharingMode = Pinfo->Sfamily.Lsf == 2 ? VK_SHARING_MODE_CONCURRENT : VK_SHARING_MODE_EXCLUSIVE,
 
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE

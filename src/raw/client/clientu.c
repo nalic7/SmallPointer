@@ -14,15 +14,15 @@ void smptr_ceuMset()
 static float
 	Pr[4],
 
-	q0_m4x4_array[16] =
+	Pq0_m4x4[16] =
 	{
 		1.0F, 0.0F, 0.0F, 0.0F,
 		0.0F, 1.0F, 0.0F, 0.0F,
 		0.0F, 0.0F, 1.0F, 0.0F,
 		0.0F, 0.0F, 0.0F, 1.0F
 	},
-	q1_m4x4_array[16],
-	q2_m4x4_array[16];
+	Pq1_m4x4[16],
+	Pq2_m4x4[16];
 
 static uint8_t state = 0;
 void smptr_ceuMsend()
@@ -98,15 +98,16 @@ void smptr_ceuMloop()
 
 	memcpy(Pbuffer, smptmPm4x4, sizeof(float) * 16);
 
+	//! check & mix
 	smptm_v4Mq(0, 0, SMPTMmD2R(180), Pr);
-	smptm_v4Mq2m(Pr, q0_m4x4_array);
-	memcpy(q1_m4x4_array, Pbuffer, sizeof(float) * 16);
-	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, Pbuffer);
+	smptm_v4Mq2m(Pr, Pq0_m4x4);
+	memcpy(Pq1_m4x4, Pbuffer, sizeof(float) * 16);
+	smptm_m4x4Mm(Pq1_m4x4, Pq0_m4x4, Pbuffer);
 
 	smptm_v4Mq(0, smptr_ceuSu.Ptr[4], 0, Pr);
-	smptm_v4Mq2m(Pr, q0_m4x4_array);
-	memcpy(q1_m4x4_array, Pbuffer, sizeof(float) * 16);
-	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, Pbuffer);
+	smptm_v4Mq2m(Pr, Pq0_m4x4);
+	memcpy(Pq1_m4x4, Pbuffer, sizeof(float) * 16);
+	smptm_m4x4Mm(Pq1_m4x4, Pq0_m4x4, Pbuffer);
 
 	//.i fix t
 	if (smpt_ceuPinput[0] & SMPT_IPuKEY_A)
@@ -118,22 +119,22 @@ void smptr_ceuMloop()
 	if (smpt_ceuPinput[0] & SMPT_IPuKEY_S)
 		Pr[2] -= 2 * smptr_ceDdelta;
 	Pr[3] = 0;
-	smptm_v4Mm4(Pbuffer, Pr, q1_m4x4_array);
-	smptr_ceuSu.Ptr[0] += q1_m4x4_array[0];
-	smptr_ceuSu.Ptr[2] += q1_m4x4_array[2];
+	smptm_v4Mm4(Pbuffer, Pr, Pq1_m4x4);
+	smptr_ceuSu.Ptr[0] += Pq1_m4x4[0];
+	smptr_ceuSu.Ptr[2] += Pq1_m4x4[2];
 
 	smptm_v4Mq(smptr_ceuSu.Ptr[3], 0, 0, Pr);
-	smptm_v4Mq2m(Pr, q0_m4x4_array);
-	memcpy(q1_m4x4_array, Pbuffer, sizeof(float) * 16);
-	smptm_m4x4Mm(q1_m4x4_array, q0_m4x4_array, Pbuffer);
+	smptm_v4Mq2m(Pr, Pq0_m4x4);
+	memcpy(Pq1_m4x4, Pbuffer, sizeof(float) * 16);
+	smptm_m4x4Mm(Pq1_m4x4, Pq0_m4x4, Pbuffer);
 
-	memcpy(q2_m4x4_array, smptmPm4x4, sizeof(float) * 16);
+	memcpy(Pq2_m4x4, smptmPm4x4, sizeof(float) * 16);
 
-	q2_m4x4_array[12] = smptr_ceuSu.Ptr[0];
-	q2_m4x4_array[13] = smptr_ceuSu.Ptr[1];
-	q2_m4x4_array[14] = smptr_ceuSu.Ptr[2];
-	memcpy(q1_m4x4_array, Pbuffer, sizeof(float) * 16);
-	smptm_m4x4Mm(q2_m4x4_array, q1_m4x4_array, Pbuffer);
+	Pq2_m4x4[12] = smptr_ceuSu.Ptr[0];
+	Pq2_m4x4[13] = smptr_ceuSu.Ptr[1];
+	Pq2_m4x4[14] = smptr_ceuSu.Ptr[2];
+	memcpy(Pq1_m4x4, Pbuffer, sizeof(float) * 16);
+	smptm_m4x4Mm(Pq2_m4x4, Pq1_m4x4, Pbuffer);
 
 	vkFlushMappedMemoryRanges(vkdevice, 1, &(VkMappedMemoryRange)
 	{

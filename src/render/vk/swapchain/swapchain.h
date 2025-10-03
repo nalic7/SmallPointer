@@ -13,6 +13,6 @@
 	extern uint8_t smpt_rd_vk_swcUframe;
 	extern uint8_t smpt_rd_vk_swcUframe_buffer;
 
-	void smpt_rd_vk_swcMmake(VkSharingMode vksharingmode);
+	void smpt_rd_vk_swcMset(VkSharingMode vksharingmode);
 	void smpt_rd_vk_swcMfree();
 #endif

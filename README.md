@@ -1,10 +1,6 @@
 # README
-```
-Project that try not to waste resource to render and work
-```
->Start Path
 ```bash
-git clone https://github.com/spacecat393/SmallPointer
+git clone https://github.com/nalic7/SmallPointer
 cd SmallPointer
 chmod +x run/*
 ```

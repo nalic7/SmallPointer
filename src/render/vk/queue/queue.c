@@ -179,7 +179,13 @@ void smpt_rd_vkqMset()
 			)
 		)
 		uint8_t Lqueue = 0;
+		Pinfo->Sfamily.L = Squeue.Lqueue_family_index;
+		Pinfo->Sfamily.Psf = malloc();
+		Pinfo->Sfamily.Lsf = ;
+		Pinfo->Ptf = malloc();
+		Pinfo->Ltf = ;
 		Pinfo->Pvkqueue = malloc(0);
+		Pinfo->Pvkcommandpool = malloc(0);
 		for (uint32_t l1 = 0; l1 < Squeue.Lqueue_family_index; ++l1)
 		{
 			for (uint32_t l2 = 0; l2 < Squeue.Pqueue_priorities_size[l1]; ++l2)
@@ -189,6 +195,45 @@ void smpt_rd_vkqMset()
 				++Lqueue;
 				//! fix qindex here
 			}
+
+			SMPT_DBmR2L
+			(
+				"vkCreateCommandPool %d",
+				vkCreateCommandPool
+				(
+					Pinfo->Vvkdevice,
+					&(VkCommandPoolCreateInfo)
+					{
+						.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+						.queueFamilyIndex = Squeue.Pqueue_family_index[l1],
+						.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+						.pNext = VK_NULL_HANDLE
+					},
+					VK_NULL_HANDLE,
+					Pinfo->Pvkcommandpool + l1
+				)
+			)
+
+			//! fix
+			Pinfo->Pvkcommandbuffer = malloc(sizeof(VkCommandBuffer) * smpt_rd_vk_swcUimage);
+			for (uint32_t l2 = 0; l2 < smpt_rd_vk_swcUimage; ++l2)
+				SMPT_DBmR2L
+				(
+					"vkAllocateCommandBuffers %d",
+					vkAllocateCommandBuffers
+					(
+						Pinfo->Vvkdevice,
+						&(VkCommandBufferAllocateInfo)
+						{
+							.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+							.commandPool = Pinfo->Pvkcommandpool + l1,
+							.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+							.commandBufferCount = 1,
+							.pNext = VK_NULL_HANDLE
+						},
+						Pinfo->Pvkcommandbuffer + l1
+					)
+				)
 
 			free(Squeue.Pqueue_priorities[l1]);
 		}
@@ -206,7 +251,13 @@ void smpt_rd_vkqMfree()
 {
 	for (uint32_t l0 = 0; l0 < smpt_rd_vkqLinfo; ++l0)
 	{
-		free(smpt_rd_vkqPinfo[l0].Pvkqueue);
-		vkDestroyDevice(smpt_rd_vkq_dvP[l0], VK_NULL_HANDLE);
+		struct SMPT_RD_VKQsINFO Sinfo = smpt_rd_vkqPinfo[l0];
+		for (uint32_t l1 = 0; l1 < Sinfo.Sfamily.L; ++l1)
+			vkDestroyCommandPool(Sinfo.Vvkdevice, Sinfo.Pvkcommandpool[l1], VK_NULL_HANDLE);
+		free(Sinfo.Sfamily.Psf);
+		free(Sinfo.Ptf);
+		free(Sinfo.Pvkqueue);
+		free(Sinfo.Pvkcommandpool);
+		vkDestroyDevice(Sinfo.Vvkdevice, VK_NULL_HANDLE);
 	}
 }

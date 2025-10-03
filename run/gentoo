@@ -1,9 +1,19 @@
-emerge -qa \
+sudo emerge -qa \
 	sys-kernel/vanilla-sources sys-kernel/linux-firmware \
 	sys-firmware/nvidia-firmware \
 	sys-devel/gcc dev-debug/gdb \
 	media-libs/vulkan-layers \
-	gui-wm/hyprland x11-terms/kitty \
+	gui-libs/wlroots gui-apps/foot \
 	app-editors/vim app-misc/screen \
 	app-arch/zip app-arch/unzip \
 	net-wireless/iwd net-wireless/bluez net-vpn/wireguard-tools
+DIR0=$(cd -- $(dirname -- $0) && pwd)
+cd $DIR0/../..
+git clone https://codeberg.org/dwl/dwl.git
+cd dwl
+cp config.def.h config.h
+vi config.h
+cd ..
+wget https://mirror.freedif.org/blender/release/Blender4.5/blender-4.5.3-linux-x64.tar.xz
+tar -xf blender-4.5.3-linux-x64.tar.xz
+rm blender-4.5.3-linux-x64.tar.xz

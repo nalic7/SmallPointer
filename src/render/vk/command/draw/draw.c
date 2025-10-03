@@ -21,12 +21,10 @@ static VkCommandBufferBeginInfo vkcommandbufferbegininfo =
 	.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
 	.pNext = VK_NULL_HANDLE
 };
-
-static VkCommandBuffer *Pvkcommandbuffer;
 //e0-cmd
 
 //s0-draw
-static VkClearValue vkclearvalue_array[2] =
+static VkClearValue Pvkclearvalue[2] =
 {
 	{.color = {.float32 = {0.0F, 0.0F, 0.0F, 1.0F}}},
 	{.depthStencil =
@@ -41,7 +39,7 @@ static VkRenderPassBeginInfo vkrenderpassbegininfo =
 	.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
 	.renderArea.offset = {0, 0},
 	.clearValueCount = 2,
-	.pClearValues = vkclearvalue_array,
+	.pClearValues = Pvkclearvalue,
 
 	.pNext = VK_NULL_HANDLE
 };
@@ -100,15 +98,15 @@ void smpt_rd_vk_cmdMset()
 	//s0-s
 	VkShaderModule vkshadermodule_vert;
 	VkShaderModule vkshadermodule_frag;
-	VkPipelineShaderStageCreateInfo vkpipelineshaderstagecreateinfo_array[2];
+	VkPipelineShaderStageCreateInfo Pvkpipelineshaderstagecreateinfo[2];
 
-	smpt_rd_vk_pl_sdMset(smpt_rd_vkUdevice, SMPTFcHOME_VERT, SMPTFcHOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, vkpipelineshaderstagecreateinfo_array);
+	smpt_rd_vk_pl_sdMset(smpt_rd_vkUdevice, SMPTFcHOME_VERT, SMPTFcHOME_FRAG, &vkshadermodule_vert, &vkshadermodule_frag, Pvkpipelineshaderstagecreateinfo);
 
 	//.i compute
 
 	//s1-s
 	smpt_rd_vk_pl_loMmake(smpt_rd_vkUdevice, &vkpipelinelayout);
-	smpt_rd_vk_plMmake(smpt_rd_vkUdevice, vkpipelineshaderstagecreateinfo_array, smpt_rd_vk_swcVrdp, vkpipelinelayout, &vkpipeline);
+	smpt_rd_vk_plMmake(smpt_rd_vkUdevice, Pvkpipelineshaderstagecreateinfo, smpt_rd_vk_swcVrdp, vkpipelinelayout, &vkpipeline);
 	//e1-s
 
 	vkDestroyShaderModule(vkdevice, vkshadermodule_frag, VK_NULL_HANDLE);
@@ -116,24 +114,12 @@ void smpt_rd_vk_cmdMset()
 	//e0-s
 
 	//s0-draw
-	Pvkcommandbuffer = malloc(sizeof(VkCommandBuffer) * smpt_rd_vk_swcUimage);
 	Pvkfence = malloc(sizeof(VkFence) * smpt_rd_vk_swcUimage);
 	Pvksemaphore = malloc(sizeof(VkSemaphore *) * smpt_rd_vk_swcUimage);
 	for (uint8_t l_0 = 0; l_0 < smpt_rd_vk_swcUimage; ++l_0)
 	{
-		//s0-cmd
-		smpt_rd_vk_cm_bfMmake(smpt_rd_vkUdevice, smpt_rd_vkUqueue_g, Pvkcommandbuffer + l_0, 1);
-		//e0-cmd
-
-		//! need check again
+		//! check
 		//vk_cmd(Pvkcommandbuffer[l_0], &vkcommandbufferbegininfo, vkqueue_graphic);
-		// //s0-ubo
-		// // smptr_ceMsetVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, &vkdescriptorimageinfo, vkwritedescriptorset_array);
-		// smptr_ceMsetVkWriteDescriptorSet(vkdescriptorset, &vkdescriptorbufferinfo, vkwritedescriptorset_array);
-		// //s1-update
-		// vkUpdateDescriptorSets(vkdevice, 6, vkwritedescriptorset_array, 0, VK_NULL_HANDLE);
-		// //e1-update
-		// //e0-ubo
 
 		SMPT_RD_VKFmMAKE(smpt_rd_vkUdevice, Pvkfence + l_0)
 
@@ -172,7 +158,7 @@ static void re_sc()
 		smpt_arMwait();
 	#endif
 
-	smpt_rd_vk_swcMmake(smpt_rd_vkqPmax_queue_surface[smpt_rd_vkUdevice] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+	smpt_rd_vk_swcMset();
 
 	vkrenderpassbegininfo.renderPass = smpt_rd_vk_swcVrdp;
 	vkviewport.width = smpt_rd_vk_swcVet2d.width;

@@ -43,9 +43,8 @@
 		#endif
 
 		#include "render/vk/vk.h"
-		#include "render/vk/queue/device/physical_device/instance/instance.h"
-		#include "render/vk/queue/device/physical_device/physical_device.h"
-		#include "render/vk/queue/device/device.h"
+		#include "render/vk/queue/physical/instance/instance.h"
+		#include "render/vk/queue/physical/physical.h"
 		#include "render/vk/queue/queue.h"
 		#include "render/vk/surface/surface.h"
 		#include "render/vk/renderpass.h"
@@ -53,7 +52,6 @@
 		#include "render/vk/swapchain/swapchain.h"
 		#include "render/vk/fence.h"
 		#include "render/vk/semaphore.h"
-		#include "render/vk/command/pool/pool.h"
 		#include "render/vk/command/buffer/buffer.h"
 		#include "render/vk/buffer/buffer.h"
 		#include "render/vk/image.h"

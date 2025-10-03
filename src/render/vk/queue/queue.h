@@ -1,22 +1,32 @@
 #ifndef SMPT_RDhVKQ
 	#define SMPT_RDhVKQ
 
+	#define SMPT_RD_VKQuMAIN 0
+	#define SMPT_RD_VKQuOFF 1
+	struct SMPT_RD_VKQsFAMILY
+	{
+		uint8_t
+			*Psf,
+			Lsf;
+			L;
+	};
 	struct SMPT_RD_VKQsINFO
 	{
+		VkCommandBuffer *Pvkcommandbuffer;
+		VkCommandPool *Pvkcommandpool;
+
 		float Fmax_sampler_anisotropy;
 		uint8_t
 			Unon_coherent_atom_size,
 			Usample_count,
-			//.i gp+sf -> shader / draw / image
-			//.i cp -> data
-			//.i tf -> image
+			//.i gp -> shader / buffer / image
+			//.i cp -> shader
+			//.i tf -> buffer / image
 			Ugp,
 			Usf,
-			Ucp,
-			Utf;
+			Ucp;
+		struct SMPT_RD_VKQsFAMILY Sfamily;
 		VkQueue *Pvkqueue;
-		//.i 0 draw
-		//.i 1 offload
 		VkDevice Vvkdevice;
 		VkPhysicalDevice Vvkphysicaldevice;
 	};

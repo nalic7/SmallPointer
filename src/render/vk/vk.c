@@ -1,4 +1,3 @@
-
 void smpt_rd_vkMset()
 {
 	smpt_rd_vkq_psc_itMset();
@@ -9,8 +8,7 @@ void smpt_rd_vkMset()
 	smpt_rd_vk_sfMmake();
 	smpt_rd_vkqMset();
 
-	smpt_rd_vk_cmpMset();
-	smpt_rd_vk_swcMmake(smpt_rd_vkqPmax_queue_surface[smpt_rd_vkUdevice] == 1 ? VK_SHARING_MODE_EXCLUSIVE : VK_SHARING_MODE_CONCURRENT);
+	smpt_rd_vk_swcMset();
 
 	while (!(smpt_sfUstate & SMPT_SFuS_RAW))
 	{
@@ -28,7 +26,6 @@ void smpt_rd_vkMset()
 
 void smpt_rd_vkMfree()
 {
-	smpt_rd_vk_cmpMfree();
 	smpt_rd_vk_swcMfree();
 
 	smpt_rd_vkqMfree();
