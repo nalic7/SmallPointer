@@ -1,11 +1,6 @@
 #ifndef hSMPT
 	#define hSMPT
 
-	#ifdef SMPT_CM_ST_MC
-		//#include <jni.h>
-		#include <jvmti.h>
-	#endif
-
 	#include <unistd.h>
 	#include <math.h>
 	#include <stdint.h>

@@ -1,2 +1,0 @@
-DIR0=$(cd -- $(dirname -- $0) && pwd)
-HOME=$DIR0/../../prism $DIR0/../../prism/PrismLauncher-Linux-x86_64.AppImage

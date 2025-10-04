@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.31)
 set(ST linux)
 #set(ST android)
 #set(ST win)
-#set(ST mc)
 
 #//.i surface
 set(DRM 1)
@@ -230,16 +229,6 @@ elseif(ST STREQUAL "android")
   if(AINPUT)
     list(APPEND TCD SMPT_CM_AINPUT)
   endif()
-
-  add_library(${PN} SHARED ${SOURCES})
-elseif(ST STREQUAL "mc")
-  list(APPEND TCD SMPT_CM_ST_MC)
-
-  list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include)
-  list(APPEND TID ${CMAKE_SOURCE_DIR}/../jdk-24.0.2/include/linux)
-
-  file(GLOB_RECURSE G_SOURCES src/mc/*.c)
-  list(APPEND SOURCES ${G_SOURCES})
 
   add_library(${PN} SHARED ${SOURCES})
 endif()
