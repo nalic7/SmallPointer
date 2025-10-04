@@ -6,96 +6,6 @@ static const char *Pextension[] =
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-struct sQUEUE
-{
-	float **Pqueue_priorities;
-	uint8_t
-		*Pqueue_priorities_size,
-		*Pqueue_family_index,
-		Lqueue_family_index;
-};
-
-#define SMPT_RD_VKQmFIND_SET \
-	uint8_t \
-		Umove = 0, \
-		*Pqueue_family_index = malloc(0), \
-		Lqueue_family_index = 0;
-
-#define SMPT_RD_VKQmFIND_INDEX \
-	++Lqueue_family_index; \
-	Pqueue_family_index = realloc(Pqueue_family_index, sizeof(uint8_t) * Lqueue_family_index); \
-	Pqueue_family_index[Lqueue_family_index - 1] = l0; \
-	for (uint8_t l1 = 0; l1 < Pqueue->Lqueue_family_index; ++l1) \
-	{ \
-		if (Pqueue->Pqueue_family_index[l1] == l0) \
-		{ \
-			Umove |= 1; \
-			break; \
-		} \
-	} \
-	if (!Umove) \
-	{ \
-		free(Pqueue_family_index); \
-		++Pqueue->Lqueue_family_index; \
-		Pqueue->Pqueue_family_index = realloc(Pqueue->Pqueue_family_index, sizeof(uint8_t) * Pqueue->Lqueue_family_index); \
-		Pqueue->Pqueue_family_index[Lqueue_family_index - 1] = l0; \
-		Pqueue->Pqueue_priorities_size = realloc(Pqueue->Pqueue_priorities_size, sizeof(uint8_t) * Pqueue->Lqueue_family_index); \
-		Pqueue->Pqueue_priorities_size[Pqueue->Lqueue_family_index - 1] = 1; \
-		Pqueue->Pqueue_priorities = realloc(Pqueue->Pqueue_priorities, sizeof(float *) * Pqueue->Lqueue_family_index); \
-		Pqueue->Pqueue_priorities[Pqueue->Lqueue_family_index - 1] = malloc(sizeof(float)); \
-		Pqueue->Pqueue_priorities[Pqueue->Lqueue_family_index - 1][0] = 1.0F; \
-		*Pq = l0; \
-		return; \
-	} \
-	Umove &= 255 - 1;
-
-#define SMPT_RD_VKQmFIND_FIX \
-	for (uint32_t l0 = 0; l0 < Pqueue->Lqueue_family_index; ++l0) \
-	{ \
-		for (uint32_t l1 = 0; l1 < Lqueue_family_index; ++l1) \
-		{ \
-			if (Pqueue->Pqueue_family_index[l0] == Pqueue_family_index[l1] && Pvkqueuefamilyproperties[Pqueue_family_index[l1]].queueCount > Pqueue->Pqueue_priorities_size[l0]) \
-			{ \
-				++Pqueue->Pqueue_priorities_size[l0]; \
-				Pqueue->Pqueue_priorities[l0] = realloc(Pqueue->Pqueue_priorities[l0], sizeof(float) * Pqueue->Pqueue_priorities_size[l0]); \
-				Pqueue->Pqueue_priorities[l0][Pqueue->Pqueue_priorities_size[l0] - 1] = 1.0F; \
-				*Pq = Pqueue_family_index[l1]; \
-				break; \
-			} \
-		} \
-	} \
-	*Pq = Pqueue_family_index[0]; \
-	free(Pqueue_family_index);
-
-static void Mfind_queue_surface(VkPhysicalDevice Vvkphysicaldevice, VkQueueFamilyProperties *Pvkqueuefamilyproperties, uint32_t Lqueue_family, struct sQUEUE *Pqueue, uint8_t *Pq)
-{
-	SMPT_RD_VKQmFIND_SET
-	VkBool32 Usurface_support;
-	for (uint32_t l0 = 0; l0 < Lqueue_family; ++l0)
-	{
-		vkGetPhysicalDeviceSurfaceSupportKHR(Pinfo->Vvkphysicaldevice, l0, smpt_rd_vk_sfVkhr, &Usurface_support);
-		if (Usurface_support)
-		{
-			SMPT_RD_VKQmFIND_INDEX
-		}
-	}
-	SMPT_RD_VKQmFIND_FIX
-}
-
-static void Mfind_queue_bit(VkQueueFamilyProperties *Pvkqueuefamilyproperties, uint32_t Lqueue_family, VkQueueFlagBits Vvkqueueflagbits, struct sQUEUE *Pqueue, uint8_t *Pq)
-{
-	SMPT_RD_VKQmFIND_SET
-	for (uint32_t l0 = 0; l0 < Lqueue_family; ++l0)
-	{
-		VkQueueFamilyProperties vkqueuefamilyproperties = Pvkqueuefamilyproperties[l0];
-		if (vkqueuefamilyproperties.queueFlags & Vvkqueueflagbits)
-		{
-			SMPT_RD_VKQmFIND_INDEX
-		}
-	}
-	SMPT_RD_VKQmFIND_FIX
-}
-
 void smpt_rd_vkqMset()
 {
 	for (uint32_t l0 = 0; l0 < smpt_rd_vkqLinfo; ++l0)
@@ -107,43 +17,109 @@ void smpt_rd_vkqMset()
 		VkQueueFamilyProperties *Pvkqueuefamilyproperties = malloc(Lqueue_family * sizeof(VkQueueFamilyProperties));
 		vkGetPhysicalDeviceQueueFamilyProperties(Pinfo->Vvkphysicaldevice, &Lqueue_family, Pvkqueuefamilyproperties);
 
-		#ifdef SMPT_CM_DEBUG
-			VkBool32 Usurface_support;
-			for (uint32_t l1 = 0; l1 < Lqueue_family; ++l1)
-			{
-				VkQueueFamilyProperties vkqueuefamilyproperties = Pvkqueuefamilyproperties[l1];
-				SMPT_DBmN2L("queueCount %d", vkqueuefamilyproperties.queueCount);
-				SMPT_DBmN2L("queueFlags %d", vkqueuefamilyproperties.queueFlags);
-				SMPT_DBmR2L("vkGetPhysicalDeviceSurfaceSupportKHR %d", vkGetPhysicalDeviceSurfaceSupportKHR(Pinfo->Vvkphysicaldevice, l1, smpt_rd_vk_sfVkhr, &Usurface_support))
-			}
-		#endif
-		//! debug
-		while (1)
+		VkBool32 Usurface_support;
+		uint32_t
+			Usf = 0xFFFFFFFF,
+			Ugp = 0xFFFFFFFF,
+			Ucp = 0xFFFFFFFF;
+		for (uint32_t l1 = 0; l1 < Lqueue_family; ++l1)
 		{
-			thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL);
+			VkQueueFamilyProperties vkqueuefamilyproperties = Pvkqueuefamilyproperties[l1];
+			SMPT_DBmN2L("queueCount %d", vkqueuefamilyproperties.queueCount);
+			SMPT_DBmN2L("queueFlags %d", vkqueuefamilyproperties.queueFlags);
+			SMPT_DBmR2L("vkGetPhysicalDeviceSurfaceSupportKHR %d", vkGetPhysicalDeviceSurfaceSupportKHR(Pinfo->Vvkphysicaldevice, l1, smpt_rd_vk_sfVkhr, &Usurface_support))
+
+			if (Usurface_support && Usf == 0xFFFFFFFF)
+			{
+				Usf = l1;
+			}
+
+			if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+			{
+				if (Usurface_support)
+				{
+					Usf = l1;
+					Ugp = l1;
+				}
+				else if (Ugp == 0xFFFFFFFF)
+				{
+					Ugp = l1;
+				}
+
+				if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_COMPUTE_BIT && Ucp != 0xFFFFFFFF && vkqueuefamilyproperties.queueCount > 1)
+				{
+					Ucp = l1;
+				}
+			}
+			else if (vkqueuefamilyproperties.queueFlags & VK_QUEUE_COMPUTE_BIT && Ucp != 0xFFFFFFFF && Ucp != Ugp)
+			{
+				Ucp = l1;
+			}
 		}
 
-		struct sQUEUE Squeue =
+		//! check
+		uint8_t
+			*Pqueue_family_index = malloc(sizeof(uint8_t));
+			*Pqueue_count = malloc(sizeof(uint8_t));
+		float **Pqueue_priorities = malloc(sizeof(float *));
+		if (Usf == Ugp)
 		{
-			.Pqueue_priorities = malloc(0);
-			.Pqueue_priorities_size = malloc(0);
-			.Pqueue_family_index = malloc(0);
-			.Lqueue_family_index = 0;
-		};
-		Mfind_queue_bit(Pvkqueuefamilyproperties, Lqueue_family, VK_QUEUE_GRAPHICS_BIT, &Squeue, &Pinfo->Ugp);
-		Mfind_queue_surface(Pinfo->Vvkphysicaldevice, Pvkqueuefamilyproperties, Lqueue_family, &Squeue, &Pinfo->Usf);
-		Mfind_queue_bit(Pvkqueuefamilyproperties, Lqueue_family, VK_QUEUE_COMPUTE_BIT, &Squeue, &Pinfo->Ucp);
-		Mfind_queue_bit(Pvkqueuefamilyproperties, Lqueue_family, VK_QUEUE_TRANSFER_BIT, &Squeue, &Pinfo->Utf);
+			Pinfo->Sfamily.L = 1;
+			Pinfo->Sfamily.Lsf = 1;
+			Pinfo->Sfamily.Psf = malloc(sizeof(uint8_t));
+			Pinfo->Ugp = 0;
+			Pqueue_priorities[1] = realloc(Pqueue_priorities[1], sizeof(float) * 2);
+			Pqueue_priorities[0][1] = 1.0F;
+		}
+		else
+		{
+			Pinfo->Sfamily.L = 2;
+			Pinfo->Sfamily.Lsf = 2;
+			Pinfo->Sfamily.Psf = malloc(sizeof(uint8_t) * 2);
+			Pinfo->Sfamily.Psf[1] = Ugp;
+			Pinfo->Ugp = 1;
+			Pqueue_family_index = realloc(Pqueue_family_index, sizeof(uint8_t) * 2);
+			Pqueue_family_index[1] = Ugp;
+			Pqueue_count = realloc(Pqueue_count, sizeof(uint8_t) * 2);
+			Pqueue_count[1] = 1;
+			Pqueue_priorities = realloc(Pqueue_priorities, sizeof(float *) * 2);
+			Pqueue_priorities[1][0] = 1.0F;
+		}
+		Pqueue_count[0] = 1;
+		Pinfo->Sfamily.Psf[0] = Usf;
+		Pinfo->Usf = 0;
+		Pinfo->Ucp = Pinfo->Ugp;
+		Pqueue_family_index[0] = Usf;
+		Pqueue_priorities[0][0] = 1.0F;
+		if (Ugp == Ucp)
+		{
+			Pqueue_priorities[Pinfo->Ucp] = realloc(Pqueue_priorities[Pinfo->Ucp], sizeof(float) * (Pqueue_count[Pinfo->Ucp] + 1));
+			Pqueue_priorities[Pinfo->Ucp][Pqueue_count[Pinfo->Ucp]] = 1.0F;
+			++Pqueue_count[Pinfo->Ucp];
 
-		VkDeviceQueueCreateInfo *Pvkdevicequeuecreateinfo = malloc(sizeof(VkDeviceQueueCreateInfo) * Squeue.Lqueue_family_index);
-		for (uint32_t l1 = 0; l1 < Squeue.Lqueue_family_index; ++l1)
+			++Pinfo->Ucp;
+		}
+		else
+		{
+			++Pinfo->Sfamily.L;
+			++Pinfo->Ucp;
+			Pqueue_family_index = realloc(Pqueue_family_index, sizeof(uint8_t) * (Pinfo->Ucp + 1));
+			Pqueue_family_index[Pinfo->Ucp] = Ucp;
+			Pqueue_priorities = realloc(Pqueue_priorities, sizeof(float *) * (Pinfo->Ucp + 1));
+			Pqueue_priorities[Pinfo->Ucp][0] = 1.0F;
+			Pqueue_count = realloc(Pqueue_count, sizeof(uint8_t) * (Pinfo->Ucp + 1));
+			Pqueue_count[Pinfo->Ucp] = 1;
+		}
+
+		VkDeviceQueueCreateInfo *Pvkdevicequeuecreateinfo = malloc(sizeof(VkDeviceQueueCreateInfo) * Pinfo->Sfamily.L);
+		for (uint32_t l1 = 0; l1 < Pinfo->Sfamily.L; ++l1)
 		{
 			Pvkdevicequeuecreateinfo[l1] = (VkDeviceQueueCreateInfo)
 			{
 				.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-				.queueFamilyIndex = Squeue.Pqueue_family_index[l1],
-				.queueCount = Squeue.Pqueue_priorities_size[l1],
-				.pQueuePriorities = Squeue.Pqueue_priorities[l1],
+				.queueFamilyIndex = Pqueue_family_index[l1],
+				.queueCount = Pqueue_count[l1],
+				.pQueuePriorities = Pqueue_priorities[l1],
 				.flags = 0,
 				.pNext = VK_NULL_HANDLE
 			};
@@ -157,7 +133,7 @@ void smpt_rd_vkqMset()
 				&(VkDeviceCreateInfo)
 				{
 					.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-					.queueCreateInfoCount = Squeue.Lqueue_family_index,
+					.queueCreateInfoCount = Pinfo->Sfamily.L,
 					.pQueueCreateInfos = Pvkdevicequeuecreateinfo,
 					.pEnabledFeatures = &vkphysicaldevicefeatures,
 					.enabledExtensionCount = sizeof(Pextension) / sizeof(Pextension[0]),
@@ -179,21 +155,15 @@ void smpt_rd_vkqMset()
 			)
 		)
 		uint8_t Lqueue = 0;
-		Pinfo->Sfamily.L = Squeue.Lqueue_family_index;
-		Pinfo->Sfamily.Psf = malloc();
-		Pinfo->Sfamily.Lsf = ;
-		Pinfo->Ptf = malloc();
-		Pinfo->Ltf = ;
 		Pinfo->Pvkqueue = malloc(0);
-		Pinfo->Pvkcommandpool = malloc(0);
-		for (uint32_t l1 = 0; l1 < Squeue.Lqueue_family_index; ++l1)
+		Pinfo->Pvkcommandpool = malloc(sizeof(VkCommandPool) * Pinfo->Sfamily.L);
+		for (uint32_t l1 = 0; l1 < Pinfo->Sfamily.L; ++l1)
 		{
-			for (uint32_t l2 = 0; l2 < Squeue.Pqueue_priorities_size[l1]; ++l2)
+			for (uint32_t l2 = 0; l2 < Pqueue_count[l1]; ++l2)
 			{
 				Pinfo->Pvkqueue = realloc(Pinfo->Pvkqueue, sizeof(VkQueue) * (Lqueue + 1));
 				vkGetDeviceQueue(Pinfo->Vvkdevice, Squeue.Pqueue_family_index[l1], l2, Pinfo->Pvkqueue + Lqueue);
 				++Lqueue;
-				//! fix qindex here
 			}
 
 			SMPT_DBmR2L
@@ -205,7 +175,7 @@ void smpt_rd_vkqMset()
 					&(VkCommandPoolCreateInfo)
 					{
 						.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-						.queueFamilyIndex = Squeue.Pqueue_family_index[l1],
+						.queueFamilyIndex = Pqueue_family_index[l1],
 						.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
 						.pNext = VK_NULL_HANDLE
 					},
@@ -214,32 +184,11 @@ void smpt_rd_vkqMset()
 				)
 			)
 
-			//! fix
-			Pinfo->Pvkcommandbuffer = malloc(sizeof(VkCommandBuffer) * smpt_rd_vk_swcUimage);
-			for (uint32_t l2 = 0; l2 < smpt_rd_vk_swcUimage; ++l2)
-				SMPT_DBmR2L
-				(
-					"vkAllocateCommandBuffers %d",
-					vkAllocateCommandBuffers
-					(
-						Pinfo->Vvkdevice,
-						&(VkCommandBufferAllocateInfo)
-						{
-							.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-							.commandPool = Pinfo->Pvkcommandpool + l1,
-							.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-							.commandBufferCount = 1,
-							.pNext = VK_NULL_HANDLE
-						},
-						Pinfo->Pvkcommandbuffer + l1
-					)
-				)
-
-			free(Squeue.Pqueue_priorities[l1]);
+			free(Pqueue_priorities[l1]);
 		}
-		free(Squeue.Pqueue_priorities);
-		free(Squeue.Pqueue_priorities_size);
-		free(Squeue.Pqueue_family_index);
+		free(Pqueue_priorities);
+		free(Pqueue_count);
+		free(Pqueue_family_index);
 
 		free(Pvkdevicequeuecreateinfo);
 

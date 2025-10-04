@@ -1,5 +1,5 @@
-#ifndef SMPT_RDhVKQ
-	#define SMPT_RDhVKQ
+#ifndef SMPT_RD_VKhQ
+	#define SMPT_RD_VKhQ
 
 	#define SMPT_RD_VKQuMAIN 0
 	#define SMPT_RD_VKQuOFF 1

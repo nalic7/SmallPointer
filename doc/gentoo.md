@@ -4,7 +4,7 @@
 >/etc/portage/make.conf
 ```bash
 #OpenRC AMD64
-USE="elogind -fonts -policykit -pulseaudio sound-server pipewire-alsa pipewire ffmpeg extra drm X xwayland wayland vaapi bluetooth -gpm jpeg2k opus"
+USE="builtin server -elogind -fonts -policykit -pulseaudio sound-server pipewire-alsa pipewire ffmpeg extra drm X xwayland wayland vaapi bluetooth -gpm jpeg2k opus"
 
 INPUT_DEVICES="libinput"
 

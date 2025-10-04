@@ -9,6 +9,7 @@ void smpt_rd_vkMset()
 	smpt_rd_vkqMset();
 
 	smpt_rd_vk_swcMset();
+	smpt_rd_vk_cm_bfMset();
 
 	while (!(smpt_sfUstate & SMPT_SFuS_RAW))
 	{
@@ -26,6 +27,7 @@ void smpt_rd_vkMset()
 
 void smpt_rd_vkMfree()
 {
+	smpt_rd_vk_cm_bfMfree();
 	smpt_rd_vk_swcMfree();
 
 	smpt_rd_vkqMfree();

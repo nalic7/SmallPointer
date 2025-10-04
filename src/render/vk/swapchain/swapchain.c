@@ -26,8 +26,8 @@ static VkSurfaceFormatKHR vksurfaceformatkhr;
 void smpt_rd_vk_swcMset()
 {
 	const struct SMPT_RD_VKQsINFO *Pinfo = smpt_rd_vkqPinfo + SMPT_RD_VKQuMAIN;
-	const VkPhysicalDevice vkphysicaldevice = Pinfo->Vvkphysicaldevice;
-	const VkDevice vkdevice = Pinfo->Vvkdevice;
+	VkPhysicalDevice vkphysicaldevice = Pinfo->Vvkphysicaldevice;
+	VkDevice vkdevice = Pinfo->Vvkdevice;
 
 	uint32_t Usurface_format;
 	SMPT_DBmR2L("vkGetPhysicalDeviceSurfaceFormatsKHR %d", vkGetPhysicalDeviceSurfaceFormatsKHR(vkphysicaldevice, smpt_rd_vk_sfVkhr, &Usurface_format, VK_NULL_HANDLE))
@@ -203,7 +203,7 @@ void smpt_rd_vk_swcMset()
 
 void smpt_rd_vk_swcMfree()
 {
-	VkDevice vkdevice = smpt_rd_vkq_dvP[smpt_rd_vkUdevice];
+	VkDevice vkdevice = smpt_rd_vkqPinfo[SMPT_RD_VKQuMAIN].Vvkdevice;
 
 	vkDestroyImageView(vkdevice, vkimageview_depth, VK_NULL_HANDLE);
 	vkDestroyImage(vkdevice, vkimage_depth, VK_NULL_HANDLE);

@@ -75,13 +75,16 @@ void smptr_ceMfree()
 	#endif
 
 	#ifdef SMPT_CM_VK
+		const struct SMPT_RD_VKQsINFO *Pinfo = smpt_rd_vkqPinfo + SMPT_RD_VKQuMAIN;
+
 		while (!(smpt_sfUstate & SMPT_SFuS_EXIT_RENDER))
 		{
 			SMPT_DBmR2L("thrd_sleep %d", thrd_sleep(&(struct timespec){.tv_sec = 1, .tv_nsec = 0}, NULL))
 			SMPT_DBmN2L("smpt_sfUstate %d", smpt_sfUstate)
 		}
 
-		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(smpt_rd_vkqP[SMPT_RD_VKQuDV][smpt_rd_vkUqueue_g]))
+		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(Pinfo->Pvkqueue[Pinfo->gp]))
+		SMPT_DBmR2L("vkQueueWaitIdle %d", vkQueueWaitIdle(Pinfo->Pvkqueue[Pinfo->sf]))
 
 		smptr_ceaMfree();
 		smptr_cemMfree();
